@@ -1,0 +1,32 @@
+##Database
+
+#Create
+
+To create a SQL database hosted on Azure:
+
+(as of Sept. 2019)
+1) Open your Azure console
+2) Click Create a Resource > SQL databases > Create SQL Database
+3) Fill in the form
+- During this, you have the option of loading the database from an Azure backup file
+4) Create
+5) Wait for the backend processes to set up your database
+
+#Add User
+
+Log into the Azure database with SSMS.
+
+<code lang="sql">
+-- must be in master database to make the LOGIN
+CREATE LOGIN test 
+WITH PASSWORD = 'SuperSecret!' 
+
+-- must be in your database to create the USER
+CREATE USER [test] 
+FOR LOGIN [test] 
+WITH DEFAULT_SCHEMA = dbo; 
+  
+-- must be in your database to alter ROLES for USER
+ALTER ROLE db_datareader ADD MEMBER [test]; 
+ALTER ROLE db_datawriter ADD MEMBER [test];
+</code>

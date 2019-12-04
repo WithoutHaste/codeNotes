@@ -1,0 +1,1027 @@
+##Function
+
+#Declaration
+
+<code>
+function MyFunction() {
+}
+
+function Area(width, height) {
+	return width * height;
+}
+</code>
+
+Parameters: the variable names listed in the declaration.
+Arguments: the values passed into the function.
+Returns: undefined by default
+
+Invocation
+<code>
+var area = Area(5, 10);
+</code>
+
+Function as variable
+<code>
+var myFunction = Area;
+console.log(myFunction.name); //outputs Area
+</code>
+
+Functions can be declared within "if" statements, but this is implemented differently in different Javascript engines so it is not recommended. Use function expressions instead if you need this design pattern.
+
+#Anonymous Expression
+
+You can create anonymous functions as expressions.
+<code>
+var multiply = function(a, b) {
+    return a * b;
+}
+console.log(multiply(3, 4)); //outputs 12
+//The function name defaults to the name of the variable.
+console.log(multiply.name); //outputs multiply
+</code>
+
+An assigned function expression may call itself because the assigned variable is within scope.
+<code>
+var fibonacci = function (num) {
+	if(num <= 0) return 0;
+	if(num <= 2) return 1;
+	return fibonacci(num - 1) + fibonacci(num - 2);
+};
+console.log(fibonacci(6)); //outputs 8, which is the 6th fibonacci number
+</code>
+
+Function expressions are frequently used for callbacks.
+<code>
+function run(callback)
+{
+	console.log(callback.name);  //outputs empty string
+	return callback();
+}
+var x = run(function(){ return 10; });
+console.log(x); //outputs 10
+</code>
+
+Function expressions are frequently used in objects.
+<code>
+var math = {
+	'myFunc': function () {
+		console.log('a');
+	}
+};
+math.myFunc(); //outputs a
+</code>
+
+#Named Expression
+
+You may specify a name for a function expression. This is recommended to improve legibility of the code, of error messages, and of stack traces.
+<code>
+function run(callback)
+{
+	console.log(callback.name);  //outputs display10
+	return callback();
+}
+var x = run(function display10(){ return 10; });
+console.log(x); //outputs 10
+</code>
+
+When the function name is specified, the function may call itself recursively. The function cannot be called by name outside of its own scope.
+<code>
+function run(callback)
+{
+	return callback(6);
+}
+
+var result = run(function fibonacci(num) {
+	if(num <= 0) return 0;
+	if(num <= 2) return 1;
+	return fibonacci(num - 1) + fibonacci(num - 2);
+});
+
+console.log(result); //outputs 8
+</code>
+
+#Constructor
+
+You can declare and define a function dynamically with the function constructor. This is not recommended as is has security risks and performance issues.
+
+These functions are defined the same way:
+<code>
+var constructedSum = new Function('a', 'b', 'return a + b');
+
+function declaredSum(a, b)
+{
+	return a + b;
+}
+
+console.log(constructedSum(2, 6)); // outputs 8			
+console.log(declaredSum(2, 6));    // outputs 8			
+</code>
+
+The arguments passed to "new Function" are any number of parameter names, ending with the function body.
+The parameter names may be specified as one comma-delimited string.
+Everything is parsed when the function object is created.
+
+The "new" keyword is optional for some reason.
+<code>
+var constructedSum = Function('a', 'b', 'return a + b');
+console.log(constructedSum(2, 6)); // outputs 8			
+</code>
+
+Constructed functions are always in the global scope, no matter where they where created from. They do not create closures to their creation contexts.
+<code>
+var x = 10;
+function useConstructor() {
+    var x = 20;
+    return new Function('return x;');
+}
+function useConstructorImmediately() {
+    var x = 30;
+    return (new Function('return x;'))();
+}
+function useExpression() {
+    var x = 40;
+    return function() {
+        return x;
+    }
+}
+var a = useConstructor();
+var b = useConstructorImmediately();
+var c = useExpression();
+console.log(a()); //outputs 10
+console.log(b);   //outputs 10
+console.log(c()); //outputs 40
+</code>
+
+One use of the function constructor is to access the global object from a bound scope:
+<code>
+(function() {
+	'use strict';
+	var global = new Function('return this')();
+	console.log(global === window); //outputs true
+	console.log(this === window);   //outputs false
+})();
+</code>
+
+#Arrow Expression
+
+Arrow function expressions are notably different from other ways of specifying a function:
+- They do not create a local "this". They access the "this" from the surrounding scope.
+- They do not have a local "arguments" object.
+- They do not have a "super" object.
+- They cannot be used as constructors (with the "new" keyword).
+- They do not have a "prototype" property.
+- They cannot be used as generators.
+
+Why use an arrow function?
+- the same functionality can be written shorter
+- since they do not create their own "this" value, they can be used to simplify specific use cases
+
+Syntax for parameters:
+<code>
+var a = (param1,..,paramN) => { statements };
+
+//these are the same
+var b1 = (param1) => { statements };
+var b2 = param1 => { statements };
+
+var c = () => { statements };
+</code>
+Default parameters and the rest parameter are supported.
+
+Syntax for function body:
+<code>
+var a  = (param1,..,paramN) => { statements };
+
+//these are the same
+var b1 = (param1,..,paramN) => one_expression; //"concise body" has an implied return
+var b2 = (param1,..,paramN) => { return one_expression }; //"block body" has an explicit return
+</code>
+
+To return an object literal, wrap it in a grouping operator:
+<code>
+var a = (param1,..,paramN) => ({name: value});
+</code>	
+You cannot put line breaks between the parameters and the arrow.
+
+Writing shorter code:
+<code>
+var elements = [ 'Hydrogen', 'Helium', 'Lithium', 'Beryllium' ];
+var a = elements.map(function(element) { return element.length; });
+var b = elements.map(element => { return element.length; });
+var c = elements.map(element => element.length);
+var d = elements.map(({ length }) => length); //I'm not sure how this one works; it may be related to destructuring
+</code>
+
+The old way of accessing an outer "this" value:
+<code>
+function Person() {
+	var that = this;
+	that.age = 0;
+
+	setInterval(function growUp() {
+		that.age++;
+	}, 1000);
+}
+var person = new Person();
+</code>
+The new way, using arrow functions:
+<code>
+function Person(){
+	this.age = 0;
+
+	setInterval(() => {
+		this.age++;
+	}, 1000);
+}
+var person = new Person();
+</code>
+When to NOT try to use this:
+<code>
+var chopper = {
+    owner: 'Zed',
+    getOwner: () => this.owner //won't work because "this" is referring to undefined or the "window" or the global object, depending on the engine
+};
+console.log(chopper.getOwner());
+</code>
+Even with "use strict" turned on, arrow functions will not create their own "this" value.
+
+Arrow functions don't have their own "arguments" object. They use the one from the surrounding scope.
+<code>
+function plusOne(n) {
+	var f = () => arguments[0] + n;
+	return f(1);
+}
+console.log(plusOne(3)); // outputs 6 because n + n
+</code>
+Use a rest parameter instead:
+<code>
+function plusOne(n) {
+	var f = (...rest) => rest[0] + n;
+	return f(1);
+}
+console.log(plusOne(3)); // outputs 4
+</code>
+
+If you get parsing errors, wrap the arrow function in the grouping operators:
+<code>
+let callback;
+callback = callback || function() {}; // ok
+callback = callback || () => {};      // SyntaxError: invalid arrow-function arguments
+callback = callback || (() => {});    // ok
+</code>
+
+Examples of simple lambdas written with arrow function expressions:
+<code>
+var nums = [5, 6, 13, 0, 1, 18, 23];
+var sum = nums.reduce((a, b) => a + b);      // 66 which is the sum of all the elements
+var even = nums.filter(v => v % 2 == 0);     // [6, 0, 18] which are all the even values
+var double = nums.map(v => v * 2);           // [10, 12, 26, 0, 2, 36, 46] which is the double of each value
+var anyZero = nums.some(item => item === 0); // true because at least 1 element equaled 0
+</code>
+
+If you want to use an arrow function for an event handler, you'll need to pass the "event" object as an argument since "this" won't be available.
+<code>
+button.addEventListener('click', function () {
+	this.classList.toggle('on');
+});
+//versus
+button.addEventListener('click', (event) => {
+	event.currentTarget.classList.toggle('on');
+});
+</code>
+
+#Shorthand Method
+
+Benefits:
+- shorter
+- more legible
+- requires a function name which is a good coding practice
+
+<code>
+var collection = {  
+	items: [],
+	add: function(...items) {
+		this.items.push(...items);
+	},
+	get: function(index) {
+		return this.items[index];
+	}
+};
+collection.add('C', 'Java', 'PHP');
+console.log(collection.get(1)); //outputs Java
+</code>
+is the same as
+<code>
+var collection = {  
+	items: [],
+	add(...items) {
+		this.items.push(...items);
+	},
+	get(index) {
+		return this.items[index];
+	}
+};
+collection.add('C', 'Java', 'PHP');
+console.log(collection.get(1)); //outputs Java
+</code>
+
+Classes always use shorthand method definitions:
+<code>
+class Star {  
+	constructor(name) {
+		this.name = name;
+	}
+	getName() {
+		return this.name;
+	}
+}
+var sun = new Star('Sun');  
+console.log(sun.getName()) //outputs Sun
+</code>
+
+Computer property names with shorthand method definitions:
+<code>
+var addMethod = 'add';
+var getMethod = 'get';
+var collection = {  
+	items: [],
+	[addMethod](...items) {
+		this.items.push(...items);
+	},
+	[getMethod](index) {
+		return this.items[index];
+	}
+};
+collection[addMethod]('C', 'Java', 'PHP');  
+console.log(collection[getMethod](1)); //outputs Java
+</code>
+
+#Generator
+
+A generator function returns an iterator object. The function will not be executed all at once; its state will be saved and execution will step forward to the next "yield" expression each time you call "next()" on the iterator.
+
+Generators end on:
+- end of function
+- a return statement, in which case the returned value is the last "yielded" value
+- an uncaught exception
+
+<code>
+function* generator(i) {
+	yield i++;
+	yield i++;
+	yield i++;
+}
+var iterator = generator(0);
+console.log(iterator.next().value); //outputs 0
+console.log(iterator.next().value); //outputs 1
+console.log(iterator.next().value); //outputs 2
+console.log(iterator.next().value); //outputs undefined
+</code>
+
+You can loop through all the yielded values of an iterator:
+<code>
+function* generator() {
+	yield 'a';
+	yield 'b';
+	yield 'c';
+}
+var str = "";
+for (let val of generator()) {
+	str = str + val;
+}
+console.log(str); // outputs abc
+</code>
+
+A generator can be an anonymous expression:
+<code>
+var x = function*(y) {
+	yield y;
+};
+</code>
+
+Iterator.next() returns an object like { 'value': yielded_value, 'done': false }.
+When the last "yield" expression is reached, "done" is returned as false. All future calls to "next()" result in { 'value': undefined, 'done': true }.
+
+If there are any statements after the last "yield" expression, they will be run if you call "next()" one more time. After that, there is nothing left in the generator function to run.
+<code>
+function* generator(i) {
+	yield i++;
+	console.log("more code");
+}
+var iterator = generator(0);
+console.log(iterator.next().value); //outputs 0
+console.log(iterator.next().value); //outputs "more code" and undefined
+console.log(iterator.next().value); //outputs undefined
+</code>
+
+You can pass an argument in "next()", but I'm not clear on what that does.
+But here is an interesting example:
+<code>
+function* generator()
+{
+	var reply = yield 'What is the letter?';
+	console.log(reply);
+	reply = yield 'What is the letter after that?'
+	console.log(reply);
+}
+var iterator = generator();
+console.log(iterator.next().value);
+console.log(iterator.next('A').value);
+iterator.next('B');
+//outputs What is the letter?
+//outputs A
+//outputs What is the letter after that?
+//outputs B
+</code>
+You cannot pass an argument to the FIRST call to "next()" on an iterator.
+
+Yield* can delegate execution to another generator:
+<code>
+function* anotherGenerator(i) {
+	yield i + 1;
+	yield i + 2;
+	yield i + 3;
+}
+function* generator(i) {
+	yield i;
+	yield* anotherGenerator(i);
+	yield i + 10;
+}
+var gen = generator(0);
+console.log(gen.next().value); // outputs 0
+console.log(gen.next().value); // outputs 1
+console.log(gen.next().value); // outputs 2
+console.log(gen.next().value); // outputs 3
+console.log(gen.next().value); // outputs 10				
+</code>
+Or over any iterable, such as an array of values:
+<code>
+function* generator(i) {
+	yield i;
+	yield* [-1, -2, -3];
+	yield i + 10;
+}
+var gen = generator(0);
+console.log(gen.next().value); // outputs 0
+console.log(gen.next().value); // outputs -1
+console.log(gen.next().value); // outputs -2
+console.log(gen.next().value); // outputs -3
+console.log(gen.next().value); // outputs 10				
+</code>
+
+Yield can only be used within the scope of a generator, so this is not valid:
+<code>
+function* generator() {
+	[1, 2].forEach(function (item) {
+		yield item; // SyntaxError: yield expression is only valid in generators
+	});
+}
+var iterator = generator();
+console.log(iterator.next());
+</code>
+
+Example use case: get unlimited random values from a set of options:
+<code>
+function * randomFrom(...arr) {
+	while (true)
+	{
+		yield arr[Math.floor(Math.random() * arr.length)];
+	}
+}
+const getRandom = randomFrom(1, 2, 5, 9, 4);
+console.log(getRandom.next().value); // returns random value
+</code>
+
+You can create a generator function dynamically, but it is not recommended due to security and performance issues.
+It works like the Function Constructor:
+<code>
+var GeneratorFunction = Object.getPrototypeOf(function*(){}).constructor
+var g = new GeneratorFunction('a', 'yield a * 2');
+var iterator = g(10);
+console.log(iterator.next().value); // 20				
+</code>
+
+#Hoisting
+
+Function declarations (with definition) are hoisted to the top of the current scope, which means either (A) the top of the enclosing function or (B) the global scope. Therefore you can call a function before (earlier in the file) it is declared.
+<code>
+myFunc(); //outputs 1
+
+function myFunc()
+{
+	console.log(1);
+}
+</code>
+
+If more than one function has the same name (regardless of parameters), the last function definition will overwrite the earlier ones.
+
+It is standard practice to put all function declarations/definitions at the end of your file, and keep the high-level statements at the beginning.
+
+Only function declarations are hoisted. Function expressions and arrow functions are not hoisted.
+
+#Scope
+
+Code blocks create a local scope.  Functions are a code block, so they have a local scope that includes their arguments.
+
+Functions can still make use of any global variables, provided their names are different from the local variables.
+
+If you assign a value to an undeclared variable, its scope will automatically be global. Don't do this.
+
+Generally avoid global variables, especially in web development. You may be overwriting another script's variable or function, and they could overwrite yours.
+
+#Parameters
+
+You can pass any number of parameters to any function.
+If there are extra parameters, they will be ignored.
+If there are not enough parameters, the extras will be set to undefined.
+
+A full list of the parameters passed to a function is accessible through the "arguments" object.
+Even if there are not enough parameters to capture all the passed arguments, they will all be in the "arguments" object.
+<code>
+function myFunc(a, b, c)
+{
+	console.log(arguments[0]); //outputs value of a
+	console.log(arguments[1]); //outputs value of b
+	console.log(arguments[2]); //outputs value of c
+}
+</code>
+
+Default parameters provide a default value for a parameter in case no value is passed in:
+<code>
+function add(a, b=2) {
+	return a + b;
+}
+console.log(add(1)); //outputs 3
+console.log(add(1, 1)); //outputs 2
+console.log(add(1, null)); //outputs 1
+</code>
+
+A function may have one rest parameter, as the last parameter.
+A rest parameter will capture all excess arguments in one array.
+<code>
+function myFunc(a, b, ...rest)
+{
+	console.log(rest);
+}
+myFunc(1, 2, 3, 4, 5); //outputs [3, 4, 5]
+</code>
+A rest parameter can have any name.
+
+#Arity
+
+The arity of a function is the number of arguments it expects.
+
+<code>
+//arity = 2
+//sum.length = 2
+function sum(a, b)
+{
+	return a + b;
+}
+
+//arity = 2
+//sum.length = 0
+function sum()
+{
+	return arguments[0] + arguments[0];
+}
+</code>
+
+#Closure
+
+A closure is a function defined inside another function. A closure can only be called by its outer-function.
+Update: it may be more correct to say a closure is a any function plus its enclosing scope, since top level functions do have access to the global scope
+
+The inner-function's scope includes itself, the outer-function, and global. I.e. the closure is a combination of the inner-function and the lexical environment it was declared in.
+
+<code>
+function A(one, two)
+{
+	B();
+	function B()
+	{
+		console.log(one);
+		console.log(two);
+	}
+}
+A(1, 2); //prints 1 2
+</code>
+
+Closures have access to the outer-function's scope even after the outer-function has returned.
+<code>
+function A(one, two)
+{
+	var three = 3;
+	return function() { 
+		return one + two + three;
+	};
+}
+var addition = A(1, 2);
+console.log(addition()); //prints 6
+</code>
+
+That includes other inner-functions of the outer-function:
+<code>
+function A()
+{
+	function B() { console.log('B'); }
+	return function() { B(); };
+}
+A()(); //prints 'B'
+</code>
+
+Closures do this by storing references to the outer-function's variables. Therefore, if the value of those variables change before the closure is run, the closure will be working with the most up-to-date values.
+<code>
+function property()
+{
+	var property = 10;
+	return {
+		getProperty: function() { return property; },
+		setProperty: function(value) { property = value; }
+	};
+}
+var propertyObject = property();
+propertyObject.setProperty(12);
+console.log(propertyObject.getProperty()); //prints 12
+</code>
+The "getProperty" and "setProperty" here are called "privileged methods" because they are the only way available to access the internal "property".
+
+Closures have access to the scope of their outer-function. If the outer-function is also a closure, then the scopes add up. Essentially, the inner-most closure has access to the scope of all wrapping functions up to the outer-most wrapping function.
+<code>
+function sum(a){
+	var e = 1;
+	return function(b){
+		return function(c){
+			return function(d){
+				return a + b + c + d + e;
+			}
+		}
+	}
+}
+console.log(sum(1)(2)(3)(4)); //prints 11
+</code>
+
+#Immediately Invoked Function Expression
+
+Also known as Self Executing Anonymous Function.
+A function that runs as soon as it is defined, and only runs once.
+
+<code>
+(function() {
+	console.log('a');
+})();
+</code>
+The parentheses around the function expression are the grouping operator. They create a new scope for the function: global variables can be accessed within the function but variables declared within the function do not pollute the global space.
+The last pair of parentheses cause the function to execute immediately.
+
+You can store the function result, but not the function itself.
+<code>
+var result = (function() {
+	return 5;
+})();
+console.log(result); //outputs 5
+</code>
+
+Incorrectly written closure:
+<code>
+function init(array)
+{
+	for(var i = 0; i < array.length; i++)
+	{
+		array[i] = function() { return i; }
+	}
+	return array;
+}
+var numbers = init(new Array(5));
+console.log(numbers[0]()); //prints 5
+console.log(numbers[1]()); //prints 5
+console.log(numbers[2]()); //prints 5
+</code>
+
+Correctly written closure using "immediately invoked function expression":
+<code>
+function init(array)
+{
+	for(var i = 0; i < array.length; i++)
+	{
+		array[i] = function() { return i; }()
+	}
+	return array;
+}
+var numbers = init(new Array(5));
+console.log(numbers[0]); //prints 0
+console.log(numbers[1]); //prints 1
+console.log(numbers[2]); //prints 2
+</code>
+Just put a "()" at the end of the function to cause it to execute immediately.
+
+Alternative implementation, passing variables into the immediately invoked function:
+<code>
+function init(array)
+{
+	for(var i = 0; i < array.length; i++)
+	{
+		array[i] = function(number) { return number; }(i)
+	}
+	return array;
+}
+var numbers = init(new Array(5));
+console.log(numbers[0]); //prints 0
+console.log(numbers[1]); //prints 1
+console.log(numbers[2]); //prints 2
+</code>
+
+Alternative implementation, using "let" instead:
+<code>
+function init(array)
+{
+	for(var i = 0; i < array.length; i++)
+	{
+		let j = i;
+		array[i] = function() { return j; }
+	}
+	return array;
+}
+var numbers = init(new Array(5));
+console.log(numbers[0]()); //prints 0
+console.log(numbers[1]()); //prints 1
+console.log(numbers[2]()); //prints 2
+</code>
+"let" defines a block-scoped variable. The scope of the variable is limited to the block/statement/expression on which it is used.
+
+"Global import" is the concept of passing global variables into an Immediately Invoked Function Expression, so that it is clear what global variables you intend to operate on.
+
+#Partial Application
+
+Application is the process of applying a function to its arguments to produce a return value.
+
+In partial application, the function and some of its arguments are passed to a second function. The local scope of the second function acts as storage for these values. The second function can be called repeatedly, filling in the missing arguments of the first function with different values each time.
+
+<code>
+function partialOperation(fullOperation, a, b, c)
+{
+	return function(d, e) {
+		return fullOperation(a, b, c, d, e);
+	};
+}
+
+function sum(a, b, c, d, e)
+{
+	return a + b + c + d + e;
+}
+
+function multiply(a, b, c, d, e)
+{
+	return a * b * c * d * e;
+}
+
+var partiallyApplied = partialOperation(sum, 1, 2, 3);
+var finalAnswer = partiallyApplied(4, 5); //15
+
+partiallyApplied = partialOperation(multiply, 1, 2, 3);
+finalAnswer = partiallyApplied(4, 5); //120
+</code>
+
+General purpose partial applicator for any number of arguments. This makes use of the build-it "arguments" array that holds all arguments passed into a function.
+<code>
+function partialApplicator(fn)
+{
+	var slice = Array.prototype.slice;
+	var args = slice.call(arguments, 1); //get all arguments after fn
+	
+	return function()
+	{
+		//concat previous arguments with new arguments and apply all to fn
+		return fn.apply(this, args.concat(slice.call(arguments, 0)));
+	}
+}
+
+function sum(a, b)
+{
+	return a + b;
+}
+
+function multiply(a, b, c, d)
+{
+	return a * b * c * d;
+}
+
+var partiallyApplied = partialApplicator(sum, 1);
+var finalAnswer = partiallyApplied(2);
+console.log(finalAnswer);
+
+partiallyApplied = partialApplicator(multiply, 1, 2);
+finalAnswer = partiallyApplied(3, 4);
+console.log(finalAnswer);
+</code>
+
+#Currying
+
+Currying is transforming a function with N arguments into a chain of functions, each with 1 argument. You end up calling a series of functions, gradually filling in the arguments needed by the original function. This is a different technique than partial application.
+
+Currying is a functional programming concept that is built into other languages, like Haskell or Elm, but is only simulated in Javascript. (In Haskell and Elm, all functions are automatically compiled as a series of curried functions.)
+
+Curried functions will always have this nested, one parameter at a time, structure:
+<code>
+function ABC(a)
+{
+	return function(b)
+	{
+		return function(c)
+		{
+			return a + b + c;
+		}
+	}
+}
+	
+var result = ABC(1)(2)(3);
+console.log(result); //outputs 6
+
+var bc = ABC(1);
+var c = bc(2);
+result = c(3);
+console.log(result); //outputs 6
+</code>
+
+Curried function structure using arrow functions:
+<code>
+var DEF = d => e => f => d + e + f;
+var result = DEF(1)(2)(3);
+console.log(result); //outputs 6
+</code>
+
+"Overloaded Currying": Curried function structure sort of like method overloading:
+<code>
+function sum(...args) {
+    if (args.length < 2) {
+        return sum.bind(this, ...args);
+    }
+    return args[0] + args[1];
+}
+console.log(sum(1,2)); //outputs 3
+console.log(sum(1)(2)); //outputs 3
+</code>
+
+Real example:
+<code>
+const tag = t => contents => `<${t}>${contents}</${t}>`;
+const boldTag = tag('b');
+console.log(boldTag('Apple')); //outputs "<b>Apple</b>"
+console.log(boldTag('Banana')); //outputs "<b>Banana</b>"
+</code>
+
+To automatically turn any function into a curried function:
+<code>
+function curry(fn, numberOfArguments)
+{
+	if(typeof numberOfArguments !== 'number')
+	{
+		//function.length is the number of expected arguments
+		numberOfArguments = fn.length;
+	}
+		
+	function getCurriedFunction(previous)
+	{
+		return function(arg)
+		{
+			//add one argument to array on each invocation
+			var args = previous.concat(arg);
+			if(args.length < numberOfArguments)
+				return getCurriedFunction(args);
+			//once you have enough arguments, run the function
+			else
+				return fn.apply(this, args);
+		};
+	}
+	
+	//init with empty array of arguments
+	return getCurriedFunction([]);
+}
+
+function sum(a, b, c)
+{
+	return a + b + c;
+}
+
+var curriedSum = curry(sum);
+var result = curriedSum(1)(2)(3);
+console.log(result);
+</code>
+
+Considerations when using currying:
+- currying is not compatible with default parameter values
+- curried functions are most useful when the first parameters are settings and the last are the data being operated on, which is backwards of the usual order of parameters
+
+#Bind
+
+With bind, you can set the "this" value for a function, plus the first parameters of the function. A new function is returned. When you invoke the new function, you can provide any remaining parameters.
+
+Syntax:
+<code>
+var newFunction = oldFunction.bind(thisValue, a, b, c);
+var result = newFunction(d, e);
+</code>
+
+Example: setting "this"
+<code>
+function getAttribute(attributeName)
+{
+	return this[attributeName];
+}	
+var customer = { id: 12, name: "Bob", age: "44" };
+var getBobAttribute = getAttribute.bind(customer);
+console.log(getBobAttribute("name")); //outputs Bob
+console.log(getBobAttribute("age")); //outputs 44
+</code>
+
+#Compose, Pipe
+
+A function is composable if it has one parameter and one return value.
+
+Function composition allows you to combine two or more functions into one new function. Function composition is the same concept as method chaining in C# and as piping in Unix command prompt.
+
+"compose" is not a built-in function:
+<code>
+const compose = (...functions) => args => functions.reduceRight((inputArgument, currentFunction) => currentFunction(inputArgument), args);
+</code>
+
+"pipe" is not a built-in function:
+<code>
+const pipe = (...functions) => args => functions.reduce((inputArgument, currentFunction) => currentFunction(inputArgument), args);
+</code>
+
+The only difference between compose and pipe is the order they execute functions in. Pipe executes left-to-right (like a Unix command line pipe). Compose executes right-to-left (like a series of nested function calls).
+
+<code>
+function reverse(text)
+{
+	return text.split('').reverse().join('');
+}
+function drop(text)
+{
+	return text.substring(0, text.length - 1);
+}
+function repeat(text)
+{
+	return text + text;
+}
+console.log(reverse("bird")); //outputs "drib"
+console.log(drop("bird")); //outputs "bir"
+console.log(repeat("bird")); //outputs "birdbird"
+
+const compose = (...functions) => args => functions.reduceRight((inputArgument, currentFunction) => currentFunction(inputArgument), args);
+const pipe = (...functions) => args => functions.reduce((inputArgument, currentFunction) => currentFunction(inputArgument), args);
+
+var dropReverseRepeat = pipe(drop, reverse, repeat);
+console.log(dropReverseRepeat("bird")); // outputs "ribrib"
+
+var repeatReverseDrop = compose(drop, reverse, repeat);
+console.log(repeatReverseDrop("bird")); // outputs "dribdri"
+</code>
+
+#Thunk
+
+A function that wraps a call to another function, with arguments, for later use.
+
+#High Order
+
+A high order function is a function that returns a function.
+
+#Pure Function
+
+A pure function is a function with no side effects. It accepts arguments and returns a value, and makes no changes to anything - no database operations, no changes to global values, nothing.
+
+Javascript does not require that functions be pure functions. However, making as many of your functions as possible into pure functions will result in cleaner code (easier to test, better organized).
+
+#Trampolining
+
+Trampolining is using a loop that invokes thunk returning functions.
+
+For when you have to run a long recursive operation that would otherwise overflow stack memory.
+
+This is much much slower than recursion.
+
+<code>
+function trampoline(fn)
+{
+	return function() {
+		var x = fn.apply(this, arguments);
+		while(x instanceof Function) {
+			x = x();
+		}
+		return x;
+	};
+}
+
+function range(start, end, result)
+{
+	result = result || [];
+	result.push(start);
+	return (start == end) ? result : function() {
+		return range(((start < end) ? ++start : --start), end, result);
+	};
+}
+
+trampoline(range)(1, 4); //returns [1, 2, 3, 4]
+//should this be trampoline(range(1,4)) ?
+</code>

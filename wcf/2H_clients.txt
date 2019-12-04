@@ -1,0 +1,123 @@
+##Clients
+
+#Consume WCF Services
+
+There are several aspects to establishing communication between client and service: 
+- Pipe Establishment (if using net.tcp)
+- Hand-Shaking 
+- Security Exchange
+- Serialization and Deserialization
+- Message Transmission
+
+The client will also need a reference to the Data Contracts and Service Contracts defined by the host.
+
+#Naming Convention
+
+Call a proxy for IGeographyService as "GeographyClient".
+
+#Client Proxies
+
+All of that low-level complexity can be abstracted into a proxy class. WCF provides the ClientBase<T> wrapper class for this purpose.
+
+You'll have one proxy class per service contract.
+<code>
+public class MyProxy : ClientBase<IServiceContract>, IServiceContract
+{
+	//implement each service contract operation here
+	//generally, these are just pass-through methods like this
+	public IEnumerable<Zipcode> GetZipcodes()
+	{
+		return Channel.GetZipcodes();
+	}
+}
+</code>
+
+<code>
+MyProxy proxy = new MyProxy();
+List<Zipcode> zipcodes = proxy.GetZipcodes();
+proxy.Close();
+</code>
+Always call proxy.Close(). The pipe established with the service remains open until you do, and it is possible to use up all the service's pipes if you don't clean up.
+
+#Configuration
+
+The proxy class will also require an endpoint, either through configuration or code. This will be in the project that uses the proxy classes.
+
+If you are using explicitly named endpoints, you will need to use the non-default constructor in the proxy class. The client code will need to specify which endpoint is used when the proxy is instantiated.
+
+<code>
+public class MyProxy : ClientBase<IServiceContract>, IServiceContract
+{
+	public MyProxy(string endpointName) : base(endpointName)
+	{
+	}
+}
+</code>
+
+You can also use configureless endpoints.
+
+<code>
+public class MyProxy : ClientBase<IServiceContract>, IServiceContract
+{
+	public MyProxy(Binding binding, EndpointAddress address) : base(binding, address)
+	{
+	}
+}
+</code>
+
+The client will need endpoint(s) defined through configuration (App.config file) or through code. The client must have a uniquely named endpoint for each service contract interface. If you do not specify a name explicitly, it will default to the name of the service contract.
+
+<code>
+<system.serviceModel>
+	<client>
+		<!-- all endpoint settings exactly match what is in the service config -->
+		<endpoint
+			address="full url of service"
+			binding="communication medium"
+			contract="fully specified Type of the service contract interface"
+		/>
+		<endpoint name="explicit name"
+			address="full url of service"
+			binding="communication medium"
+			contract="fully specified Type of the service contract interface"
+		/>
+	</client>
+</system.serviceModel>
+</code>
+
+The client code can then call the web service through a proxy class.
+
+If you do not provide an explicit name for an endpoint, it will be set to one based on the "contract" attribute. All endpoint data is collected into a dictionary, keyed on the name of the endpoints. So if you have more than one endpoint for the same contract, neither with an explicit name, only one will end up being used by the proxy.
+
+#Contract Equivalence
+
+The service and client do not have to share a library of Data Contracts and Service Contracts.
+
+It is possible for the service and client to use different contracts, as long as they are equivalent:
+- Contract Names are the same
+- Namespaces are the same
+- Member and Operation names are the same
+
+Note that you can override the actual name of a Member or Operation with an attribute, to make your contracts equivalent.
+
+This works because all data passed between service and client is serialized and then deserialized. As long as the serialization instructions are the same, the data will be passed correctly.
+
+#Channel Factory
+
+Instead of using proxy classes, you can use a channel factory to create the proxy classes on the fly.
+
+<code>
+ChannelFactory<IServiceContract> factory = new ChannelFactory<IServiceContract>("");
+/*
+	as of the time this lesson was written,
+	there was a known bug in ChannelFactory
+	where you need to use an empty string instead of no string for the default constructor
+*/
+IServiceContract proxy = factory.CreateChannel();
+List<Zipcode> zipcodes = proxy.GetZipcodes();
+factory.Close();
+</code>
+
+Channel factories can also use configureless endpoints.
+
+Channel factories can be used if you want to write a custom Proxy that does more behind-the-scenes work than the default Proxy.

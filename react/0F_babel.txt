@@ -1,0 +1,42 @@
+##Babel
+
+Babel is a Javascript compiler. It can convert markup and programming languages into Javascript.
+
+ReactJS uses Babel to convert JSX into Javascript.
+
+Using in-browser compiler, which will be slow for your clients:
+<code>
+	<html>
+		<head>
+			<meta charset="UTF-8">
+
+			<!-- Load React. -->
+			<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+			<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+			<!-- If using JSX -->
+			<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+		</head>
+		<body>
+			<div id="root"></div>
+		</body>
+	</html>
+
+	<script type='text/babel'>
+		ReactDOM.render(
+			<h1>Hello, world!</h1>,
+			document.getElementById('root')
+		);
+	</script>
+</code>
+
+#Preprocessor
+
+Compile JSX to Javascript before serving pages to your clients.
+
+1) Install Node.js on your computer.
+2) In terminal: npm init -y
+3) In terminal: npm install babel-cli@6 babel-preset-react-app@3
+4) In terminal: npx babel --watch source --out-dir . --presets react-app/prod 
+
+Step (4) starts a "watcher" application.
+Now when you create a file with JSX in it in the "source" directory, it will be automatically processed into a plain Javascript file, with the same file name, in the output directory.

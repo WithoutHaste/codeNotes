@@ -1,0 +1,21 @@
+##Test Driven Development
+
+(These notes are based on minimal research, so far.)
+
+#Methodology
+
+1) Write a failing test case, for the smallest unit of functionality you are working on.
+2) Write just enough code (new feature, or bug fix) to make that test case pass.
+3) Repeat.
+
+You can refactor anytime all your test cases are passing.
+
+"Write just enough code" can mean hard-coding results first, as you work out your object structure. And only then return actual calculations.
+
+#Reasons
+
+You code will be written to be testable.
+
+You'll build a comprehensive automated test suite.
+
+TTD can be a good design tool, when you haven't written a feature yet. It can be used as a whiteboard, that will actually compile when you've cleaned it up.

@@ -1,0 +1,66 @@
+##Edit Object
+
+Only the changed data will be updated.
+
+#Connected Applications
+
+Editing within current context:
+<code>
+Country country = dbContext.Countries.First();
+country.Name = "New Name";
+dbContext.SaveChanges();
+</code>
+
+#Disconnected Applications
+
+Editing within a new context:
+<code>
+dbContext.Countries.Attach(country);
+country.Name = "New Name";
+dbContext.SaveChanges();
+//This will only save changes made after the "Attach" statement.
+</code>
+Or
+<code>
+//Manually mark the object as edited.
+//EVERY field in the object will be "updated", regardless of previous value.
+country.Name = "New Name";
+dbContext.Countries.Attach(country);
+dbContext.Entry(country).State = EntityState.Modified;
+dbContext.SaveChanges();
+</code>
+
+DO NOT use "dbContext.Countries.Add(country)" because it will ignore the country's Id and actually add a new record.
+
+Editing a child object that has no foreign key to the parent in the Entity class:
+<code>
+//City is a child of Country, and some of the fields in City have been edited
+public void SaveUpdatedCity(City updatedCity, int countryId)
+{
+	using(GeographyContext dbContext = new GeographyContext())
+	{
+		City city = dbContext.Cities.Include(c => c.Country).FirstOrDefault(c => c.Id == updatedCity.Id);
+		dbContext.Entry(city).CurrentValues.SetValues(updatedCity);
+		dbContext.SaveChanges();
+	}
+}
+</code>
+If the Entity class City had an explicit foreign key to Country, saving changes to City would be much less convoluted.
+
+#AcceptAllChanges
+
+Both of these tell EF to discard all tracked changes, whether or not the database transaction succeeds. You might lose data this way.
+<code>
+dbContext.SaveChanges();
+//or
+dbContext.SaveChanges(SaveOptions.AcceptAllChangesAfterSave);
+//because this enum value is 1, you'll also see
+dbContext.SaveChanges(true);
+</code>
+
+This lets you check if the transaction failed before discarding the change tracking.
+<code>
+dbContext.SaveChanges(SaveOptions.None); //or dbContext.SaveChanges(false);
+//check that transaction did not fail
+dbContext.AcceptAllChanges();
+</code>

@@ -1,0 +1,366 @@
+##Select
+
+Select records from a table:
+<code>
+SELECT * FROM tableName;
+
+SELECT columnA, columnB FROM tableName;
+</code>
+
+#Aliasing
+
+<code>
+SELECT 
+	columnA AS aliasA, 
+	columnB 
+FROM tableName;
+
+SELECT 
+	* 
+FROM tableA AS tA
+INNER JOIN tableB as tB ON tA.columnA = tB.columnC;
+</code>
+
+#Joins
+
+INNER JOIN
+matches rows in both tables
+
+LEFT JOIN (LEFT OUTER JOIN)
+returns everything from the left (first) table, with matches from the right table where possible
+
+RIGHT JOIN (RIGHT OUTER JOIN)
+returns everything from the right (second) table, with matches from the left table where possible
+
+FULL JOIN (FULL OUTER JOIN)
+returns everything from both tables, with matches where possible
+
+A self join means that you join a table to itself. This is not a special command word.
+
+Be careful with joins, you can really slow down a query with an overly-large join.
+
+<code>
+SELECT 
+	* 
+FROM tableA 
+INNER JOIN tableB ON tableA.columnA = tableB.columnB;
+</code>
+
+#Union
+
+<code>
+SELECT * FROM tableA WHERE columnA = value
+UNION
+SELECT * FROM tableB WHERE columnB = value
+</code>
+
+The result returned will have the DISTINCT rows from the combined SELECT statements.
+
+Use UNION ALL to return duplicate rows as well. This is faster.
+
+The column list in each result set must be in the same order, with the same names and data types.
+
+#Top
+
+Select just the first N rows of the result set.
+
+<code>
+SELECT TOP 5 
+	* 
+FROM tableName;
+
+SELECT TOP 10 PERCENT 
+	* 
+FROM tableName;
+
+--surround variables in parentheses
+SELECT TOP (@BatchSize) 
+	* 
+FROM tableName;
+</code>
+
+#Distinct
+
+Returns just the distinct rows in the result set.
+
+<code>
+SELECT DISTINCT 
+	* 
+FROM tableName;
+</code>
+
+#Where Operators
+
+Where clauses can be combined using the set joins AND and OR.
+Where clauses can be negated with keyword NOT.
+
+<code>
+SELECT 
+	* 
+FROM tableName 
+WHERE (columnA < 5  AND (columnB = 'D' OR columnC <> 4));
+</code>
+
+Null Operators: IS NULL, IS NOT NULL
+SQL uses 3-value truth statements, so if you want to operate on a NULL value, you must use these operators.
+
+Normal Operators:
+= equals
+<> not equal
+> greater than
+< less than
+>= greater than or equal
+<= less than or equal
+
+#BETWEEN Where Operator
+
+Defines a range of valid values.
+
+Note that different database engines will include or exclude one or both of the boundary values. MS SQL Server includes both boundary conditions in the valid values. 
+
+I.e., the range is inclusive at both the minimum and the maximum.
+
+<code>
+SELECT * FROM Customer WHERE OrderCount BETWEEN 3 AND 5;
+
+SELECT * FROM Customer WHERE MiddleInitial BETWEEN 'A' AND 'D';
+
+SELECT * FROM Customer WHERE Birthday BETWEEN '1995/01/01' AND '2000/01/01';
+</code>
+
+#LIKE Where Operator
+
+A simple regular expression matcher.
+
+<code>
+SELECT * FROM Customer WHERE FirstName LIKE 'Sa%'; --any name starting with "Sa"
+</code>
+
+% matches any number of any characters
+_ matches exactly one character
+[abc] matches one character in the brackets
+[a-g] matches one character in the range in the brackets
+[^abc] matches one character that is NOT in the brackets
+[!abc] is equivalent to [^abc]
+
+<code>
+--select any string containing a '%' percent sign
+SELECT * FROM Comment WHERE Text LIKE '%[%]%';
+
+--change the escape character
+SELECT * FROM Comment WHERE Text LIKE '%\%%' ESCAPE '\';
+</code>
+
+#IN Where Operator
+
+Checks that the column value is in the provided list.
+
+<code>
+SELECT * FROM Customer WHERE State IN ('TX', 'IL', 'NM');
+
+SELECT * FROM Customer WHERE State IN (
+	SELECT State FROM States WHERE Population < 1,000,000
+);
+</code>
+
+#EXISTS Where Operator
+
+Returns true if result set returns any rows at all. This can be very fast, since it only needs to verify that one row would be returned.
+
+<code>
+WHERE EXISTS (
+	--subquery
+);
+</code>
+
+#Group By
+
+Define how to group rows so that aggregate operations can be performed on them.
+
+The GROUP BY clause goes after the WHERE clause.
+
+<code>
+SELECT City, COUNT(CustomerId) AS Cnt FROM Customer GROUP BY City;
+
+SELECT City, Zipcode, COUNT(CustomerId) AS Cnt FROM Customer GROUP BY City, ZipCode;
+</code>
+
+Every column you are grouping by must be included in the SELECT clause.
+All other columns in the SELECT clause must be aggregate functions.
+
+#Having
+
+The WHERE clause cannot use aggregate functions. To put conditional statements on aggregate results, use the GROUP BY and the HAVING clauses.
+
+The HAVING clause goes after the GROUP BY clause.
+
+HAVING can use all the same structures and operators as WHERE.
+
+<code>
+SELECT 
+	City, 
+	COUNT(CustomerId) AS Cnt 
+FROM Customer 
+GROUP BY City 
+HAVING Cnt > 5;
+	
+SELECT 
+	City, 
+	COUNT(CustomerId) AS Cnt 
+FROM Customer 
+GROUP BY City 
+HAVING SUM(otherColumn) < 6;
+</code>
+
+#Order By
+
+ASC sorts results in ascending order (lowest to highest). This is the default.
+DESC sorts results in descending order (highest to lowest).
+
+The ORDER BY clause goes last.
+	
+<code>
+SELECT * FROM Customer ORDER BY LastName ASC;
+
+SELECT * FROM Customer ORDER BY LastLogin DESC, LastName ASC;
+</code>
+
+Specifying multiple ORDER BY columns means sort by the first column, then by the second column, and so on.
+
+#ROW_NUMBER
+
+ROW_NUMBER will add a column to your result set that numbers the results 1 to N.
+
+<code>
+SELECT
+	ROW_NUMBER() OVER(ORDER BY CustomerId) AS RowNum,
+	CustomerId,
+	Name
+FROM Customer
+ORDER BY Name
+</code>
+The result set will be ordered by Name, but the RowNum will be ordered by CustomerId.
+
+<code>
+SELECT
+	ROW_NUMBER() OVER(
+		PARTITION BY CustomerId, OrderYear 
+		ORDER BY CustomerId, OrderYear
+	) as YearlyOrders,
+	CustomerId,
+	Name,
+	OrderYear
+FROM Customer
+</code>
+The result set will be group by unique combinations for CustomerId/OrderYear.
+Each grouping will be numbered 1 to N with that group.
+So you'll have duplicate YearlyOrders in the final result set.
+
+#Aggregate Functions
+
+AVG(col) average the values
+
+COUNT(col) count the number of rows
+
+FIRST(col) return the first value
+
+LAST(col) return the last value
+
+MAX(col) return the highest value
+
+MIN(col) return the lowest value
+
+SUM(col) sum all the values
+
+#Other Functions
+
+UPPER(string) convert all characters to uppercase
+
+LOWER(string) convert all characters to lowercase
+
+MID(string, index, length) substring function, with index starting at 1
+
+LEN(string) string length
+
+RIGHT(string, length) returns the substring, counting from the right-end of the string
+
+LEFT(string, length) returns the substring, counting from the left-end of the string
+
+ROUND(numericColumn, decimalDigitCount) round a number
+be wary of the default rounding rules in the system, they may not be the rules you are used to
+for instance, scientific rounding versus banker's rounding
+
+ISNULL(checkValue, replacementValue) if the checkValue is NULL, the replacementValue will be used instead
+
+COALESCE(A, B, C...) the first non-null value in the list will be returned
+
+STUFF(text, startIndex, length, replacement) deletes (startIndex, length) from text, then inserts replacement at startIndex
+
+FORMAT(column, 'C', 'en-us') format currency: turn 1198.56 into $1,198.56
+
+#XQuery
+
+For columns of type XML Object.
+
+Checking if a node exists:
+<code>
+WHERE xmlCol.exist('rootNode/modeA/nodeB') = 0
+</code>
+
+Comparing values:
+<code>
+WHERE xmlCol.value('(rootNode/nodeA/nodeB)[1]', 'varchar(30)') = 'myString'
+</code>
+
+Selecting a value:
+<code>
+SELECT xmlCol.value(('(rootNode/nodeA/nodeB/text())[1]', 'varchar(30)') ...
+</code>
+
+Using a node like a table:
+<code>
+SELECT colA.query('./nodeC').value('.', 'char(11)')
+FROM xmlCol.nodes('rootNode/nodeA/nodeB') as ref(colA)
+</code>
+
+Insert a node:
+<code>
+--xml before
+<results>
+	<result>
+		<value>Order not synced</value>
+	</result>
+</results>
+
+--sql
+UPDATE MyTable SET xmlCol.modify('
+	insert <result><value>Manual update</value></result>
+	into (/results)[1]
+') WHERE Id = 5;
+
+--xml after
+<results>
+	<result>
+		<value>Order not synced</value>
+	</result>
+	<result>
+		<value>Manual update</value>
+	</result>
+</results>
+</code>
+
+Delete a node:
+<code>
+UPDATE MyTable SET xmlCol.modify('
+	delete (/results/result)[last()]
+') WHERE Id = 5;
+</code>
+
+#Index Hint
+
+You can recommend a particular index be used for a SELECT statement:
+<code>
+SELECT
+	columnA
+FROM tableName (index=indexName);
+</code>

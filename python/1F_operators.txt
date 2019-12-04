@@ -1,0 +1,50 @@
+##Operators
+
+Operator: arithmetic and logical symbols
+Operand: the values the operator uses
+
+#Arithmetic
+	+ plus
+	- minus
+	* times
+	/ divide
+	// divide then floor
+	% modulus (remainder of divide then floor)
+	** power
+	abs(x) absolute value
+	divmod(x, y) returns tuple (x/y, x%y)
+
+Python does not support ++ or --
+
+You can separate arithmetic phrases with parentheses ( )
+
+#Logic
+	==
+	!=
+	>
+	<
+	>=
+	<=
+	not
+	and (also written &)
+	or (also written |)
+	
+You can separate logical phrases with parentheses ( )
+	
+#Assignment
+	=
+	+=
+	-=
+	*=
+	/=
+	//=
+	%=
+	**=
+	
+#Bitwise
+	& and
+	| or
+	^ xor (when only one is true)
+	~ not
+	<< shift left
+	>> shift right

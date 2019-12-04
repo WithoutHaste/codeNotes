@@ -1,0 +1,31 @@
+##Collation
+
+Collation can be set at the database level, can be overridden at the table level (?maybe?), and can be overridden at the column level.
+
+Collation affects how text data is interpreted, how text is sorted, case-sensitivity rules, etc.
+
+You cannot compare text data that is using different collations.
+
+#Database
+
+To see what collation a database is using:
+1) Open SSMS
+2) Right-click on the database > Properties > Options tab > Collation is at the top
+
+Or in T-SQL:
+<code>
+--for the server
+SELECT CONVERT (varchar(256), SERVERPROPERTY('collation'));
+
+--for the database
+SELECT name, collation_name FROM sys.databases; 
+
+--for the column
+SELECT name, collation_name FROM sys.columns WHERE name = N'<column name>';
+</code>
+
+To see all supported collations:
+<code>
+SELECT name, description FROM sys.fn_helpcollations();
+</code>
+

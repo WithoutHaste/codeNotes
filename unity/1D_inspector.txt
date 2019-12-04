@@ -1,0 +1,11 @@
+##Inspector
+
+The inspector pane will show and edit details of the selected asset.
+
+At the very top is the name of the object or asset.
+
+Position, depth, and dimensions are at the top.
+Also at the top is an image with a red cross-hair. Click that to set how the asset is anchored to the view. The position and dimensions are relative to the anchor point.
+
+At the bottom is the "Add Component" button.
+Add Component > Layout > some selection - can be used to set a lot of default behavior.

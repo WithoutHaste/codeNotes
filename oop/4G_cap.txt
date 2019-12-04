@@ -1,0 +1,11 @@
+##CAP Theorem
+
+The CAP theorem for distributed computing, published by Eric Brewer: 
+
+It is not possible for a distributed computer system to simultaneously provide Consistency, Availability, and Partition Tolerance. At most, two of these can be provided at a time.
+
+Consistency: all nodes see the same data at the same time.
+
+Availability: every request receives a FAILED or SUCCEEDED response.
+
+Partition Tolerance: the system continues to operate despite partial system failure or arbitrary message loss.

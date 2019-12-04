@@ -1,0 +1,168 @@
+##Module-Level: SOLID Principles
+
+#Goal
+
+The SOLID design principles for writing object-oriented code. How to arrange functions and data structures into classes, and how to interconnect those classes.
+
+"Mid-level" principles means working higher than the "line of code" level and lower than the "architecture" level.
+
+The goal of these principles is to produce software that is tolerant to change, easy to understand, and can be used in many different systems.
+
+These principles were organized and presented by this author, so he should know what he's talking about here.
+
+#Single Responsibility Principle
+
+Each software module should have only one reason to change. (NOT every module should do just one thing. A FUNCTION should do just one thing, but this principle is working at a higher level.)
+
+Software systems change to satisfy actors (groups of business stakeholders, users, etc). So to achieve this, organize the software to imitate the social organization of the company. You could rephrase it as "each software module should be responsible to only one actor".
+
+("Module" generally means "source file" here.)
+
+For example, the code to calculate overtime should not be shared between the Accounting Department's modules and the Human Resources Department's modules. The calculation might be the same now, but is very likely to be different in the future. The CFO's decisions should not impact the COO's decisions.
+
+Adhering to this principle will make dividing work among a team much easier, as each programmer is more likely to be editing different source files. You won't have many merge operations when checking in source code.
+
+Two examples of organizing the source code: (solid arrows mean a source code dependency)
+<pinker>
+Layout:
+	[Employee Facade]
+	[Pay Calculator][Hour Reporter]
+	[Employee Data]
+Relate:
+	[Employee Facade]->[Pay Calculator],[Hour Reporter]
+	[Pay Calculator]->[Employee Data]
+	[Hour Reporter]->[Employee Data]
+[Employee Facade]:
+	Define:
+		+ calculatePay
+		+ reportHours
+[Pay Calculator]:
+	Define:
+		+ calculatePay
+[Hour Reporter]:
+	Define:
+		+ reportHours
+</pinker>
+
+<pinker>
+Layout:
+	[Employee]
+	[Pay Calculator][Hour Reporter]
+Relate:
+	[Employee]->[Pay Calculator],[Hour Reporter]
+[Employee]:
+	Define:
+		- employeeData|
+		+ calculatePay
+		+ reportHours
+[Pay Calculator]:
+	Define:
+		+ calculatePay
+[Hour Reporter]:
+	Define:
+		+ reportHours
+</pinker>
+
+#Open-Closed Principle
+
+Software should be open to change/extension and closed to editing/modification.
+
+For software to be easy to change, the system must be designed so you can change it by adding new code, rather than editing existing code.
+
+If simple extensions to the requirements force massive changes to the software, then the architects of that software system have engaged in a spectacular failure.
+
+Example: you have a system with a financial summary web page that displays the data in a scrollable format, with some color-coding. If a stakeholder asks for the same data in a printable format, paginated, in black and white, how much of your current system has to change? How much of this can be achieved by adding code, instead of editing code?
+
+Sample data flow:
+<pinker>
+Layout:
+	[Financial Data]
+	[Financial Analyzer]
+	[Financial Report Data]
+	[Web Reporter][Print Reporter]
+Relate:
+	[Financial Data]->[Financial Analyzer]
+	[Financial Analyzer]->[Financial Report Data]
+	[Financial Report Data]->[Web Reporter],[Print Reporter]
+</pinker>
+Note that calculating the data is separated from displaying the data.
+
+Sample detailed class diagram:
+<pinker>
+Layout:
+	[Controller][Interactor]
+	[Screen Presenter][Print Presenter]...[Database]
+	[Web View][PDF View]
+[Interactor]:
+	Layout:
+		[{A}Financial Report Request (Data Structure)]
+		[{B}Financial Report Requester (Interface)][{D}Financial Report Generator][{F}Financial Entities]
+		[{C}Financial Report Response (Data Structure)][{E}Financial Data Gateway (Interface)]
+	Relate:
+		{D}->{A},{C},{E},{F}
+		{D}-:>{B}
+[Database]:
+	Layout:
+		[{G}Financial Data Mapper][{H}Financial Database]
+	Relate:
+		{G}->{H},{F}
+		{G}-:>{E}
+[Controller]:
+	Layout:
+		[{I}Financial Report Controller]
+		[{J}Financial Report Presenter (Interface)]
+	Relate:
+		{I}->{A},{B},{C},{J}
+		{J}->{C}
+[Screen Presenter]:
+	Layout:
+		[{K}Screen Presenter]
+		[{L}Screen View Model (DS)][{M}Screen View (I)]
+	Relate:
+		{K}-:>{J}
+		{K}->{L},{M}
+		{M}->{L}
+[Web View]:
+	Layout:
+		[Web View]
+	Relate:
+		[Web View]-:>{M}
+[Print Presenter]:
+	Layout:
+		[{N}Print Presenter]
+		[{O}Print View Model (DS)][{P}Print View (I)]
+	Relate:
+		{N}-:>{J}
+		{N}->{O},{P}
+		{P}->{O}
+[PDF View]:
+	Layout:
+		[PDF View]
+	Relate:
+		[PDF View]-:>{P}
+</pinker>
+
+#Liskov Substitution Principle
+
+For software to be built of interchangeable parts, those parts must adhere to the contract that makes the parts interchangeable.
+
+In other words, everywhere in the code that Class A is used, it should be possible to substitute in an instance of Class B without breaking anything.
+
+<pinker>
+Layout:
+	[Class B][Class A]
+Relate:
+	[Class B]-D[Class A]
+</pinker>
+
+For example, if you're wondering if Class B should inherit from Class A, and you know that there's a function in Class A that doesn't apply to Class B, then Class B should not inherit from Class A.
+
+#Interface Segregation Principle
+
+Don't depend on things you don't need.
+
+For example, if there are 10 methods listed in an interface and half the users only need 6 of them, then that interface should be split into at least two interfaces. That way, those users only have to depend on the methods they are actually using.
+
+#Dependency Inversion Principle
+
+Code implementing high-level policies (such as Business Logic) should not depend on code implementing low-level policies (such as Data Access).

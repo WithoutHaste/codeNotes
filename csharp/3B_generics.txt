@@ -1,0 +1,301 @@
+##Generics
+
+#Generic Class
+
+Encapsulates operations that are not specific to a particular data type
+Commonly used for collections
+
+You can convert a concrete class to a generic class by replacing types with type parameters.
+<code>
+public class MyGeneric<T>
+{
+	public MyGeneric(T myParam)
+	{
+	}
+}
+</code>
+
+To inherit from a generic class and specify the type:
+<code>
+public class MyGeneric<T> { }
+
+public class MySpecific : MyGeneric<MyType> { }
+</code>
+
+Getting the Type of a generic:
+<code>
+using System.Reflection;
+
+public class OneGeneric<T> { }
+public class TwoGeneric<T,U> { }
+
+//within method...
+Type typeOne = typeof(OneGeneric<>);
+Type typeTwo = typeof(TwoGeneric<,>);
+TypeInfo typeInfoOne = typeOne.GetTypeInfo();
+TypeInfo typeInfoTwo = typeTwo.GetTypeInfo();
+</code>
+
+#Generic Method
+
+A method specifying a generic type
+
+<code>
+static void Swap<T>(ref T a, ref T b)
+{
+	T temp = a;
+	a = b;
+	b = temp;
+}
+</code>
+
+#Generic Call
+
+Calling a generic method
+
+<code>
+MyGeneric<int> myInts = new MyGeneric<int>();
+Utilities.Swap<int>(ref x, ref y);
+</code>
+
+#Type Parameter Constraints
+
+<code>
+class MyGeneric<T> where T:IComparable { }
+</code>
+Requires type T to implement interface IComparable
+
+<code>
+class MyGeneric<T> where T:BaseClass { }
+</code>
+Requires type T to derive from class BaseClass
+
+<code>
+class MyGeneric<T,U> where T:class where U:struct { }
+</code>
+Requires type T to be a class and type U to be a struct
+
+<code>
+class MyGeneric<T> where T:IComparable,new() { }
+</code>
+Requires type T to implement interface IComparable, and to implement a parameterless constructor
+
+<code>
+class MyGeneric<T,U> where T:U { }
+</code>
+Requires type T to be of the same class as U, or of a derived class of U
+
+<code>
+public void MyMethod<T,U>(int a, string b) where T:AbstractClass,new() { }
+</code>
+All the same constraints can be applied to a generic method. The constraints go between the parameter list and the method body.
+
+#Example: Paired Strongly-Type Generic Derivatives
+
+Example demonstrating using abstract generic classes to create a paired set of derived classes that return strong-typed values.
+
+Here are the base abstract classes. They provide weakly typed data.
+<code>
+	/// <summary>
+	/// A wrapper around the <see cref='Node'/> class.
+	/// Provides extension operations that affect <see cref='Node'/>.
+	/// </summary>
+	public abstract class ANodeWrapper
+	{
+		/// <summary>
+		/// Returns the wrapped <see cref='Node'/>.
+		/// </summary>
+		/// <exception cref='Exception'>Node is already set.</exception>
+		public Node Node {
+			get {
+				return node;
+			}
+			set {
+				if(node != null)
+					throw new Exception("Node is already set.");
+				node = value;
+			}
+		}
+		private Node node;
+
+		/// <summary></summary>
+		protected ALinkWrapper linkWrapper;
+
+		/// <summary></summary>
+		public ANodeWrapper()
+		{
+		}
+
+		/// <summary></summary>
+		public ANodeWrapper(Node node)
+		{
+			Node = node;
+		}
+	}
+
+	/// <summary>
+	/// A wrapper around the <see cref='Link'/> class.
+	/// Provides extension operations that affect <see cref='Link'/>.
+	/// </summary>
+	public abstract class ALinkWrapper
+	{
+		/// <summary>
+		/// Returns the wrapped <see cref='Link'/>.
+		/// </summary>
+		/// <exception cref='Exception'>Link is already set.</exception>
+		public Link Link {
+			get {
+				return link;
+			}
+			set {
+				//this is the one weak point - can't do type checking at this level
+				if(link != null)
+					throw new Exception("Link is already set.");
+				link = value;
+			}
+		}
+		private Link link;
+
+		/// <summary></summary>
+		protected List<ANodeWrapper> childNodeWrappers = new List<ANodeWrapper>();
+
+		/// <summary></summary>
+		public ALinkWrapper()
+		{
+		}
+
+		/// <summary></summary>
+		public ALinkWrapper(Link link)
+		{
+			Link = link;
+		}
+
+		/// <summary>Add child node to end of list.</summary>
+		public virtual void Add(ANodeWrapper childNodeWrapper)
+		{
+			childNodeWrappers.Add(childNodeWrapper);
+		}
+	}
+</code>
+
+Here are the mid-level generic classes, still abstract. They provide strongly-typed data.
+<code>
+	/// <summary>
+	/// The purpose of <see cref='ANodeWrapper'/> and <see cref='ANodeWrapper{T}'/> is to provide a paired set of strongly-type subclasses.
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public abstract class ANodeWrapper<T> : ANodeWrapper where T:ALinkWrapper
+	{
+		/// <summary></summary>
+		public T LinkWrapper {
+			get {
+				return (T)linkWrapper;
+			}
+			set {
+				if(linkWrapper != null)
+					throw new Exception("LinkWrapper is already set.");
+				linkWrapper = value;
+			}
+		}
+
+		/// <summary></summary>
+		public ANodeWrapper()
+		{
+		}
+
+		/// <summary></summary>
+		public ANodeWrapper(Node node) : base(node)
+		{
+		}
+	}
+
+	/// <summary>
+	/// The purpose of <see cref='ANodeWrapper'/> and <see cref='ANodeWrapper{T}'/> is to provide a paired set of strongly-type subclasses.
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public abstract class ALinkWrapper<T> : ALinkWrapper where T:ANodeWrapper
+	{
+		/// <summary></summary>
+		public T[] ChildNodeWrappers {
+			get {
+				return childNodeWrappers.Cast<T>().ToArray();
+			}
+		}
+
+		/// <summary></summary>
+		public ALinkWrapper()
+		{
+		}
+
+		/// <summary></summary>
+		public ALinkWrapper(Link link) : base(link)
+		{
+		}
+
+		/// <summary>Add child node to end of list.</summary>
+		public override void Add(ANodeWrapper childNodeWrapper)
+		{
+			if(!(childNodeWrapper is T))
+				throw new ArgumentException("ChildNodeWrapper is not of type T:" + typeof(T));
+			childNodeWrappers.Add(childNodeWrapper);
+		}
+	}
+</code>
+
+Here are the paired concrete classes:
+<code>
+	public class NodeWrapper : ANodeWrapper<LinkWrapper>
+	{
+		public NodeWrapper()
+		{
+		}
+
+		public NodeWrapper(Node node) : base(node)
+		{
+		}
+		
+		//many more extensions operations would go here
+	}
+
+	public class LinkWrapper : ALinkWrapper<NodeWrapper>
+	{
+		public LinkWrapper()
+		{
+		}
+
+		public LinkWrapper(Link link) : base(link)
+		{
+		}
+		
+		//many more extensions operations would go here
+	}
+</code>
+
+Here's the business logic operating on the base abstract classes, but returning strongly-type concrete data.
+<code>
+	/// <summary>
+	/// Returns the tree rooted at <paramref name='startingNode'/> recreated with each element wrapped.
+	/// The wrapped elements are still interconnected.
+	/// </summary>
+	/// <typeparam name="T">Node Wrapper type</typeparam>
+	/// <typeparam name="U">Link Wrapper type</typeparam>
+	/// <param name="startingNode"></param>
+	public static T Wrap<T,U>(Node startingNode) where T : ANodeWrapper,new() where U : ALinkWrapper,new()
+	{
+		T nodeWrapper = new T();
+		nodeWrapper.Node = startingNode;
+
+		if(startingNode.Link != null)
+		{
+			U linkWrapper = new U();
+			linkWrapper.Link = startingNode.Link;
+			foreach(Node childNode in startingNode.Link.ChildNodes)
+			{
+				T childNodeWrapper = Wrap<T,U>(childNode);
+				linkWrapper.Add(childNodeWrapper);
+			}
+		}
+
+		return nodeWrapper;
+	}
+</code>

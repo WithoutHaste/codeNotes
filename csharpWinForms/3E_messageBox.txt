@@ -1,0 +1,49 @@
+##Message Box
+
+Display a pop-up message to the user:
+<code>
+DialogResult result = MessageBox.Show("user message", "Title", MessageBoxButtons.OK, MessageBoxIcon.Error);
+</code>
+
+MessageBoxButtons: OK, OKCancel, AbortRetryIgnore, YesNoCancel, YesNo, RetryCancel
+
+To create a custom message box or dialog, create a normal form and display it with ShowDialog(). This will display the form modally (as a modal form), meaning nothing except this form will accept input until the form is closed.
+<code>
+public class MyModal : Form
+{
+	public MyModal()
+	{
+		//create form
+	}
+	private void CloseForm()
+	{
+		this.DialogResult = DialogResult.OK;
+		this.Close();
+	}
+}
+
+public class MainForm : Form
+{
+	public MainForm()
+	{
+		//create form
+	}
+	public void DisplayModalForm()
+	{
+		using(MyModal myModal = new MyModal())
+		{
+			DialogResult result = myModal.ShowDialog();
+		}
+	}
+}
+</code>
+
+To set the location of the dialog form:
+<code>
+using(MyModal form = new MyModal())
+{
+	form.StartPosition = FormStartPosition.Manual;
+	form.Location = new Point(this.Location.X + 30, this.Location.Y + 30); //point on screen
+	form.ShowDialog();
+}
+</code>

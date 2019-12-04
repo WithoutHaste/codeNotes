@@ -1,0 +1,41 @@
+##Multi-Targeted Library
+
+#Duplicate Project File
+
+Create a *.csproj for each target framework and compile each one separately.
+
+Must keep any changes to these files in sync.
+
+#Build Configurations
+
+Add a build configuration to the project for each target framework.
+
+Makes project files more complex and error-prone.
+
+#Visual Studio 2017
+
+!![Bugsnag: How To](https://blog.bugsnag.com/building-multi-targeted-dot-net-libraries/)
+
+1) Open *.csproj
+2) Find the "<TargetFramework>" tag
+3) Change it to "<TargetFrameworks>"
+4) Update the value to a semi-colon (;) delimited list of all the frameworks you want to target
+
+Example
+<code>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>MyProject</PackageId>
+    <Title>My Project Title</Title>
+    <TargetFrameworks>net35;net40;net45;netstandard1.3;netstandard2.0</TargetFrameworks>
+  </PropertyGroup>
+</Project>
+</code>
+
+Haven't gotten this to work yet.
+All the examples have "<Project Sdk="Microsoft.NET.Sdk">", so this may not work for "<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">".
+
+MSBuild will automatically compile your project for each framework listed.
+It will produce one *.dll for each target framework.
+
+You're supposed to be able to target multiple frameworks in a Test project the same way, so you can auto-test all those different frameworks, but reading about it, it sounds buggy still.

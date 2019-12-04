@@ -1,0 +1,8 @@
+##Trigger
+
+#Naming Convention
+
+"TR_TableName_Event"
+Ex: TR_Customers_AfterInsert
+
+Possibly with an additional descriptor at the end, if you have many triggers on one event.

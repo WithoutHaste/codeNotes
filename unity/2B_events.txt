@@ -1,0 +1,214 @@
+##Events
+
+#UnityEvent
+
+Publisher
+<code>
+using UnityEngine;
+using UnityEngine.Events;
+
+public MyPublisher : MonoBehavior
+{
+	public UnityEvent MyCustomEvent;
+	
+	public void Start()
+	{
+		if(MyCustomEvent == null)
+			MyCustomEvent = new UnityEvent();	
+	}
+	
+	private void Something()
+	{
+		MyCustomEvent.Invoke();
+	}
+}
+</code>
+
+Subscriber
+<code>
+using UnityEngine;
+using UnityEngine.Events;
+
+public MySubscriber : MonoBehavior
+{
+	public void Something()
+	{
+		myPublisher.MyCustomEvent.AddListener(OnCustomEvent);
+	}
+	
+	public void OnCustomEvent()
+	{
+		Debug.Log("Subscriber: Custom Event");
+	}
+}
+</code>
+
+UnityEvent can have 0 to 4 arguments. Ex: UnityEvent<int, string> has two arguments.
+<code>
+public class MyCustomEvent : UnityEvent<int>
+{
+}
+
+public class MyPublisher : MonoBehavior
+{
+	public MyCustomEvent EventA;
+	
+	public void Start()
+	{
+		if(EventA == null)
+			EventA = new MyCustomEvent();	
+	}
+	
+	private void Something()
+	{
+		EventA.Invoke(0);
+	}
+}
+</code>
+
+#UnityAction
+
+UnityAction is a pointer to a function with 0-4 parameters.
+You can pass functions as parameters with UnityAction.
+<code>
+UnityAction
+UnityAction<T>
+UnityAction<T,U>
+UnityAction<T,U,V>
+UnityAction<T,U,V,W>
+</code>
+
+UnityAction can be extended (derived from).
+
+#Mouse Clicks
+
+OnMouseUpAsButton: mouse released over same GUIElement or Collider as it was pressed down over.
+
+OnMouseDown: mouse pressed down over this element.
+OnMouseUp: mouse released over this element, regardless of where the mouse was pressed down.
+
+OnMouseEnter
+OnMouseExit
+
+OnMouseDrag
+
+Button elements support OnClick, through the Inspector pane.
+
+To add custom events to GUI elements:
+1)
+<code>
+//Mouse Click Example
+using UnityEngine;
+using UnityEngine.EventSystems;
+
+public class ControllerElementOption : MonoBehaviour
+{
+	public void OnPointerClick(BaseEventData eventData)
+	{
+		Debug.Log("OnPointerClick");
+
+		if(eventData is PointerEventData)
+		{
+			PointerEventData pointerEventData = (eventData as PointerEventData);
+
+			if(pointerEventData.button == PointerEventData.InputButton.Left)
+				Debug.Log("Left click");
+			else if(pointerEventData.button == PointerEventData.InputButton.Middle)
+				Debug.Log("Middle click");
+			else if(pointerEventData.button == PointerEventData.InputButton.Right)
+				Debug.Log("Right click");
+		}
+	}
+}
+</code>
+2) Add this controller to the scene.
+3) For the element you want to click, open Inspector pane and Add Component > Event > Event Trigger
+4) On the component, select the Pointer Click event type
+5) On the component, select the element with the controller on it, then the OnPointerClick function
+
+#Global Messaging System
+
+EventManager.cs
+<code>
+using UnityEngine;
+using UnityEngine.Events;
+using System.Collections;
+using System.Collections.Generic;
+
+public class EventManager : Singleton<EventManager>
+{
+	private Dictionary<string, UnityEvent> eventDictionary = new Dictionary<string, UnityEvent>();
+
+	protected EventManager() { } //protect constructor
+
+	public static void StartListening(string eventName, UnityAction listener)
+	{
+		UnityEvent thisEvent = null;
+		if(Instance.eventDictionary.TryGetValue(eventName, out thisEvent))
+		{
+			thisEvent.AddListener(listener);
+		}
+		else
+		{
+			thisEvent = new UnityEvent();
+			thisEvent.AddListener(listener);
+			Instance.eventDictionary.Add(eventName, thisEvent);
+		}
+	}
+
+	public static void StopListening(string eventName, UnityAction listener)
+	{
+		UnityEvent thisEvent = null;
+		if(Instance.eventDictionary.TryGetValue(eventName, out thisEvent))
+		{
+			thisEvent.RemoveListener(listener);
+		}
+	}
+
+	public static void TriggerEvent(string eventName)
+	{
+		UnityEvent thisEvent = null;
+		if(Instance.eventDictionary.TryGetValue(eventName, out thisEvent))
+		{
+			thisEvent.Invoke();
+		}
+	}
+}
+</code>
+
+Subscribe listener
+<code>
+using UnityEngine;
+using UnityEngine.Events;
+
+public class MyClass : MonoBehaviour
+{
+	private UnityAction listenerCustomEvent;
+	
+	public void Awake()
+    {
+		listenerCustomEvent = new UnityAction(OnCustomEvent);
+	}
+
+	public void OnEnable()
+	{
+		EventManager.StartListening("customEventName", listenerCustomEvent);
+	}
+
+	public void OnDisable()
+	{
+		EventManager.StopListening("customEventName", listenerCustomEvent);
+	}
+	
+	public void OnCustomEvent()
+	{
+		Debug.Log("Listener: Custom Event");
+	}
+}
+</code>
+
+Trigger event
+<code>
+//...
+EventManager.TriggerEvent("customEventName");
+</code>

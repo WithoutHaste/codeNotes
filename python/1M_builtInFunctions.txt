@@ -1,0 +1,175 @@
+##Built-In Functions
+
+#Math
+
+<code>
+abs(a) #absolute value
+
+divmod(a, b)
+
+min(iterable)
+min(a, b, c...)
+
+max(iterable)
+max(a, b, c...)
+
+pow(a, b) #a to the power b
+
+round(a) #rounds a float to an int
+
+sum(iterable)
+sum(a, b, c...)
+</code>
+
+#Range
+
+Range returns a sequence of consecutive integers.
+Sequence-type "range".
+
+Common usage
+<code>
+for myVar in range(5):
+	print(myVar) #0 1 2 3 4
+</code>
+
+Return range from 0 to N-1
+<code>
+x = range(5) #basically 0, 1, 2, 3, 4
+print(type(x)) #<class 'range'>
+print(x) #range(0, 5)
+</code>
+
+Returns a range from N to M-1
+<code>
+x = range(2, 5) #basically 2, 3, 4
+</code>
+
+Returns a range from N to M-1, with strides of P
+<code>
+x = range(2, 20, 3) #basically 2, 5, 8, 11, 14, 17
+</code>
+
+Convert a range to a list
+<code>
+x = list(range(10)) #[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+</code>
+
+Proving that ranges are determined once, at the beginning of the loop
+<code>
+s = "a"
+for i in range(0, len(s)):
+	s += "a"
+	print(s)
+	if len(s) > 10:
+		break
+ #results in "aa"
+</code>
+
+#String
+
+Join - join the elements of a collection into one string
+The syntax begins with the string delimiter to be used
+<code>
+x = ["a", "b", "c"]
+y = "_".join(x)
+print(y) #a_b_c
+</code>
+
+Split - divide a string into a list of strings, based on a delimiter
+<code>
+x = "a,b,cde"
+y = x.split(",") #["a", "b", "cde"]
+
+text = "Bob,business,45"
+name,degree,age = text.split(",")
+</code>
+
+Strip - remove leading and trailing white spaces and end-line characters
+<code>
+x = " text ".strip()
+print(x) #"text"
+</code>
+
+IsDigit - returns boolean - could this string be converted to am integer?
+<code>
+if myString.isdigit():
+	x = int(myString)
+</code>
+
+EndsWith - returns boolean - does string end with substring?
+<code>
+if "hello".endswith("llo"):
+	print(True)
+</code>
+
+#List
+
+Append - add an object to the end of the list
+<code>
+x = [1, 2, 3]
+x.append(4)
+print(x) #[1, 2, 3, 4]
+
+x.append([5, 6])
+print(x) #[1, 2, 3, 4, [5, 6]]
+</code>
+
+Extend - add each element in the iterable to the end of the list
+<code>
+x = [1, 2, 3]
+x.extend([4, 5, 6])
+print(x) #[1, 2, 3, 4, 5, 6]
+</code>
+
+Insert - insert an element into a position in the list
+<code>
+x = ["a", "e", "i"]
+x.insert(1, "b") #insert "b" at index position 1
+print(x) #["a", "b", "e", "i"]
+</code>
+
+Index - returns the index of the first instance of this value in the list
+Throws an error if the value is not in the list
+<code>
+x = ["a", "b", "c"]
+y = x.index("c")
+print(y) #2
+</code>
+
+Delete - remove an element by index
+<code>
+x = ["a", "b", "c"]
+del x[0]
+print(x) #["b", "c"]
+</code>
+
+Remove - remove the first instance of this value from the list
+<code>
+x = ["a", "b", "c", "b"]
+x.remove("b")
+print(x) #["a", "c", "b"]
+</code>
+
+Clear - remove all elements from the list
+<code>
+x = ["a", "b", "c"]
+x.clear()
+print(x) #[]
+</code>
+Basic ascending sort
+<code>
+x = [5, 3, 7, 4, 1]
+x.sort() #only works on lists
+print(x) #[1, 3, 4, 5, 7]
+</code>
+
+Basic ascending sort for any iterable
+<code>
+a = { 1:"one", 2:"two", 3:"three", 6:"six", 7:"seven", 9:"nine" }
+x = [6,3,7,9,3,2]
+y = sorted(x)
+print(y) #[2, 3, 3, 6, 7, 9]
+
+z = sorted(x, key=lambda s:a[s]) #can specify sort key
+print(z) #[9, 1, 3, 3, 2, 7, 6]
+</code>

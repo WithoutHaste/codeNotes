@@ -1,0 +1,32 @@
+##XML Documentation
+
+Type three forward slashes (///) in the line directly above a method or class to initiate a template for documenting that part of your code.
+
+These special comments will provide information for IntelliSense and API documentation.
+
+<code>
+/// <summary>
+/// Description of the purpose of the method.
+/// </summary>
+public void MyMethod()
+{
+}
+</code>
+
+These special comments are not included in the compiled assembly and are not available through reflection.
+
+To enable generation of automated documentation files from these comments:
+1) Open project properties
+2) Go to Build tab
+3) Check "XML documentation file"
+4) (optional) change the default documentation file location
+5) Build the project
+
+!![See all tags here.](https://github.com/WithoutHaste/EarlyDocs/blob/master/HowToUseXmlComments.md)
+
+#Processors
+
+There are many tools available to convert the XML documentation into a web page or Markdown - Sandcastle and DocFX, for instance.
+
+!![This is my tool.](https://github.com/WithoutHaste/EarlyDocs)
+It generates a collection of Markdown documents, one for each Type. It pulls information from the XML documentation and the DLL itself (if available).

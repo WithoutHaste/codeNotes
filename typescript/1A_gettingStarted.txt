@@ -1,0 +1,13 @@
+##Visual Studio Setup
+
+1) Install Typescript Tools for Visual Studio.
+2) If Visual Studio says that Web Developer Tools are not installed:
+- Open Control Panel > Programs and Features > Visual Studio > Change
+- Modify Visual Studio > Select Microsoft Web Development Tools under Windows and Web Development
+- Click Next > Update
+- Wait several minutes while it installs
+3) Open Visual Studio > New Project > Other Languages > Typescript
+
+continue at https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html
+
+

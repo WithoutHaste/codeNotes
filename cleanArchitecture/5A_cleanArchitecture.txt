@@ -1,0 +1,20 @@
+##Clean Architecture
+
+#Basic
+
+Solid arrows = source code dependency
+Dashed arrows = flow of control
+<pinker>
+Layout:
+	[UI][Business Rules][Database]
+Relate:
+	[UI]->[Business Rules]
+	[Database]->[Business Rules]
+	[Business Rules]=>[UI],[Database]
+</pinker>
+
+The UI and the Database become plug-ins to the Business Rules. They can be compiled into separate components (such as C# assemblies) and deployed independently of each other.
+
+Independent Deployability: only the component that was edited needs to be re-compiled and re-deployed.
+
+Independent Developability: if components can be deployed independently, then they can be developed independently by different teams.

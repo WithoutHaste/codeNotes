@@ -1,0 +1,27 @@
+##Text Box
+
+booleans:
+TextBox.Multiline
+TextBox.WordWrap
+TextBox.AcceptsReturn
+TextBox.AcceptsTabs
+
+TextBox.Text = text displayed in the text box. Used "\r\n" for line break.
+TextBox.Lines = array of lines in the text box
+TextBox.ReadOnly = boolean for whether text is editable or not
+TextBox.ScrollBars = ScrollBars.Vertical or Horizontal or Both
+
+Accurately count number of lines displayed in a text box when line-wrapping is enabled.
+GetFirstCharIndexFromLine(lineIndex) returns the characterIndex (where 0 is the first char in the textbox) that begins the indicated line, taking line-wrap into account.
+lineIndex starts at 0.
+<code>
+private int CountLines(RichTextBox textBox)
+{
+	int lineCount = 1;
+	while(textBox.GetFirstCharIndexFromLine(lineCount) > -1)
+	{
+		lineCount++;
+	}
+	return lineCount;
+}
+</code>

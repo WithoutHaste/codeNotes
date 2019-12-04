@@ -1,0 +1,35 @@
+##Debugging
+
+#Break Points
+
+To debug Unity scripts with Visual Studio (Windows):
+1. In Visual Studio > Tools menu > Extensions and Updates > install the Visual Studios Tools For Unity plug-in.
+2. In Unity, Edit menu > Preferences > External Tools tab > check Editor Attaching.
+3. Set a breakpoint in the code open in Visual Studio.
+4. In Visual Studio, click "Attach to Unity" along the top.
+5. In Unity, click Play.
+
+If you have Visual Studio 2017, this should work without error.
+
+If you have Visual Studio 2015:
+1. When you click "Attach to Unity", you'll get a popup about errors in the build, do you want to use the latest build?
+2. Click "Yes"
+3. You see this error in the errors console:
+  * Invalid option 'latest' for /langversion; must be ISO-1, ISO-2, Default or an integer in range 1 to 6.
+4. Ignore the error and click "Play" in Unity. Debugging will work.
+
+#Windowed vs Full Screen
+
+There does not seem to be any way to test windowed vs full screen functionality when running a normal "Play" test inside the Unity IDE.
+
+Seems you must build the project fully and run it as its own application.
+In Unity: File menu > Build and Run > select folder to save build to > Ok
+
+Note the build will be starting with a fresh set of PlayerPrefs.
+
+#Log Files
+
+Everything sent to Debug.Log is automatically saved to log file "Editor.log".
+
+macOS:   ~/Library/Logs/Unity/Editor.log
+Windows: C:\Users\<username>\AppData\Local\Unity\Editor\Editor.log

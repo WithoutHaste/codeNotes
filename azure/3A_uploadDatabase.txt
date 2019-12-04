@@ -1,0 +1,11 @@
+##Upload Database
+
+To upload a SQL Server database to Azure:
+
+(as of Sept. 2019)
+1) You'll need an Azure Server setup to deploy to
+2) Open your database in SSMS (SQL Server Management Studio)
+3) Right-click database > Tasks > Deploy Database to Microsoft Azure SQL Database
+4) Fill in the form
+- You will need to allow access to Azure through your firewall
+- You cannot deploy to a pre-existing Azure database, it must be a new one

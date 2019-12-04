@@ -1,0 +1,162 @@
+##XPath
+
+XPath is am XML navigation and selection language.
+
+Path syntax: /step/step | step/step
+Step syntax: axis::test[predicate]
+
+XML document used in examples:
+<code>
+1	<?xml version="1.0" encoding="UTF-8" ?>
+2	<store>
+3		<book>
+4			<title lang="en">Catch-22</title>
+5			<price>29.95</price>
+6		</book>
+7		<book>
+8			<title lang="en">Walden</title>
+9			<price>15.95</price>
+10		</book>
+11		<book>
+12			<title>Nightwatch</title>
+13			<price>25.50</price>
+14		</book>
+15		<store lang="ge">
+16			<book>
+17				<title lang="ge">Die Verwandlung</title>
+18				<price>8.99</price>
+19			</book>
+20		</store>
+21		<overstock>
+22			<book>
+23				<title lang="en">Ubuntu Kung-Fu</title>
+24				<price>34.99</price>
+25			</book>
+26		</ovestock>
+27	</store>
+28	<book>
+29		<title lang="fr">La Petite Prince</title>
+30		<price>18.00</price>
+31	</book>
+</code>
+
+#Selectors
+
+nodename = selects all nodes with that name
+/ = starts at the root node, absolute path to nodes
+// = selects nodes from anywhere that match the selection
+. = selects the current node
+.. = selects the parent of the current node
+@ = selects attributes
+
+<code>
+XPath: "store"
+Selects elements "store" at 2 and 15
+</code>
+
+<code>
+XPath: "/store"
+Selects element "store" at 2
+</code>
+
+<code>
+XPath: "store/book"
+Selects elements "book" at 3, 7, 11, and 16
+</code>
+
+<code>
+XPath: "//book"
+Selects elements "book" at 3, 7, 11, 16, 22, and 28
+</code>
+
+<code>
+XPath: "store//book"
+Selects elements "book" at 3, 7, 11, 16, and 22
+</code>
+
+<code>
+XPath: "//@lang"
+Selects elements "title" at 4, 8, 17, 23, 29
+Selects element "store" at 15
+</code>
+
+#Predicates
+
+Predicates are conditions added to the end of selectors. They are always inside [].
+
+[1] = a specific index (indexes start at 1)
+[last()] = the last element
+[last()-1] = the second to last element
+[position()<3] = the first and second elements
+[@lang] = elements with a lang attribute defined
+[@lang='en'] = elements with a lang='en' attribute defined
+[price > 35] = element has a direct child called price, and its value is greater than 35
+[starts-with(.,'Ubuntu')] = element has inner text that starts with this string
+
+Operators: + - * div = != < <= > >= or and mod
+
+<code>
+XPath: "/store/book[2]"
+Selects element "book" at 7
+</code>
+
+<code>
+XPath: "/store/book[last()]"
+Selects element "book" at 11
+</code>
+
+<code>
+XPath: "//title[@lang]"
+Selects elements "title" at 4, 8, 17, 23, and 29
+</code>
+
+<code>
+XPath: "store/book[price > 25]/title"
+Selects elements "title" at 4 and 12
+</code>
+
+<code>
+XPath: "//title[starts-with(.,'Ubuntu')]"
+Selects elements "title" at 23
+</code>
+
+#Wildcards
+
+* = any element node
+@* = any attribute node
+node() = any node of any kind
+text() = the text contents of the current node
+
+#Multiple Paths
+
+You can union multiple paths with |.
+
+<code>
+store/book | overstock/book
+</code>
+
+#Axis
+
+Selects a node set relative to the current node.
+
+self = select current node
+attribute = selects all attributes of current node
+namespace = select all namespace nodes of the current node
+
+ancestor = selects every ancestor
+ancestor-or-self = selects every ancestor plus the current node
+descendent = select all descendents
+descendent-or-self = select all descendents plus the current node
+
+child = select all direct children
+parent = select the direct parent
+
+following = select everything in the xml document after the closing tag of the current node
+following-sibling = select all siblings of the current node that occur after it
+preceding = select everything in the xml document before the current node tag EXCEPT for ancestors of the current node
+preceding-sibling = select all siblings of the current node that occurred before it
+
+<code>
+XPath: "book[3]/ancestor::store"
+Selects elements "store" at 2
+</code>

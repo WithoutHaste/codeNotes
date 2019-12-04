@@ -1,0 +1,53 @@
+##Lists
+
+Generate a list of React elements.
+<code>
+const numbers = [1, 2, 3, 4, 5];
+const listItems = numbers.map((number, index) =>
+	<li key={number.toString()}>{number}</li>
+);
+
+ReactDOM.render(
+	<ul>{listItems}</ul>,
+	document.getElementById('root')
+);
+</code>
+
+Or
+<code>
+return (
+	<ul>
+		{numbers.map((number, index) =>
+			<li key={number.toString()}>{number}</li>
+		)}
+	</ul>
+);
+</code>
+
+#Key
+
+The "key" attribute is added to help React identify DOM elements that have been edited.
+Keys should be unique within their list (among their siblings).
+Usually you'll use data ids as your keys.
+Use the list index if nothing else is available. (Not recommended if elements will change order in the list.)
+
+If you create a component for an element that had a key on it, the key should be moved to the component tag.
+<code>
+function ListItem(props) 
+{
+	//no key here
+	return <li>{props.value}</li>;
+}
+
+function NumberList(props) 
+{
+	const numbers = props.numbers;
+	const listItems = numbers.map((number) =>
+		//key is here, but is not passed in "props" to the component
+		<ListItem key={number.toString()} value={number} />
+	);
+	return (
+		<ul>{listItems}</ul>
+	);
+}
+</code>

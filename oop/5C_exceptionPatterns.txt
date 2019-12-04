@@ -1,0 +1,122 @@
+##Exception Handling Patterns
+
+!![source: Exception handling patterns](http://wiki.c2.com/?ExceptionPatterns)
+
+#Considerations
+
+Throwing an exception is a control structure (like if or goto) in the sense that it causes control of the program to shift, sometimes dramatically. The method throwing the exception has no information about where control will return to.
+
+Throwing an exception is a very slow operation, comparatively. It should be used sparingly.
+
+In general, do not use exceptions as intentional flow control. And throw exceptions as little as possible.
+
+#Naming Exceptions
+
+Describe the problem, why is the exception being thrown.
+
+Use a standard naming format. Do not create both "XNotFoundException" and "NoSuchYException" in the same project.
+
+Do not make exception specific to a class. 
+If you see the exception hierarchy closely matching your class hierarchy, you are probably not generalizing your exceptions by behavior enough.
+
+Example: 
+Consider ArrayIndexOutOfBoundsException => IndexOutOfBoundsException => RangeException. The first is specific to arrays only, the last is general to many situations.
+
+Example:
+ClassNotFoundException, MethodNotFoundException, and FieldNotFoundException could all be generalized to MissingException. When the exception occurs, the context it occurs in will fill in the rest of the details.
+
+Example:
+It does not make sense to name a field in class Person "PersonFirstName". You simply call it "FirstName" because it being within class Person provides context.
+Similarly, the code that catches an exception will know a lot about the context of the exception based on what operation was just attempted.
+
+Some major categories of exceptions are:
+- logical errors in the program (for example, the program is in an impossible state)
+- resource failures (for example, a file cannot be read)
+- user errors (for example, the user input is poorly formatted)
+- configuration errors (for example, invalid configuration)
+
+#Refine Exceptions
+
+When you start creating exceptions types for your project, begin with general categories. For instance, you could start with a single Exception class named for your project that all other exceptions you throw will derive from.
+
+As work continues and you find places where a more specific exception makes sense, create sub classes.
+
+Consider how users of your service will want to group exceptions together to catch them.
+
+#When to Raise Exceptions
+
+In general, exceptions should only be raised for exceptional (unusual) conditions. The normal operation of a method should not rely on exceptions.
+
+When to raise exceptions:
+- your method encounters unusual conditions it cannot handle
+- a client service has breached its obligations (such as passing badly formatted data)
+- your method cannot fulfill its obligations
+
+Make sure to always "clean up" before throwing an exception. 
+For instance, release all locks on files and close all database connections. 
+For instance, leave the current object in a consistent state, not a partially altered state. Satisfying this condition leads you to putting all validations steps first (anything that could produce an exception) and all data altering steps last.
+
+#When to Catch Exceptions
+
+Exceptions do not have to be caught right away. Only catch the exception in methods that have enough information and options to do something about the problem.
+
+Seeing many "try/catch" pairs throughout your code may mean that you need to refactor out some of that logic. It may be serving little purpose, while cluttering the code.
+
+On the other hand, don't let the exception propagate so high up that the context of the exception is lost.
+
+In general, do not write "catch(Exception e) { }", which will catch any exception type at all. Find out what specific exceptions could occur during an operation, and then catch them specifically.
+
+#Converting Exceptions
+
+If a service you are using (or a layer of your own project that might as well be a service) 
+throws a variety of detailed exceptions, it often makes sense to convert those lower-level 
+or third-party exceptions into the exceptions of the current layer.
+
+Information from the lower level exception can be included in the higher level exception when it is appropriate.
+
+Example:
+Lower level message IOException("Disk is full") may be converted to a higher level DataException("Cannot save customer record: Disk is full.")
+
+#Security Door Pattern
+
+You have an operation that will be used internally and from clients.
+
+Make one private method that does the operation. It assumes that all necessary validations, data formatting checks, etc have already been done. You can use this method internally.
+
+Make one public method that runs validations, data formatting checks, etc and only calls the private method if everything checks out. Clients will use this method.
+
+#Bouncer Pattern
+
+A method that will either throw an exception or do nothing. This is the same pattern as an Assert statement, and is frequently used for validation.
+
+Benefits are reuse of code (if it will be called from many places) and self-documentation (if called from few places). The name of the bouncer method describes its purpose.
+
+<code>
+private void ValidateFormat(string text, string detailForMessage)
+{
+	if(notFormattedRight(text))
+		throw new FormatException("message" + detailForMessage);
+}
+</code>
+
+#Alternatives to Exceptions
+
+Error Avoidance: check conditions before trying an operation.
+For example, check if a value is 0 before dividing by that value.
+For example, check how much money is in a customer's account before withdrawing money.
+There are many reasons you should not always do this: primarily duplication of logic, and the conditions may change between checking and executing.
+
+Null Object: a object of the expected type that contains no data. All normal operations work on the NullObject, so it will not cause "null exceptions" to be thrown.
+This is usually implemented as a Singleton pattern, ensuring that all instances of the NullObject are the same object, so it is easy to check if what you have is the NullObject.
+
+Error Values: return a special value indicating an error occurred. This is useful in cases where the error is minor and can be ignored.
+This can be much easier to unit test than exceptions.
+This can also encourage nested if statements, which is bad.
+
+Pass Error Handler: pass an error handler method into the method that might need it.
+This can be much easier to unit test, because the error handling code is already in its own method.
+
+Use Assertions: cause the program to fail until the problem is solved by a person. This is for errors that the program absolutely cannot handle.
+
+Bottom Propagation: a special value that does not cause errors when operated on, but also generally does not change value when operated on. This does imply that anything is really wrong, just that a edge has been hit.
+Similar to NullObject.

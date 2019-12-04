@@ -1,0 +1,30 @@
+##Time
+
+#Date/Time
+
+To display the current time, in the default time zone:
+<code>
+var hour = current_hour();
+var minute = current_minute();
+var second = current_second();
+</code>
+
+To display the current date:
+<code>
+var month_day = current_day(); //value 1 to 31
+var week_day = current_weekday(); //value 0=Sunday to 6=Saturday
+var month = current_month(); //value 1 to 12
+var year = current_year();
+</code>
+
+#Timer
+
+Returns the number of microseconds since your game started (1 million microseconds per second).
+<code>
+var microseconds = get_timer();
+</code>
+
+Returns the length of one STEP in microseconds, so you can account for different computer speeds.
+<code>
+var microseconds = delta_time();
+</code>

@@ -1,0 +1,27 @@
+##Windowed
+
+Unity starts the application by asking the user to select what size window they want to use.
+- can I turn that off?
+
+<code>
+Resolution x = Screen.CurrentResolution; //get resolution of window
+Resolution[] y = Screen.resolutions; //list of resolutions supported by the monitor, smallest to largest (may not include all options)
+</code>
+
+Is application full screen?
+<code>
+bool isFullScreen = Screen.fullScreen;
+</code>
+You can also set this value to change it.
+
+Set window size manually:
+<code>
+Screen.SetResolution(width, height, boolFullScreen);
+Screen.SetResolution(width, height, FullScreenMode);
+//preferredRefreshRate is an optional parameter
+</code>
+FullScreenMode:
+- ExclusiveFullScreen: Unity will change the monitor's resolution and claim control of it.
+- FullScreenWindow: A normal full screen window, at the monitor's resolution. OS UI can display over the window.
+- MaximizedWindow: A normal window that is windowed but sized to fill the screen.
+- Windowed: A normal window that is windowed and sized smaller than the screen.

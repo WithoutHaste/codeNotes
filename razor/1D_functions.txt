@@ -1,0 +1,57 @@
+##Functions
+
+#@Helpers
+
+@Helpers are functions that do not return a value. They output directly to the page.
+
+<code>
+@helper DisplayPrice(decimal price) 
+{
+	if(price == 0)
+	{
+		<span>Free!</span>
+	}
+	else
+	{
+		<span>@String.Format("{0:C2}", price)</span>
+	}
+}
+@foreach(Product x in list)
+{
+	<p>@x.Name: @DisplayPrice(x.Price)</p>
+}
+</code>
+
+If you call a helper from within a helper, always use the "@" symbol. Even if the syntax highlighter indicates that the method call is recognized as such, it'll get skipped.
+<code>
+@helper A()
+{
+	@B();
+}
+@helper B()
+{
+	@:Reached B
+}
+</code>
+
+Note that you cannot code-step through a @helper (at least in VS2015), but the code does run.
+
+#Functions
+
+Functions do return values.
+
+<code>
+@functions 
+{
+	string FormatPrice(decimal price)
+	{
+		if(price == 0)
+			return "Free!";
+		return String.Format("{0:C2}", price);
+	}
+}
+@foreach(Product x in list)
+{
+	<p>@x.Name: @FormatPrice(x.Price)</p>
+}
+</code>

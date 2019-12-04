@@ -1,0 +1,7 @@
+##Core Domain
+
+The key differentiator of your client's business. This functionality cannot be outsourced, and must be executed well.
+
+##Sub Domain
+
+Separate applications or features your software must support or interact with.

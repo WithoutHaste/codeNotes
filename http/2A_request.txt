@@ -1,0 +1,35 @@
+##Request
+
+The HTTP Request document.
+
+#Verb
+
+The action to perform on the server.
+
+GET - request a resource
+POST - create a resource
+PUT - update a resource
+PATCH - update parts of a resource (ex: the address of the customer, not the whole customer)
+DELETE - delete a resource
+etc
+
+#Headers
+
+Metadata about the request.
+A set of Name/Value pairs.
+
+Content Type - the format of the content
+Content Length - size of content
+Authorization - who is making the request
+Accept - the formats I can accept in the response
+Cookies - state data
+etc
+
+#Content
+
+Could be any data.
+
+HTML, CSS, JavaScript, XML, JSON, etc.
+
+The content format may be limited by the Verb.
+For instance, GET requests don't have any Content because they are just requesting information.

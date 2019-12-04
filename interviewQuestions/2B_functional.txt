@@ -1,0 +1,5 @@
+##Functional Programming
+
+FizzBuzz
+
+What sort would you use if you required tight max time bounds and wanted highly regular performance.

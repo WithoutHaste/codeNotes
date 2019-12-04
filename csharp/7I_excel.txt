@@ -1,0 +1,27 @@
+##Excel
+
+#EPPlus
+
+Install with NuGet:
+<code>
+install-package EPPlus
+</code>
+
+Generate excel file:
+<code>
+using OfficeOpenXml;
+
+ExcelPackage newPackage = new ExcelPackage();
+
+ExcelWorksheet worksheet = package.Workbook.Worksheets.Add(name);
+
+worksheet.InsertRow(rowFrom:0, rows:2);
+worksheet.Cells["A0"].Value = "Name";
+worksheet.Cells["B0"].Value = "Address";
+worksheet.Cells["C0"].Value = "Phone";
+worksheet.Cells["A1"].Value = "Bob";
+worksheet.Cells["B1"].Value = "123 Street";
+worksheet.Cells["C1"].Value = "(123) 456-7890";
+
+newPackage.SaveAs(new FileInfo(fullPath));
+</code>

@@ -1,0 +1,6 @@
+##Delete
+
+Delete records from a table:
+<code>
+DELETE FROM tableName WHERE columnName = value;
+</code>

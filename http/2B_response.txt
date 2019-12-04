@@ -1,0 +1,27 @@
+##Response
+
+The HTTP Response document.
+
+#Status Code
+
+The status of the requested operation.
+
+100-199: informational
+200-299: success
+300-399: redirection
+400-499: client errors
+500-599: server errors
+
+#Headers
+
+Similar to the request headers.
+
+Content Type
+Content Length
+Expires - when the data is considered stale
+Cookies
+etc
+
+#Content
+
+Similar to the request content.

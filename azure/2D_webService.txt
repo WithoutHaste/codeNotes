@@ -1,0 +1,126 @@
+##Web Service
+
+#.csdef
+
+*.csdef is your Cloud Service Definition file.
+Naming convention: ServiceDefinition.csdef.
+
+It is an XML file.
+It defines the service model and the number of roles.
+
+The definition cannot be altered after you upload it.
+
+Each ServiceDefinition must contain 1 to 25 roles (WebRole or WorkerRole).
+
+Example:
+<code lang="xml">
+	<?xml version="1.0" encoding="utf-8"?>
+	<ServiceDefinition name="MyServiceName" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+	  <WebRole name="WebRole1" vmsize="Medium">
+		<Sites>
+		  <Site name="Web">
+			<Bindings>
+			  <Binding name="HttpIn" endpointName="HttpIn" />
+			</Bindings>
+		  </Site>
+		</Sites>
+		<Endpoints>
+		  <InputEndpoint name="HttpIn" protocol="http" port="80" />
+		  <InternalEndpoint name="InternalHttpIn" protocol="http" />
+		</Endpoints>
+		<Certificates>
+		  <Certificate name="Certificate1" storeLocation="LocalMachine" storeName="My" />
+		</Certificates>
+		<Imports>
+		  <Import moduleName="Connect" />
+		  <Import moduleName="Diagnostics" />
+		  <Import moduleName="RemoteAccess" />
+		  <Import moduleName="RemoteForwarder" />
+		</Imports>
+		<LocalResources>
+		  <LocalStorage name="localStoreOne" sizeInMB="10" />
+		  <LocalStorage name="localStoreTwo" sizeInMB="10" cleanOnRoleRecycle="false" />
+		</LocalResources>
+		<Startup>
+		  <Task commandLine="Startup.cmd" executionContext="limited" taskType="simple" />
+		</Startup>
+	  </WebRole>
+
+	  <WorkerRole name="WorkerRole1">
+		<ConfigurationSettings>
+		  <Setting name="DiagnosticsConnectionString" />
+		</ConfigurationSettings>
+		<Imports>
+		  <Import moduleName="RemoteAccess" />
+		  <Import moduleName="RemoteForwarder" />
+		</Imports>
+		<Endpoints>
+		  <InputEndpoint name="Endpoint1" protocol="tcp" port="10000" />
+		  <InternalEndpoint name="Endpoint2" protocol="tcp" />
+		</Endpoints>
+	  </WorkerRole>
+	</ServiceDefinition>
+</code>
+
+Sites: websites or web applications hosted in IIS7
+
+InputEndpoints: endpoints for contacting this service
+
+InternapEndpoints: endpoints used by this service's role instances to communicate with each other
+
+ConfigurationSettings: settings for a specific role
+
+Certificates: certificates needed to a role
+
+LocalResources: a local directory in which a role is running
+
+Imports: imported modules
+
+Startup: tasks to run when a role starts
+
+#.cscfg
+
+*.cscfg is your Cloud Service Configuration file.
+Naming convention: ServiceConfig.cscfg.
+
+It is an XML file.
+It provides settings to the service, individual roles, and the number of role instances.
+
+The configuration can be altered after you upload it.
+
+#.cspkg
+
+*.cspkg is your Service Package.
+
+It is a zip file.
+It contains the application code and model.
+The model is made up of the *.csdef and *.cscfg files.
+
+#Quick Create
+
+Create a new cloud service
+
+Upload (deploy) a cloud service package
+
+#Custom Create
+
+If you already have your service ready to upload, you can do all the Quick Create steps at once here.
+
+#From Visual Studio
+
+1) Create a web service
+2) In Visual Studio > right-click on project > Publish Web App (VS 2017) or Publish (VS 2015)
+3) Select target Microsoft Azure App Service
+4) (if not already) log into Microsoft Azure
+5) Select an existing Web App (or create a new one)
+6) Check the publish form is filled out correctly > Publish
+7) Watch of the Success message in the output panel
+
+- Did not work from 2015 Community - got error about "No registered provider found" for App version 2.0.
+- Works fine from 2017 Community.
+
+8) In Azure > select the App Service you just published to > Deployment Center tab
+9) Select a deployment option (Instructions continue for Manual Deploy From FTP) > click Dashboard
+10) for User Credentials, the username format is "appName\userName"
+- enter User Credentials
+11) In Visual Studio > right-click on project > Publish

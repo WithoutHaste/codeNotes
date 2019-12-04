@@ -1,0 +1,7 @@
+##HTML Paths
+
+"~" (tilda) at the beginning of an HTML path means the root of the web page.
+Ex: "~/Views/Contact/Index.cshtml"
+
+If you're path does not start with a "~", it is an absolute path.
+Using relative paths is highly recommended

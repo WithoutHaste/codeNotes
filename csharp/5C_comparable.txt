@@ -1,0 +1,19 @@
+##Comparable
+
+Interface IComparable is required for LINQ comparisons.
+
+<code>
+public MyClass : IComparable
+{
+	public int CompareTo(object other)
+	{
+		if(!(other is MyClass))
+			return -1; //return whatever makes the most sense
+		if(this < (other as MyClass))
+			return -1;
+		if(this == (other as MyClass))
+			return 0;
+		return 1;
+	}
+}
+</code>

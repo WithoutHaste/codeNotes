@@ -1,0 +1,25 @@
+##Included File
+
+You can include miscellaneous files with the final game.  Locally, the files are stored in *.gmx/data-files.
+
+Included files can be organized into a folder structure.
+
+Included files can be marked included/excluded for various game platforms.
+
+#Platform
+
+Right-click on an included file and select "Properties" or "Edit" to set which platforms this file will be included with. The default seems to be "All".
+
+#Read Text
+
+Filename is relative to the Included Files tree root.
+<code>
+var fileId = file_text_open_read(working_directory + "\" + filename);
+
+while(!file_text_eof(fileId))
+{
+	var line = file_text_readln(fileId);
+}
+
+file_text_close(fileId);
+</code>

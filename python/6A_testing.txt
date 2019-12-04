@@ -1,0 +1,191 @@
+##Unit Tests
+
+To create a unit test class, make a subclass of unittest.TestCase.
+Each class method named with prefix "test" will be run as a test.
+
+"setUp" is run before each test method.
+"tearDown" is run after each test method, whether it succeeded or not.
+"setUpClass" is run once before the class tests are run.
+"tearDownClass" is run once after the class tests are run.
+
+"unittest.main()" provides a command line interface to the tests.
+
+<code>
+import unittest
+
+class MyTests(unittest.TestCase):
+	def test_upper(self):
+		self.assertEqual("foo".upper(), "FOO")
+	def test_isupper(self):
+		self.assertTrue('FOO'.isupper())
+		self.assertFalse('Foo'.isupper())
+	def test_split(self):
+		#test that split fails without separater
+		s = 'hey oooh'
+		with self.assertRaises(TypeError):
+			s.split(2)
+			
+	def setUp(self):
+		print("set up")
+	def tearDown(self):
+		print("tear down")
+		
+	def setUpClass(cls):
+		print("set up class")
+	def tearDownClass(cls):
+		print("tear down class")
+
+if __name__ == "__main__":
+	unittest.main()
+</code>
+
+#Asserts
+
+<code>
+assertEqual(a, b)
+assertTrue(a == b)
+assertFalse(a == b)
+
+ #verify a specific error was raised
+assertRaises(exception)
+</code>
+
+#Command Line
+
+You can run your tests in different ways.
+
+The test case file contains the "unittest.main()" section, and will run itself.
+<code>
+python MyTests.py
+</code>
+(the ".py" is optional)
+
+The test case file does not contain the "unittest.main()" section. This will run it.
+<code>
+python -m unittest MyTests.py
+</code>
+
+You can run multiple test files.
+<code>
+python -m unittest MyTestsA.py MyTestsB.py
+</code>
+
+You can run just one test class from a file the contains multiple classes.
+<code>
+python -m unittest MyTests.TestCustomer
+</code>
+
+You can run just one test method from a class.
+<code>
+python -m unittest MyTests.TestCustomer.test_payment
+</code>
+
+Options:
+	-v verbose, more information shown
+	-f fail fast, stop at first failed test
+	-c catch, Control-C while tests run will (after current test completes) display results so far
+	-b buffer, output is sent to a buffer to be saved
+	--locals shows local variables in tracebacks
+	
+Test discovery: from the current directory, unittest will search here and below for tests to run
+<code>
+python -m unittest discover
+</code>
+If you don't add command options, then "discover" is optional.
+
+Discover Options:
+	-s specify a starting directory
+	-p specify a pattern that the filename must match
+
+Note that the file at path A/B/C.py will be imported as A.B.C	
+
+#Suite
+
+Running unittest.main() will run all the tests in the file.
+You can also build an explicit suite, and run just those tests.
+
+<code>
+import unittest
+
+def suite():
+	suite = unittest.TestSuite()
+	suite.addTest(MyTests("test_a"))
+	suite.addTest(MyTests("test_b"))
+	return suite
+	
+class MyTests(unittest.TestCase):
+	def test_a(self):
+		self.assertTrue(True)
+	def test_b(self):
+		self.assertTrue(True)
+	def test_c(self):
+		self.assertTrue(True)
+		
+if __name__ == "__main__":
+	runner = unittest.TextTestRunner()
+	runner.run(suite())
+</code>
+
+#Skip
+
+You can mark test methods to be skipped.
+You can use the same syntax to mark an entire class to be skipped.
+
+<code>
+import unittest
+
+class MyTests(unittest.TestCase):
+	
+	@unittest.skip("message")
+	def test_a(self):
+		self.assertTrue(True)
+		
+	@unittest.skipIf(myVersion < 4, "message")
+	def test_b(self):
+		self.assertTrue(True)
+		
+	@unittest.skipUnless(operatingSystem == "Windows", "message")
+	def test_c(self):
+		self.assertTrue(True)
+</code>
+
+You can conditionally skip a test at any point.
+<code>
+import unittest
+
+class MyTests(unittest.TestCase):
+	def test_a(self):
+		if not resourceIsSetup:
+			unittest.skip("message")
+		self.assertTrue(True)
+</code>
+
+#Expected Failure
+
+You can mark a method as an expected failure. It will not be counted as a failure on the test result.
+
+<code>
+import unittest
+
+class MyTests(unittest.TestCase):
+
+	@unittest.expectedFailure
+	def test_a(self):
+		self.assertTrue(False)
+</code>
+
+#Sub Test
+
+You can run multiple tests within a loop.
+
+<code>
+import unittest
+
+class MyTests(unittest.TestCase):
+	def test_even(self):
+		for number in range(0, 10, 2):
+			with self.subTest(x=number):
+				self.assertEqual(x%2, 0)
+</code>
+Each iteration will be reported as a unique test, specifying the arguments used.
+Even if one iteration fails, all the iterations in the method will be run.

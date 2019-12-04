@@ -1,0 +1,6 @@
+##About
+
+!![Clean Architecture by Robert C. Martin](https://www.amazon.com/Clean-Architecture-Craftsmans-Software-Structure/dp/0134494164)
+!![author's blog](https://blog.cleancoder.com/)
+
+These notes are all taken from the book. Much of the notes are the opinions of Mr. Martin.

@@ -1,0 +1,91 @@
+##Components
+
+A component is a combination of template and controller. They have a private scope, that isolates them from the rest of a project. They enable code and template reuse.
+
+Each instance on a component will have its own "isolate scope", ie private scope.
+
+Components are a subset of directives.
+
+#Component Definition Object
+
+Simple example:
+<code>
+angular.module('appName').component('greetUser', {
+	template: 'Hello, {{ $ctrl.user }}',
+	controller: function GreetUserController() {
+		this.user = 'Steve';
+	}
+});
+//then, in the view
+<greet-user></greet-user>
+</code>
+
+Note that we say 'greetUser' in the javascript, and 'greet-user' in the html. This is the convention AngularJS expects.
+
+$ctrl is the default alias for the component's private scope.
+
+The controller is optional; leave it out if your component does not need behavior.
+
+The template can be an html string, or a filename to an html file.
+
+##Phone Example 2
+
+Phone example 1 refactored to use components.
+
+#app/index.html
+<code>
+<html ng-app="appName">
+	<head>
+		<script src='../angular.js' />
+		<script src='app.js' />
+		<script src='phone-list/phone-list.component.js' />
+	</head>
+	<body>
+		<phone-list></phone-list>
+	</body>
+</html>
+</code>
+
+#app/app.js
+<code>
+angular.module('appName', []);
+</code>
+
+#app/phone-list/phone-list.component.js
+<code>
+angular.module('appName').component('phoneList', {
+	templateUrl: 'phone-list.template.html',
+	controller: function PhoneListController() {
+		this.phones = [
+			{ name:'Nexus', snippet:'fast and furious' },
+			{ name:'Galaxy', snippet:'to infinity and beyond' },
+			{ name:'Motorola', snippet:'next next gen' }
+		];
+	}
+});
+</code>
+
+Loading a template through a file will cause extra round trips to the server. See $templateRequest and $templateCache to prevent that.
+
+#app/phone-list/phone-list.template.js
+<code>
+<ul>
+	<li ng-repeat="phone in $ctrl.phones">
+		<span>{{ phone.name }}</span>
+		<p>{{ phone.spinnet }}</p>
+	</li>
+</ul>
+</code>
+
+#app/phone-list/phone-list.component.spec.js
+<code>
+describe('phoneList', function() {
+	beforeEach(module('appName'));
+	describe('PhoneListController', function() {
+		it('description of test', inject(function($componentController) {
+			var ctrl = $componentController('phoneList');
+			expect(ctrl.phones.length).toBe(3);
+		}));
+	});
+});
+</code>

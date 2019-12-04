@@ -1,0 +1,7 @@
+##Options
+
+#Verbosity
+
+menu Tools > Options > Projects and Solutions > Build and Run > MSBuild project build output verbosity
+Default: Minimal
+Full: Diagnostic

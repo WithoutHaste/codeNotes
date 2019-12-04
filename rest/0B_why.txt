@@ -1,0 +1,6 @@
+##Why use an API?
+
+You need to communicate across networks.
+You need to communicate across proxies.
+You need to communicate across firewalls.
+You are building a mobile app.

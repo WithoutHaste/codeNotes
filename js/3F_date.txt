@@ -1,0 +1,91 @@
+##Date
+
+An object type.
+
+JavaScript string format: Tue Oct 24 2017 20:37:53 GMT-0600 (Mountain Standard Time)
+JavaScript integer format: 1508899073536 (milliseconds since 1970/1/1 00:00:00)
+
+#New
+
+Current date
+<code>
+var x = Date();
+var y = new Date();
+</code>
+
+New date
+<code>
+var x = new Date(milliseconds);
+
+var y = new Date(dateString);
+
+var a = new Date(year, month, day);
+var b = new Date(year, month, day, hours);
+var c = new Date(year, month, day, hours, minutes);
+var d = new Date(year, month, day, hours, minutes, seconds);
+var e = new Date(year, month, day, hours, minutes, seconds, milliseconds);
+</code>
+
+Date string examples
+<code>
+var a1 = new Date("2017-11-24"); //ISO International Standard - most reliable across browsers - "YYYY-MM-DD"
+var a2 = new Date("2017-11-24T12:00:00Z"); //ISO International Standard - with time and zone
+var a3 = new Date("2017-11-24T12:00:00-06:30"); //ISO International Standard - with time and UTC relative zone
+
+var b = new Date("11/24/2017"); //short date - "MM/DD/YYYY" - not supported by all browsers
+
+var c1 = new Date("October 24 2017"); //long date - "MMMM DD YYYY"
+var c2 = new Date("Oct 24 2017"); //long date - "MMM DD YYYY"
+var c3 = new Date("24 Oct 2017"); //long date - "DD MMM YYYY"
+
+var d = new Date("Tuesday October 24 2014"); //full date
+var e = new Date("October 24, 2017 11:13:00");
+</code>
+
+ISO dates can be set with just YYYY-MM or YYYY.
+
+The timezone defaults to the browser's timezone.
+"Z" is the timezone code for UTC aka GMT.
+
+#Indexes
+
+Months range from 0 to 11.
+
+#ToString
+
+date.toString() returns string
+
+date.toUTCString() returns string
+
+date.toDateString() returns string
+
+<code>
+var date = new Date();
+
+var x = date.toString(); //Tue Oct 24 2017 20:44:45 GMT-0600 (Mountain Standard Time)
+var y = date.toUTCString(); //Wed, 25 Oct 2017 02:45:22 GMT
+var z = date.toDateString(); //Tue Oct 24 2017
+</code>
+
+#Parse
+
+<code>
+var x = Date.parse("March 21, 2012"); //milliseconds since 1970/01/01 00:00:00
+</code>
+
+#Methods
+
+getFullYear() //yyyy
+getDate() //day 1-31
+getDay() //weekday 0-6 with 0 as Sunday
+getHours() //hours 0-23
+getMinutes() //minutes 0-59
+getSeconds() //seconds 0-59
+getMilliseconds() //milliseconds 0-999
+getTime() //milliseconds since 1970/01/01 00:00:00
+
+Everything except getDay() has a "set" conterpart.
+
+#Comparison
+
+Dates can be compared with normal comparison operators.

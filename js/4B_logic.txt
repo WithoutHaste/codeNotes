@@ -1,0 +1,112 @@
+##Logic
+
+All the loops can use 'break' to exit the loop early, and 'continue' to skip to the next iteration.
+
+#If Else
+
+<code>
+if(x < y) {
+	z = 5;
+}
+</code>
+
+<code>
+if(x < y) {
+	z = 5;
+}
+else {
+	z = 7;
+}
+</code>
+
+<code>
+if(x < y) {
+	z = 5;
+}
+else if(x == y) {
+	z = 6;
+}
+else {
+	z = 7;
+}
+</code>
+
+#For Loop
+
+<code>
+var x = ["a", "b", "c"];
+for(var i = 0; i < x.length; i++)
+{
+	console.log(x[i]);
+}
+</code>
+
+#For In Loop
+
+For..In will iterate over enumerable properties of an object. Order is not consistent.
+For..In will iterate over the indexes of an array. But don't use it, because order is not consistent.
+
+<code>
+var x = { firstName: "John", lastName: "Smith", age: 34 };
+var text = "";
+for(field in x) {
+	text += field + ": " + x[field] + ", ";
+}
+console.log(text); //"firstName: John, lastName: Smith, age: 34, "
+</code>
+
+#For Of Loop
+
+For..Of iterates over "iterable collections". That's anything with a Symbol.iterator property.
+It keeps calling Iterator.next() until 'done' is true.
+
+This does not work on objects.
+It works well on arrays, strings, and NodeLists.
+
+array:
+<code>
+var array = ['a','b','c', 'd'];
+for(let element of array)
+{
+	console.log(element);
+}
+</code>
+
+NodeList:
+<code>
+var elements = document.querySelectorAll('.myClass');
+for (let element of elements) 
+{
+	element.addEventListener('click', doSomething);
+}
+</code>
+
+#While Loop
+
+<code>
+var x = 1;
+while(x < 100) {
+	console.log(x);
+	x++;
+}
+</code>
+
+<code>
+var x = 1;
+do {
+	console.log(x);
+	x++;
+} while(x < 100);
+</code>
+
+#Switch
+
+<code>
+switch(x) {
+	case 1: y = 7; break;
+	case 2: z = 62; break;
+	case 3:
+	case 4: z = -5; break;
+	default: y = z - 56; break;
+}
+</code>

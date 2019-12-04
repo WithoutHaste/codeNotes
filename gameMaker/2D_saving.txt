@@ -1,0 +1,26 @@
+##Saving
+
+#INI
+
+You can only have one ini file open at a time. Data is not saved until the close function.
+
+You're INI files can be called anything valid.
+
+Save example
+<code>
+ini_open("saveData.ini"); //open file or open empty file
+ini_write_real("SectionHeader", "variableNameA", value); //save a number
+ini_write_string("SectionHeader", "variableNameB", value); //save a string
+ini_close();
+</code>
+If the file did not exist, and you wrote to it, it will be created
+
+Load example
+<code>
+ini_open("saveData.ini"); //open file or open empty file
+var a = ini_read_real("SectionHeader", "variableNameA", defaultValueA);
+var b = ini_read_string("SectionHeader", "variableNameB", defaultValueB);
+ini_close();
+</code>
+
+Use "real" for numbers and booleans.

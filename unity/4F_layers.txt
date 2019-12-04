@@ -1,0 +1,3 @@
+##Layers
+
+You can lock layers in place with the "Layers" menu in the upper-right of the screen.

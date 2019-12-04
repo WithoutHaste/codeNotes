@@ -1,0 +1,20 @@
+##Cursor
+
+Set global variable cursor_sprite to any loaded sprite index.
+The default cursor is -1;
+
+The sprite image_index and image_speed cannot be set.
+
+<code>
+cursor_sprite = spr_myCursor;
+</code>
+
+##Mouse
+
+Set game to register a left-double-click as a single-right-click. 
+
+If user is on a Mac, their computer settings may override this and (for example) set a two-finger-left-click as a single-right-click. If so, it will register correctly in the game.
+
+<code>
+device_mouse_dbclick_enable(true);
+</code>

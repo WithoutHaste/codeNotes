@@ -1,0 +1,210 @@
+##Events
+
+JavaScript functions can be triggered by a browser event.
+
+#HTML Events
+
+Add events with HTML attributes. Any javascript can be entered into the event attribute, including multiple statements.
+
+<code>
+<html>
+	<element event='myFunc()'>
+	</element>
+	<element event='console.log("1"); console.log("2");'>
+	</element>
+</html>
+</code>
+
+<code>
+<button onclick="document.getElementById('demo').innerHTML = Date()">Time?</button>
+</code>
+
+Use the 'this' keyword to refer to the current element.
+<code>
+<button onclick="this.innerHTML='Clicked'">Click?</button>
+</code>
+
+Use the browser-provided 'event' variable to pass the event object to your event handler.
+<code>
+<button onclick="myEventHandler(event)">Click?</button>
+</code>
+
+Set an event listener programatically.
+<code>
+document.getElementById("myId").addEventListener("click", myEventHandler);
+
+function myEventHandler(event) {
+	console.log(event);
+	console.log(this); //'this' is set to the element
+}
+</code>
+You can add multiple event handlers to the same event.
+Note that this method expects events like "click" instead of "onclick".
+
+Remove an event listener programatically.
+<code>
+document.getElementById("myId").removeEventListener("click", myEventHandler);
+</code>
+
+#Event Propagation
+
+Given nested elements that each have a listener for event X, which order should the event handlers be called in?
+
+Bubbling: the inner-most element will run first, working outward. This is the default.
+
+Capturing: the outer-most element will run first, working inward.
+
+<code>
+document.getElementById("myId").addEventListener("click", myEventHandler, useCapture:true);
+</code>
+
+#Event List
+
+Events not listed elsewhere: 
+	onload: when a document finishes loading
+
+	onchange: input value changed - for INPUT, SELECT, and TEXTAREA tags
+	onfocusin: element is about to gain focus
+	onfocus: element gains focus
+	onfocusout: element is about to lose focus
+	onblur: element loses focus
+	oninput: element gets user input
+	oninvalid: element is invalid
+	onreset: form is reset
+	onsearch: user writes something in a search field
+	onselect: after a user selects text - for INPUT and TEXTAREA tags
+	onsubmit: form is submitted
+	ontoggle: user opens or closes a DETAILS element
+	
+	oncopy: user copies element contents
+	oncut: user cuts element contents
+	onpaste: user pastes content into an element
+
+	ontouchstart: finger is placed on touch screen
+	ontouchmove: finger is dragged across touch screen
+	ontouchend: finger is removed from touch screen
+	ontouchcancel: touch is interrupted
+	
+	onbeforeprint: page is about to be printed
+	onafterprint: page has started printing, or print dialog is closed
+	
+	oncanplay: media has buffered enough to begin playing
+	oncanplaythrough: media has buffered all the way to the end
+	ondurationchange: duration of the media is changed
+	onratechange: playing speed of the media is changed
+	onvolumechange: volume of the media is changed
+	onended: media file has played to the end
+	onloadstart: browser begins trying to load media
+	onloadeddata: media data is loaded
+	onloadedmetadata: media metadata is loaded
+	onprogress: browser is currently downloading the media
+	onstalled: media data is not available
+	onemptied: media file is not unavailable, or network issue
+	onsuspend: browser is intentionally not loading media data
+	onpause: the media is paused and expects to resume (like for buffering)
+	onplay: media is played
+	onplaying: media is currently playing
+	onpause: media is paused
+	onseeking: user is moving to a new position in the media
+	onseeked: user finishes moving to a new position in the media
+	ontimeupdate: media playing position has changed
+	
+	animationstart: css animation has started
+	animationiteration: css animation is repeated
+	animationend: css animation has completed
+	transitionend: css transition ends
+	
+	onabort: loading a resource was aborted
+	onbeforeunload: the document is about to be unloaded
+	onerror: an error occurred loading a file
+	onhashchange: the anchor section of the URL changed
+	onpageshow: user navigates to the page
+	onpagehide: user leaves the page
+	onresize: document view is resized
+	onscroll: element's scrollbar is scrolled
+	onunload: after a page has been unloaded - for BODY tag only
+	onmessage: a message is received from the server
+	onopen: a connection with the server is opened
+	ononline: browser starts to work online
+	onoffline: browser starts to work offline
+	onpopstate: window history changes
+	onstorage: a web storage area is updated
+	
+Methods:
+	preventDefault(): cancels the event if it is cancelable 
+		(verified for onkeydown and onkeypress, to block a character being typed)
+	stopImmediatePropagation(): prevents other listeners of the same event from being called
+	stopPropagaion(): prevents further propagation of event
+	
+#Mouse Events
+
+onclick: left-mouse-click on element
+ondblclick: double left-mouse-click on element
+oncontextmenu: right-mouse-click on element
+onshow: a MENU element is shown as a context (right-click) menu
+onmousedown: a mouse button is pressed on an element
+onmouseup: a mouse button is released on an element
+onwheel: mouse wheel is moved
+onmouseenter: mouse moves over element
+onmouseleave: mouse moves off element
+onmousemove: mouse moves while over an element
+
+onmouseover: mouse moves over element, or one of its children
+onmouseout: mouse moves off element, or one of its children
+
+ondragstart: user starts dragging an element
+ondrag: element is being dragged
+ondragenter: element enters a drop target
+ondragover: element is over a drop target
+ondragleave: element leaves a drop target
+ondrop: element is dropped on a drop target
+ondragend: user stops dragging element (mouse button released)
+
+Event Properties:
+	button = which mouse button was pressed
+		0: left (or main)
+		1: middle or wheel
+		2: right (or secondary)
+		3: browser back (or fourth)
+		4: browser forward (or fifth)
+	buttons = bitwise flag for which mouse buttons were pressed
+		0: none
+		1: left (primary)
+		2: right (secondary)
+		4: middle (auxiliary)
+		8: browser back (fourth)
+		16: browser forward (fifth)
+	detail = number of times the mouse was clicked
+	pageX, pageY = x and y coordinates of mouse relative to document
+	clientX, clientY = x and y coordinates of mouse relative to window
+	screenX, screenY = x and y coordinates of mouse relative to screen
+	relatedTarget = ? the element related to the event-triggering-element
+	altKey, ctrlKey, shiftKey, metaKey = was this key pressed when the event triggered?
+	which => button
+	
+#Keyboard Events
+	
+onkeydown: 
+	keyboard key pressed down 
+	will repeat if key is held down
+	occurs before char is added to the text field
+onkeypress: 
+	keyboard key pressed
+	will only trigger for displayable character keys (will trigger for "T" but not for "Shift" or "Control")
+	(verified in FireFox that is does occur for Backspace, Delete, and the arrow keys)
+	will repeat if key is held down
+	occurs before char is added to text field
+onkeyup: 
+	keyboard key released 
+	can only occurs once per key press
+	occurs after char is added to text field
+
+Event Properties:
+	key = (character) the character of the key
+	keyCode = (integer) Unicode character code of the key
+	charCode = (integer) Unicode character code of the key (KEYPRESS event only)
+	altKey, ctrlKey, shiftKey, metaKey = was this key pressed when the event triggered?
+	location = location of key on the keyboard
+	which => keyCode
+	
+	

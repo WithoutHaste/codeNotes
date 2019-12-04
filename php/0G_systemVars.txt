@@ -1,0 +1,15 @@
+##System Variables
+
+#Server
+
+Variables that might be provided by the web server:
+
+The full URL, including query string:
+<code>
+$_SERVER['REQUEST_URI']
+</code>
+
+Just the path part of the URL, excluding the home address (such as www.site.com) and excluding the query string.
+<code>
+parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+</code>

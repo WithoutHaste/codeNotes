@@ -1,0 +1,88 @@
+##Graphics
+
+#Create Image
+
+<code>
+using System;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+
+Bitmap bitmap = new Bitmap(width, height);
+using(Graphics graphics = Graphics.FromImage(bitmap))
+{
+	graphics.SmoothingMode = SmoothingMode.AntiAlias;
+	graphics.Clear(Color.White);
+	//draw on graphics
+}
+bitmap.Save(saveAsFilename, ImageFormat.Png);
+</code>
+
+#Open Image
+
+To open and edit an image.
+<code>
+using System.Drawing;
+
+public class MyClass
+{
+	public MyClass()
+	{
+		Image image = Image.FromFile(fullPath);
+		using(Graphics graphics = Graphics.FromImage(image))
+		{
+			//edit image
+		}
+		image.Save(fullpath);
+	}
+}
+</code>
+
+#Strings
+
+Draw text:
+<code>
+using(Graphics graphics = Graphics.FromImage(image))
+{
+	string text = "Sample Text";
+	System.Drawing.Font font = new System.Drawing.Font("Arial", 16);
+	System.Drawing.SolidBrush brush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
+
+	graphics.DrawString(text, font, brush, x, y);
+}
+</code>
+
+Find out how much space the string will take up.
+<code>
+SizeF size = graphics.MeasureString(text, font);
+</code>
+
+#Lines
+
+<code>
+graphics.DrawLine(pen, startPoint, endPoint);
+</code>
+
+#Arcs
+
+Arcs are bound by Rectangles, start at a degree, and go through a sweep-degree.
+
+<code>
+//fill in an arc
+graphics.FillPie(new SolidBrush(Color.White), rectangle, 0, 360);
+//outline an arc
+graphics.DrawArc(new Pen(Color.Black, 1), rectangle, 0, 360);
+</code>
+
+#Flip Image
+
+Images use a top-left origin point, like computer screens do.
+
+Flip graphics before drawing on it, so you can calculate using a bottom-left origin.
+<code>
+private void FlipTopToBottom(Graphics graphics, int height)
+{
+	graphics.ScaleTransform(1, -1);
+	graphics.TranslateTransform(0, -height);
+}
+</code>

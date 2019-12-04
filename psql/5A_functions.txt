@@ -1,0 +1,27 @@
+##Functions
+
+<code>
+CREATE TABLE myTable (id INT NOT NULL);
+INSERT INTO myTable VALUES (1);
+INSERT INTO myTable VALUES (2);
+INSERT INTO myTable VALUES (3);
+
+CREATE OR REPLACE FUNCTION myFunction() RETURNS SETOF myTable AS
+$BODY$ //any label can be put inside the $$ characters
+	DECLARE
+		result myTable%rowtype;
+	BEGIN
+		FOR result IN SELECT * FROM myTable ORDER BY id ASC
+		LOOP
+			IF result.id > 2 THEN
+				EXIT;
+			END IF;
+			RETURN NEXT result;
+		END LOOP;
+		RETURN;
+	END
+$BODY$
+LANGUAGE 'plpgsql';
+
+SELECT * FROM myFunction();
+</code>

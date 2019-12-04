@@ -1,0 +1,64 @@
+##Object
+
+Basic:
+<code>
+class myClass
+{
+    function myMethod()
+    {
+        echo "Test"; 
+    }
+}
+
+$x = new myClass;
+$x->myMethod();
+</code>
+
+Store all constructor arguments as local fields:
+<code>
+class myClass
+{
+	public function __construct(array $arguments = array()) 
+	{
+		if (!empty($arguments)) 
+		{
+			foreach ($arguments as $property => $argument) 
+			{
+				$this->{$property} = $argument;
+			}
+		}
+	}
+}
+</code>
+
+#Fields
+
+<code>
+class myClass
+{
+	public $myField = "default";
+}
+
+$x = new myClass;
+$x->{'myField'} = "A";
+
+$fieldName = 'myField';
+$x->$fieldName = "B";
+</code>
+
+#Arguments
+
+Function arguments are required, unless you set a default value.
+
+#Static Method
+
+<code>
+class myClass
+{
+	public static function myStaticMethod()
+	{
+		echo "Static";
+	}
+}
+myClass::myStaticMethod();
+</code>

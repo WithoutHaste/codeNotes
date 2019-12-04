@@ -1,0 +1,25 @@
+##Solution
+
+#Rename
+
+Fully backup your solution before attempting manual rename operations.
+
+1) Close Visual Studio
+
+2) Rename the solution directory with version control
+- If using Git source control, rename in Windows Explorer
+
+3) Open *.sln file in a text editor
+4) Replace all "OldProject" references with "NewProject"
+5) Save changes to *.sln
+6) Rename *.sln
+
+7) Open *.csproj file in a text editor
+8) Replace all "OldProject" references with "NewProject"
+9) Save changes to *.csproj
+10) Rename *.csproj
+
+11) Reopen solution in Visual Studio
+12) Rename any namespaces in project that have changed
+
+13) If using Git, update .gitignore with new paths

@@ -1,0 +1,121 @@
+##Threads
+
+How to put the service on a different thread than the rest of the application.
+For instance, if the application includes a GUI, you want the GUI and the service on different threads.
+
+It is best practice to be careful with what runs on which threads. You never know what changes to the application will occur in the future, and race conditions and deadlocks are difficult to debug.
+
+#Marshalling / Marshaling
+
+Marshalling is the process of transforming an object to a data format suitable for transmission or storage.
+Often used to move data between different parts of a computer or between programs or between threads.
+
+Marshalling is similar to serialization.
+
+The opposite process is unmarshalling or demarshalling.
+
+#UseSynchronizationContext
+
+UseSynchronizationContext is a service behavior attribute.
+
+To make the service run on a background thread:
+<code>
+using System.ServiceModel;
+
+[ServiceBehavior(UseSynchronizationContext=false)] //execute service on a worker thread, instead of the service host's main thread
+public class GeographyManager : IGeographyService
+{
+	public void UpdateGUI(string message)
+	{
+		//update GUI element with message
+		mainWindow.ShowMessage(message);
+	}
+}
+</code>
+
+#Synchronization Context
+
+SynchronizationContext represents the executing context for a particular thread.
+
+In the main thread, like the GUI:
+<code>
+public class MainWindow : Form
+{
+	private SynchronizationContext synchronizationContext = null;
+	
+	public MainWindow()
+	{
+		//initialize window
+		
+		synchronizationContext = SynchronizationContext.Current;
+	}
+	
+	public void ShowMessage(string message)
+	{
+		//this will marshall from the service thread to the GUI thread
+		SendOrPostCallback callback = new SendOrPostCallback(arg => 
+		{
+			messageLabel.Content = "Message: " + message;
+		});
+		synchronizationContext.Send(callback, null); //the "null" is a state variable that will be passed into the callback "arg"
+	}
+	
+	private void buttonClick(object sender, RoutedEventArgs e)
+	{
+		//do this on a non-GUI thread so the GUI is not locked while the service runs
+		Thread thread = new Thread(() =>
+		{
+			Channel<IGeographyService> factory = new ChannelFactory<IGeographyService>("");
+			IGeographyService proxy = factory.CreateChannel();
+			proxy.ShowMessage("very important message");
+			factory.Close();
+		});
+		thread.IsBackground = true; //low priority thread, so it does not get in the way of the application closing
+		thread.Start();
+	}
+}
+</code>
+Every thread in the application can now use this SynchronizationContext to talk to the GUI thread.
+
+If you need to make multiple calls from the proxy on different threads each, then instantiate the proxy (and close it) outside the worker thread(s). This gives the proxy thread affinity for the main thread.
+
+#Tasks
+
+Using threads directly is out of date. Use tasks instead.
+Benefits: uses thread pools.
+
+<code>
+public class MainWindow : Form
+{
+	private SynchronizationContext synchronizationContext = null;
+	
+	public MainWindow()
+	{
+		//initialize window
+		
+		synchronizationContext = SynchronizationContext.Current;
+	}
+	
+	public void ShowMessage(string message)
+	{
+		//this will marshall from the service thread to the GUI thread
+		SendOrPostCallback callback = new SendOrPostCallback(arg => 
+		{
+			messageLabel.Content = "Message: " + message;
+		});
+		synchronizationContext.Send(callback, null); //the "null" is a state variable that will be passed into the callback "arg"
+	}
+	
+	private async void buttonClick(object sender, RoutedEventArgs e)
+	{
+		//do this is a non-GUI thread so the GUI is not locked while the service runs
+		await Task.Run(() =>
+		{
+			Channel<IGeographyService> factory = new ChannelFactory<IGeographyService>("");
+			IGeographyService proxy = factory.CreateChannel();
+			proxy.ShowMessage("very important message");
+			factory.Close();
+		});
+	}
+}
+</code>

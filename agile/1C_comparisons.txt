@@ -1,0 +1,55 @@
+##Other Models
+
+#Waterfall
+
+Discussion of Waterfall as a process started with Winston Royce, who was naming common problems with the default software development process. So from the start, what is called Waterfall was an anti-pattern. Winston Royce was already in favor of an iterative model.
+
+Stages of the Waterfall process:
+- Requirements gathering
+- Design
+- Construction
+- Integration
+- Testing and Debugging
+- Installation or Deployment
+- Maintenance
+
+Problems with Waterfall:
+- It doesn't allow you to go back to a previous phase of the project, to make repairs or improvements.
+- You progress to the next phase before you have time to get feedback about the previous phase.
+- You don't have any working software until the end of the process.
+
+For instance, it is impossible to collect all requirements before starting to build a system. Many requirements are revealed as developers and users consider the partially built system.
+
+What needs to be true for Waterfall to work?
+- All requirements are well documented, clear, and unchanging
+- Product definition is stable throughout development
+- The technology being used is well understood
+- The project is short - 4 months max
+- You have all the resources you need available
+
+Advantages of Waterfall:
+- Easy to schedule and control
+- Roles can be clearly defined and departmentalized
+- An easy to understand process
+- Fits into a Gantt chart nicely
+
+!![Winston Royce's 1970 paper](http://withouthaste.com/codeNotes/agile/Royce_Winston_1970_ManagingTheDevelopmentOfLargeSoftwareSystems.pdf)
+"The virtue of all of this is that as the design proceeds the change process is scoped down to manageable limits. At any point in the design process after the requirements analysis is completed there exists a firm and closeup, moving baseline to which to return in the event of unforeseen design difficulties.
+
+What we have is an effective fallback position that tends to maximize the extent of early work that is salvageable and preserved."
+
+"At this point it is appropriate to raise the issue of - "how much documentation?" My own view is "quite a lot"; certainly more than most programmers, analysts, or program designers are willing to do if left to their own devices. The first rule of managing software development is ruthless enforcement of documentation requirements.
+
+...During the early phase of software development, the documentation IS the specification and IS the design. Until coding begins, these three nouns (documentation, specification, design) denote a single thing."
+
+#V-Model
+
+V-Model is a modifeid Waterfall. (Paul E. Brook, 1986)
+
+In the V-Model, there is a test-design phase for each development phase. Then all these tests are run during the validation phase.
+
+Types of tests:
+- Acceptance Tests, based on requirements
+- System Tests, based on system design
+- Integration Tests, based on architecture and module design
+- Unit Tests, based on coding

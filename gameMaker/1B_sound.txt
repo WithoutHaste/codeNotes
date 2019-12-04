@@ -1,0 +1,44 @@
+##Sound
+
+For background music and sound effects.
+
+Accepts Wave (.wav) and MP3 files. 
+
+Sounds can be assigned to audio groups, that can be loaded/unloaded in memory all at once and can use the same volume controls.
+
+#Wave
+
+Wave files are usually used for sound effects because the format allows the sound to be played instantly.
+
+You can also play multiple wave files simultaneously.
+
+#MP3
+
+Use MP3 format for background music.  GameMaker only allows you to play one at a time.
+
+#Play
+
+Play a sound resource once.  This will only work if your IDE is set to use the old audio engine.
+<code>
+sound_play(name_of_sound);
+</code>
+
+Play any sound resource, possibly in a loop.  This will only work if your IDE is set to use the new audio engine.
+<code>
+audio_play_sound(name_of_sound, priority, loopSound);
+</code>
+Lower (lesser) priority sounds may be canceled if too many sounds are playing at once.  Priorities are arbitrary integers.
+
+Set sound volume, for all future times the sound is played.
+0 = silent, 1 = full volume
+<code>
+sound_volume(name_of_sound, volume);
+</code>
+Sound volume is logarithmic, so ~0.8 is half the volume of 1.
+
+You can also set the default volume per sound in the sound's properties. The properties volume slider appears to be linear rather than logarithmic.
+
+To stop a sound:
+<code>
+audio_stop_sound(name_of_sound);
+</code>

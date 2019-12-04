@@ -1,0 +1,153 @@
+##Directives
+
+You cannot intersperse directives within Xml comments - you'll either get a "badly formatted Xml" warning or an "Xml comment is not placed on a valid language element" warning.
+
+#Using
+
+The using directive imports namespaces into your program. They do not have to be placed at the top of a file, but that is the standard.
+
+<code>
+using System;
+using System.IO;
+</code>
+
+You can alias a namespace:
+<code>
+using System;
+using My = MyNamespace;
+...
+My.AddInts(5, 7);
+</code>
+
+(.Net 4.6)
+
+You can now import a specific static class.
+
+<code>
+//previously
+using System;
+using MyNamespace;
+...
+Utility.AddInts(5, 7);
+
+//also previously
+using System;
+using static MyNamespace.Utility;
+...
+AddInts(5, 7);
+
+//now
+using System;
+using MyNamespace.Utility;
+...
+AddInts(5, 7);
+</code>
+
+#if endif
+
+A code block is only compiled if the specified symbol is (or is not) defined.
+
+Test symbol:
+<code>
+	#if DEBUG
+		//code
+	#elif X
+		//code
+	#else
+		//code
+	#endif
+</code>
+
+Define and undefine symbols:
+<code>
+	#define X
+	//code
+	#undef X
+</code>
+	
+#WARNING
+
+Warning will generate a level 1 warning with the specified message when you build.
+
+<code>
+	#WARNING sql stmt altered to allow build, do not deploy as-is
+</code>
+
+#DEFINE
+
+You can define your own preprocessor symbols. These symbols will only exist within the file they are defined in.
+
+<code>
+	#define TRACE
+	#if TRACE
+	//do something
+	#endif
+	#if (TRACE && DEBUG)
+	//do something
+	#endif
+</code>
+
+In Visual Studio, you can have symbols defined based on the compile mode.
+	Project > Properties > Build > check Define DEBUG Constant
+
+You can undefine symbols:
+<code>
+	#undef TRACE
+</code>	
+	
+#Preprocessor Symbols
+
+"DEBUG" is a preprocessor symbol.
+The custom symbols you create with #define are preprocessor symbols.
+
+Preprocessor symbols are either defined, or undefined. They are not set to a value like a variable.
+
+You can also define symbols in the *.csproj file.
+
+In *.csproj:
+<code>
+  <Project>
+    ...
+    <PropertyGroup>
+	  <DefineConstants>$(DefineConstants);MY_SYMBOL</DefineConstants>
+    </PropertyGroup>
+  </Project>
+</code>
+In code:
+<code>
+	#if MY_SYMBOL
+	//do something
+	#endif
+</code>
+
+"DefineConstants" overwrites all current constants.
+To add your constant to the current constants, use the "$(DefineConstants);" clause.
+
+You can view your custom defined constants in:
+Project properties > Build tab > select a configuration > custom constants are listed at the top
+
+The following are supposed to be built-in preprocessor symbols that are defined based on your target framework, but they aren't working for me.
+!![Target Framework Symbols](https://docs.microsoft.com/en-us/dotnet/core/tutorials/libraries#how-to-multitarget)
+Framework                Moniker      Symbol
+---------------------------------------------
+.NET Framework 2.0   --> net20    --> NET20
+.NET Framework 3.0   --> net30
+.NET Framework 3.5   --> net35    --> NET35
+.NET Framework 4.0   --> net40    --> NET40
+.NET Framework 4.5   --> net45    --> NET45
+.NET Framework 4.5.1 --> net451   --> NET451
+.NET Framework 4.5.2 --> net452   --> NET452
+.NET Framework 4.6   --> net46    --> NET46
+.NET Framework 4.6.1 --> net461   --> NET461
+.NET Framework 4.6.2 --> net462   --> NET462
+.NET Framework 4.7   --> net47    --> NET47
+.NET Framework 4.71  -->          --> NET471
+.NET Framework 4.72  -->          --> NET472
+<code>
+	#if NET40
+	using System.Net;
+	#else
+	using System.Net.Http;
+	using System.Threading.Tasks;
+	#endif
+</code>

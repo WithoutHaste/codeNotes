@@ -1,0 +1,9 @@
+##Flow Control
+
+#ng-if
+
+<code>
+<td ng-repeat="x in list">
+	<div ng-if="x < 2">{{ x }}</div>
+</td>
+</code>

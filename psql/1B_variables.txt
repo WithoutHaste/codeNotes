@@ -1,0 +1,13 @@
+##Variables
+
+Declaration:
+<code>
+x integer;
+y varchar;
+</code>
+
+Assignment:
+<code>
+x := 0;
+y := 'text';
+</code>

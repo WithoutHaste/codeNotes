@@ -1,0 +1,54 @@
+##Literals
+
+#String
+
+CHAR, VARCHAR, or TEXT (may not recognize some characters)
+<code>
+'a'
+'a string'
+'12343'
+'And. Punc,tuation!'
+</code>
+
+NCHAR, NVARCHAR, or NTEXT (Unicode strings)
+<code>
+N'a'
+N'a string'
+N'12343'
+N'And. Punc,tuation!'
+</code>
+
+#Integer
+
+<code>
+84756
++3
+-1
+</code>
+
+#Decimal
+
+<code>
+453.2535
++30.003
+-0.454
+</code>
+
+#DateTime
+
+<code>
+'May 2, 2015'
+'2015/05/02' --YYYY/MM/DD
+'2015/05/02 09:18:30' --YYYY/MM/DD hh:mm:ss
+</code>
+
+#Escaping Characters
+
+Escape % in a LIKE comparison:
+<code>
+WHERE column LIKE '%[%]%' --where string has a percent sign anywhere in it
+</code>
+or
+<code>
+WHERE column LIKE '%\%%' ESCAPE '\'
+</code>

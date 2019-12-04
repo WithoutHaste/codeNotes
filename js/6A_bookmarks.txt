@@ -1,0 +1,12 @@
+##Bookmarklet
+
+A way to save a piece of javascript code, and run it against the current web page.
+
+1) Create a browser bookmark
+2) Replace the "Location" with pure javascript
+3) Click this bookmark to execute the javascript against the current web page
+
+Ex:
+<code>
+javascript:document.getElementsByTagName("table")[0].rows[0].cells[0].remove()
+</code>

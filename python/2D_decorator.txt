@@ -1,0 +1,63 @@
+##Decorator
+
+Decorators look like this:
+<code>
+@text
+</code>
+
+#Class Methods
+
+See the class section for more about the @classmethod, @staticmethod, and @property decorators.
+
+#Method As Decorator
+
+Function A can be decorated with another function B. When A is run, it is actually passed as a parameter to function B, and function B can choose when/if to run it.
+
+<code>
+def myDecorator(f):
+	def wrapper():
+		print("Starting...")
+		f()
+		print("Ending...")
+	return wrapper
+	
+def plainFunction():
+	print("plain function")
+	
+x = myDecorator(plainFunction)
+x()
+
+ #outputs:
+ #Starting...
+ #plain function
+ #Ending...
+</code>
+
+Simplified syntax:
+<code>
+def myDecorator(f):
+	def wrapper():
+		print("Starting...")
+		f()
+		print("Ending...")
+	return wrapper
+
+@myDecorator	
+def plainFunction():
+	print("plain function")
+	
+plainFunction()
+
+ #outputs:
+ #Starting...
+ #plain function
+ #Ending...
+</code>
+
+When would you use a decorator?
+To time the length of functions
+To apply regular logging
+To wait before executing a function - rate limiting
+To require a login for a function
+To validate the arguments passed into a function
+etc

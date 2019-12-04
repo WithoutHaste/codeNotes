@@ -1,0 +1,8 @@
+##Attributes
+
+#tabIndex
+
+You can make any element focusable by adding a tabIndex attribute to it.
+<code>
+	<p tabIndex="4">...</p>
+</code>

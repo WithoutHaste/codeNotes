@@ -1,0 +1,14 @@
+##Feature Driven Design
+
+"FDD is a model-driven, short-iteration process. It begins with establishing an overall model shape, then it continues with a series of two-week design-by-feature, build-by-feature iterations. The features are small and useful in the eyes of the clients."
+
+#Practices
+
+- Domain object modeling
+- Developing by feature 
+- Component and class ownership
+- Feature teams
+- Inspections
+- Configuration management
+- Regular builds
+- Visibility of progress and results

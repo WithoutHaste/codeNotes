@@ -1,0 +1,60 @@
+##Controls
+
+"continue" and "break" work like other languages.
+
+#If Else
+
+In curly bracket format, "elseif" and "else if" can both be used.
+
+<code>
+if($x > 0)
+{
+}
+else if($x < 0)
+{
+}
+else
+{
+}
+</code>
+
+<code>
+if($x > 0)
+{
+}
+elseif($x < 0)
+{
+}
+else
+{
+}
+</code>
+
+When using colon format, only "elseif" is valid.
+
+<code>
+if($x > 0):
+	//something
+elseif($x < 0):
+	//something else
+else:
+	//or this
+endif;
+</code>
+
+#For
+
+<code>
+for($x = 0; $x <= 10; $x++)
+{
+	echo $x;
+}
+</code>
+
+#Foreach
+
+<code>
+foreach($array as $element)
+{
+}
+</code>

@@ -1,0 +1,104 @@
+##Regular Expressions
+
+Can be used with string methods: match, replace, search, split.
+Can be used with RegExp methods: exec, test
+
+RegExp.test(string) returns true if a match is found.
+RegExp.exec(string) returns the next match, or null. Must be called repeatedly to get all matches.
+
+<code>
+var regex = new RegExp("b+", "g");
+var matches = getMatches(regex, "abbbcbbc");
+function getMatches(regex, text)
+{
+	var matches = [];
+	var match = null;
+	while((match = regex.exec(text)) !== null)
+	{
+		matches.push(match);
+	}
+	return matches
+}
+</code>
+
+Warning: there is a flaw in the Javascript RegExp exec process. If the RegExp matches an empty string, which is zero-width, it will not increment the cursor index and will enter an infinite loop.
+To avoid that:
+<code>
+var regex = new RegExp("b+", "g");
+var matches = getMatches(regex, "abbbcbbc");
+function getMatches(regex, text)
+{
+	var matches = [];
+	var match = null;
+	while((match = regex.exec(text)) !== null)
+	{
+		matches.push(match);
+		if (match.index === regex.lastIndex)
+			regex.lastIndex++;
+	}
+	return matches
+}
+</code>
+You can test these on pattern "a*" and text "a aa aaa".
+
+If the global flag (g) is used, RegExp.exec will return each match then null.
+If the global flag is not used, RegExp.exec will return the same first match indefinitely.
+You can check the 'flag' property of the RegExp object to determine what flags were used.
+<code>
+if(regexp.flags.indexOf('g') == -1)
+{
+	//only call exec once
+}
+</code>
+
+#Instantiation
+
+<code>
+var regex1 = /b+/g;
+var regex2 = new RegExp("b+", "g");
+</code>
+
+Use the literal for expressions that will not change and will be used many times. It is only compiled once.
+
+Use the constructor for expressions that are only used once or come from user input.
+
+#Patterns
+
+Javascript and C# use the same regular expression patterns. See C# notes, Regular Expression Patterns section.
+
+Or see Lessons section, Regular Expressions in javascript.
+
+Exceptions:
+	Options:
+		g = global search
+		i = case insensitive
+		m = multiline search
+		u = interpret pattern as unicode
+		y = sticky = start at current position in string
+	Grouping Constructs:
+		named groups are not allowed, just ordinals
+		in fact, looks like only basic (subexpressions) are allowed
+	Substitions
+		$_ doesn't work for substituting entire input string
+
+#Replace
+
+Simple:
+<code>
+var text = "abcbbcba";
+text = text.replace(/c/g, "C"); //text="abCbbCba"
+</code>
+
+With ordinal groups:
+<code>
+var text = "There is 1 cat and 11 dogs.";
+text = text.replace(/(\D)1(\D)/g, "$1one$2"); //text="There is one cat and 11 dogs."
+</code>
+
+With custom alterations:
+<code>
+//capitalizes only the first alphabet-character
+var text = "  this sentence.";
+text = text.replace(/(\w)/, w => w.toUpperCase()); //text="  This sentence"
+</code>
+		

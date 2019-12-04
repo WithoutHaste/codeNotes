@@ -1,0 +1,135 @@
+##Behavior Configuration
+
+Behaviors of a service.
+
+#Declarative Configuration
+
+<code lang="xml">
+<system.serviceModel>
+	<services>
+		<service name="MyService" behaviorConfiguration="serviceBehaviorA">
+			<endpoint address="a" binding="b" contract="c"/>
+		</service>
+		<behaviors>
+			<serviceBehaviors>
+				<behavior name="serviceBehaviorA">
+					<!-- settings here -->
+				</behavior>
+			</serviceBehaviors>
+		</behaviors>
+	</services>
+</system.serviceModel>
+</code>
+
+If you don't give the "behavior" a name, it will become the default settings to each "service" that does not specify a "behaviorConfiguration".
+
+#Inline Configuration
+
+<code>
+[ServiceBehavior(IncludeExceptionDetailInFaults=true)]
+public class MyManager : IMyService
+{
+}
+</code>
+
+Some behaviors can only be set inline, because they make such a difference to how the service operates that they cannot be left in an easily edited place like a config file.
+
+#Procedural Configuration
+
+<code>
+Behavior behavior = host.Description.Behaviors.Find<{type}>();
+if(behavior == null)
+{
+	behavior = nwe {behavior type};
+	behavior.{property} = {value};
+	host.Description.Behaviors.Add(behavior);
+}
+</code>
+
+#Exceptions
+
+You can receive more detailed information about unhandled SOAP faults. This is recommended during development, but not during production, for security and usability reasons.
+(Ideally, you handle all faults anyway.)
+
+Inline:
+<code>
+[ServiceBehavior(IncludeExceptionDetailInFaults=True)]
+public class GeographyManager : IGeographyService
+{
+}
+</code>
+
+Declarative:
+<code lang="xml">
+<system.serviceModel>
+	<services>
+		<service name="MyService" behaviorConfiguration="serviceBehaviorA">
+			<endpoint address="a" binding="b" contract="c"/>
+		</service>
+		<behaviors>
+			<serviceBehaviors>
+				<behavior name="serviceBehaviorA">
+					<serviceDebug includeExceptionDetailInFaults="true" />
+				</behavior>
+			</serviceBehaviors>
+		</behaviors>
+	</services>
+</system.serviceModel>
+</code>
+
+Procedural:
+<code>
+ServiceHost hostGeographyManager = new ServiceHost(typeof(GeographyManager));
+
+ServiceDebugBehavior debugBehavior = hostGeographyManager.Description.Behaviors.Find<ServiceDebugBehavior>();
+if(debugBehavior == null)
+{
+	behavior = new ServiceDebugBehavior();
+	behavior.IncludeExceptionDetailInFaults = true;
+	hostGeographyManager.Description.Behaviors.Add(debugBehavior);
+}
+else
+{
+	behavior.IncludeExceptionDetailInFaults = true;
+}
+
+hostGeographyManager.Open();
+
+hostGeographyManager.Close();
+</code>
+
+To test this, you can set your Client project to Start Without Debugging.
+
+#Metadata Exposure
+
+#Instancing
+
+#Concurrency
+
+#Throttling
+
+Throttling can prevent memory overload. If the service is being overwhelmed by requests, it will queue up requests and feed them to the service more slowly.
+
+The default settings are usually sufficient.
+
+Declarative:
+<code lang="xml">
+<system.serviceModel>
+	<services>
+		<service name="MyService" behaviorConfiguration="serviceBehaviorA">
+			<endpoint address="a" binding="b" contract="c"/>
+		</service>
+		<behaviors>
+			<serviceBehaviors>
+				<behavior name="serviceBehaviorA">
+					<serviceThrottling 
+						maxConcurrentSessions="100" <!-- open transport sessions; defaults to NumberOfProcessors X 100 -->
+						maxConcurrentCalls="16" <!-- defaults to NumberOfProcessors X 16 -->
+						maxConcurrentInstances="26" <!-- minimum of 116 (sum of other minimums) -->
+						/>
+				</behavior>
+			</serviceBehaviors>
+		</behaviors>
+	</services>
+</system.serviceModel>
+</code>

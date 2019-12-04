@@ -1,0 +1,13 @@
+##How it works
+
+1) A client machine makes a request to a server.
+
+The request is a text document containing a Verb, Headers, and Content.
+ex: POST, Content Length: 11, Hello World
+
+2) The server processes the request and may return a response.
+
+The response is a text document containing a Status Code, Headers, and Content.
+ex: 201, Content Type: text, Hello World
+
+The server is stateless. It process each request individually.

@@ -1,0 +1,29 @@
+##Delete Object
+
+#Connected Application
+
+<code>
+Country country = dbContext.Countries.First();
+dbContext.Countries.Remove(country);
+dbContext.SaveChanges();
+</code>
+
+#Disconnected Application
+
+<code>
+dbContext.Countries.Attach(country);
+dbContext.Countries.Remove(country);
+dbContext.SaveChanges();
+</code>
+Or
+<code>
+dbContext.Entry(country).State = EntityState.Deleted;
+dbContext.SaveChanges();
+//this works because the object is automatically Attached
+</code>
+Or
+<code>
+//Write your own stored procedure, so the object does not have to be loaded before it can be deleted
+dbContext.Database.ExecuteSqlCommand("exec DeleteCountryById {0}", id);
+//this is correctly parameterized
+</code>

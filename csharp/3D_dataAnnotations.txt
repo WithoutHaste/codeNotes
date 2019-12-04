@@ -1,0 +1,73 @@
+##Data Annotations
+
+Located in System.ComponentModel.DataAnnotations.
+
+Attributes that can be added to class properties. You can add multiple types of annotations to a single property.
+
+#Validation Attributes
+
+<code>
+[StringLength(50)] //maximum string length
+[Range(0.01,100.00)] //range of valid values
+[Required(ErrorMessage="Provide phone number.")]
+[RegularExpression(@"....")] //field must conform to a pattern
+[Compare("Password")] //compare one field to another
+[EnumDataType(typeof(MyEnum))] //verifies that value is specified in the enum
+</code>
+
+The ErrorMessage property is available on all these attributes.
+
+#Display Attributes
+
+<code>
+[Display(...)] //lots of optional properties
+[DisplayName("Author")]
+[DataType(DataType.EmailAddress)] //tells how to format a string
+[Name(...)]
+[ShortName(...)]
+[Description(...)] //usually for a tooltip
+[Prompt(...)] //usually a watermark in an input field
+[GroupName(...)] //used to group fields
+[Order(...)]
+[AutoGenerateField(...)]
+[AutoGenerateFilter(...)]
+[DisplayColumn(...)] //apply to parent in foreign key relationship
+[SortColumn(...)]
+[DisplayFormat(DataFormatString="{0:C}")]
+[DisplayFormat(ConvertEmptyStringToNull=true, NullDisplayText="Not Specified")]
+</code>
+
+#Custom Attributes
+
+Make a class inheriting from ValidationAttribute and override IsValid. Optionally add new constructors to take in extra parameters.
+
+<code>
+//defining the attribute
+public class MinStringLengthAttribute : ValidAttribute
+{
+	public int Min { get; set; }
+	public override bool IsValid(object obj)
+	{
+		return (((string)obj).Length >= Min);
+	}	
+}
+//using the attribute
+[MinStringLength(Min=5)]
+</code>
+
+Or use CustomValidationAttribute
+<code>
+//defining the attribute
+public class MyClass
+{
+	public static ValidationResult MyValidationMethod(object obj)
+	{
+		bool success = //code
+		if(success)
+			return ValidationResult.Success;
+		return new ValidationResult("error message");
+	}
+}
+//using the attribute
+[CustomValidation(typeof(MyClass), "MyValidationMethod")]
+</code>

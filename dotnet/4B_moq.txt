@@ -1,0 +1,92 @@
+##Moq
+
+Moq is a framework for mocking objects to facilitate unit testing. Eg, you can mock a database connection to isolate the behavior of the method you are testing from any actual database.
+
+Moq mocks objects by deriving from them and overriding their properties and methods. Therefore, all properties and methods you want to mock must be declared virtual. Interfaces are easy because their properties and methods are inherently virtual. You cannot mock a static method.
+
+Some of these instructions assume you are using Visual Studio.
+
+#Installation
+
+Tools menu > Library Package Manager > Package Manager Console.
+Verify the Default Project is your unit test project.
+Verify Package Source is "nuget.org".
+Run "Install-Package Moq"
+
+In each unit test file, add Moq.
+
+<code>
+using Moq;
+</code>
+
+#Basic Example
+
+In this example, MethodBeingTested will call mockInterface.MethodA. It will receive returnValue.
+
+<code>
+Mock<MyInterface> mockInterface = new Mock<MyInterface>();
+mockInterface.Setup(x => x.MethodA()).Returns(returnValue);
+MethodBeingTested(a, b, mockInterface.Object);
+</code>
+
+Or you can create a moq factory.
+<code>
+MockRepository mockRepository = new MockRepository(MockBehavior.Loose) { DefaultValue = Default.Mock };
+Mock<MyInterface> mockInterface = mockRepository.Create<MyInterface>();
+</code>
+
+#Mixing call types
+
+Mock one method on an object, and use the real call on another.
+
+<code>
+Mock<MyObject> obj = new Mock<MyObject>() { CallBase = true };
+//Setup the mocked method
+//all methods not explicitly Setup will use the real call instead
+</code>
+
+#Methods with Parameters
+
+When the parameter value does not matter.
+<code>
+mockInterface.Setup(x => x.MethodB(It.IsAny<int>(), It.IsAny<string>())).Returns(returnValue);
+</code>
+
+When with parameter value is specific.
+<code>
+mockInterface.Setup(x => x.MethodB(5, It.IsAny<string>())).Returns(returnValue);
+</code>
+
+#Return
+
+To return a null, you must specify a null of the expected object type.
+<code>
+mockInterface.Setup(x => x.MethodA()).Returns(default(Object));
+</code>
+
+You can return a sequence of different values, as of Mock 4.2.1312.1622.
+<code>
+//first time Method is called, resultA is returned
+//each time after that, resultB is returned
+mockObj.SetupSequence(x => x.Method()).Returns(resultA).Returns(resultB);
+</code>
+
+#Properties
+
+<code>
+mockInterface.Setup(x => x.Property).Returns(returnValue);
+</code>
+
+#Verify
+
+Verify that a mocked method was called, and how many times it was called.
+<code>
+mockInterface.Verify(x => x.MethodA(), Times.Once());
+</code>
+
+Times: AtLeast, AtMost, AtMostOnce, Between, Exactly, Never, Once.
+
+Verify that a mocked property was got.
+<code>
+mockInterface.VerifyGet(x => x.Property);
+</code>

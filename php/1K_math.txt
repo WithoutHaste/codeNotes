@@ -1,0 +1,8 @@
+##Math
+
+#Rand
+
+Rand will return a random integer, with the min and max inclusive.
+<code>
+$coinFlip = rand(0,1);
+</code>

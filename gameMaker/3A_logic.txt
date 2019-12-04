@@ -1,0 +1,106 @@
+##Logic
+
+#If Else
+
+<code>
+if(x > y)
+{
+}
+else if(a > b)
+{
+}
+else
+{
+}
+</code>
+
+Version 2 introduced ternary operator:
+<code>
+var a = (b > 0) ? 15 : -1;
+</code>
+
+#Do Until
+
+<code>
+do
+{
+	x++;
+} until(x > 100);
+</code>
+
+#For
+
+<code>
+for(var i = 0; i < 10; i++)
+{
+}
+</code>
+
+#Repeat
+
+<code>
+repeat(10)
+{
+}
+</code>
+
+#Switch
+
+<code>
+switch(x)
+{
+	case 0: break;
+	case 1: break;
+	default: break;
+}
+</code>
+
+#With
+
+Enter scope of instance by id
+<code>
+with(instanceId)
+{
+	//now in instance local scope
+}
+</code>
+You can also access the instance variables directly
+<code>
+instanceId.myVariable = 5;
+</code>
+
+Iterate through all instances of an object
+<code>
+with(obj_myObject)
+{
+	//now in each instance local scope
+}
+</code>
+
+#Return
+
+Exits the current script, and may return a value.
+
+#Exit
+
+Exits the current script. If this script was called from an object event, it also exits the entire event.
+
+#Restart
+
+Restarts the game: runs Game End event, runs Game Start event. Does not reset global variables automatically, you'd have to code that.
+
+<code>
+game_restart();
+</code>
+
+#End
+
+Ends the game, exits the game. Finished the current Step and runs Game End event first.
+
+<code>
+game_end();
+</code>
+
+This method is against the restrictions of the Windows 8 and iOS marketplaces, because it causes an error.  It will silently fail on the HTML5 module.
+
+This method is intended for Steam Workshop, Windows, Windows Phone, Android, Linux, and Mac.

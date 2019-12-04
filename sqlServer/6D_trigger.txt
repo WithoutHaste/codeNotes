@@ -1,0 +1,93 @@
+##Trigger
+
+Triggers are special kind of stored procedure that runs automatically when certain events occur.
+Triggers run AFTER an event occurs.
+
+DML triggers react to INSERT, UPDATE, and DELETE events.
+DDL triggers react to CREATE, ALTER, and DROP events.
+DCL triggers react to the LOGON event.
+
+In SQL Server 6.5, you could only define 3 triggers per table, one for each DML event.
+As of SQL Server 7, you can define as many as you want. But you cannot set what order they will fire in.
+As of SQL Server 2000, you can at least set which will fire first and last.
+
+Triggers cannot be invoked on-command.
+
+#Create
+
+An INSERT trigger:
+<code>
+CREATE TRIGGER triggerName ON tableName
+AFTER INSERT
+AS
+BEGIN
+	--statements
+END
+</code>
+
+An INSERT and UPDATE trigger:
+<code>
+CREATE TRIGGER triggerName ON tableName
+AFTER INSERT, UPDATE
+AS
+BEGIN
+	--statements
+END
+</code>
+
+You can specify that a trigger not fire during replication processes:
+<code>
+CREATE TRIGGER triggerName ON tableName
+AFTER INSERT
+NOT FOR REPLICATION
+AS
+BEGIN
+	--statements
+END
+</code>
+
+Inside these stored procedures, you have access to special temp tables that hold the before/after values of affected records.
+The "inserted" temp table holds (INSERT) rows to be inserted or (UPDATE) new rows inserted by update.
+The "deleted" temp table holds (UPDATE) existing rows modified by update or (DELETE) rows deleted.
+
+#INSTEAD OF
+
+An INSTEAD OF trigger will run instead of the INSERT/UPDATE/DELETE operation. The CRUD operation does not occur at all.
+
+Example usage: you have a table that does not allow delete, it just has an IsDeleted column. So you put an INSTEAD OF DELETE trigger on it to enforce that rule.
+
+<code>
+CREATE TRIGGER triggerName ON tableName
+INSTEAD OF DELETE
+AS
+BEGIN
+	--statements
+END
+</code>
+
+#Disable
+
+You can temporarily disable a trigger.
+<code>
+DISABLE TRIGGER triggerName ON tableName;
+
+ENABLE TRIGGER triggerName ON tableName;
+</code>
+
+#Drop
+
+Drop a trigger:
+<code>
+DROP TRIGGER IF EXISTS triggerName;
+</code>
+
+#List
+
+List all triggers on a database.
+<code>
+SELECT  
+	name,
+	is_instead_of_trigger
+FROM sys.triggers
+WHERE type = 'TR';
+</code>

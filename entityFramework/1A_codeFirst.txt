@@ -1,0 +1,218 @@
+##Code First
+
+The name is misleading: you may have already built your database. This method is really an alternative to defining the database-to-code mapping in an EDMX file. This way you define the mapping in C#.
+
+#Objects
+
+POCO stands for Plain Old CLR Object. These are your Domain classes - they have Properties, and no Methods.
+So these are not "Entities" as "Clean Architecture" defines it, since they contain no behavior, and exist in the Data Layer.
+
+<code>
+public class Country
+{
+	public int Id { get; set; }
+	public string Name { get; set; }
+	public int ContinentId { get; set; }
+	public virtual Continent Continent { get; set; }
+	public virtual ICollection<City> Cities { get; set; }
+}
+</code>
+
+By Entity Framework convention, a Property called "Id" will be the Primary Key, and will Auto-Increment.
+
+The "virtual" keyword is optional here. Without it, Country.Cities will be null. With it, Entity Framework will load the Cities collection at the time that you need reference it (Lazy Loading).
+
+It is recommended to have Foreign Key Properties (such as ContinentId) explicitly defined.
+This makes the relationship more clear to Entity Framework. For instance, is the Foreign Key nullable or not?
+It is also critical for maintaining relationships in applications where object references are lost (disconnected applications). Like a web application, or an architecture that separates the Business Entities from the Data Access Layer.
+
+If you don't specify a foreign key property, you're using an Independent Association.
+
+See "Data Annotations" for more property specifications that will affect the generated model.
+
+There's also something called "Fluent API" that could be used here.
+
+#Minimum Configuration
+
+Define DbContext
+<code>
+using System.Data.Entity;
+
+public class MyDb : DbContext
+{
+	public DbSet<Country> Counties { get; set; }
+}
+</code>
+A DbSet is a "Repository", in terms of the "Repository Pattern".
+
+Use DbContext
+<code>
+MyDb _db = new MyDb();
+List<Country> model = _db.Countries.ToList(); //this connects to the database, sends the query, and returns the results
+_db.Dispose();
+</code>
+
+Optional: set which database connection from the Web.config to use
+<code>
+using System.Data.Entity;
+
+public class MyDb : DbContext
+{
+	public MyDb() : base("name=DefaultConnection")
+	{
+	}
+	
+	public DbSet<Country> Countries { get; set; }
+}
+</code>
+
+#Validating Model
+
+You can look at the database schema EF will create from your Domain classes, to see if you need to define more specific Configuration.
+
+1) In Visual Studio > Tools menu > Extensions and Updates
+2) Install "Entity Framework Power Tools" (for VS2015, download from online)
+3) Set the project with the DbContext class as the Start Up project.
+4) Right-click on a DbContext class file > View Entity Data Model
+
+#Configuration
+
+The configuration explicitly defines the mapping from object to database table.
+
+<code>
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
+
+public class CountryConfiguration : EntityTypeConfiguration<Country>
+{
+	public CountryConfiguration()
+	{
+		ToTable("Country", "dbo"); //use table name "Country" instead of default "Countries"
+		HasKey(x => x.Id); //sets primary key
+		Property(x => x.Id).HasColumnName("CountryId").HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+		Property(x => x.ContinentId).IsRequired();
+		Property(x => x.Name).HasMaxLength(64).IsOptional();
+		HasMany(x => x.Cities).WithRequired(city => city.Country).HasForeignKey(city => city.CountryId).WillCascadeOnDelete(true);		
+	}
+}
+</code>
+
+Relationships are only defined on one object in the relationship. Here, the Country defines the Country-City relationship and leaves the Continent-Country relationship to the ContinentConfiguration class.
+
+#Context
+
+The database context brings together multiple configurations. A single context does not have to cover the entire database.
+
+<code>
+using System.Data.Entity;
+
+public class GeographyContext : BaseContext<GeographyContext>
+{
+	public DbSet<Continent> Continents { get; set; }
+	public DbSet<Country> Countries { get; set; }
+	public DbSet<City> Cities { get; set; }		
+
+	public GeographyContext(string connectionString) : base(connectionString)
+	{
+	}
+
+	protected override void OnModelCreating(DbModelBuilder modelBuilder)
+	{
+		modelBuilder.Configurations
+			.Add(new ContinentConfiguration())
+			.Add(new CountryConfiguration())
+			.Add(new CityConfiguration());
+		base.OnModelCreating(modelBuilder);
+	}
+}
+
+public abstract class BaseContext<T> : DbContext where T:DbContext
+{
+	static BaseContext()
+	{
+		Database.SetInitializer<T>(null);
+	}
+	
+	protected BaseContext(string connectionStringOrConnectionName) : base(connectionStringOrConnectionName)
+	{
+	}
+	
+	public override int SaveChanges()
+	{
+		//if you have custom code to run on SaveChanges
+		return base.SaveChanges();
+	}
+}
+</code>
+
+1 to 1..0 relationship:
+<code>
+	HasOptional(x => x.Child).WithRequired(child => child.Parent);
+</code>
+
+1 to 1 relationship:
+<code>
+	HasRequired(x => x.Child).WithRequired(child => child.Parent);
+</code>
+
+Many to many relationship:
+<code>
+	HasMany(objectB => objectB.ObjectsA).WithMany(objectA => objectA.ObjectsB);
+</code>
+
+Many to many relationship with joining table:
+<code>
+	HasMany(objectB => objectB.ObjectsA).WithMany(objectA => objectA.ObjectsB)
+		.Map(objectB => objectB.MapLeftKey("BId").MapRightKey("AId").ToTable("AtoB"));
+</code>
+
+Ignore a code-only property:
+<code>
+	Ignore(x => x.Property);
+</code>
+
+#Querying Context
+
+<code>
+using(GeographyContext context = new GeographyContext(connectionString))
+{
+	List<City> cities = context.Cities.Include("Country").Where(x => x.HasElectionThisYear).ToList();
+}
+</code>
+
+#Creating Database
+
+In at least Visual Studio 2012, if you create your code-first classes, create the database context, instantiate the database context, and run the code - then Entity Framework will try to connect to the Default Connection defined in Web.config, and if it succeeds it will automatically create the database as described by the object model.
+
+The database name will match the fully qualified name of the DbContext object you instantiated.
+Ex: I used class "AppDb : DbContext" under namespace "App.Models" so the database was created with name "App.Models.AppDb".
+
+To create the database semi-manually, see Migrations.
+
+#Views
+
+Entity Framework does not treat Entities created from Views any differently than Entities created from Tables. If you edit a View object and save changes, you'll get an error when the database refuses the update command.
+
+So Views are still for read-only operations.
+
+#Schema
+
+How to specify the schema of a table.
+
+With built-in Data Annotations:
+<code>
+[Table("Country", Schema="Other")]
+public class Country
+{	
+}
+</code>
+
+With a custom Data Annotation and Convention: 
+(see Conventions notes)
+
+Change default schema for entire model:
+<code>
+modelBuilder.HasDefaultSchema("Other");
+</code>
+This default is applied before any Conventions or Configurations that might override it.
+The migration history table will also use the default schema.

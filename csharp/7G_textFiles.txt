@@ -1,0 +1,29 @@
+##Text Files
+
+#Read Text
+
+<code>
+using System;
+using System.IO;
+
+using(StreamReader reader = new StreamReader(filename))
+{
+	string line = null;
+	while((line = reader.ReadLine()) != null)
+	{
+	}
+}
+</code>
+
+#Write Text
+
+<code>
+using System;
+using System.IO;
+
+using(StreamWriter writer = new StreamWriter(filename))
+{
+	writer.Write("X");
+	writer.WriteLine("Y");
+}
+</code>

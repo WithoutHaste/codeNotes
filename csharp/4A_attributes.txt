@@ -1,0 +1,17 @@
+##Attributes
+
+#Caller
+
+(.Net 4.5)
+
+Uses reflection to provide runtime information:
+<code>
+using System.Runtime.CompilerServices;
+
+public void MyMethod(normalParam, [CallerMemberName] string name = "", [CallerLineNumber] int lineNumber = 0, [CallerFilePath] string path = "")
+{
+	Console.WriteLine("This method called by: " + name);
+	Console.WriteLine("This method called from line: " + lineNumber);
+	Console.WriteLine("This method called from file: " + path);
+}
+</code>

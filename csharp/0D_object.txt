@@ -1,0 +1,8 @@
+##Objects
+
+Everything in C# is derived from the Object class.
+
+ValueType is derived from Object.
+All value types are derived from ValueType. These types are treated as true value types from other languages (for example, memory is allocated to the stack).
+You cannot explicitly derive from ValueType. All structs are derived from ValueType.
+Ex: Int32 is a struct derived from ValueType.

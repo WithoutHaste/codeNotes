@@ -1,0 +1,31 @@
+##Errors
+
+#Try Catch
+
+<code>
+try:
+	print("hey")
+except:
+	print("error")
+	
+try:
+	x = input("a number:")
+except IOError:
+	print("IO Error")
+except TypeError as e:
+	print("TypeError: " + str(e)) #prints the error message
+except:
+	print("some other error")
+</code>
+
+#Raise Error
+
+<code>
+raise ValueError("message")
+</code>
+
+Convention says do not raise generic Error
+
+#Error Types
+
+IOError, ValueError, ImportError, EOFError, KeyboardInterrupt

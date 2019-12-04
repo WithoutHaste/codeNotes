@@ -1,0 +1,9 @@
+##Terminology
+
+#URI, URL, URN
+
+URI stands for Uniform Resource Identifier.
+URL stands for Uniform Resource Locator. Example: https://a.b.com/d
+URN stands for Uniform Resource Name.
+
+URLs and URNs are both types of URIs.

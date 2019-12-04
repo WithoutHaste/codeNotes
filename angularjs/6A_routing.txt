@@ -1,0 +1,68 @@
+##Routing
+
+You'll need the angular-route.js library file.
+
+You'll now have one x.html layout template page, used by all other pages, and many partial y.html template files.
+
+Example route: index.html#!/some/path
+
+#index.html
+<code>
+<head ng-app="appName">
+	<script src="angular.js" />
+	<script src="angular-route.js" />
+	<script src="app.module.js" />
+	<script src="app.config.js" />
+	<script src="phone-list/phone-list.module.js" />
+	<script src="phone-list/phone-list.component.js" />
+	<script src="phone-detail/phone-detail.module.js" />
+	<script src="phone-detail/phone-detail.component.js" />
+</head>
+<body>
+	<div ng-view></div>
+</body>
+</code>
+
+#app/app.module.js
+<code>
+angular.module('appName', ['ngRoute', 'phoneDetail']);
+</code>
+
+#app/app.config.js
+
+The template values will replace <div ng-view></div>.
+
+The prefix : means to treat what comes after as a variable.
+
+<code>
+angular.module('appName').config(['$locationProvider', '$routeProvider', 
+	function config($locationProvider, $routerProvider) {
+		$locationProvider.hashPrefix('!');
+		$routeProvider
+			.when('/phones', { template: '<phone-list></phone-list>' })
+			.when('/phones/:phoneId', { template: '<phone-detail></phone-detail>' })
+			.otherwise('/phones');
+	}
+]);
+</code>
+
+#app/phone-detail/phone-detail.module.js
+
+While it is not strictly required that phone-detail import ngRoute, since the global app level imported it, it is recommended that all components explicitly import their own dependencies.
+
+<code>
+angular.module('phoneDetail', ['ngRoute']);
+</code>
+
+#app/phone-detail/phone-detail.component.js
+
+The parameters defined in the route are made available through $routeParams.
+
+<code>
+angular.module('phoneDetail', {
+	template: 'todo: detailed view of phone {{ $ctrl.phoneId }}',
+	controller: ['$routeParams', function PhoneDetailController($routeParams) {
+		this.phoneId = $routeParams.phoneId;
+	}]
+});
+</code>

@@ -1,0 +1,110 @@
+##Controls
+
+Switch is not supported in Python.
+
+Keywords "continue" and "break" and "pass" are supported.
+
+#If
+
+<code>
+if a == b:
+	print("a == b")
+elif b == c:
+	print("b == c")
+else:
+	print("none of the above")
+</code>
+
+Single line (the else is required here)
+<code>
+x = 5 if a == b else 6 #if a == b then x = 5 otherwise x = 6
+</code>
+
+#For
+
+For can iterate over any sequence: string, list, tuple, set, dictionary
+<code>
+x = ["a", "b", "c"]
+for myVar in x:
+	print(myVar)
+	
+y = {"a":1, "b":2, "c":3}
+for key in y:
+	print(key, "=", y[key])
+for v in y.values():
+	print(v)
+</code>
+
+A for loop can have an else statement, which executes at the end of the loop (unless the loop was broken)
+<code>
+for x in y:
+	print("hey")
+else:
+	print("done")
+</code>
+
+You cannot edit the for loop iterator like in javascript or C#
+<code>
+backedUp = False
+for i in range(5):
+	print(i)
+	if not backedUp:
+		i -= 1
+		backedUp = True
+ #outputs 0 1 2 3 4
+</code>
+
+break: exit the loop, skipping the else statement
+
+continue: skip ahead to the next iteration of the loop
+
+#While
+
+Continues looping until the condition is False.
+
+<code>
+while x < 10:
+	print(x)
+	x += 1
+</code>
+
+While can also have an else that is executed once at the end, if loop is not broken.
+<code>
+while x < 10:
+	print(x)
+	x+=1
+else:
+	print("done")
+</code>
+
+break: exit the loop, skipping the else statement
+
+continue: skip ahead to the next iteration of the loop
+
+#Enumerate
+
+Enumerate adds a built-in counter or index or row number to a loop.
+The enumerate actually returns tuples of (index, value), which are being mapped to our two variables.
+<code>
+for index, value in enumerate(myCollection):
+	#do stuff
+</code>
+
+Enumerator starts count at zero by default, but you can specify the starting index.
+<code>
+for index, value in enumerate(myCollection, 5):
+	#do stuff
+</code>
+
+#Comprehension
+
+A comprehension is a one-line expression defining a sequence of values that allows you to filter and edit the results.
+
+<code>
+x = [0 for i in range(10)] #[0,0,0,0,0,0,0,0,0,0]
+
+y = [i*i for i in range(10)] #[0,1,4,9,16,25,36,49,64,81]
+
+z = [str(i) for i in range(10) if i % 2 == 0] #["0","2","4","6","8"]
+</code>
+

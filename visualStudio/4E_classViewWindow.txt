@@ -1,0 +1,7 @@
+##Class View Window
+
+View menu > Class View > right-click on Namespace > View Class Diagram
+
+This actually generates a class diagram file (*.cd) in your solution directory.
+
+The diagram shows inheritance relationships, class fields, and class methods. It does not show which classes rely on each other.

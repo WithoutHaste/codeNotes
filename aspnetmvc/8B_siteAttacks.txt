@@ -1,0 +1,37 @@
+##Site Attacks
+
+#CSRF: Cross-Site Request Forgery
+
+Consider when using Forms Authentication.
+
+The attacker creates their own web page, for something unrelated.
+
+The attacker's webpage includes a hidden form that submits to the same location as one of your forms, and has all the same fields with that attacker's values already filled in.
+
+The attacker waits for someone who is currently logged into your site to come to their page, so they can silently submit this form using that user's authentication cookie. The cookie is automatically sent with the request, exactly as it should be for any request to your site.
+
+From the user's point of view, they just opened some random web page and nothing unusual happened.
+
+To protect against this, add the "ValidateAntiForgeryToken" to any Action that accepts post requests and requires authorization:
+<code>
+//in controller
+[HttpPost]
+[Authorize(Roles="admin")]
+[ValidateAntiForgeryToken]
+public ActionResult MyAction()
+{
+	...
+}
+
+//in view
+@using(Html.BeginForm()) {
+	@Html.AntiForgeryToken()
+	...
+}
+</code>
+Probably best to check for that automatically when the post/authorization conditions are true. Can probably insert that into the Request Life-Cycle somewhere.
+
+Whats happening here is that you send a "i am valid" value to the user with the form.
+That value is saved to a cookie.
+That value is returned when the form is submitted, and checked by ValidateAntiForgeryToken.
+The attacker cannot spoof this value because you cannot set cookies to another site.

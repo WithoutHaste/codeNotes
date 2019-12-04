@@ -1,0 +1,120 @@
+##Script Examples
+
+Examples of unobtrusive javascript:
+- separation of display from functionality
+- web page can operation fully with javascript disabled
+
+#Autocomplete
+
+Example of adding autocomplete to an input field using the jQuery UI library.
+
+Controller action to handle the request for "user has typed this in so far":
+<code>
+public ActionResult Autocomplete(string term) //jQuery UI autocomplete requests send argument "term"
+{
+	var results = _db.Countries
+					.Where(c => c.Name.StartsWith(term))
+					.Take(10)
+					.Select(c => new { label = c.Name }); //jQuery UI expects results with key "label" and/or "value"
+	return JsonResult(results, JsonRequestBehavior.AllowGet); //jQuery UI expects JSON result
+}
+</code>
+
+Razor view:
+<code>
+	<form method="get" action="@Url.Action("Index")">
+		<input type="search" name="searchTerm" data-myApp-autocomplete="@Url.Action("Autocomplete")"/>
+		<input type="submit" value="Search by Name"/>
+	</form>
+	@Html.RenderPartial("_Countries", Model)
+</code>
+
+Javascript:
+<code>
+$(function() {
+	const submitAutocompleteForm = function(event, ui) {
+		//so that the user does not have to click "Submit" after making a selection from the autocomplete suggestions
+		let $input = $(this);
+		$input.val(ui.item.label); //because this event might trigger before the input value is actually set
+		
+		let $form = $input.parents("form:first");
+		$form.submit();		
+	};
+	
+	const createAutocomplete = function() {
+		let $input = $(this); //wrap the selected HTML input element in jQuery
+		let options = {
+			//there are many options that jQuery UI Autocomplete supports
+			source: $input.attr("data-myApp-autocomplete") //url to request the data from
+			,select: submitAutocompleteForm //this function will be run when a selection is made (optional)
+		};
+		$input.autocomplete(options); //invoke jQuery UI Autocomplete widget
+	};
+
+	$("input[data-myApp-autocomplete]").each(createAutocomplete);
+});
+</code>
+
+#Paging Results
+
+1) Use NuGet to include "PagedList.Mvc" in your project.
+
+Controller action must now take paging into account:
+<code>
+using PagedList;
+...
+public ActionResult Index(int page=1)
+{
+	int pageSize = 10;
+	var results = _db.Countries
+					.Select(c => new MyModel{
+						Name = c.Name
+					})
+					.ToPagedList(page, pageSize); //this extension method was added by PagedList
+	return View(results);
+}
+</code>
+
+View must accept new model type "IPagedList":
+<code>
+@model IPagedList<MyModel>
+...
+</code>
+
+View will need the pager widget:
+<code>
+<div class="pagedList" data-myApp-target="#countryList">
+	@Html.PagedListPager(Model, page => Url.Action("Index", new { page }), PagedListRenderOptions.MinimalWithItemCountText)
+</div>
+</code>
+
+The new PagedList.css file will need to be included in the web page:
+<code>
+bundles.Add(new StyleBundle("~/Content/css").Include(
+		  "~/Content/bootstrap.css",
+		  "~/Content/site.css",;
+		  "~/Content/PagedList.css"));
+</code>
+
+By default, the pager reloads the entire page. Use AJAX instead:
+<code>
+$(function() {
+	const getPage = function() {
+		let $a = $(this); //wrap the selected HTML anchor element in jQuery
+		let options = {
+			url: $a.attr("href")
+			,type: "get"
+			,data: $("form").serialize() //includes values from form on current page
+		};
+		$.ajax(options).done(function(data) {
+			var target = $a.parents("div.pagedList").attr("data-myApp-target");
+			$(target).replaceWith(data);
+		});
+		return false; //stop event propagation
+	};
+
+	$(".main-content").on("click", ".pagedList a", getPage); //on click, the event will only be raised if a ".pagedList a" was clicked
+});
+</code>
+The paging anchor tags are going to be replaced each time the page is changed, so don't attach events to those anchors.
+Instead, this attaches to the ".main-content" element found in the global "_Layout.cshtml" layout.

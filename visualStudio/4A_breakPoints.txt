@@ -1,0 +1,17 @@
+##Breakpoints
+
+#Keyboard Shortcuts
+
+F9 to add/remove breakpoint on the current line.
+
+There is no default shortcut to disable all breakpoints, but you can do this from Debug > Disable All Breakpoints.
+
+#Breakpoints Window
+
+Open with: Debug menu > Windows > Breakpoints
+Or: Ctrl-Alt-B
+
+You can:
+- Deactivate breakpoints without deleting them (just uncheck the line)
+- Set a condition on when the breakpoint is used (ex: 124th iteration of loop)
+- WhenHit lets you output a message to the Output Window instead of breaking

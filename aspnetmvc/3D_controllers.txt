@@ -1,0 +1,27 @@
+##Controllers
+
+#Basic
+
+A controller is a single class that is made up of public methods called "Actions".
+HTTP requests will be routed to a particular controller based on the name of the class (pattern "XController", where "X" is used in the route).
+
+<code>
+class MyController : IController 
+{
+	public void Execute() { ... } //runs the Action Invoker
+}
+
+//you'll usually derive from MVC's abstract controller class
+class MyController : Controller { }
+</code>
+
+#Controller Factory
+
+<code>
+class MyControllerFactory : IControllerFactory { }
+//you'll usually use the default DefaultControllerFactory
+</code>
+
+#Scaffolding
+
+When adding a new controller through Visual Studio, there are many template options that can generate boiler-plate code based on a Model and basic Create/View/Edit/Delete actions.

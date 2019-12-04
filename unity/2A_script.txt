@@ -1,0 +1,33 @@
+##Scripts
+
+Scripts contain C# code.
+
+If you rename a script in Unity:
+- Links to script in Unity are updated.
+- The name of the class in the C# code is not updated. This must be manually updated to match the name of the script or you'll get errors in Unity.
+
+#Methods
+
+Load a new scene:
+<code>
+using UnityEngine.SceneManagement;
+//...
+SceneManager.LoadSceneAsync("SceneName", LoadSceneMode.Single);
+</code>
+
+Exit application:
+<code>
+Application.Quit();
+</code>
+This is ignored running within Unity, but works on "Build and Run".
+
+#Links
+
+You can link GameObjects and Assets to any public non-static field in a script.
+The script must inherit from MonoBehavior or ScriptableObject.
+
+Once the script is written, look at it in the Inspector pane. Your public non-static fields will show up. 
+You can link their values to GameObjects or Assets.
+
+If make a link of (ex) type "Image", and you drag-n-drop any element that has an Image component on it to the link, it will be the Image component of that element that you are linking to.
+So if there is only one component of a GUI element that you need access to, use that as the data type.

@@ -1,0 +1,163 @@
+##Number
+
+A data type
+
+<code>
+var x = 5;
+var y = 10.50;
+var z = 120e5; //exponential (scientific) notation
+</code>
+
+#Storage
+
+(link to WWC floating point lesson for much more details)
+
+All numbers are stored as 64-bit floating points.
+Bits 0-51 store the number, bits 52-62 store the exponent, and bit 63 stores the sign.
+
+Integers are accurate up to 15 digits.
+
+The maximum number of decimals is 17.
+
+Floating point arithmetic is not completely accurate.
+<code>
+var x = 999999999999999; //999999999999999
+var y = 9999999999999999; //10000000000000000
+
+var z = 0.2 + 0.1; //0.30000000000000004
+</code>
+
+Therefore, use some form of rounding
+<code>
+var z = (2 + 1) / 10; //0.3
+</code>
+
+#Constants
+
+Number.MAX_VALUE
+Number.MIN_VALUE
+Number.NEGATIVE_INFINITY
+Number.NaN
+Number.POSITIVE_INFINITY
+
+#NaN
+
+NaN stands for Not A Number. This result is given when an operation results in an illegal value.
+<code>
+var x = 100 / "Apple"; //NaN
+if(isNaN(x)) {} //true
+</code>
+
+Any operations that includes a NaN will result in NaN.  Except some weird ones.
+<code>
+var x = NaN + "5"; //"NaN5"
+</code>
+
+#Infinity
+
+'Inifity' or '-Infinity' will be returned if you go beyond the range of JavaScript numbers.
+<code>
+if(2 == Infinity) {} //false
+if(2/0 == Infinity) {} //true
+</code>
+
+#Binary
+
+Numbers prefixed with "0b" are interpreted as binary integers.
+<code>
+var x = 0b10001; //17
+</code>
+
+#Octal
+
+Some browsers interpret numerics with a leading zero as octals.
+<code>
+var x = 017; //15
+</code>
+
+#Hexadecimal
+
+Numerics with prefix '0x' are interpreted as hexadecimal values.
+<code>
+var x = 0xFF; //255
+</code>
+
+#Conversions
+
+Number
+<code>
+var a = Number(true); //1
+var b = Number(false); //0
+var c = Number("10"); //10
+var d = Number("10 20"); //NaN
+var e = Number(Date()); //returns number of milliseconds since 1970/1/1
+</code>
+
+parseInt only works on strings, and only returns the first integer found
+<code>
+var a = parseInt("10"); //10
+var b = parseInt("10.33"); //10
+var c = parseInt("10 20 30"); //10
+var d = parseInt("in 10 years"); //10
+var e = parseInt("no numbers"); //NaN
+</code>
+
+parseInt defaults to base-10, but you can also specify the base
+<code>
+var f = parseInt("0110110001", 2);
+</code>
+
+parseFloat only works on strings, and only returns the first number found
+<code>
+var a = parseFloat("10"); //10
+var b = parseFloat("10.33"); //10.33
+var c = parseFloat("10.20.30"); //10.20
+var d = parseFloat("in 10 years"); //10
+var e = parseFloat("no numbers"); //NaN
+</code>
+
+#ToString
+
+number.toString(base) returns string
+
+<code>
+var x = 128.toString(); //"128"
+var y = 128.toString(16); //"80" 
+</code>
+
+<code>
+var s = String.fromCharCode(asciiCode);
+</code>
+
+#ToExponential
+
+number.toExponential(decimalPlaces) returns string
+
+<code>
+var x = (9.656).toExponential(2); //"9.66e+0"
+var y = (9.656).toExponential(4); //"9.6560e+0"
+</code>
+
+#ToFixed
+
+Rounds a number to the specified decimal places.
+
+number.toFixed(decimalPlaces) returns string
+
+<code>
+var x = (9.656).toFixed(0); //"10"
+var y = (9.656).toFixed(2); //"9.66"
+var z = (9.656).toFixed(4); //"9.6560"
+</code>
+
+#ToPrecision
+
+Rounds a number to the specified number of digits.
+
+number.toPrecision(digits) returns string
+
+<code>
+var x = (9.656).toPrecision(); //"9.656"
+var y = (9.656).toPrecision(2); //"9.7"
+var z = (9.656).toPrecision(5); //"9.6560"
+</code>

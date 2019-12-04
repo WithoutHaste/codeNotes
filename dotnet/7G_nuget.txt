@@ -1,0 +1,240 @@
+##NuGet
+
+How to make NuGet packages.
+
+#nuspec File
+
+1) Download nuget.exe
+!![Download nuget.exe](https://dist.nuget.org/win-x86-commandline/latest/nuget.exe)
+2) Copy nuget.exe to the Solution directory of the project that will be included in the nuget package.
+3) Open command prompt, Navigate to the Solution directory, run "nuget spec".
+- A "ProjectName.nuspec" file will be generated based on the Solution.
+4) Open ProjectName.nuspec and manually fill in the properties for: id, authors, owners, license, iconUrl, tags, dependencies
+!![Complete list of optional properties.](https://docs.microsoft.com/en-us/nuget/reference/nuspec)
+
+The "id" property must be unique across nuget.org and contain only URL-compliant characters. It is recommended to prefix your company name, to help guarantee uniqueness. Namespace style names, with dot delimiters, are suggested. It is best if the "id" matches the namespace used in the code.
+- If your package is a collection of sample code, the "id" should end with ".Sample".
+!![Search NuGet to verify id is not in use.](https://www.nuget.org/packages)
+
+The "version" property must be changed each time the contents of the package change.
+
+"authors" is a comma-delimited list of names matching profile names on NuGet.org.
+"owners" is a comma-delimited list of names matching profile names on NuGet.org. Optional.
+
+"tags" is a space-delimited list of keywords and descriptors associated with the package.
+
+The "description" and "releaseNotes" tags support Markdown formatting in their contents. This will not show up on NuGet's preview page, but it does once you publish the project.
+- Note that hyperlink aliases don't work. A full web address will act as a hyperlink, but you cannot alias it with the [alias](link) syntax.
+
+5) Add a list of *.dll files to be included in the package.
+<code>
+<package>
+	<files>
+		<file src='MyPath\MyLibrary.dll' target='lib\MyLibrary.dll' />
+	</files>
+</package>
+</code>
+- The path will start at the directory of the *.nuspec file.
+- The target should start with "lib\".
+
+It is recommended that *.dll files be placed in a framework-specific subfolder under "lib".
+Example: target="lib\net46\MyLibrary.dll" indicates that the library relies on .Net 4.6
+
+If a *.dll is not needed in the compiled client project, place it in "ref/" instead of "lib/". Your *.dll will not be copied to the client's output folder.
+
+Any 3rd party library that your library relies on must be included as a file here.
+In general, any *.dll in your library's bin folder should be included here.
+
+6a) Add a list of content files to be included in the package (*.cs, *.html, *.txt, *.json, *.xml, etc)
+<code>
+<package>
+	<files>
+		<file src='MyPath\MyData.txt' target='content\MyData.txt' />
+	</files>
+</package>
+</code>
+- It is recommended to include a "readme.txt" file. It will be displayed when the package is installed.
+
+These files will end up in the root directory of the client's project.
+
+6b) Add a list of *.targets and *.prop files to be included in the package.
+<code>
+<package>
+	<files>
+		<file src='MyPath\MyTarget.targets' target='build\MyTarget.targets' />
+	</files>
+</package>
+</code>
+
+The appropriates references will be automatically added to the client's project file.
+
+Many of the common macro values are only set during <Import Project="...\Microsoft.CSharp.targets" />. And importation of custom *.props files is inserted before that in the project file. Therefore, most macros cannot be used in custom *.props files.
+
+If a property is not set and you try to use it, it will be equal to empty string.
+
+7) Add existing NuGet packages that this one depends on.
+<code>
+<package>
+	<group targetFramework="uap">
+		<dependency id='nugetId' version='nugetVersion' />
+	</group>
+</package>
+</code>
+
+If you have a list of dependencies for (ex) targetFramework="net40", this list will be used for all targets 4.0 and above, unless you specify another group for one of the higher targets. So if you have dependencies for low frameworks, and none for higher ones, include an empty group for the first framework that has no dependencies.
+
+#AssemblyInfo Token Replacement
+
+You can use tokens in the *.nuspec. They are formatted as a token name surrounded by dollar ($) signs.
+<code>
+  <package>
+    <metadata minClientVersion="2.0">
+      <id>MyId</id>
+      <version>$version$</version>
+	</metadata
+  </package>
+</code>
+
+If you use tokens, you must build the NuGet package using "nuget pack Name.csproj" instead of "nuget pack Name.nuspec".
+
+Otherwise you will get error "Value cannot be null or an empty string. Parameter name: value."
+
+#Create Package
+
+1) Create and fill in the *.nuspec file.
+2) Open command prompt, Navigate to the directory that contains *.nuspec and nuget.exe
+3) Run "nuget pack ProjectName.nuspec" which creates file "ProjectName.Version.nupkg".
+
+You can re-pack the package anytime the contents change.
+
+#Testing
+
+1) Add a local NuGet source to Visual Studio.
+1a) Tools menu > Options > NuGet Package Manager > Package Sources
+1b) Click the "Add" button (the green plus-sign).
+1c) Choose a source name and a directory for the local packages.
+1d) Click "Ok".
+
+This local source can be selected when adding packages through "Manage NuGet Packages".
+
+2) Add the test package to your test project.
+2a) Tools menu > NuGet Package Manager > Manage NuGet Packages for Solution
+2b) Set "Package Source" to the local source.
+2c) Select "Browse".
+2d) Select the test package to install.
+
+3) Run the appropriate tests.
+
+#Certificates
+
+All NuGet packages must be signed with a certificate that is registered with NuGet.
+!![NuGet's post](https://blog.nuget.org/20180522/Introducing-signed-package-submissions.html)
+!![Signed Packages](https://docs.microsoft.com/en-us/nuget/reference/signed-packages-reference)
+!![Signing Packages and list of trusted root authorities](https://docs.microsoft.com/en-us/nuget/create-packages/sign-a-package)
+!![Signing and Uploading Packages](https://dev.to/jeikabu/signing-a-nupkg-and-uploading-to-nugetorg-2a98)
+
+Signing a package provides protection against tampered content.
+The signature is produced from a X.509 certificate.
+
+NuGet only accepts certificates signed by a "trusted root authority" who is trusted by default by Windows.
+In order words, you cannot use self-issued certificates.
+
+This focuses on "Author Signatures", which is the type required by NuGet.
+
+It sounds like, if you sign your package with a valid certificate today and publish it, then the package will remain valid after the certificate itself expires. Because the timestamp on the package is for a time the certificate was valid.
+
+You can sign any number of packages with one certificate.
+
+1) Buy a certificate from a trusted root authority approved by Microsoft.
+- You should get a PKCS #12 file with *.pfx extension.
+- Import this into Windows.
+- Must have an RSA public key 2048 bits or greater.
+
+1.5A) You should have the private key on your development computer.
+- run certmgr.msc to view keys
+- look under Intermediate Certification Authorities > Certificates > search by expiration date or name of company
+- looks like a private key is only exportable (backup-able) if that ability was specified when the certificate was requested
+
+1.5B) Or this - export certificate from the browser you used for the request and the certificate installation.
+- Firefox > Options > Privacy & Security > scroll down to Certificates > View Certificates
+- select Your Certificates > should see your new certificate there
+- Backup certificate as a *.p12 file
+- The p12 format is the same as the pfx format, so you can just change the extension
+
+2) Export the certificate to "DER encoded binary X.509" format.
+!![How to Install OpenSSL](https://www.cloudinsidr.com/content/how-to-install-the-most-recent-version-of-openssl-on-windows-10-in-64-bit/)
+!![Download OpenSSL](https://slproweb.com/products/Win32OpenSSL.html)
+- Install OpenSSL
+- Explorer > C:\OpenSSL-Win64\bin > run openssl.exe as administrator
+- "pkcs12 -in <MyCertificate>.pfx -out <MyCertificate>.crt -nokeys -clcerts" (pull public certificate out of package, requires the password you set when creating the .pfx file)
+- "x509 -inform pem -in <MyCertificate>.crt -outform der -out <MyCertificate>.cer" (convert to binary encoding (DER), no password required)
+
+3) Register the certificate with NuGet. Look under Account Settings >> Certificates.
+
+4) Sign the package with a timestamp.
+- In command prompt, at the location of the *.nupkg file:
+- "nuget sign MyPackage.nupkg -CertificateSubjectName <MyCertificateSubjectName> -Timestamper <TimestampServiceURL>"
+- Example "nuget.exe sign MyPackage.1.0.0.nupkg -CertificatePath path_to_private_key.pfx -Timestamper http://sha256timestamp.ws.symantec.com/sha256/timestamp"
+- this will update the <MyPackage> file so it is now signed
+
+5) Verify the package.
+- "nuget.exe verify MyPackage.1.0.0.nupkg -All"
+- output should end with "Successfully verified package"
+
+#Publish
+
+1) Create an account on NuGet.org.
+2) Go to the page for uploading packages.
+3) Click "Choose File" and select the local *.nupkg file.
+4) Click "Upload".
+5) Verify the information.
+6) Click "Publish".
+
+The package can now be searched for and installed by anyone using NuGet.
+
+#Pre Release
+
+NuGet supports a naming convention to mark "alpha" and "beta" releases.
+!![Microsoft Page](https://docs.microsoft.com/en-us/nuget/create-packages/prerelease-packages)
+
+Update the "version" tag in your *.nuspec file to "<number>-alpha".
+Or update the assembly attribute of you C# project to "[assembly: AssemblyInformationalVersion("<number>-alpha")]".
+
+Pack and publish as normal. NuGet will not auto-install or recommend this "alpha" or "beta" version to anyone unless they check "Include Prerelease" while searching.
+
+To install a pre-release from command line:
+<code>
+nuget install -IncludePrerelease MyPackage
+</code>
+
+You can technically use any string after the hyphen and NuGet will assume the package is prerelease, but the most recognized are:
+alpha - work in progress or experimentation
+beta - feature complete for next release but contains known bugs
+rc - "release candidate" - feature complete and, if no bugs are found, will be the next release
+
+If you use many different strings, NuGet will sort them alphabetically, assuming that the later ones are newer.
+
+#Patterns
+
+For providing properties with default values that can be overridden per project:
+<code>
+<!-- in the Target -->
+<!-- the default will only be set if the property value is empty -->
+<CreateProperty Value="default_value_with_macros" Condition="'$(MyPropertyName)'==''">
+	<Output TaskParameter="Value" PropertyName="MyPropertyName"/>
+</CreateProperty>
+
+<!-- override defaults in *.csproj -->
+<!-- make sure your PropertyGroup is after Microsoft.CSharp.targets, so you can use macros -->
+<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+<PropertyGroup>
+	<MyPropertyName>custom_value_with_macros</MyPropertyName>
+</PropertyGroup>
+<!-- NuGet custom targets will be imported after this -->
+</code>
+
+#Considerations
+
+When deciding how to design solutions and namespaces:
+1) Any grouping of functionality that requires a third-party library needs its own namespace and its own NuGet package.
+- that way the extra dependency is not forced on users that won't be using it

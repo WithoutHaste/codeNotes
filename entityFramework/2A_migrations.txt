@@ -1,0 +1,281 @@
+##Migrations
+
+This will help setup a new database, initialize its data, keep the database schema in sync with changes to the object model, etc.
+
+#Setup
+
+1) In Visual Studio > View menu > Other Windows > Package Manager Console
+ - or Tools menu > NuGet Package Manager > Package Manager Console
+2) In console > "Enable-Migrations -ContextTypeName MyDb"
+ - use the name of your DbContext subclass instead of "MyDb"
+ 
+This will inspect your entity classes and the database, and will add a new folder "Migrations" to your solution. 
+
+#Configuration
+
+This is the "Migrations/Configuration.cs" file that was automatically added to your project:
+<code>
+public Configuration()
+{
+	//Entity Framework will not make changes to database unless you explicitly tell it to
+	AutomaticMigrationsEnabled = false; 
+}
+</code>
+
+"Seed" is invoked every time the database is updated by the Migration.
+It can insert default data.
+<code>
+protected override void Seed(AppA.Models.AppADb context)
+{
+	//look in database, search for Countries by "Name", update them or add them
+	//using Name instead of Id because Id is auto-incremented and could be anything
+	context.Countries.AddOrUpdate( record => record.Id,
+		new Country { Name="France" },
+		new Country { Name="Germany" }
+}
+</code>
+
+Setting the schema of the _MigrationHistory table:
+<code>
+using System.Data.Common;
+using System.Data.Entity.Migrations.History;
+
+public class MigrationHistoryTableContext : HistoryContext
+{
+	public MigrationHistoryTableContext(DbConnection dbConnection, string defaultSchema) : base(dbConnection, defaultSchema)
+	{
+	}
+	
+	protected override void OnModelCreating(DbModelBuilder modelBuilder)
+	{
+		base.OnModelCreating(modelBuilder); //run the base method first
+		modelBuilder.HasDefaultSchema("admin"); //set schema
+	}
+}
+
+using System.Data.Entity;
+using System.Data.Entity.SqlServer;
+
+internal class GeographyDbConfiguration : DbConfiguration
+{
+	public GeographyDbConfiguration()
+	{
+		SetHistoryContext(SqlServerServices.ProviderInvariantName //get name of the database provider you are using
+			, (connection, defaultSchema) => new MigrationHistoryTableContext(connection, defaultSchema) //specify migration table context
+		);
+	}
+}
+</code>
+Usage example: put the _MigrationHistory table into a different schema than the main database, so that its permissions can be set separately.
+You can change other things about the table here, but it is not recommended unless you are writing a Provider.
+
+#Initial Create
+
+(The file name starts with the YYYYMMDD... info for when it was generated.)
+
+This file describes the database schema that will be created.
+
+You can add plain SQL statements to the "Up" method, and they will be executed.
+<code>
+Sql(plainTextSQLStatement);
+</code>
+
+Entity Framework uses this, plus a system table in your database called "_Migrations" to determine what schema changes need to applied to a database.
+
+#Create Database
+
+If your database does not exist yet:
+
+1) In Package Manager Console > "Add-Migration <migration name>"
+2) This will create a migration file with all necessary commands in it. It will be saved in the Migrations folder.
+3) In Package Manager Console > "Update-Database -Verbose"
+ - by default, this will run the most recent migration file
+ - Verbose is optional, it outputs more information about what is happening
+ 
+To create the database script, but not run it:
+3) In Package Manager Console > "Update-Database -Script"
+ - the sql will be generated, but not automatically saved anywhere - so save that file
+ 
+All migrations will also update the dbo.__MigrationHistory table that is automatically added to your database.
+This table stores hashes of the database structure at different points in time. It is used by EF to figure out the next migration.
+
+Possible Error: System.Data.SqlClient.SqlException (0x80131904)
+A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify that the instance name is correct and that SQL Server is configured to allow remote connections. (provider: SQL Network Interfaces, error: 26 - Error Locating Server/Instance Specified)
+- When connecting to LocalDb, it worked after I manually made the connection through Visual Studio first:
+- View menu > Service Explorer > right-click Data Connections > Add Connection > enter the info for your connection
+
+#Update
+
+Manually update database based on Migration:
+1) In Package Manager Console > "Update-Database -Verbose"
+That's it.
+
+If Automatic Migrations are enabled, the database schema can be updated.
+If not, just the data can be updated.
+
+If you get warnings, like the possibility of data loss because you made a charvar column shorter, you can override them:
+1) In Package Manager Console > "Update-Database -Verbose -Force"
+
+Note: if you generate a migration, but don't apply it, you'll need to delete it before creating a new migration.
+
+Note: changes to the _MigrationHistory table will not be shown in the script you can inspect for a migration, but they do happen. Ex: changing the _MigrationHistory table's schema.
+
+To target a specific migration:
+1) In Package Manager Console > "Update-Database -TargetMigration <migration name> -Script"
+
+#Idempotent Migrations
+
+How to update a database that is several migrations behind in updates?
+
+"Idempotent" means something that can be applied repeatedly without causing damage. An idempotent migration script can tell if it has already been run, and will not run again if it has.
+
+Create an idempotent script that takes all previous migrations into account:
+<code>
+Update-Database -Script -SourceMigration $InitialDatabase
+</code>
+(Exactly that text, nothing is replaced.)
+
+#Methods
+
+EF 5 DbMigration Methods:
+Create/Drop/Rename/MoveTable
+Add/Drop/Alter/RenameColumn
+Add/DropForeignKey
+Add/DropPrimaryKey
+Create/DropIndex
+.Sql()
+
+EF 6 New DbMigration Methods:
+RenameIndex
+Create/Drop/Alter/Rename/MoveStoredProcedure
+AlterTableAnnotations(TColumns)
+
+Creating a custom DbMigration Method to: CreateView
+<code>
+using System.Data.Entity.Migrations.Model;
+
+public class CreateViewOperation : MigrationOperation
+{
+	public string ViewName { get; private set; }
+	public string ViewQueryString { get; private set; }
+	public override bool IsDestructiveChange { get { return false; } } //true if the operation might destroy data
+
+	public CreateViewOperation(string viewName, string viewQueryString) : base(null)
+	{
+		ViewName = viewName;
+		ViewQueryString = viewQueryString;
+	}
+}
+
+public class RemoveViewOperation : MigrationOperation
+{
+	public string ViewName { get; private set; }
+	public override bool IsDestructiveChange { get { return false; } } //true if the operation might destroy data
+	
+	public RemoveViewOperation(string viewName) : base(null)
+	{
+		ViewName = viewName;
+	}
+}
+
+using System.Data.Entity.Migrations;
+using System.Data.Entity.Migrations.Infrastructure;
+
+public static class Extensions
+{
+	public static void CreateView(this DbMigration migration, string viewName, string viewQueryString)
+	{
+		((IDbMigration)migration).AddOperation(new CreateViewOperation(viewName, viewQueryString);
+	}
+	
+	public static void RemoveView(this DbMigration migration, string viewName)
+	{
+		((IDbMigration)migration).AddOperation(new RemoveViewOperation(viewName);
+	}
+}
+
+using System.Data.Entity.Migrations.Model;
+using System.Data.Entity.Migrations.Utilities;
+using System.Data.Entity.SqlServer;
+
+public class CustomSqlServerMigrationSqlGenerator : SqlServerMigrationSqlGenerator
+{
+	protected override void Generate(MigrationOperation migrationOperation)
+	{
+		if(migrationOperation is CreateViewOperation)
+		{
+			CreateViewOperation createViewOperation = (migrationOperation as CreateViewOperation);
+			using(IndentedTextWriter writer = Writer())
+			{
+				writer.WriteLine("CREATE VIEW {0} AS {1};", operation.ViewName, operation.ViewQueryString);
+				Statement(writer);
+			}
+		}
+		else if(migrationOperation is RemoveViewOperation)
+		{
+			RemoveViewOperation removeViewOperation = (migrationOperation as RemoveViewOperation);
+			using(IndentedTextWriter writer = Writer())
+			{
+				writer.WriteLine("DROP VIEW {0};", operation.ViewName);
+				Statement(writer);
+			}
+		}
+		//should there be a call to the base behavior on "else" here?
+	}
+}
+
+using System.Data.Entity;
+using System.Data.Entity.SqlServer;
+
+public class CustomDbConfiguration : DbConfiguration
+{
+	public CustomDbConfiguration()
+	{
+		SetMigrationSqlGenerator(SqlProviderServices.ProviderInvariantName, 
+			() => new CustomSqlServerMigrationSqlGenerator
+		);
+	}
+}
+</code>
+To test this, generate an empty migration with "Add-Migration <migration name> -IgnoreChanges", and manually add this to the script:
+<code>
+public override Up()
+{
+	this.CreateView("viewName", "SELECT TOP....full view sql");
+}
+
+public override Down()
+{
+	this.RemoveView("viewName");
+}
+</code>
+This example did not go over how to have the migration automatically generate these Create/RemoveViewOperations based on changes to your entities.
+
+#Multiple Models
+
+If you have multiple distinct models targeting the same database:
+
+You could have each model use a different schema, so that each model's _MigrationHistory table will also be in its own schema, and they won't conflict with each other.
+
+You could also use ContextKeys to differentiate the Histories.
+<code>
+internal sealed class Configuration : DbMigrationsConfiguration
+{
+	public Configuration()
+	{
+		ContextKey = "MyUniqueKey";
+	}
+}
+</code>
+You should only be setting the ContextKey manually on a brand new database, with no history.
+ContextKey defaults to the strongly-typed name of the Context class.
+
+This does not support a Multi-Tenant Database, where one model is replicated several times within one database (such as if one database is supporting multiple separate clients).
+
+This also does not support one entity being used in multiple models which all map to the same table in the database. Basically, don't share types or tables between models.
+
+If you have multiple Contexts in one project, you'll need to specify a directory for each one to store its migrations in.
+1) In Package Manager Console > "Enable-Migrations -ContextTypeName <context class name> -MigrationDirectory <directory name>"
+
+
+

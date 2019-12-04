@@ -1,0 +1,46 @@
+##Import
+
+How to organize your program into multiple files:
+
+<code>
+ #file A.py
+import B
+print("this is A")
+
+ #file B.py in same directory
+print("this is B")
+
+ #output from running python A.py
+ #this is B
+ #this is A
+</code>
+
+<code>
+ #file A.py
+import B
+B.myFunc() #must specify the module name to call the function
+print("this is A")
+
+ #file B.py in same directory
+def myFunc():
+	print("this is B")
+
+ #output from running python A.py
+ #this is B
+ #this is A
+</code>
+
+#Alias
+
+<code>
+import really________long_______name as shortName
+import module.submodule.subsubmodule as otherShortName
+</code>
+
+#Import Object
+
+Don't want to say "datetime.datetime.now()"? You can import just the datetime object from the datetime module.
+<code>
+from datetime import datetime
+currentDateTime = datetime.now()
+</code>

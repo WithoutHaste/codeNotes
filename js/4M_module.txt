@@ -1,0 +1,56 @@
+##Module
+
+A module is a collection of related code. Modules provide organization reusable code, so you can specify which widgets are needed by each of your projects.
+
+Modules should have as few dependencies as possible. Ideally, a module does not rely on any code outside the module.
+
+Modules provide a private space for variables, so that you do not pollute the global namespace.
+
+#Module Pattern
+
+The Module Pattern mimics the idea of classes in Object-Oriented Programming. It allows you to have public and private methods and variables in an object.
+
+An Immediately Invoked Function Expression is one implementation of the Module Pattern (see the Function section below).
+
+Using closures to protect private data is another implementation of the Module Pattern (see the Closure section below).
+
+ES6 introduced native support for modules (called ESM Modules or ECMAScript Modules):
+<code>
+//I'm not sure this example is right
+
+// in file lib/counter.js
+var counter = 1;
+function increment() { counter++; }
+function decrement() { counter--; }
+
+module.exports = {
+	counter: counter,
+	increment: increment,
+	decrement: decrement
+};
+
+// in file src/main.js
+var counter = require('../lib/counter');
+counter.increment();
+console.log(counter.counter); //outputs 1
+</code>
+
+"require" makes a copy of the module, which is disconnected from the original module.
+
+CommonJS is a library for creating modules that can be imported into other projects. You can specify which modules are publicly available with "module.exports" and you can specify which modules to import into your project with "require". CommonJS was created before ESM Modules became available, and is used by Node.js.
+
+CommonJS module:
+<code>
+//in the module file
+function myModule()
+{
+	this.hello = () => 'hello';
+	this.goodbye = () => 'goodbye';
+}
+module.exports = myModule;
+
+//in the project file
+require('myModule');
+</code>
+
+CommonJS only loads modules synchronously, meaning the web page will be blocked while modules are loaded from the server. CommonJS is designed for server-side use.

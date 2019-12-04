@@ -1,0 +1,267 @@
+##Unit Testing
+
+I don't know yet how useful this level of unit testing of the front-end is. Front-ends tend to change rapidly. How many of the tests will have to updated frequently?
+
+#Basic
+
+(Assuming you told the template project to include a test project when the solution was first created.)
+
+(See C# Unit Testing notes for most information about using the Microsoft.VisualStudio.TestTools.UnitTesting library. This page focuses on anything specific to ASP.Net applications.)
+
+This shows how to test a controller without using IIS or a real HTTP request. Since most of the work of an MVC application occurs in the controllers, they are the most important element to test.
+
+Basic example:
+<code>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Web.Mvc;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using AppA;
+using AppA.Controllers;
+
+namespace AppA.Tests.Controllers
+{
+	[TestClass]
+	public class HomeControllerTest
+	{
+		[TestMethod]
+		public void Index()
+		{
+			// Arrange
+			HomeController controller = new HomeController();
+
+			// Act
+			ViewResult result = controller.Index() as ViewResult;
+
+			// Assert
+			Assert.IsNotNull(result);
+		}
+	}
+}
+</code>
+
+Ensure a model is passed to the view:
+<code>
+		[TestMethod]
+		public void Index()
+		{
+			// Arrange
+			HomeController controller = new HomeController();
+
+			// Act
+			ViewResult result = controller.Index() as ViewResult;
+
+			// Assert
+			Assert.IsNotNull(result);
+			Assert.IsNotNull(result.Model);
+		}
+</code>
+
+#Testing Actions
+
+Basic example of testing an Action:
+<code>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Web.Mvc;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using AppA;
+using AppA.Controllers;
+
+namespace AppA.Tests.Controllers
+{
+	[TestClass]
+	public class HomeControllerTest
+	{
+		[TestMethod]
+		public void Index()
+		{
+			// Arrange
+			HomeController controller = new HomeController();
+			// Act
+			ViewResult result = controller.Index() as ViewResult;
+			// Assert
+			Assert.IsNotNull(result);
+		}
+	}
+}
+</code>
+
+#Dependency Inversion: Database
+
+To isolate your test cases from things like databases and email services. For instance, if HomeController.Index() loads data from a database, how do you test it?
+
+Example of making the database optional by referencing an Interface instead of a Concrete Class.
+
+Setting up the database:
+<code>
+public interface IAppDb : IDisposable
+{
+	IQueryable<T> Query<T>() where T : class;
+}
+
+public class AppDb : DbContext, IAppDb
+{
+	public AppDb() : base("name=DefaultConnection")
+	{
+	}
+	
+	public DbSet<Country> Countries { get; set; }
+	
+	IQueryable<T> IAppDb.Query<T>()
+	{
+		return Set<T>();
+	}
+}
+</code>
+
+In controller:
+<code>
+public class HomeController : Controller
+{
+	IAppDb _db;
+
+	//default constructor uses the real database - the web server will use this constructor
+	public HomeController()
+	{
+		_db = new AppDb();
+	}
+
+	//constructor that the test cases can use
+	//example of dependency injection
+	public HomeController(IAppDb db)
+	{
+		_db = db;
+	}
+	
+	public ActionResult Index()
+	{
+		var model = _db.Query<Country>.Take(10);
+		return View(model);
+	}
+}
+</code>
+
+In test project:
+<code>
+[TestMethod]
+public void Index()
+{
+	// Arrange
+	FakeAppDb db = new FakeAppDb();
+	db.AddSet<Country>((new List<Country>() {...}).AsQueryable());
+	HomeController controller = new HomeController(db);
+	// Act
+	ViewResult result = controller.Index() as ViewResult;
+	// Assert
+	Assert.IsNotNull(result);
+}
+...
+public class FakeAppDb : IAppDb
+{
+	private Dictionary<Type, object> Sets = new Dictionary<Type, object>();
+
+	public IQueryable<T> Query<T> where T : class
+	{
+		return Sets[typeof(T)] as IQueryable<T>;
+	}
+	
+	public void Dispose()
+	{
+	}
+	
+	public void AddSet<T>(IQueryable<T> objects)
+	{
+		Sets.Add(typeof(T), objects);
+	}
+}
+</code>
+
+#Faking ControllerContext
+
+Example: the Action checks "Request.IsAjaxRequest()" but the test case has not provided an HTTP Request.
+
+In test project:
+<code>
+public class FakeControllerContext : ControllerContext
+{
+	HttpContextBase _context = new FakeHttpContext();
+	
+	public override System.Web.HttpContextBase HttpContext
+	{
+		get { return _context; }
+		set { _context = value; }
+	}
+}
+
+public class FakeHttpContext : HttpContextBase
+{
+	HttpRequestBase _request = new FakeHttpRequest();
+	
+	public override HttpRequestBase Request
+	{
+		get { return _request; }
+	}
+}
+
+public class FakeHttpRequest : HttpRequestBase
+{
+	public override string this[string key]
+	{
+		get { return null; }
+	}
+}
+</code>
+
+In test case:
+<code>
+[TestMethod]
+public void Index()
+{
+	// Arrange
+	HomeController controller = new HomeController();
+	controller.ControllerContext = new FakeControllerContext();
+	// Act
+	ViewResult result = controller.Index() as ViewResult;
+	// Assert
+	Assert.IsNotNull(result);
+}
+</code>
+
+#Examples
+
+<code>
+[TestMethod]
+public void Create_CountryValid_Saved()
+{
+	//arrange
+	var db = new FakeAppDb();
+	var controller = new CountryController(db);
+	//act
+	controller.Create(new Country());
+	//assert
+	Assert.AreEqual(1, db.Added.Count); //fakes/mocks can have methods/properties that make testing easy
+	Assert.AreEqual(true, db.Saved);    //there's a lot more code in the IAppDb and FakeAppDb to support all this
+}
+
+[TestMethod]
+public void Create_CountryInvalid_NotSaved()
+{
+	//arrange
+	var db = new FakeAppDb();
+	var controller = new CountryController(db);
+	controller.ModelState.AddModelError("", "Invalid");
+	//act
+	controller.Create(new Country());
+	//assert
+	Assert.AreEqual(0, db.Added.Count);
+}
+</code>
+
+<code>
+
+</code>

@@ -1,0 +1,13 @@
+##Timeout
+
+Start:
+<code>
+function Ctrl($scope, $timeout) {
+	$timeout(callbackFunction, delayMilliseconds);
+}
+</code>
+
+Cancel:
+<code>
+$timeout.cancel();
+</code>

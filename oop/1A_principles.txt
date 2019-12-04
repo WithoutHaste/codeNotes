@@ -1,0 +1,82 @@
+##Language Design Principles
+
+#Encapsulation
+
+The internal representation of an object is hidden
+The hiding of data implementation by restricting access to accessors and mutators
+Prevents outside users from setting values to invalid or inconsistent states
+Reduces system complexity
+
+#Abstraction
+
+Code to interfaces instead of to detailed implementations
+Decompose complex systems into smaller components to manage complexity
+
+#Inheritance
+
+Reuse code by establishing an object hierarchy
+
+#Polymorphism
+
+Literally, one name with many forms
+
+##Examples of Polymorphism
+
+#Overloading
+
+You can have several methods with the same name and different parameter lists
+The correct method is determined at compile-time
+(The return type does not differentiate the method signatures)
+
+#Overriding
+
+A derived class can override a base class method
+The correct method is determined at run-time
+
+##Programming Design Principles
+
+These are the SOLID principles.
+
+#Single Responsibility
+
+A class should have only one responsibility.
+Therefore, it will have only one reason to change.
+
+For example, class Calculator should not format its outputs for display.
+
+#Open/Closed
+
+A class should be open for extension and closed for modification.
+Similarly, make a class easy to extend so it does not have to be modified.
+
+The goal is to design modules such that their behavior can be extended without modifying their source code.
+
+For example, you might use the Decorator Pattern when writing a "discount price" module, instead of one class that contains all the discounts. The first design can be extended, the second requires editing the module when requirements change.
+
+#Liskov Substitution
+
+Derived classes can be substituted for their base classes.
+
+That means that anything you can call on the base class, and anything you can pass the base class into, will also work with any derived class.
+
+Don't break base class functionality when writing derived classes. 
+
+Ex from Robert Martin: if you have base class Bird with Flying methods, do not make derived class Penguin under Bird because Penguins cannot fly.
+
+(This principle is named for Barbara Liskov, who introduced the idea in 1987)
+
+#Interface Segregation
+
+Clients should not have to implement interfaces they do not use.
+
+For example, interface IShape should not include a method Volume() because 2D shapes do not have a volume but would be forced to implement the method.
+
+Segregate (separate) the methods into as many different interfaces as makes sense.
+
+#Dependency Inversion
+
+High level models should not depend on low level models.
+
+For example, a PasswordReminder class does not care what sort of database it accesses, so it should accept a database connection as an argument instead of creating its own. It should also be accepting the base class DBConnection rather than the more specific derived class MySQLConnection.
+
+This will also make test cases much easier to write.

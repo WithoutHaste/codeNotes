@@ -1,0 +1,152 @@
+##Model Binding
+
+#Default
+
+The model binder maps HTTP request data into your action method's parameters.
+
+The HTTP request data is given by Value Providers. The default ones look in the query string, form data, route data, and posted files.
+
+<code>
+class MyModelBinder : IModelBinder { }
+</code>
+
+The default model binders are usually sufficient, even for complex objects.
+
+Example:
+<code>
+public ActionResult Search(string name, int id)
+{
+	return View();
+}
+</code>
+The HTTP request query data will be searched for anything named "name" and "id", with the right data types, and those values will be passed into the action method as arguments. This can work automatically for even complex, nested objects.
+
+The route mapper can also specify how to map url fragments to parameters.
+
+#Binding Form Arrays
+
+You can submit a form that has multiple inputs with the same name:
+<code lang="xml">
+	<input type="text" name="Id" value="1" />
+	<input type="text" name="Id" value="2" />
+	<input type="text" name="Id" value="3" />
+</code>
+This will be submitted as an array of integers named "Id".
+
+For complex (multiple input) types, this may not bind to the model reliably.
+
+For instance, an unchecked checkbox will not submit at all.
+This submits as: string[] { "on" } instead of string[] { "on", "off", "off }
+<code lang="xml">
+	<input type="checkbox" name="IsEdited" checked />
+	<input type="checkbox" name="IsEdited" />
+	<input type="checkbox" name="IsEdited" />
+</code>
+
+To keep complex data related correctly, add an index to the name:
+<code>
+	<input type="text" name="[0].Id" value="1" />
+	<input type="checkbox" name="[0].IsEdited" checked />
+
+	<input type="text" name="[1].Id" value="2" />
+	<input type="checkbox" name="[1].IsEdited" />
+
+	<input type="text" name="[2].Id" value="3" />
+	<input type="checkbox" name="[2].IsEdited" />
+</code>
+The indexes must start at 0 and step by 1.
+
+To use arbitrary indexes:
+<code>
+    <input type="hidden" name="products.Index" value="cold" />
+    <input type="text" name="products[cold].Name" value="Beer" />
+    <input type="text" name="products[cold].Price" value="7.32" />
+    
+    <input type="hidden" name="products.Index" value="123" />
+    <input type="text" name="products[123].Name" value="Chips" />
+    <input type="text" name="products[123].Price" value="2.23" />
+    
+    <input type="hidden" name="products.Index" value="caliente" />
+    <input type="text" name="products[caliente].Name" value="Salsa" />
+    <input type="text" name="products[caliente].Price" value="1.23" />
+</code>
+
+#Custom
+
+Custom model binder:
+<code>
+using System;
+using System.Collections.Generic;
+using System.Web.Mvc;
+
+//the website form contained multiple inputs with name "CustomerId"
+//these came in as an array of integers called "CustomerId"
+public class MultipleIdsBinder : IModelBinder
+{
+	public object BindModel(ControllerContext controllerContext, ModelBindingContext bindingContext)
+	{
+		if(bindingContext == null)
+			throw new ArgumentNullException(nameof(bindingContext));
+
+		return (int[])bindingContext.ValueProvider.GetValue("CustomerId").ConvertTo(typeof(int[]));
+	}
+}
+</code>
+
+Specifying a custom binder for an action parameter:
+<code>
+public MyController
+{
+	public ActionResult MyAction([ModelBinder(typeof(MultipleIdsBinder))]int[] ids)
+	{
+		//stuff
+	}
+}
+</code>
+
+Specifying a custom binder for a class:
+<code>
+[ModelBinder(typeof(CustomModelBinder))]
+public class MyClass
+{
+}
+</code>
+
+#Alias
+
+Give an action parameter an alias that the model binder will use instead of the parameter name.
+
+<code>
+using System.Web.Mvc;
+...
+public void MyAction([Bind(Prefix="id")] int productId)
+</code>
+
+(.Net 4.5)
+
+This parameter attribute specifies what query string parameter to map to an action parameter.
+
+<code>
+using System.Web.ModelBinding;
+...
+public void MyAction([QueryString("productID")] int? id)
+</code>
+
+#Exclude/Include
+
+You can set a blacklist of fields with "Exclude" or set a whitelist of fields with "Include". This sets what fields the model binder will take into account.
+<code>
+using System.Web.Mvc;
+...
+public void MyAction([Bind(Exclude="Name,StartDate")] MyModel model)
+</code>
+
+You'd only need Exclude if there are fields in your model that you don't want set from HTTP Request data.
+An alternative is to make an input-only model that is simply missing those fields.
+
+#Security
+
+Overposting aka Mass Assignment:
+Since the model binder will match as much data as possible from the HTTP Request to the action parameters, you must assume that attackers will try adding their own parameters to the HTTP Request.
+
+Ex: If there is a field that should not be editable after the record is first saved, you'll need to enforce that rule on the backend. It will not be enough to make the value not-editable on the web page.

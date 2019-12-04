@@ -1,0 +1,44 @@
+##Terminology
+
+#ACID
+
+The ACID properties are rules for how a database management service will function to ensure that the database remains consistent, before and after each transaction.
+
+Atomicity: Either the entire transaction succeeds, or none of it does. If anything in the transaction fails, everything already done will be rolled back. Also called "all or nothing".
+
+Consistency: All data integrity constraints are followed, as of the end of each transaction.
+
+Isolation: Multiple transactions can occur concurrently without messing each other up.
+
+Durability: Once a transaction has been committed, that data will not be lost, even in the event of system failure.
+
+#Command Categories
+
+DDL stands for Data Definition Language. These commands deal with the structure of the database.
+DDL includes CREATE, DROP, ALTER, TRUNCATE, COMMENT, and RENAME.
+
+DML stands for Data Manipulation Language. These commands deal with the manipulation of data.
+DML includes SELECT, INSERT, UPDATE, and DELETE.
+
+DCL stands for Data Control Language. These commands deal with database security.
+DCL includes GRANT and REVOKE.
+
+TCL stands for Transaction Control Language. These commands deal with managing transactions.
+TCL includes COMMIT, ROLLBACK, SAVEPOINT, and SET TRANSACTION.
+
+#Referential Integrity
+
+Maintaining the Foreign Key to Primary Key constraints.
+Every Foreign Key must have a matching Primary Key in the referenced table.
+
+#Transaction
+
+A transaction is a collection of statements that will be run together. Either all of them will succeed, or all of them will fail together.
+
+#T-SQL
+
+T-SQL stands for Transaction SQL. It's a Microsoft language that extends basic SQL.
+
+#Misc
+
+"Row version" is a synonym for "timestamp" in SQL Server. So you might see "row version" in an error message when it means the timestamp column.

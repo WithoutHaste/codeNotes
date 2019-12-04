@@ -1,0 +1,42 @@
+##Random
+
+Seed random number generator with an integer or long.
+<code>
+import random
+
+random.seed(5)
+</code>
+If you pass in None, the generator will seed with current time or something like it.
+
+Get a random float from 0 inclusive to 1 exclusive.
+<code>
+import random
+
+x = random.random()
+</code>
+
+Get a random integer from N to M, both inclusive.
+<code>
+import random
+
+x = random.randint(0, 5)
+</code>
+
+Select a random value from a sequence.
+<code>
+import random
+
+x = [1, 2, 3, 4, 5]
+y = random.choice(x)
+</code>
+
+Randomly sort a sequence in place.
+You can optionally provide your own random number generator function, provided it returns values [0, 1).
+<code>
+import random
+
+x = [1, 2, 3, 4, 5]
+random.shuffle(x)
+
+random.shuffle(x, myRandomFunction)
+</code>

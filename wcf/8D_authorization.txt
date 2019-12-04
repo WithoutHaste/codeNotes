@@ -1,0 +1,46 @@
+##Authorization
+
+Authorization is the act of deciding if the current user is allowed to run a particular operation.
+
+#Windows
+
+Authorization is against the Primary Identity.
+
+A Windows Principal is created, wrapping the Primary Identity and its associated Roles (Windows Groups, in this case). That principal is placed on the current thread.
+<code>
+using System.Security.Principal;
+
+IPrincipal principal = Thread.CurrentPrincipal;
+</code>
+
+#Authorize Operation
+
+Require the principal has a particular role to be able to run this operation:
+<code>
+public class MyService : IMyService
+{
+	[PrincipalPermission(SecurityAction.Demand, Role="Administrators")]
+	public void MyOperation()
+	{
+	}
+}
+</code>
+This attribute is not specific to WCF, so you can use it downstream on other business objects.
+
+The PrincipalPermission attribute just makes a call to:
+<code>
+bool isAuthorized = Thread.CurrentPrincipal.IsInRole(stringRole);
+</code>
+You can authorize based on a specific username, but don't do that. Always authorize based on roles the user has.
+
+Make sure the user is authenticated, but it doesn't matter what roles they have:
+<code>
+public class MyService : IMyService
+{
+	[PrincipalPermission(SecurityAction.Demand)]
+	public void MyOperation()
+	{
+	}
+}
+</code>
+So no anonymous users allowed. This can be useful if you want to enable logging of who does what.

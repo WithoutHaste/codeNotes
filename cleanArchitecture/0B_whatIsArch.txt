@@ -1,0 +1,23 @@
+##What is Architecture
+
+Grady Booch:
+Architecture represents the significant design decisions that shape a system, where significant is measured by cost of change.
+
+Brian Foote and Joseph Yoder:
+If you think good architecture is expensive, try bad architecture.
+
+Ralph Johnson:
+Architecture is the decisions that you wish you could get right early in a project, but that you are not necessarily more likely to get them right than any other.
+
+Tom Glib:
+Architecture is a hypothesis that needs to be proven by implementation and measurement.
+
+#Robert C. Martin
+
+The only way to go fast, is to go well.
+
+When you get software right, something magical happens: You don't need hordes of programmers to keep it working. You don't need massive requirements documents and huge issue tracking systems. You don't need global cube farms and 24/7 programming.
+
+When software is done right, it requires a fraction of the human resources to create and maintain. Changes are simple and rapid. Defects are few and far between. Effort is minimized, and functionality and flexibility are maximized.
+
+The goal of software architecture is to minimize the human resources required to build and maintain the required system.

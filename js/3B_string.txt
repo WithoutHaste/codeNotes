@@ -1,0 +1,200 @@
+##String
+
+A data type
+
+<code>
+var x = "text";
+var y = 'text';
+</code>
+
+Strings are immutable, they cannot be edited, only replaced.  Thus, all string methods return a string.
+
+#Conversions
+
+Adding a Number and a String will result in the Number being treated as a String.
+<code>
+var x = "Summation: " + 3 + 5; //"Summation: 35"
+</code>
+
+JavaScript will attempt to convert Strings to Numbers in specifically numeric operations.
+<code>
+var x = "100" / "20"; //5
+</code>
+
+#Escape Character
+
+Escape character \
+<code>
+var x = "with \"double quotes\" included";
+</code>
+\" double quote
+\' single quote
+\\ backslash
+
+Outdated escape characters, not really applicable to the web:
+\b backspace
+\r carriage return
+\f form feed
+\t tab horizontal
+\v tab vertical
+
+Some browser support using a single slash to type text across multiple lines
+<code>
+var x = "skjfhksdfuhskfushkdfusdf\
+skdfjshkfusdfhkusdf";
+</code>
+
+#Template Literal
+
+Template literals are string literals with embedded expressions.
+Template literals are surrounded by backticks.
+
+<code>
+var noun = "cat";
+var text = `I got a new ${noun} yesterday.`; //I got a new cat yesterday.
+
+var a = 3;
+var b = 5:
+text = `${a} + ${b} = ${a+b}`; //3 + 5 = 8
+</code>
+
+Tagged literals:
+<code>
+function myTag(stringArray, expression1, expression2)
+{
+	//stringArray = ['', ' is ', ' than me.']
+	//expression1 = 'Bob'
+	//expression2 = 35
+	
+	var adjective = (expression2 < 30) ? "younger" : "older";
+
+	return expression1 + stringArray[1] + adjective + stringArray[2];
+}
+
+var name = "Bob";
+var age = 35;
+console.log(myTag`${name} is ${age} than me.`); //prints 'Bob is older than me.'
+</code>
+Tagged literals can return any data type, not just a string.
+
+You can access raw strings in tagged literals (strings without special characters interpreted):
+<code>
+function myTag(stringArray)
+{
+	console.log(stringArray.raw[0]); //prints the '\n' instead of an endline
+}
+myTag`text line 1\ntext line 2`;
+</code>
+
+Raw strings can also be written this way:
+<code>
+console.log(String.raw`text line 1\ntext line 2`);
+</code>
+
+#Operations
+
+Length
+<code>
+var x = "text";
+var a = x.length; //4
+</code>
+
+IndexOf
+string.indexOf(text) returns int
+string.lastIndexOf(text) returns int
+<code>
+var x = "text";
+var a = x.indexOf("t"); //0
+var b = x.indexOf("ex"); //1
+var c = x.indexOf("b"); //-1
+var d = x.indexOf("t", 2); //start looking at index 2, so result is 3
+</code>
+
+<code>
+var x = "text";
+var a = x.lastIndexOf("t"); //3
+var b = x.lastIndexOf("t", 2); //start looking at index 2, so result is 0
+</code>
+
+Search
+Similar to indexOf, but more powerful. Can search for regular expressions.
+Does not accept a starting index.
+
+Slice
+string.slice(startIndexInclusive, endIndexExclusive) returns string
+<code>
+var x = "The quick brown dog...";
+var a = x.slice(4, 8); //"quic"
+var b = x.slice(-18, -14); //counts from end of string, so "quic"
+var c = x.slice(4); //goes to end of string, so "quick brown dog..."
+</code>
+
+Substring
+Like slice, but cannot accept negative indexes.
+
+Substr
+string.substr(startIndexInclusive, length) returns string
+<code>
+var x = "The quick brown dog...";
+var a = x.substr(4, 8); //"quick br"
+var b = x.substr(-10, 8); //counts from end of string, so "quick br"
+var c = x.substr(4); //goes to end of string, so "quick brown dog..."
+</code>
+
+Replace
+Replaces the (default) first matching substring found.  
+Accepts regular expressions.  
+Is case-sensitive.
+string.replace(search, replacement) returns string
+<code>
+var x = "The dog is a dog";
+var y = x.replace("dog", "cat"); //"The cat is a dog"
+</code>
+
+Replace all
+<code>
+var x = "The dog is a dog";
+var y = x.replace(/dog/g, "cat"); //"The cat is a cat"
+</code>
+
+ToUpperCase
+string.toUpperCase() returns string
+
+ToLowerCase
+string.toLowerCase() returns string
+
+Concat
+string.concat(stringA, stringB, ...) returns string
+<code>
+var x = "Hello".concat(" World"); //"Hello World"
+var y = "Hello".concat(" ", "Wo", "rld"); //"Hellow World"
+</code>
+
+CharAt
+string.charAt(index) returns string
+string.charCodeAt(index) returns int
+<code>
+var x = "Hello".charAt(0); //"H"
+var y = "Hello".charCodeAt(0); //72
+</code>
+
+Accessing strings as if they were arrays is not supported by all browers. You cannot edit a string this way.
+<code>
+var x = "Hello"[0];
+</code>
+
+Split
+Convert a string into an array of strings.
+string.split(seperator) returns []
+<code>
+var x = "Hello".split(""); //["H", "e", "l", "l", "o"]
+var y = "a,b,c".split(","); //["a", "b", "c"]
+var z = "Name|Address|Phone".split("|"); //["Name", "Address", "Phone"]
+var a = "Hello".split(); //["Hello"]
+</code>
+
+Includes
+string contains the substring
+<code>
+var containsSubstring = "abcdef".includes("cd");
+</code>

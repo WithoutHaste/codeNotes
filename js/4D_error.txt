@@ -1,0 +1,46 @@
+##Error Handling
+
+<code>
+try {
+	myFunc(70);
+} 
+catch(err) {
+	console.log(err.message);
+}
+finally {
+	console.log("always run finally");
+}
+
+function myFunc(num) {
+	if(num > 50)
+		throw { message: "Number must be <= 50." };
+	console.log(num);
+}
+</code>
+
+You can throw a string, number, boolean, or object. The example above is throwing an object.
+
+#JS Error
+
+When a JavaScript error occurs, it throws the object { name: "", message: "" }
+
+Name can be:
+EvalError - eval() threw an error (newer versions of JavaScript throw SyntaxError instead)
+RangeError - a number was out of range
+ReferenceError - illegal reference
+SyntaxError
+TypeError
+URIError - encodeURI() threw an error
+
+#Debugging
+
+console.log(text)
+
+use debugger window to set breakpoints
+
+set a breakpoint in the code that will open the debugger window
+<code>
+var x = 5;
+debugger; //break point
+myFunc(x);
+</code>

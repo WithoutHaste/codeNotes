@@ -1,0 +1,224 @@
+##Database
+
+Basic example to connect to SQL Server Express is in "SQL Server" notes under "LocalDB" section.
+
+#Connection String
+
+Specify the entire connection string. If you don't, the default machine configuration connection string will be used.
+<code>
+public CountryDbContext() : base("connectionString")
+{
+}
+</code>
+
+Specify the name of the connection string in the config file.
+<code>
+public CountryDbContext() : base("name=nameOfConnectionString")
+{
+}
+</code>
+Note that the config file is that of the currently running process. If you put your connection string in the data access library's config, the service host can't find it. It should be in the service host's config.
+
+#Initialization
+
+<code>
+public CountryDbContext() : base("connectionString")
+{
+	//select one of the following
+	Database.SetInitializer<CountryDbContext>(new NullDatabaseInitializer<CountryDbContext>());
+	Database.SetInitializer<CountryDbContext>(new CreateDatabaseIdNoneExists<CountryDbContext>());
+	Database.SetInitializer<CountryDbContext>(new DropCreateDatabaseIfModelChanges<CountryDbContext>());
+	Database.SetInitializer<CountryDbContext>(new DropCreateDatabaseAlways<CountryDbContext>());
+	Database.SetInitializer<CountryDbContext>(new CountryDbInitializer());
+}
+</code>
+
+As of EF 6, these Initializer will take existing migrations into account. This includes skipping Seed Logic if migrations exist.
+
+#Settings
+
+Set SQL command timeout (amount of seconds each command has to execute):
+<code>
+dbContext.Database.CommandTimeout = 180; //seconds
+</code>
+
+#Commands
+
+EF 6 sends only 1 command to the database at a time, even if many commands are queued up.
+After all commands are run, the session is committed and the connection is closed.
+
+1) Open 1 connection
+2) Run each command, one at a time
+3) Commit transaction
+4) Close connection
+
+If any command fails, the entire transaction is rolled-back.
+
+#Parameterization
+
+String literals and numeric literals you use in a LINQ query will not be parameterized.
+
+Variables used in a LINQ query will always be parameterized.
+
+#Configuration
+
+DbConfiguration class
+
+#Logging
+
+<code>
+dbContext.Database.Log = HandleLog;
+
+private void HandleLog(string message)
+{
+	//logging
+}
+</code>
+
+<code>
+//output all logging to the console
+dbContext.Database.Log = Console.Write;
+
+//collect logs into a StringBuilder
+StringBuilder builder = new StringBuilder();
+dbContext.Database.Log = s => builder.Append(s);
+</code>
+
+Turn on logging in Web.config instead of in code:
+<code lang="xml">
+	<entityFramework>
+		<interceptors>
+			<!-- format: <full name of interceptor>,<name of assembly> -->
+			<interceptor type="System.Data.Entity.Infrastructure.Interception.DatabaseLogger,EntityFramework"/>
+		</interceptors>
+	</entityFramework>
+</code>
+By default, this logger sends the log to Console.Write.
+
+To specify saving log to a file:
+<code lang="xml">
+	<entityFramework>
+		<interceptors>
+			<interceptor type="System.Data.Entity.Infrastructure.Interception.DatabaseLogger,EntityFramework">
+				<parameters>
+					<parameter value="D:\Logs\AppLog.txt"/>
+					<parameter value="true" type="System.Boolean"/>
+				</parameters>
+			</interceptor>
+		</interceptors>
+	</entityFramework>
+</code>
+
+Overriding the format of the logs:
+<code>
+using System;
+using System.Data.Common;
+using System.Data.Entity;
+using System.Data.Entity.Infrastructure.Interception;
+
+public class MyLogFormatter : DatabaseLogFormatter
+{
+	public MyLogFormatter(DbContext context, Action<string> writeAction) : base(context, writeAction)
+	{
+	}
+	
+	public override void LogCommand<TResult>(DbCommand command, DbCommandInterceptionContext<TResult> interceptionContext)
+	{
+		Write(string.Format("Context {0} is executing command {1}{2}",
+			Context.GetType().Name, command.CommandText, Environment.NewLine)
+		);
+	}
+}
+</code>
+Note that when setting the "interceptor" in the Web.config, "Context" in the formatter will always be null.
+?how do you tell the application to use your formatter?
+
+#Read Committed Snapshot
+
+Setting the Default Transaction Isolation Level to "Read_Committed_Snapshot" in a database means that: each time the data is changed, the database creates a new snapshot. Queries to the database use the snapshot instead of the live data.
+
+Starting in EF 6, this is set by default of the database generated from "Code First". Benefits listed include "more scalability" and "fewer deadlocks".
+
+#Intermittent Connections
+
+EF 6 added support for Connection Resiliency - settings for how to respond to intermittent database connectivity.
+
+If you use the SqlDefaultExecutionStrategy, it does not have connection resiliency. Its error messages will suggest using something like SqlAzureExeutionStrategy instead.
+
+Base class DbExecutionStrategy includes settings like Max Retry Count and Max Delay.
+
+Setting your execution strategy:
+<code>
+using System.Data.Entity;
+using System.Data.Entity.SqlServer;
+
+class GeographyDbConfiguration : DbConfiguration
+{
+	public GeographyConfiguration()
+	{
+		SetExecutionStrategy(SqlProviderServices.ProviderInvariantName, () => new SqlAzureExecutionStrategy());
+	}
+}
+</code>
+
+How to automate testing:
+<code>
+//Mocking errors in database connections
+using System.Data.Entity;
+using System.Data.Entity.SqlServer;
+
+class GeographyDbConfiguration : DbConfiguration
+{
+	public GeographyConfiguration()
+	{
+		AddInterceptor(new TransientFailureCausingCommandInterceptor());
+	}
+}
+
+using System.Data.Common;
+using System.Data.Entity.Infrastructure.Interception;
+using System.Diagnostics;
+using SqlExceptions;
+
+public class TransientFailureCausingCommandInterceptor : IDbCommandInterceptor
+{
+	public void NonQueryExecuting(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
+	{
+	}
+	
+	public void NonQueryExecuted(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
+	{
+	}
+	
+	public void ReaderExecuting(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
+	{
+		if(!(command.CommandText.Contains("serverproperty") || (command.CommandText.Contains("_MigrationHistory")))
+		{
+			Debug.WriteLine("throwing fake exception from interceptor");
+			throw SqlExceptionFaker.Error10053; //Transient Connection Error
+		}
+	}
+
+	public void ReaderExecuted(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
+	{
+	}
+}
+</code>
+
+#Async
+
+You can run database queries asynchronously. There is an async version of all the materializing LINQ methods. There's also "LoadAsync", "FindAsync", and "SaveChangesAsync".
+
+<code>
+public async Task<List<Country>> GetCountries()
+{
+	using(GeographyContext context = new GeographyContext())
+	{
+		return await context.Countries.ToListAsync();
+	}
+}
+</code>
+
+This is a big topic.
+
+But briefly, having an "await" in the middle of a method will cause execution in the method to pause, and the calling method continues to run. The remainder of the "awaiting" method will run once the async request returns.

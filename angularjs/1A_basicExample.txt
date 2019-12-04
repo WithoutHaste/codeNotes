@@ -1,0 +1,118 @@
+##Phone Example 1
+
+#Templates
+
+ng-app marks the scope of your AngularJS application. Only inner elements will be affected. You can add custom attribute ng-app to any html tag. This is your html template.
+
+<code>
+<html ng-app>
+</html>
+</code>
+
+#Bindings
+
+AngularJS uses double 'staches to code within html tags.
+
+<code>
+<html ng-app>
+	<p>{{ 'Hello '+name }}</p>
+</html>
+</code>
+
+In this example, the variable 'name' is bound to the paragraph tag. When the variable 'name' is changed, the contents of the paragraph will be automatically updated.
+
+AngularJS expressions (the contents of the double 'staches) are javascript-like. They are evaluated in the context of the current model scope.
+
+#Example
+
+appName.html:
+<code>
+<html ng-app="appName">
+	<head>
+		<script src="angular.js" />
+		<script src="appName.js" />
+	</head>
+	<body ng-controller="PhoneListController">
+		<ul>
+			<li ng-repeat="phone in phones">
+				<span>{{ phone.name }}</span>
+				<p>{{ phone.spinnet }}</p>
+			</li>
+		</ul>
+	</body>
+</html>
+</code>
+
+appName.js:
+<code>
+var appName = angular.module('appName', []);
+appName.controller('PhoneListController', function PhoneListController($scope) {
+	$scope.phones = [
+		{ name:'Nexus', snippet:'fast and furious' },
+		{ name:'Galaxy', snippet:'to infinity and beyond' },
+		{ name:'Motorola', snippet:'next next gen' }
+	];
+});
+</code>
+
+Important connections:
+	ng-app="appName" => angular.module('appName'...
+	ng-controller="PhoneListController" => appName.controller('PhoneListController'...
+	ng-repeat="...phones"> => $scope.phones
+	
+resulting html:
+<code>
+<html>
+	<head>
+		<script src="angular.js" />
+		<script src="appName.js" />
+	</head>
+	<body>
+		<ul>
+			<li>
+				<span>Nexus</span>
+				<p>fast and furious</p>
+			</li>
+			<li>
+				<span>Galaxy</span>
+				<p>to infinity and beyond</p>
+			</li>
+			<li>
+				<span>Motorola</span>
+				<p>next next gen</p>
+			</li>
+		</ul>
+	</body>
+</html>
+</code>
+
+#Scope
+
+In the example above, ng-app creates a global scope, ng-controller creates a nested scope, and ng-repeat creates another nested scope.
+
+#Unit Tests
+
+Based on the previous example.
+
+app.spec.js (assuming controller is in global namespace):
+<code>
+describe('PhoneListController', function() {
+	it('description of test', function() {
+		var scope = {};
+		var controller = new PhoneListController(scope);
+		expect(scope.phones.length).toBe(3);
+	});
+});
+</code>
+
+app.spec.js (when controller is not in global namespace):
+<code>
+describe('PhoneListController', function() {
+	beforeEach(module('appName')); //load module before each test
+	it('description of test', inject(function($controller) {
+		var scope = {};
+		var controller = $controller('PhoneListController', { $scope: scope });
+		expect(scope.phones.length).toBe(3);
+	}));
+});
+</code>

@@ -1,0 +1,6 @@
+##Views
+
+Views are used to show part of a room when the room is larger than the display.
+You can show a view scaled or 1:1.
+
+You can have up to 8 views of the same room active at once.

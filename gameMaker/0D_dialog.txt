@@ -1,0 +1,5 @@
+##Dialogs
+
+#Game Information
+
+The game information window is a text scratch pad for the developer. It will not be visible to the player.

@@ -1,0 +1,6 @@
+##Logging
+
+<code>
+//everything written to console will be logged
+dbContext.Database.Log = Console.WriteLine;
+</code>

@@ -1,0 +1,11 @@
+##Settings
+
+Application-level settings can only be edited during design, or in the <Application>.exe.config file between application sessions.
+
+User-level settings can be edited and saved during run-time.
+
+<code>
+Color myColor = Properties.Settings.Default.myColor;
+Properties.Settings.Default.myColor = Color.AliceBlue; 
+Properties.Settings.Default.Save(); 
+</code>

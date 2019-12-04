@@ -1,0 +1,5 @@
+##DSDM
+
+DSDM stands for Dynamic Systems Development Method.
+
+DSDM grew out of RAD (Rapid Application Development) in the 90s.

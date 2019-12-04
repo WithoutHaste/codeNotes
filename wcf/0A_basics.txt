@@ -1,0 +1,24 @@
+(All of these examples will be C# specific)
+(Most of the types needed for WCF in C# are in System.ServiceModel)
+
+##What is WCF?
+
+WCF stands for Windows Communication Foundation.
+
+It is a framework for building service-oriented applications AND a runtime for deploying these services.
+
+WCF provides a unified programming model for several technologies: COM+ Services, Web Services (in capitals), .Net Remoting, Microsoft Message Queuing, etc. It provides transactions, reliability, state, security, instantiation, scalability, and so on.
+
+It is mostly SOAP based, but can use REST.
+
+WCF abstracts the details of communication, and separates these settings from your business code. You can use HTTP today, and Net.TCP tomorrow by just changing your config file.
+
+WCF web services are interoperable with many types of clients because it (usually) passes messages in XML format using HTTP protocol. Ie, it uses SOAP.
+
+##Architecture
+
+WCF uses an "interception" or "pipe line" architecture, loosely based on the Chain of Responsibility design pattern.
+
+You have two end points, the client and the service.  The client packages a message and sends it through a proxy client, through a series of client channels, through a series of service channels, to the service.
+
+One channel may handle security (encoding), another may handle queuing.  You can add and remove channels to change behavior.

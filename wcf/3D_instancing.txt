@@ -1,0 +1,117 @@
+##Instancing
+
+Instancing decides which instance (running process) of a service will answer a particular request/call.
+
+This enables a big differences between WCF (can maintain state) and Web API (stateless).
+
+#Per Call
+
+Per call instance context mode: every request/call from a client is handled by a new service instance.
+Even if the client's proxy stays open.
+
+This is most scalable option.
+There is no chance of memory leaks.
+
+Does not support maintaining state.
+
+#Per Session
+
+Per sessions instance context mode: the first request/call from a proxy is handled by a new service instance. 
+All calls from the proxy are handled by this service instance until the proxy is closed.
+When the proxy is closed, it makes one final call to the service to say it is closing.
+
+This is the default option.
+
+This option requires a transport session:
+- TCP binding
+- IPC binding
+- WS-HTTP binding with reliability or security turned on
+If none of these are used, the service auto-downgrades to Per Call mode.
+
+Supports maintaining state across multiple requests/calls with class-scoped variables. (For example, a field/property in the service implementation class.)
+May need to consider locking errors.
+
+#Single
+
+Single instance context mode: when the host opens it starts a new service instance.
+All requests/calls to the service are handled by this one instance until the host closes.
+(singleton pattern)
+
+You can still have multiple transport sessions going on from clients, they just all hit the same service instance.
+
+Supports maintaining state, but that state is shared by every proxy.
+MUST consider locking errors, given how many clients could be using it at the same time.
+
+?Supports something like starting the service instance before starting the host?
+?See pre-hosting initialization?
+
+#Inline
+
+<code>
+[ServiceBehavior(InstanceContextMode=InstanceContextMode.PerCall)]
+public class MyService : IMyService
+{
+}
+</code>
+
+Enum values: PerCall, PerSession, Single
+
+This behavior can only be set inline, so that a system administrator cannot change it in the config.
+This setting makes a big difference to how the business logic will work.
+
+#Demarcation
+
+A service contract setting saying you can control when a transport sessions starts/ends.
+These settings are properties on the OperationContract attribute.
+
+Demarcation requires that you have a transport session.
+
+<code>
+using System.ServiceModel;
+
+[ServiceContract]
+public class IMyService
+{
+	[OperationContract(IsInitiating=true,IsTerminating=false)]
+	void MyOperation();
+}
+</code>
+
+Default values:
+- IsInitiating=true meaning this operation can initiate a session
+- IsTerminating=false meaning this operation will not automatically end the session
+
+Usage example:
+You can using Per Session instancing (with state across calls).
+There is an initialization operation that must be called before any other operation.
+So you set IsInitiating to true only on the initialization operation, and false on all others.
+Therefore, the only way to start a session with the service is to call that initialization operation.
+
+If the client calls an IsInitializing=false operation first, they'll get an InvalidOperationException with the detail "The operation cannot be the first operation to be called because IsInitializing is false".
+
+#Session Mode
+
+Session mode is a property on the service contract attribute.
+
+You can require that a transport session is used to communicate with the service.
+That means the binding one of the following:
+- TCP
+- IPC
+- WS-Http with reliability or security turned on
+
+Session mode defaults to "Allowed", meaning allowed by not required. If a transport session is not used, a Per Session service will downgrade to a Per Call service.
+
+Session mode "Required" means the client MUST use a transport session.
+
+Session mode "NotAllowed" means the client MAY NOT use a transport session.
+
+<code>
+using System.ServiceModel;
+
+[ServiceContract(SessionMode=SessionMode.Required)]
+public class MyService : IMyService
+{
+}
+</code>
+
+If you try to use TCP to connect to a SessionMode="NotAllowed" service, you'll get an InvalidOperationException with a detail like "Contract does not allow Session, but Binding NetTcpBinding does not support Datagram or is not configured properly to support it".

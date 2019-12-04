@@ -1,0 +1,76 @@
+##Scrolling
+
+Examples are based on vertical scrolling.
+
+Event:
+<code>
+window.onscroll = function() {};
+scrollableElement.onscroll = function() {};
+</code>
+
+Element position in browser viewport:
+<code>
+var position = element.getBoundingClientRect();
+</code>
+Has a top, left, width, and height.
+
+Element position in scrollable parent viewport:
+<code>
+var elementYInParent = element.getBoundingClientRect().top - element.parentNode.getBoundingClientRect().top;
+</code>
+
+Total height of content in scrollable parent:
+<code>
+var contentHeight = element.parentNode.scrollHeight;
+</code>
+
+Total height of scrollable parent viewport:
+<code>
+var viewportHeight = element.parentNode.getBoundingClientRect().height;
+</code>
+
+Current position of scrollable parent scroll bar:
+<code>
+var position = element.parentNode.scrollTop;
+</code>
+
+Possible range of parent scroll positions:
+<code>
+var contentHeight = element.parentNode.scrollHeight;
+var viewportHeight = element.parentNode.getBoundingClientRect().height;
+var minScrollTop = 0;
+var maxScrollTop = contentHeight - viewportHeight;
+</code>
+
+Scroll element into view:
+<code>
+var parent = element.parentNode;
+var elementYInParent = element.getBoundingClientRect().top - element.parentNode.getBoundingClientRect().top;
+parent.scrollTop += elementYInParent;
+</code>
+
+Animate scroll instead of jumping:
+<code>
+var animateScrollTarget = null; //so you aren't heading in two directions at once
+function animateScroll() {
+	if(animateScrollTarget == null)
+		return;
+	var element = <selector for the scrollable element>;
+	if(element.scrollTop == animateScrollTarget)
+		return;
+	var movementUnit = 15;
+	if(Math.abs(element.scrollTop - animateScrollTarget) < movementUnit)
+	{
+		element.scrollTop = animateScrollTarget;
+		return;
+	}
+	if(element.scrollTop > animateScrollTarget)
+		element.scrollTop -= movementUnit;
+	else
+		element.scrollTop += movementUnit;
+	
+    setTimeout(function() {
+        animateScroll();
+    }, movementUnit);
+}
+</code>

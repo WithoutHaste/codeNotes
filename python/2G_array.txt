@@ -1,0 +1,35 @@
+##Numpy Array
+
+Numpy is a core python library. It is very commonly shortened to "np".
+
+<code>
+import numpy as np
+
+x = np.array([0, 1, 2, 3]) #create a rank 1 array
+
+print(type(x)) #outputs <class 'numpy.darray'>
+print(x) #outputs [0, 1, 2, 3]
+print(x[0]) #outputs 0
+print(x.shape) #outputs (4,) because the length is 4
+
+y = np.array([[1, 2, 3], [10, 20, 30]]) #create a rank 2 array
+
+print(y[1, 2]) #outputs 30
+print(y.shape) #outputs (2, 3) because the outer length is 2, the inner length is 3
+</code>
+
+Create an array filled with default values.
+<code>
+import numpy as np
+
+x = np.zeros((1, 2)) #creates [[0, 0]]
+y = np.ones((2, 2)) #creates [[1, 1], [1, 1]]
+z = np.full((3, 1), 7) #creates [[7], [7], [7]]
+</code>
+
+Create an array filled with random values.
+<code>
+import numpy as np
+
+x = np.random.random((2, 2)) #creates [[a, b], [c, d]] where those are random values
+</code>

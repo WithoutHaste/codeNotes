@@ -1,0 +1,168 @@
+##Authentication
+
+#Windows Authentication
+
+aka IntegratedAuth
+aka Single Sign On (a more general term)
+
+Usually used for intranet (internal to a company) applications.
+It uses the Windows operating system for identification and authorization. Uses Active Directory.
+Once a user is logged into the Windows domain, they can be automatically logged into the intranet application.
+
+When creating a new ASP.Net MVC project, use the "Intranet Application" template to set most of this up automatically.
+This will also display some instructions for setting up IIS to work with your application.
+
+By default, users will not be able to access ANY part of the web page until they have logged into the Windows Domain.
+Note that Internet Explorer will still display its own login popup if it thinks the web page is not running on your local network. And "localhost" is not considered to be on the local network.
+To change that locally:
+1) In Internet Explorer > open Tools menu (Alt-T) > Internet Options
+2) Security tab > Local Intranet > Sites > Advanced
+3) Enter "http://localhost" and click "Add" to whitelist this address.
+RELATED SETTINGS (do not change)
+1) In Internet Explorer > open Tools menu (Alt-T) > Internet Options
+2) Security tab > Local Intranet > Custom level > scroll down to User Authentication and view these settings
+
+Setup:
+1) In Visual Studio, select the application in Solution Explorer > click View menu > Properties Window
+2) Expand "Development Server" section > set Windows Authentication to Enabled
+
+Project/Web.config:
+<code>
+	<system.web>
+		<authentication mode="Windows" />
+	</system.web>
+</code>
+
+Decorate controller actions with Authorize attributes.
+<code>
+//authorize specific users
+[Authorize(Users=@"Domain\UserA,Domain\UserB")]
+
+//authorize specific roles
+[Authorize(Roles=@"Domain\ManagersA,Domain\ManagersB")]
+
+//authorize specific roles
+[Authorize(Roles=@"VicePresidents")]
+</code>
+
+Or make an explicit role-check in code
+<code>
+bool hasRole = System.Web.HttpContext.Current.User.IsInRole(@"Domain\Role");
+</code>
+
+In Visual Studio, create a new MVC project with Windows Authentication already setup:
+	New Web App > MVC > change Authentication to "WindowsAuth" > ok
+
+In the view:
+<code>
+//holds Domain\username of the logged in user
+@Context.User.Identity.Name
+
+//holds the domain the application is running under
+@Environment.UserDomainName
+
+//holds the username the application is running as
+@Environment.Username
+</code>
+
+To list all the roles the current user has:
+<code>
+<!-- in web.config, enable role manager -->
+<configuration>
+	<system.web>
+		<roleManager enabled="true" />
+	</system.web>
+</configuration>
+
+//in controller
+using System.Web.Security;
+...
+string[] roles = Roles.GetRolesForUser();
+</code>
+
+Views have access to:
+<code>
+	@User.Identity.IsAuthenticated
+	@User.Identity.AuthenticationType
+	@User.Identity.Name //format "Domain/Username"
+	if(User.IsInRole("roleName")) { }
+</code>
+
+#Forms Authentication
+
+Check logins yourself.
+Works for internet applications (the user is not logged into your company's domain).
+
+Uses cookies on the user's computer to track session.
+
+SSL is required to make the authentication secure - this is what encrypts the username/password when the user sends it from their computer to your server.
+
+Project/Web.config:
+<code>
+	<system.web>
+		<authentication mode="Forms" />
+	</system.web>
+</code>
+
+If starting from a template, look in the "Accounts" controller/views to see basic registration and login pages already setup.
+If starting from a template, check how the database login is setup because you may want to make a bit more efficient.
+
+Create a web page with a login form.
+When the user tries to access any page that requires authentication, if they are not logged in they will be redirected to this login page. The user will be automatically redirected back their original page if they login successfully.
+
+Create a controller action to handle login:
+<code>
+//in a controller
+public ActionResult Login(string username, string password, string sourceUrl)
+{
+	if(service.ValidateLogin(username, password))
+	{
+		FormsAuthentication.SetAuthCookie(username, true);
+	}
+	return RedirectToView(sourceUrl);
+}
+
+//in Web.config
+	<system.web>
+		<authentication mode="Forms">
+			<forms loginUrl="~/MyController/Login" timeout="2880" />
+		</authentication>
+	</system.web>
+</code>
+
+Still add the authorize attribute to controller actions that require the login:
+<code>
+[Authorize]
+public ActionResult MyAction()
+{
+}
+</code>
+
+Or set an entire Controller as requiring authorization, and just one action within as not requiring authorization:
+<code>
+[Authorize]
+public class MyController : Controller
+{
+	[AllowAnonymous] //overrides Controller-level attribute
+	public ActionResult Index()
+	{
+		...
+	}
+	...
+}
+</code>
+
+#OpenID, OAuth
+
+Open standards for identification (OpenID) and authorization (OAuth).
+
+Also works for internet applications.
+
+Your users do not set a password on your site, and you don't store or validate their login.
+The user logins in with a third-party (e.g. Facebook, Google, etc) and that service tells your site who the user is.
+Your application will need to be registered with that third-party.
+
+Uses open-source .Net OpenAuth.
+
+Similar to Forms Authentication, your site will redirect unauthorized users to a login page.
+

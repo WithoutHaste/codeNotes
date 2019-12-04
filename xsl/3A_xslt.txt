@@ -1,0 +1,336 @@
+##XSLT
+
+XSLT stands for Extensible Stylesheet Language Transformation.
+
+XSLT transforms XML documents into XML, TXT, HTMl, etc documents. It can add, remove, rearrange, sort, and change elements and attributes. It can perform tests and make decisions.
+
+An XSLT document can use extension .xslt or .xsl.
+
+The official W3C XSLT namespace is available at "http://www.w3.org/1999/xsl/Transform".
+
+XML document used in examples:
+<code>
+	<?xml version="1.0" encoding="UTF-8" ?>
+	<catalog>
+		<cd>
+			<artist>The Beatles</artist>
+			<title>Best of the Beatles</title>
+			<price>12.99</price>
+		</cd>
+	</catalog>
+</code>
+
+#Template
+
+Templates are reusable XSLT blocks.
+
+The match attribute is an XPath defining what elements to apply this template to. All the XSLT within the template is relative to the element the template is applied to.
+
+You can have multiple templates per XSLT file.
+
+Template applied to root node:
+<code>
+<xsl:template match="/">
+	...
+</xsl:template>
+</code>
+
+Named templates:
+<code>
+<xsl:template name="footer">
+	...
+</xsl:template>
+</code>
+
+#Apply Templates
+
+Apply-templates finds the appropriate template for each node and applies it.
+
+For each node in current set:
+<code>
+<xsl:apply-templates/>
+</code>
+
+For each node in current set selected by this XPath:
+<code>
+<xsl:apply-templates select="artist"/>
+</code>
+
+Example:
+<code>
+<xsl:template match="/">
+	<html>
+		<body>
+			My CDs:
+			<xsl:apply-templates/>
+		</body>
+	</html>
+</xsl:template>
+<xsl:template match="cd">
+	<p>
+		<xsl:apply-templates select="title"/> - 
+		<xsl:apply-templates select="artist"/>
+	</p>
+</xsl:template>
+<xsl:template match="title">
+	Title: <xsl:value-of select="."/>
+</xsl:template>
+<xsl:template match="artist">
+	Artist: <xsl:value-of select="."/>
+</xsl:template>
+</code>
+
+#Template Precedence
+
+1. Templates in primary (current) stylesheet are used before imported templates.
+
+2. Templates with a higher "priority" attribute are used first.
+
+3. Templates with any "priority" attribute are used before templates without the attribute.
+
+4. Templates with more specific XPath patterns are used first.
+
+If more than one template is still possible after all that, you'll either get an error or the last template will be selected.
+
+#Call Template
+
+You can explicitly used a named template.
+
+<code>
+<xsl:call-template name="footer"/>
+</code>
+
+#Template Parameters
+
+You can pass parameters into templates, whether you use apply-templates or call-template.
+
+<code>
+<xsl:apply-templates>
+	<xsl:with-param name="paramA" select="artist"/>
+	<xsl:with-param name="paramB" select="title"/>
+	<xsl:with-param name="paramC">constant</xsl:with-param>
+	<xsl:with-param name="paramD" select="'constant'"/>
+</xsl:apply-templates>
+<xsl:template match="cd">
+	<xsl:param name="paramA"/>
+	<xsl:param name="paramB"/>
+	<xsl:param name="paramC">Default Value</xsl:param>
+	...
+	<!-- reference with $paramA -->
+</xsl:template>
+</code>
+
+#Variables
+
+XSLT variables are all constants, you cannot change their value.
+
+Place them at the top of the file as global variables, or within a template as local variables.
+
+Declaring variables:
+<code>
+<xsl:variable name="varA">constant</xsl:variable>
+<xsl:variable name="varB" select="cd[2]"/>
+<xsl:variable name="varC" select="'constant'"/>
+</code>
+
+Referencing variables:
+<code>
+<xsl:with-param name="paramA" select="$varA"/>	
+</code>
+
+#For-Each
+
+Loops through a node set. 
+
+The default sort order is "ascending". 
+The default sort-data-type is "text".
+The options for case-order are "upper-first" and "lower-first".
+
+<code>
+<xsl:for-each select="catalog/cd">
+	<xsl:sort select="artist"/>
+	...
+</xsl:for-each>
+</code>
+
+<code>
+	<xsl:sort select="price" data-type="number" order="descending"/>
+</code>
+
+<code>
+	<xsl:sort select="artist" case-order="upper-first"/>
+</code>
+
+#If
+
+The contents of an If block are only used if the XPath predicate is true.
+
+<code>
+<xsl:if test="price > 10">
+	...
+</xsl:if>
+</code>
+
+String operations:
+<code>
+test="string-length($paramA) > 0"
+test="contains($text, $substring)"
+test="substring-before($text, $substring)"
+test="substring-after($text, $substring)"
+</code>
+
+Boolean operations:
+<code>
+test="not($paramB)"
+</code>
+
+#Choose
+
+Choose works like a if,else if,else statement. The first "when" whose XPath predicate returns "true" is used. 
+
+<code>
+<xsl:choose>
+	<xsl:when test="price > 10">
+		...
+	</xsl:when>
+	<xsl:when test="price > 5">
+		...
+	</xsl:when>
+	<xsl:otherwise>
+		...
+	</xsl:otherwise>
+</xsl:choose>
+</code>
+
+#Text Node
+
+<code>
+<xsl:text>plain text</xsl:text>
+</code>
+
+#Attribute Node
+
+Adding an attribute to an element node.
+
+<code>
+<img>
+	<xsl:attribute name="src">
+		<xsl:value-of select="image/name"/>
+	</xsl:attribute>
+</img>
+</code>
+
+#Copy
+
+Outputs a copy of the current node as-is, with no descendents.
+
+<code>
+<xsl:copy>...</xsl:copy>
+</code>
+
+#Copy Of
+
+Outputs a copy of the selected node as-is, with all descendents.
+
+<code>
+<xsl:copy-of select="header"/>
+</code>
+
+#Comments
+
+<code>
+<xsl:comment>Comments</xsl:comment>
+</code>
+
+#Error
+
+Outputs an error message and (optionally) terminates transformation.
+
+<code>
+<xsl:message terminate="yes">Message</xsl:message>
+</code>
+
+#Output
+
+An XSLT document can only have one "output" element, and it must be directly under the "xsl:stylesheet" or "xsl:transform" element.
+
+It defines the format of the output document. There are a lot of optional attributes.
+
+<code>
+<xsl:output indent="yes"/>
+</code>
+
+#Example
+
+XML input document:
+<code>
+<?xml version="1.0" encoding="UTF-8"?>
+<menu>
+	<food>
+		<name>Eggs Over Easy</name>
+		<price>5.95</price>
+		<calories>120</calories>
+	</food>
+	<food>
+		<name>Waffles</name>
+		<price>8.95</price>
+		<calories>420</calories>
+	</food>
+	<food>
+		<name>Oatmeal</name>
+		<price>3.50</price>
+		<calories>230</calories>
+	</food>
+</menu>
+</code>
+
+XSLT document:
+<code>
+<?xml version="1.0" encoding="UTF-8"?>
+<html xsl:version="1.0" xmlns:xsl="http://www.w3.org/1999/xsl/Transform">
+	<body>
+		<xsl:for-each select="menu/food">
+			<div>
+				<p>
+					<xsl:value-of select="name"/> - $<xsl:value-of select="price"/>
+				</p>
+				<span>
+					(<xsl:value-of select="calories"/> calories)
+				</span>
+			</div>
+		</xsl:for-each>
+	</body>
+</html>
+</code>
+
+HTML output document:
+<code>
+<html>
+	<body>
+		<div>
+			<p>
+				Eggs Over Easy - $5.95
+			</p>
+			<span>
+				(120 calories)
+			</span>
+		</div>
+		<div>
+			<p>
+				Waffles - $8.95
+			</p>
+			<span>
+				(420 calories)
+			</span>
+		</div>
+		<div>
+			<p>
+				Oatmeal - $3.50
+			</p>
+			<span>
+				(230 calories)
+			</span>
+		</div>
+	</body>
+</html>
+</code>

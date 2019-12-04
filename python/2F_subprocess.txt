@@ -1,0 +1,8 @@
+##Subprocess
+
+<code>
+import subprocess
+cmdLine = r"c:\path\myProgram.exe"
+myProcess = subprocess.Popen(cmdLine)
+muProcess.wait() #wait until process completes
+</code>

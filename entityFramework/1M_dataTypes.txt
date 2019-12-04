@@ -1,0 +1,7 @@
+##Data Types
+
+#Char
+
+Entity Framework does not map to the C# char data type.
+So in code first, char properties will be ignored.
+Change them to string properties, with a maxlength of 1.

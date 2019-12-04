@@ -1,0 +1,51 @@
+##Pluralization
+
+By default, EF wants to generate entities with singularized names and database tables with pluralized names. 
+
+I'm accustomed to both entities and database tables having singularized names, which would require overriding how table names are generated from Code-First.
+
+#English
+
+<code>
+new EnglishPluralizationService().Pluralize(word);
+new EnglishPluralizationService().Singularize(word);
+</code>
+
+#Other Languages
+
+The built-in grammar service only handles English.
+
+Adding one pair at a time:
+<code>
+CustomPluralizationEntry[] customEntries = new CustomPluralizationEntry[] {
+	new CustomPluralizationEntry("singleA", "pluralA"),
+	new CustomPluralizationEntry("singleB", "pluralB")
+};
+EnglishPluralizationService service = new EnglishPluralizationService(customEntries);
+string plural = service.Pluralize(single);
+</code>
+
+Create a custom service to apply language rules:
+<code>
+public class MyLanguageService : IPluralizationService
+{
+	public string Pluralize(string word)
+	{
+		//todo
+	}
+	
+	public string Singularize(string word)
+	{
+		//todo
+	{
+}
+
+public class MyDbConfiguration : DbConfiguration
+{
+	public MyDbConfiguration()
+	{
+		SetPluralizationService(new MyLanguageService());
+	}
+}
+</code>
+You cannot derive from EnglishPluralizedService (sealed class), but if you still want to use it as part of your custom service, instantiate it internally when you need it.

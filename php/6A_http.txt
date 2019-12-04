@@ -1,0 +1,27 @@
+##HTTP
+
+#Parameters
+
+Accessing GET parameters:
+<code>
+$email = $_GET["email"];
+</code>
+
+#Set Headers
+
+Set a custom HTTP response code and message.
+
+<code>
+$protocol = (isset($_SERVER['SERVER_PROTOCOL']) ? $_SERVER['SERVER_PROTOCOL'] : 'HTTP/1.0');
+header($protocol . ' ' . $code . ' ' . $text);
+</code>
+
+This sets the status and text that are accessible through javascript:
+<code>
+//var request = new XMLHttpRequest();
+//request.status = 500
+//request.statusText = "Internal Server Error"
+</code>
+
+500 is the standard "Internal Server Error" code.
+

@@ -1,0 +1,7 @@
+##Project
+
+The project pane shows a directory listing of all the project files, with detailed contents of the selected folder on the side.
+
+Adding files to the project in Windows Explorer automatically adds them to the project in Unity.
+
+The slider on the bottom-right of the pane changes the detail view icon size. Increase the size to make longer file names visible.

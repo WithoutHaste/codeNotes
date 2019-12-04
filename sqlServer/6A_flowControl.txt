@@ -1,0 +1,94 @@
+##Flow Control
+
+#BEGIN END
+
+BEGIN...END delineates a code block. All statements within the block will be run as one batch.
+
+Statement blocks can be nested. It is common, for instance, to have an IF...BEGIN...END block within a PROCEDURE...BEGIN...END block.
+
+#IF ELSE
+
+<code>
+IF 1 = 0 PRINT 'A'
+ELSE PRINT 'B';
+</code>
+
+<code>
+IF 1 = 0
+BEGIN
+	--multiple lines
+END
+ELSE
+BEGIN
+	--multiple lines
+END;
+</code>
+
+#WHILE
+
+<code>
+WHILE @count < 10
+BEGIN
+	--multiple lines
+END
+</code>
+
+Use BREAK to exit a WHILE loop immediately.
+
+Use CONTINUE to skip ahead to the top of the WHILE loop immediately.
+
+#TRY CATCH
+
+<code>
+BEGIN TRY
+	--statements
+END TRY
+BEGIN CATCH
+	--statements
+END CATCH
+</code>
+
+Inside the CATCH block, you can access these values:
+- ERROR_LINE() returns the line number where the exception occurred
+- ERROR_MESSAGE() returns the exception message text
+- ERROR_PROCEDURE() returns the name of the stored procedure or trigger where the exception occurred
+- ERROR_NUMBER() returns the number (code) of the error
+- ERROR_SEVERITY() returns the severity level of the error (0 to 25)
+- ERROR_STATE() returns the state number (code) of the error, which is used with the error number to be more specific about what occurred
+
+By comparison, @@ERROR returns the error number of an error that occurred in just the previous statement.
+
+These information functions are aware of which CATCH block they are inside of, and will return data correctly even when used in or after nested CATCH blocks.
+
+You can THROW an error from a CATCH block if you can't actually resolve it there.
+The error will rise to the next CATCH block up in execution.
+<code>
+BEGIN CATCH
+	--try to resolve issue
+	THROW;
+END CATCH
+</code>
+
+#RAISEERROR
+
+Raise an error/exception.
+<code>
+RAISEERROR('message', @severity, @state);
+</code>
+
+Severity:
+- 0 to 10 for informational messages
+- 11 to 18 for errors
+- 19 to 25 for fatal errors
+
+State:
+- 0 to 255
+If you raise the same user-defined error at multiple locations, use a different state for each to differentiate them.
+
+#THROW
+
+Raise an error/exception another way.
+<code>
+THROW @number, 'message, @state;
+</code>
+These errors default to severity level 16.

@@ -1,0 +1,17 @@
+##Macro
+
+In GameMaker, macros are global constant variables.  They can also contain functions.
+
+Name macros with all-caps for legibility.
+
+Values can be a number, a "string" in quotes, or a function call with arguments specified (arguments must all be global as well).
+
+As of Game Maker 2, macros are listed under the Scripts tree and are defined in code.
+<code>
+	#macro VARIABLE_BEST_TIME "BestTime"
+	#macro DEFAULT_BEST_TIME -1
+	#macro BEST_TIME_COUNT 5
+	#macro MILLISECONDS_PER_SECOND 1000
+	#macro MILLISECONDS_PER_MINUTE MILLISECONDS_PER_SECOND * 60
+</code>
+Note: No equal signs, No semicolons.

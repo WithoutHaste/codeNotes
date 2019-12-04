@@ -1,0 +1,8 @@
+##Shortcuts
+
+#Add View
+
+In Visual Studio, right-click in the action method, select "Add View".
+Or, in the action method, type Ctrl-M + Ctrl-V.
+
+This will add a view to Project/Views/<controller name>/<action name>.cshtml

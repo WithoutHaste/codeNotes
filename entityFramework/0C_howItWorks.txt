@@ -1,0 +1,27 @@
+##How EF Works
+
+#Summary
+
+Create your Domain classes.
+
+DbContext API wraps the Domain classes. Instruct EF how this model maps to the database schema.
+You may create many different DbContexts from one database.
+
+Write your queries using LINQ To Entities, against your domain classes. EF will translate the queries into SQL queries against the database schema.
+
+Can map to database tables or to database views.
+Can execute stored procedures.
+
+#Models
+
+EDMX Model vs Code-Based Model
+
+EF can use a visual model (the drag-n-drop designer) or a model inferred from your domain classes.
+
+If you use the designer, it will generate a *.edmx file (xml format). Then it will generate domain classes based on the *.edmx.
+(EDMX = Entity Data Model XML)
+If you write your own domain classes, those steps are skipped.
+
+At runtime, any available *.edmx file will be used by default. Your custom domain classes will only be used if there is no *.edmx file (Code-First API generates the in-memory model).
+Either way, EF generates an in-memory model.
+

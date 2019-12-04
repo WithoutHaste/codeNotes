@@ -1,0 +1,17 @@
+##Images - ImageIO
+
+!![imageio Home Page](https://imageio.readthedocs.io/en/stable/index.html)
+
+#Save Animated GIF
+
+Must start with all "frames" saved to file system.
+
+<code>
+	using imageio
+
+	#imageFilenames is a list of filenames for the "frames"
+	images = []
+	for imageFilename in imageFilenames:
+		images.append(imageio.imread(imageFilename))
+	imageio.mimsave(saveToFilename, images, fps=framesPerSecond)
+</code>

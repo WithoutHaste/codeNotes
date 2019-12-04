@@ -1,0 +1,8 @@
+##Clipping
+
+#Donut Example
+
+1. Make two circles, one smaller than the other.
+2. Make sure the smaller circle is higher than that other (Object menu > Raise to Top)
+3. Center the circles on each other
+4. Select both circles > Path menu > Difference

@@ -1,0 +1,13 @@
+##DVCS
+
+DVCS stands for Distributed Version Control System.
+
+#Benefits
+
+Backups are also simple, because they are just a clone of the main repository.
+
+Reliable branching and merging. So you can make a branch for developing one feature or fixing one bug, and trust that it will be properly merged back into the repository. Branching allows you to keep all changes version controlled, and only merge them into the main repository when they are complete.
+
+Every developer has a full local history on their machine.
+
+You can analyze regressions, searching in a binary fashion to find out when a bug was introduced.

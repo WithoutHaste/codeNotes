@@ -1,0 +1,44 @@
+##Naming Conventions
+
+#Case
+
+All names are in CamelCase.
+
+Constants and Readonlys have names in all capitals with snake case, such as MAX_COUNT.
+
+Property names start with a capital letter.
+Public field names start with a capital letter.
+Private field names start with a lower case letter.
+
+Method names start with a capital letter.
+
+#Name
+
+Classes have singular names, such as "Customer" instead of "Customers".
+
+Interface names start with "I", such as "IEnumerable".
+
+Fields that are private even within the object start with an underscore, such as _extraPrivateField.
+- This indicates that even within the object, this field should not be touched lightly.
+- It may indicate a readonly field.
+
+Boolean properties and fields start with "Is" or "Has", such as "IsActive" or "HasErrors".
+Methods that return booleans are named the same way.
+
+#Acronyms
+
+Acronyms are spelled with only their first character capitalized, such as "Xml" or "Tcp".
+
+#Verbose Names
+
+It's ok to have long variable/method/class names. For instance, I recommend saying "synchronizationContext" instead of "syncContext" or worse "syncCnt".
+
+The name might be very long, such as "CheckInRemoteCustomerWithoutSynchronizationUsingDurableLayer".
+And maybe some of that information can be refactored into parameter types or the class name.
+But if it can't, you need it to be in the field or method name.
+Don't leave information out just because the name is long.
+
+Verbose names are easier to read and to understand.
+Verbose names are part of self-documenting code.
+
+You only have to write it a few times, but you'll have to read it many many times.

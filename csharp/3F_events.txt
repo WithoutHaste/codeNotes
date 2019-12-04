@@ -1,0 +1,153 @@
+##Event
+
+publisher classes raise events to alert subscriber classes
+
+<code>
+public delegate void EventHandlerB(object sender, EventArgsB e);
+
+public class Publisher
+{
+	public event EventHandler EventA; //uses basic EventHandler, EventArgs objects
+	
+	public event EventHandlerB EventB;
+	
+	public Publisher() { ... }
+	
+	private void Something() 
+	{
+		TriggerEventA();
+		TriggerEventB();
+	}
+	
+	private void TriggerEventA()
+	{
+		if(EventA == null) return;
+		EventA(this, new EventArgs());
+	}
+	
+	private void TriggerEventB()
+	{
+		if(EventB == null) return;
+		EventB(this, new EventArgsB());
+	}
+}
+
+public class Subscriber
+{
+	public Subscriber(Publisher publisher)
+	{
+		publisher.EventA += new System.EventHandler(OnEventA);
+		publisher.EventB += new Publisher.EventHandlerB(OnEventB);
+	}
+	
+	public void OnEventA(object sender, EventArgs e)
+	{
+	}
+	
+	public void OnEventB(object sender, EventArgsB e)
+	{
+	]
+}
+
+public class EventArgsB : EventArgs { ... }
+</code>
+
+#Passing
+
+Passing event to another control
+<code>
+private void passMouseWheelToParent(object sender, MouseEventArgs e)
+{
+	Control parent = (sender as Control).Parent;
+	System.Reflection.MethodInfo onMouseWheel = parent.GetType().GetMethod("OnMouseWheel", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+	onMouseWheel.Invoke(parent, new object[] { e });
+}
+</code>
+
+#Keys
+
+When you click Enter in a single-line TextBox, you get an error-ding-sound. This will suppress it.
+<code>
+private void textBox_KeyDown(object sender, KeyEventArgs e)
+{
+	if(e.KeyCode == Keys.Enter)
+	{
+		e.Handled = true;
+		e.SuppressKeyPress = true; //stop the error-ding from sounding
+	}
+}
+</code>
+
+#Naming Conventions
+
+Event delegate:
+<code>
+//subscriber handles the event "EventRaised"
+void OnEventRaised(object sender, EventArgs args)
+{
+}
+</code>
+When there are multiple events with the same "EventRaised" name being handled, I'll use the naming convention "OnObjectEventRaised" to differentiate them.
+
+Custom event arguments:
+<code>
+class SpecificEventArgs : EventArgs
+{
+	public SpecificEventArgs(/*required data*/)
+	{
+		//store data locally
+	}
+}
+</code>
+Usually, EventArgs are immutable objects so that an event subscriber cannot change the value before another event subscriber handles it.
+
+Declare event in class:
+<code>
+//declare type for each specific event handler
+public delegate void SpecificEventHandler(object sender, SpecificEventArgs args);
+public event SpecificEventHandler NounVerb;
+
+//or
+//declare event without requiring a new type for each event handler
+public event EventHandler<SpecificEventArgs> NounVerb;
+</code>
+Events are declared as public fields in classes. The compiler automatically adds wrappers to the event field so that it can only be accessed in valid ways - to add/remove subscribers to/from the event.
+
+Invoke the event:
+<code>
+private void MyMethod()
+{
+	//previously
+	if(NounVerb != null) //if there are no subscribers, the event will be null
+	{
+		NounVerb.Invoke(this, new SpecificEventArgs(/*arguments*/);
+	}
+	
+	//Framework 4.6 and above
+	NounVerb?.Invoke(this, new SpecificEventArgs(/*arguments*/);
+}
+</code>
+Pass special value "EventArgs.Empty" to indicate that no information is being passed to the event handler.
+
+Microsoft's example does not have a method just for invoking each specific event. So they don't show a naming convention for that pattern.
+My suggestion:
+<code>
+private void InvokeNounVerb()
+{
+	if(NounVerb == null) return;
+	NounVerb.Invoke(this, new SpecificEventArgs(/*arguments*/);
+}
+</code>
+
+Event handlers should never have a return value.
+To return data, it must be set in the EventArgs. Example: marking an event as cancelled by setting a field in the EventArgs.
+
+You can manage internal events explicitly:
+<code>
+internal event EventHandler<SearchDirectoryArgs> DirectoryChanged
+{
+    add { directoryChanged += value; }
+    remove { directoryChanged -= value; }
+}
+private EventHandler<SearchDirectoryArgs> directoryChanged;
+</code>

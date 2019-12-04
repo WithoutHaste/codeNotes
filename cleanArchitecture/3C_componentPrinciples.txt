@@ -1,0 +1,5 @@
+##Component-Level Principles
+
+#Common Closure Principle
+
+The "Single Responsibility Principle" applied to a higher level.

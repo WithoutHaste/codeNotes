@@ -1,0 +1,32 @@
+##Typography
+
+Defaults to 14px font size, 1.428 line height, with 10px bottom margin on paragraphs.
+
+#Headers
+
+Use <h1> through <h6> for headers.  Use <small> for secondary text within a header.
+
+<code>
+<h2>Title <small>Subtitle</small></h2>
+</code>
+
+#List
+
+Use <dl> for description list.
+
+<code>
+<dl>
+	<dt>Aaa</dt><dd>Apple</dd><dd>Arrow</dd>
+	<dt>Bbb</dt><dd>Ball</dd><dd>Bear</dd>
+</dl>
+</code>
+
+#Misc
+
+Use <mark> to highlight text.
+
+Use <blockquote> to inset a section of text.
+
+Use <code> to enclose code syntax.
+
+Use <kbd> to style a keyboard command like Ctrl-P.

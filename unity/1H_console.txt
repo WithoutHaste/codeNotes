@@ -1,0 +1,8 @@
+##Console
+
+Display the Console pane with Window menu > General > Console.
+
+You can display debug messages to the Console pane from your scripts:
+<code>
+Debug.Log(string);
+</code>

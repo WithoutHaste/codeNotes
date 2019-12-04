@@ -1,0 +1,241 @@
+##Routing
+
+Routing lets you use URLs that do not map to specific files in a web site. Thus, URLs can be more descriptive of actions and be more easily understood by users.
+
+Default routing: websiteUrl/ControllerName/ActionName/parameters
+You do not need to manually register this default routing behavior.
+
+You can inspect route handling data within a controller action by looking at the global "RouteData" object.
+
+#Route Handler
+
+A route handler simply returns an HTTP handler.
+
+<code>
+class MyRouteHandler : IRouteHandler { }
+
+//the default is MVCRouteHandler
+</code>
+
+#Convention Based Routing
+
+Project/Global.asax.cs > Application_Start method is run once when the application starts.
+It calls
+<code>
+RouteConfig.RegisterRoutes(RouteTable.Routes);
+</code>
+which contains all code for registering routes.
+To register custom routes, add to Project/App_Start/RouteConfig.cs > RegisterRoutes().
+
+How to register a route:
+<code>
+routes.MapRoute(name: "Default", //internal name of route mapper
+	url: "{controller}/{action}/{id}", //pattern of route
+	defaults: new { controller="Home", action="Index", id=UrlParameter.Optional } ); //defaults fill in missing information
+</code>
+Each route needs an associated RouteHandler class (which is done automatically by MapRoute). The default is MVCRouteHandler. The RouteHandler will create the HTTPHandler that will actually process the request.
+
+Route mappers will be used in the order in which they are registered. The first route mapper that matches a url will be used.
+
+Routes are case-insensitive.
+
+Specify a route parameter is optional, without setting a default value:
+<code>
+defaults: new { controller="Home", action="Index", id=UrlParameter.Optional }
+</code>
+
+#Ignore
+
+This default ignore in Project/App_Start/RouteConfig.cs
+<code>
+routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
+</code>
+means that urls to specific real files will be ignored by the routing engine, they'll be handled like normal web requests.
+
+#Attribute Routing
+
+Attribute routing lets you define routes at the Action level. This was added in MVC 5. 
+
+It is considered easier to read, because the route(s) is right next to the Action is points at. My concern is that I cannot see all my routes at once, to check that they don't override each other.
+
+To enable attribute routing:
+<code>
+public class RouteConfig
+{
+	public static void RegisterRoutes(RouteCollection routes)
+	{
+		//ignore convention based routing
+		routes.IgnoreRoute(“{resource}.axd/{*pathInfo}”);
+
+		//enable attribute routing
+		routes.MapMvcAttributeRoutes();
+	}
+}
+</code>
+
+Applying route to Action:
+<code>
+[Route(“{productId:int}/{productTitle}”)]
+public ActionResult Show(int productId) { … }
+</code>
+
+Applying route prefix to Controller and Actions:
+<code>
+//set prefix for all Action routes
+[RoutePrefix("reviews")]
+public class ReviewsController : Controller
+{
+	// Catches "/reviews"
+	[Route]
+	public ActionResult Index() { … }
+
+	// Catches "/reviews/5"
+	[Route("{reviewId}")]
+	public ActionResult Show(int reviewId) { … }
+	
+	// Catches "/spotlight-review" because ~ overrides the Controller prefix
+	[Route("~/spotlight-review")]
+	public ActionResult ShowSpotlight() { … } 
+}
+</code>
+
+Applying default route to Controller:
+<code>
+[RoutePrefix("promotions")]
+[Route("{action=index}")]
+public class ReviewsController : Controller
+{
+	// Catches "/promotions"
+	public ActionResult Index() { … }
+
+	// Catches "/promotions/archive"
+	public ActionResult Archive() { … } 
+	
+	// Catches "/promotions/edit/5"
+	[Route("edit/{promoId:int}")]
+	public ActionResult Edit(int promoId) { … } 
+}
+</code>
+
+Registering a Controller with an Area without the AreaRegistration class:
+<code>
+[RouteArea("Admin")]
+public class MenuController : IController
+{
+}
+
+//register a custom prefix for the area at the same time
+[RouteArea("BackOffice", AreaPrefix = "back-office")]
+public class OtherController : IController
+{
+}
+</code>
+
+Routing constraints are written after the "parameterName:".
+Example of routing based on data type:
+<code>
+// Catches "/users/5"
+[Route("users/{id:int}"]
+public ActionResult GetUserById(int id) { … }
+
+// Catches "users/ken"
+[Route("users/{name}"]
+public ActionResult GetUserByName(string name) { … }
+</code>
+Notes that the "int" is listed first because everything is coming in as a string, so that's not a good filter. Routing is checked from the top of the file down.
+
+You can apply multiple constraints separated by ":"
+<code>
+[Route("users/{id:int:min(1)}")]
+</code>
+
+Constraints:
+- {x:alpha} matches one char [a-z,A-Z]
+- {x:length(10)} matches a string with length 10
+- {x:length(10,20) matches a string with length 10 to 20 inclusive
+- {x:minlength(10)} matches a string with length 10 or more
+- {x:maxlength(10)} matches a string with length up to 10
+- {x:regex(\d\d\d)} matches a string by regular expression (in this case, contains 3 consecutive digits)
+- {x:decimal}
+- {x:double}
+- {x:float}
+- {x:long}
+- {x:int}
+- {x:min(10)} matches an integer down to 10
+- {x:max(10)} matches an integer up to 10
+- {x:range(5,10)} matches an integer from 5 to 10 inclusive
+- {x:bool} matches a boolean value
+- {x:datetime}
+- {x:GUID}
+
+#Custom Attribute Routing Constraints
+
+Example constraint only accepts a few values, entered as "valueA|valueB|valueC":
+<code>
+public class ValuesConstraint : IRouteConstraint
+{
+	private readonly string[] validOptions;
+
+	public ValuesConstraint(string options)
+	{
+		validOptions = options.Split('|');
+	}
+
+	public bool Match(HttpContextBase httpContext, Route route, string parameterName, RouteValueDictionary values, RouteDirection routeDirection)
+	{
+		object value;
+		if (values.TryGetValue(parameterName, out value) && value != null)
+		{
+			return validOptions.Contains(value.ToString(), StringComparer.OrdinalIgnoreCase);
+		}
+		return false;
+	}
+}
+</code>
+
+Register the custom constraint:
+<code>
+public class RouteConfig
+{
+	public static void RegisterRoutes(RouteCollection routes)
+	{
+		var constraintsResolver = new DefaultInlineConstraintResolver();
+		constraintsResolver.ConstraintMap.Add("values", typeof(ValuesConstraint));
+		routes.MapMvcAttributeRoutes(constraintsResolver);
+	}
+}
+</code>
+
+#Route Names
+
+You can name a route, and use that name to generate the URL:
+<code>
+//in controller
+[Route("menu", Name = "mainmenu")]
+public ActionResult MainMenu() { … }
+
+//in view
+<a href="@Url.RouteUrl("mainmenu")">Main menu</a>
+</code>
+
+#Ordering
+
+You want to register routes from the most specific (to be checked first) to the least specific (defaults to use last).
+
+Example of using both convention based routing and attribute routing at the same time:
+<code>
+public static void RegisterRoutes(RouteCollection routes)
+{
+	routes.IgnoreRoute(“{resource}.axd/{*pathInfo}”);
+
+	routes.MapMvcAttributeRoutes();
+
+	AreaRegistration.RegisterAllAreas();
+
+	routes.MapRoute(
+		name: “Default”,
+		url: “{controller}/{action}/{id}”,
+		defaults: new { controller = “Home”, action = “Index”, id = UrlParameter.Optional }
+	);
+}
+</code>

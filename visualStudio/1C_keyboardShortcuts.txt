@@ -1,0 +1,17 @@
+##Keyboard Shortcuts
+
+#Tabs
+
+Close all tabs: Alt-W-L
+
+#Code Folding
+
+Collapse all code sections: Ctrl-M-O
+Expand all code sections: Ctrl-M-L
+
+To set that folding/outlining toggles always be visible:
+	Tools > Options > Text Editor > C# > Advanced > check "Enter Outlining Mode When File Opens"
+
+#Navigation
+
+Go to line number: Ctrl-G

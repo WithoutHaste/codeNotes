@@ -1,0 +1,147 @@
+##Operators
+
+#Prefix and Postfix Incrementors
+
+<code>
+int x = 5;
+x++; //postfix x = x + 1
+++x; //prefix x = x + 1
+x--; //postfix x = x - 1
+--x; //prefix x = x - 1
+</code>
+
+A prefix expression will return the new value of x.
+A postfix expression will return the previous value of x.
+
+<code>
+int[] numbers = new int[] { 0,1,2,3,4,5 };
+int index = 2;
+int a = numbers[index++]; //a = numbers[2]
+index = 2;
+int b = numbers[++index]; //b = numbers[3]
+</code>
+
+In a for loop like (int x=0; x<length; x++) it does not make a difference.
+
+#Null Coalesce (??)
+
+<code>
+x = y ?? 0;
+//if y is null, 0 is set instead
+</code>
+
+<code>
+x = y ?? z ?? 0;
+//chain it
+</code>
+
+#Null Conditional (?)
+
+As of C# 6.0 (.Net Framework 4.6)
+
+aka Null Propagator
+
+Offers succinct null checking
+
+<code>
+return student?.GetGrades();
+//if student is null, null is returned
+//otherwise, GetGrades() is run
+</code>
+
+<code>
+return students?[index];
+//if students is null, null is returned
+//otherwise, students[index] is returned
+</code>
+
+<code>
+MyEvent?.Invoke(this, new EventArgs());
+//if event has no listeners, do nothing
+//otherwise, invoke the event
+</code>
+
+#Is
+
+Return true if object is of the specified type:
+<code>
+if(myObject is MyType)
+{
+}
+</code>
+
+(C# 7) Return true if object is of the specified type, and cast is to the variable:
+<code>
+if(myObject is MyType myVariable)
+{
+	//use myVariable
+}
+</code>
+
+#Yield
+
+"Yield" can be used instead of IEnumerable.
+
+Auto-return each element in the collection one at a time:
+<code>
+yield return myCollection;
+yield break; //end iteration
+</code>
+
+Method as iterator:
+<code>
+using System.Collections.Generic;
+
+foreach(int i in Power(2, 8))
+{
+	Console.WriteLine(i);
+}
+
+public static IEnumerable<int> Power(int a, int b)
+{
+	int result = 1;
+	for(int i = 0; i < b; i++)
+	{
+		result = result * a;
+		yield return result;
+	}
+}
+</code>
+
+Property as iterator:
+<code>
+using System.Collections.Generic;
+
+MyClass myClass = new MyClass();
+foreach(int x in myClass.Numbers)
+{
+	Console.WriteLine(x);
+}
+
+public class MyClass
+{
+	public IEnumerable<int> Numbers
+	{
+		get
+		{
+			yield return 5;
+			yield return 78;
+			yield return 2;
+			yield return 12;
+		}
+	}
+}
+</code>
+
+#Operator Overloading
+
+You can overload any operator.
+
+<code>
+public static MyClass operator +(MyClass a, MyClass b)
+{
+	return new MyClass(a.X + b.X);
+}
+</code>
+
+You cannot overload logical and (&&) or logical or (||), but you can overload true, false, bitwise and (&), and bitwise or (|).

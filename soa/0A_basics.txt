@@ -1,0 +1,27 @@
+##What is SOA?
+
+#From misc
+
+SOA stands for Service-Oriented Architecture.
+
+It is the reliance on web services to send and receive data.  The services are loosely coupled, meaning any client on any platform can connect to any service as long as the essential contracts are met.
+
+Clients can consume multiple services, and services can have multiple clients.
+
+#From Plural Sight
+
+The decomposition of a system into autonomous (or nearly autonomous) units of responsibility, and exposure of those units in a secure and controlled fasion.
+
+Exposure of an API for your system.
+The client has limited functionality access.
+Clients access functionality by making service calls.
+
+#SOA vs OOP
+
+Comparison from the client side:
+- OOP is when you use a library. You have access to all the individual objects. You need a lot of knowledge about how to use the objects together, what order to run operations in, etc.
+- SOA abstracts all those details away, only exposing high-level operations that always leave the application in a valid state (i.e. they are stateless because state does not have to be maintained between calls).
+
+Comparison from the application side:
+- OOP is concerned with the lower-level design decisions.
+- SOA is concerned with the higher-level design decisions.

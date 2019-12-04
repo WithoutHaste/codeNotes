@@ -1,0 +1,22 @@
+##Database
+
+#Create
+
+<code>
+CREATE DATABASE databaseName;
+</code>
+
+#Delete
+
+<code>
+DROP DATABASE databaseName;
+</code>
+
+#Select
+
+<code>
+USE databaseName;
+
+--queries to run against the selected database
+</code>
+

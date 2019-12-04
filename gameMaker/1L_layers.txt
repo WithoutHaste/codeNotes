@@ -1,0 +1,46 @@
+##Layers
+
+You can create named layers in a Room.
+
+You can also create layers through scripts.
+
+Do not try to manually manage Depths and use Layers at the same time. It looks best to use one or the other.
+
+Types of Layers:
+1. Instance Layers may contain instances of objects. Use this instead of depth settings.
+2. Asset Layers may contain sprites without objects. This can be used for special animations, color blending, and transformations.
+3. Tile Layers may contains tiles. They provide faster collision detection and ?word building?.
+4. Background Layers may contain sprites. This is where you put your background images. They may be animated, stretched, and/or tiled.
+5. Path Layers may contain one path each. They are only for editing paths within the IDE, not for runtime use.
+
+At runtime, these differentiations disappear. You can put things where you want them to go, but I expect it is best to stay organized.
+
+For named layers created in the Room Editor, depths are automatically set 100 units apart from each other.
+
+Get id of named layer:
+<code>
+var id = layer_get_id(name);
+</code>
+
+Create layer at runtime:
+<code>
+var id = layer_create(depth);
+</code>
+
+Get depth of layer:
+<code>
+var depth = layer_get_depth(layer_id);
+</code>
+
+Get the element ids of everything on a layer:
+<code>
+var id_array = layer_get_all_elements(layer_id_or_string_name);
+</code>
+These ids may be for object instances, backgrounds, sprites, tile maps, tiles, or particle systems.
+
+Toggle visibility of entire layer:
+<code>
+layer_set_visible(layer_id, bool);
+var is_visible = layer_get_visible(layer_id_;
+</code>
+Does this affect user interaction events?

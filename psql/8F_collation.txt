@@ -1,0 +1,18 @@
+##Collation
+
+What non-standard collations are being used?
+<code>
+select table_schema, 
+       table_name, 
+       column_name,
+       collation_name
+from information_schema.columns
+where collation_name is not null
+order by table_schema,
+         table_name,
+         ordinal_position;
+</code>
+
+#UTF-8
+
+PSQl supports the "utf8_general_ci" collation directly. This can store more special characters than the basic latin collations can.

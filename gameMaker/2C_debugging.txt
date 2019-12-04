@@ -1,0 +1,25 @@
+##Debugging
+
+#Console Message
+
+Output to console log.
+<code>
+show_debug_message(text);
+show_debug_message("Text: " + string(numberVar));
+</code>
+
+#User Message
+
+Output popup message to user with an "Ok" button.
+<code>
+show_message("Error: my error message");
+</code>
+
+#Throw Error
+
+<code>
+show_error(message, bool);
+</code>
+Set bool to true to end the program immediately.
+
+You'll see the error message and the location of the error in the dialog that pops up.

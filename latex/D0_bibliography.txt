@@ -1,0 +1,38 @@
+##Bibliography
+
+#bib
+
+Create a text file saved with .bib file format.
+See BibTeX generator for full format details.
+
+Sample
+<code>
+@BOOK{DUMMY:1,
+AUTHOR="John Doe",
+TITLE="The Book without Title",
+PUBLISHER="Dummy Publisher",
+YEAR="2100",
+}
+</code>
+
+#Citation
+
+The "bibliography" command both gives the filename (sans file extension) of our bibliography.
+
+The "bibliographystyle" command gives the format for displaying the bibliography.
+
+The "displaybibliography" command prints the bibliography.
+
+<code>
+\documentclass{article}
+
+\begin{document}
+
+Random citation \cite{DUMMY:1} embeddeed in text.
+
+\bibliography{filename} 
+\bibliographystyle{ieeetr}
+\printbibliography
+
+\end{document}
+</code>

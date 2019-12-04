@@ -1,0 +1,33 @@
+##Comparisons
+
+#Web Services
+
+"Web Services" is the terribly confusing name Microsoft gave its earlier web services framework. Roughly 2000 to 2002.
+
+"Web Services" only supported HTTP.
+They didn't enforce strict communication contracts.
+Required use of the WS* stack.
+
+#Enterprise Services
+
+"Enterprise Services" included some advanced features, like security and transactions.
+But it was hard to setup.
+
+#MSMQ
+
+MSMQ is a queuing framework that is still in use today. It provides reliable message transportation.
+
+#Sockets
+
+Sockets are good for forming point-to-point connections.
+They require a lot of custom code to setup, because they are low-level - highly configurable but a lot of overhead to setup your system.
+
+#Web API
+
+"Web API" is another confusing name Microsoft gave a current web services framework.
+
+WCF and Web API are used for different kinds of projects.
+- WCF is more feature rich than Web API. It is also more heavy-weight (harder to setup).
+- WCF mainly uses the SOAP protocol, while Web API only uses the REST architecture. 
+- Web API is more interoperable (because it uses just HTTP and REST).
+- Communication with Web API only requires an HTTP request, while communicating with WCF requires tooling (meaning the client needs to also use the WCF framework, to most easily talk to the WCF service).

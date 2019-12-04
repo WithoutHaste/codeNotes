@@ -1,0 +1,59 @@
+##Localization
+
+You can set these settings manually, or let ASP.Net do it automatically based on the HTTP Request header "Accept-Language".
+
+To make this automatic, add globalization to the Web.config:
+<code>
+	<system.web>
+		<globalization culture="auto" uiCulture="auto" />
+	</system.web>
+</code>
+
+#Current Culture
+
+Impacts formatting.
+
+<code>
+//setting
+Thread.CurrentCulture
+
+//affects things like this
+DateTime.Now.ToString()
+</code>
+
+#Current UI Culture
+
+Impacts resource loading.
+
+<code>
+//setting
+Thread.CurrentUICulture
+</code>
+
+#Resource Files
+
+Use resource files (*.resx) to localize string literals and binary assets (such as images).
+You'll need one resource file for each language you explicitly support.
+
+Example file structure:
+Strings.resx: stores default language
+Strings.es.resx: stores Spanish language, named following the .Net convention
+
+When adding a new file to the project, look for file type "Resources File".
+The access modifier should be "public" (see file edit window) because Razor foods are compiled into their own assembly.
+The build action should be "Embedded Resource" (see file properties).
+
+To use these values:
+<code>
+//in view
+@Resources.Strings.Greeting
+
+//in action
+string greeting = Resources.Strings.Greeting;
+
+//in property attributes
+[Required(ErrorMessageResourceType=typeof(Namespace.Resources), ErrorMessageResourceName="ErrorForPhoneNumber")]
+public string PhoneNumber { get; set; }
+</code>
+
+You can add resource files at any folder-depth in your project. To use these files, simply specify the full namespace.

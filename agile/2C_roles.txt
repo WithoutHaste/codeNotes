@@ -1,0 +1,40 @@
+##Roles
+
+Agile teams are made up of people from many different departments. They should consider themselves part of the team first, and members of different departments second.
+
+Team members do what is needed at the time it is needed to achieve the team goals.
+
+#Product Expert
+
+The product export or domain expert will interact closely with users/customers.
+They will research the market the product is in, and what business benefits the software will provide.
+
+They create and prioritize work for the team.
+They help determine when work is complete.
+
+Scrum calls this role the "Product Owner".
+
+#Cross-Functional Skills
+
+Some team members have cross-functional skills for building and operating the entire system, and understanding how it will fit into the larger world.
+
+These core members work as a single team to design, code, test, and implement a software system.
+
+They must all work and collaborate together.
+A team member will frequently assume multiple roles in additional to their primary responsibilities.
+
+#Leadership
+
+This may be the manager or the team lead. Their goal is to enable and support the success of the team.
+This may involve managing stakeholder expectations, company communication, progress reporting, motivating team members, budget management, and staff management.
+
+This is a "servant leadership" role, where the leader's main focus is serving the team.
+
+Scrum calls this role the "Scrum Master".
+
+#Coach
+
+It is helpful for have someone available as coach/mentor.
+
+This person is not responsible for any specific project deliverables. They focus on continuous improvement and engineering discipline.
+They help guide the team to become better every single day.

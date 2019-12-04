@@ -1,0 +1,22 @@
+##curl
+
+curl is a command line tool that makes a simple HTTP Request.
+
+#Http request
+
+<code lang="bash">
+curl google.com
+</code>
+Displays the HTML/CSS/etc that is returned by the request.
+
+#View Headers
+
+<code lang="bash">
+curl google.com -I
+</code>
+Displays just the headers of the response.
+
+<code lang="bash">
+curl google.com -i
+</code>
+Displays the headers and the content of the response.

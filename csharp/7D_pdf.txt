@@ -1,0 +1,238 @@
+##PDFSharp
+
+Using the PDFSharp library to create PDF documents.
+
+#Basic
+
+How to create a new document, draw text on it, and save it:
+<code>
+using System;
+using PdfSharp;
+using PdfSharp.Drawing; //for XFont
+using PdfSharp.Drawing.Layout; //for XTextFormatter
+using PdfSharp.Pdf; //for PdfDocument
+
+class Program
+{
+	static void Main(string[] args)
+	{
+		PdfDocument document = new PdfDocument();
+		PdfPage page = document.AddPage();
+
+		XFont font = new XFont("Verdana", 20, XFontStyle.Bold);
+		XGraphics graphics = XGraphics.FromPdfPage(page);
+		graphics.DrawString("Testing Text", font, XBrushes.Black, new XRect(0, 0, page.Width, page.Height), XStringFormats.Center);
+		
+		document.Save("test.pdf"); //creates new or overwrites old
+	}
+}
+</code>
+
+#Text
+
+XGraphics.DrawString will not line wrap. Use XTextFormatter instead.
+<code>
+PdfPage page = document.AddPage();
+XFont font = new XFont("Times New Roman", 12, XFontStyle.Regular);
+string text = "The quick brown fox jumped over the lazy dog in the house that Jack built with his two good hands.";
+XRect rectangle = new XRect(0, 0, page.Width, page.Height);
+using(XGraphics graphics = XGraphics.FromPdfPage(page))
+{
+	XTextFormatter textFormatter = new XTextFormatter(graphics);
+	textFormatter.DrawString(text, font, XBrushes.Black, rectangle, XStringFormats.TopLeft);
+}
+</code>
+
+MeasureString:
+<code>
+using(XGraphics graphics = XGraphics.FromPdfPage(page))
+{
+	XSize measure = graphics.MeasureString(text, font);
+	//measure.Width
+	//measure.Height
+}
+</code>
+MeasureString ignores leading and trailing spaces.
+
+There is no built in measure for how tall a line-wrapped XTextFormatter string is. Here is a home-rolled solution.
+<code>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using PdfSharp.Drawing;
+
+namespace PdfSharpExtensions
+{
+	public static class XGraphicsExtension
+	{
+		public static string[] BreakParagraphIntoLines(this XGraphics graphics, string text, XFont font, double width)
+		{
+			List<string> lines = new List<string>();
+			int startIndex = 0;
+			int endIndex = 0;
+			int lastSpaceIndex = -1;
+			string substring = "";
+			while(endIndex < text.Length - 1)
+			{
+				if(text[endIndex] == ' ')
+				{
+					lastSpaceIndex = endIndex;
+				}
+
+				substring = text.Substring(startIndex, endIndex - startIndex + 1);
+				XSize measure = graphics.MeasureString(substring, font);
+				if(measure.Width > width)
+				{
+					substring = text.Substring(startIndex, lastSpaceIndex - startIndex + 1);
+					lines.Add(substring);
+					startIndex = lastSpaceIndex + 1;
+					endIndex = startIndex;
+				}
+				else
+				{
+					endIndex++;
+				}
+			}
+			substring = text.Substring(startIndex);
+			if(!lines.Contains(substring))
+			{
+				lines.Add(substring);
+			}
+			return lines.ToArray();
+		}
+
+		public static double MeasureStringHeightWithLineWrap(this XGraphics graphics, string text, XFont font, double width)
+		{
+			double height = graphics.MeasureString(text, font).Height;
+			string[] lines = graphics.BreakParagraphIntoLines(text, font, width);
+			return (double)lines.Length * height;
+		}
+	}
+}
+</code>
+
+#Fonts
+
+There are two ways to embed fonts in your pdf.
+
+Specify each font to be embedded:
+<code>
+XPdfFontOptions options = new XPdfFontOptions(PdfFontEmbedding.Always);
+XFont font = new XFont("Times New Roman", 12, XFontStyle.Regular, options);
+</code>
+
+Automatically embed all fonts used on a particular page:
+<code>
+PdfPage page = new PdfPage();
+XGraphics graphics = XGraphics.FromPdfPage(page);
+graphics.MFEH = PdfFontEmbedding.Automatic;
+</code>
+
+#Units
+
+1 XUnit = 1/72 Inches
+
+Conversions
+<code>
+PdfPage page = document.AddPage();
+page.Width = XUnit.FromInch(8.5);
+page.Height = XUnit.FromInch(11);
+page.Orientation = PageOrientation.Portrait;
+</code>
+
+#Drawing
+
+Colors
+<code>
+XColor paleGray = new XColor { R = 229, G = 229, B = 229 };
+XPen outline = new XPen(paleGray);
+XBrush fill = new XSolidBrush(paleGray);
+graphics.DrawRectangle(new XPen(paleGray), new XSolidBrush(paleGray), XRect);
+//or
+graphics.DrawRectangle(XPens.LightGray, XBrushes.LightGray, XRect);
+</code>
+
+Lines
+<code>
+graphics.DrawLine(XPens.Black, x1, y1, x2, y2);
+//or
+XPen pen = new XPen(XColors.Black, lineThickness);
+graphics.DrawLine(pen, x1, y1, x2, y2);
+</code>
+
+Rectangles
+<code>
+//outline
+graphics.DrawRectangle(XPens.Black, x, y, width, height);
+graphics.DrawRectangle(XPens.Black, XRect);
+//filled
+graphics.DrawRectangle(XPens.Black, XBrushes.LightGray, x, y, width, height);
+graphics.DrawRectangle(XPens.Black, XBrushes.LightGray, XRect);
+</code>
+
+Circles
+<code>
+graphics.DrawArc(linePen, x, y, width, height, startDegrees, sweepDegrees);
+</code>
+The circle fits within the bounding rectangle.
+0 start = center-right
+Positive sweep moves clockwise, negative sweep moves counter-clockwise.
+
+Pie Segments
+<code>
+//outline
+graphics.DrawPie(linePen, x, y, width, height, startDegrees, sweepDegrees);
+//filled
+graphics.DrawPie(XBrushes.Black, x, y, width, height, startDegrees, sweepDegrees);
+</code>
+
+Images
+<code>
+XImage ximage = XImage.FromFile(fullPathFilename);
+graphics.DrawImage(ximage, x, y, ximage.PointWidth, ximage.PointHeight);
+</code>
+CreateSpace recommends using images with at least 200dpi resolution to avoid blurring on PDFs.
+
+Rotating graphics
+<code>
+//put the rotated section in its own using/dispose code block
+using(XGraphics graphics = XGraphics.FromPdfPage(page))
+{
+	graphics.RotateAtTransform(90, new XPoint(page.Width / 2, page.Height / 2));
+	graphics.DrawLine(linePen, 0, 0, 300, 300);
+}
+</code>
+Or
+<code>
+//save and restore state
+XGraphicsState state = graphics.Save();
+graphics.RotateAtTransform(90, new XPoint(page.Width / 2, page.Height / 2));
+graphics.DrawLine(linePen, 0, 0, 300, 300);
+graphics.Restore(state);
+</code>
+Positive degrees rotates the entire graphics section clockwise around the specified point.
+If you rotate 90 degrees (clockwise), then a negative Y (moves object left/right) and positive X (moves object up/down) will bring drawings into view.
+
+Working example of vertical text, with the bottom of the text facing the left:
+<code>
+using(XGraphics graphics = XGraphics.FromPdfPage(page))
+{
+	graphics.RotateAtTransform(90, new XPoint(0, 0));
+	XRect rotatedRectangle = new XRect(
+		originalRectangle.Y,
+		0 - originalRectangle.X - originalRectangle.Width,
+		originalRectangle.Height,
+		originalRectangle.Width
+	);
+	graphics.DrawString("Vertical Text", font, XBrushes.Black, rotatedRectangle, XStringFormats.TopLeft);
+}
+</code>
+
+Rotating at the (0,0) point is straight forward. Any other point and the transformation gets weird. See examples:
+
+Visual reference: positive 90 degrees rotation
+![positive 90 degrees rotation](images/pdfSharp_graphicsRotation_positive90.png =400x)
+
+Visual reference: negative 90 degrees rotation
+![negative 90 degrees rotation](images/pdfSharp_graphicsRotation_negative90.png = 400x)

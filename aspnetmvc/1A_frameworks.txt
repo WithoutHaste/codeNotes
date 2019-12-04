@@ -1,0 +1,40 @@
+##ASP.Net Frameworks
+
+ASP.Net is made up of three frameworks. You can use a single framework, or multiple together. A common combination is MVC with Razor Web Pages. Or create an MVC site, with Web Forms used for the data access portion due to its library set.
+
+#Web Forms
+
+Use *.aspx pages.
+Mimics Win Forms apps.
+Focuses on declarative and control-based programming.
+Not so good at Separation of Concerns or automated unit testing.
+
+Includes a WYSIWYG drag-n-drop interface.
+Includes an event model to program against.
+
+Will render the HTML for you (which does lessen your control of the rendered HTML).
+
+Automatic preservation of state between HTTP requests.
+
+Generally there is one file per URL, rather than the routing that MVC uses.
+
+#MVC
+
+Based on the Model-View-Controller design pattern.
+Good for Test Driven Development, Separation of Concerns, Inversion of Control, and Dependency Injection.
+Good for separating the business logic layer from the presentation layer.
+
+Does not automatically preserve state between HTTP requests.
+
+Provides greater control of the rendered HTML than Web Forms does.
+
+Uses routing instead of having one web page per URL.
+
+#Web Pages
+
+Uses *.cshtml pages.
+For very simple designs, similar to PHP. Creates HTML pages with integrated server-side code using the Razor language.
+
+Features Helper functions to render common HTML controls (such as maps, twitter feeds, etc).
+
+Easy to add Javascript to.

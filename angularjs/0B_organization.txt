@@ -1,0 +1,32 @@
+##Naming Conventions
+
+kebab-case for custom html attributes
+camelCase for the corresponding directives which implement them
+
+x.spec.js contains tests for x.js.
+
+x.component.js contains the component x.
+x.component.spec.js contains the tests for component x.
+
+The $ prefix is reserved for angular-provided services.
+The $$ prefix is reserved for private-do-not-touch angular properties.
+
+##Organization
+
+The test (spec) file resides with the file it tests.
+
+One feature per file, be it a component, a controller, or a template.
+
+All files for a component reside in a folder with the component's name.
+
+Ex:
+<code>
+app/
+	app.js
+	phone-list/
+		phone-list.component.js
+		phone-list.component.spec.js
+	shared/
+</code>
+
+The shared folder can be called 'shared', 'common', or 'core'.

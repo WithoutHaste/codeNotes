@@ -1,0 +1,98 @@
+##Parameters
+
+#Params
+
+You can specify one 'params' parameter, and it must be the last parameter in the list. A 'params' parameter is always a Collection<T>. When calling the method, you can include any number of type T arguments.
+
+<code>
+class MyClass
+{
+	void TestA(params int[] list) { ... }
+	void TestB(int a, string b, params object[] list) { ... }
+}
+...
+myClass.TestA(3, 7, 242, 65);
+myClass.TestB(56, "text", "a", new Student(), 34.545);
+</code>
+
+Method overloading only compares method signatures, and the "params" keyword (and other constraints) are not considered. Therefore, this is not allowed because the methods have the same signature:
+<code>
+public void Add(params MyClass[] elements) //must use array
+{
+	this.elements.AddRange(elements);
+}
+
+public void Add(MyClass[] elements) //not allowed - same method name with same parameter types
+{
+	this.elements.AddRange(elements);
+}
+
+public void Add(List<MyClass> elements) //this is ok!
+{
+	this.elements.AddRange(elements);
+}
+</code>
+
+#Out
+
+'out' can be used to cause a parameter to be passed by reference AND the parameter does not have to be initialized before passing it in. The variable MUST have its value set within the function.
+
+<code>
+public bool TryParse(string text, out int parsedValue)
+{
+	//attempt to convert text into an integer
+	//if successful, set parsedValue to that integer and return true
+	//else, set parsedValue to -1 and return false
+}
+
+public void DemoOutKeyword()
+{
+	int parsedValue;
+	if(TryParse("644", out parsedValue))
+	{
+		Console.WriteLine("Parse successful: {0}", parsedValue);
+	}
+}
+</code>
+
+#Ref
+
+'ref' can be used to cause a parameter to be passed by reference.  The variable must be initialized before passing it in.  The variable's value does not have to be changed within the function.
+
+<code>
+public void ChangeValue(ref int x)
+{
+	x += 5;
+}
+
+public void DemoRefKeyword()
+{
+	int x = 10;
+	Console.WriteLine("Before: {0}", x);
+	ChangeValue(ref x);
+	Console.WriteLine("After: {0}", x);
+}
+</code>
+
+#Overloading
+
+'out' and 'ref' look the same to method overloading resoluation. A method with neither will be seen as different from a method with either.
+
+In this example, the "A" methods are valid, the "B" methods are valid, but the "C" methods will cause a compilation error because they are seen as identical.
+
+<code>
+void A(int, string);
+void A(out int, string);
+
+void B(int, string);
+void B(ref int, string);
+
+void C(out int, string);
+void C(ref int, string);
+</code>
+
+#Boxing and Unboxing
+
+Boxing is assigning a value type variable to a reference type variable. Ie, wrapping a value type inside a reference type.
+
+Unboxing is assigning a reference type variable to a value type variable. Ie, unwrapping a value type that was inside a reference type.

@@ -1,0 +1,29 @@
+##Project Settings
+
+#General
+
+Edit menu > Project Settings > Player tab
+- set Company Name
+- set Product Name
+- set Version Number
+- set Default Icon
+- set Default Cursor
+- under Other Settings > Configuration > Scripting Runtime Version: this sets what .Net framework is required to run the game.
+
+Capture Single Screen: if true, application will not darken secondary monitors when running in full screen mode.
+
+Display Resolution Dialog: if enabled, there will be a resolution selection screen before the application starts.
+
+Use Player Log: enable logging of debugging information. Must be disabled to publish to the MAC store.
+
+#2D Games
+
+1. Edit menu > Project Settings > Editor tab > Default Behavior Mode > select "2D"
+  * Selecting "2D Template" when creating new project will do this, also
+  * By default, textures will be imported as sprites
+  * By default, the scene view will be in 2D mode
+  
+#Debugging
+
+To enable breakpoints in Visual Studio when running Unity code:
+Edit menu > Preferences > External Tools tab > check Editor Attaching

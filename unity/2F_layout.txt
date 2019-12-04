@@ -1,0 +1,35 @@
+##Layouts
+
+Layout components can be added to GameObjects.
+
+#Vertical Layout / Horizontal Layout
+
+Child Controls Size:
+Looks like there's general agreement that this was poorly named, and maybe "control child's size" would have been better.
+If it is checked, that dimension of the children will be set by this layout.
+
+#Grid Layout
+
+Cell size must be specified exactly. The only way I've seen to auto-resize the cells to fit their container is through scripts.
+
+Consider using nested Vertical Layout and Horizontal Layouts instead, which do support auto-resizing.
+
+Script to auto-resize grid:
+<code>
+using UnityEngine;
+using UnityEngine.UI;
+
+public AutoSizeGrid : MonoBehavior
+{
+	public int RowCount;
+	public int ColCount;
+
+	public void Start()
+	{
+		RectTransform container = gameObject.GetComponent<RectTransform>();
+		GridLayoutGroup gridLayout = gameObject.GetComponent<GridLayoutGroup>();
+		gridLayout.cellSize = new Vector2(container.rect.width / ColCount, container.rect.height / RowCount);
+	}
+}
+</code>
+Add this script to the GameObject that has a Grid Layout component.

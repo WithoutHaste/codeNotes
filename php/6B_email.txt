@@ -1,0 +1,26 @@
+##Email
+
+#Send
+
+<code>
+$headers = "From: noreply@website.com\r\n";
+mail($to, $subject, $message, $headers);
+</code>
+
+Use these headers for HTML formatted messages.
+<code>
+$headers = "MIME-Version: 1.0\r\n";
+$headers .= "Content-type:text/html;charset=UTF-8\r\n";
+$headers .= "From: noreply@website.com\r\n";
+</code>
+
+#Validate
+
+Copied this regular expression from the web for verifying a email address is probably valid.
+<code>
+function isValidEmail($text)
+{
+	$regex = "/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/";
+	return (preg_match($regex, $text));
+}
+</code>

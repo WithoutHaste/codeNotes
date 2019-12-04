@@ -1,0 +1,57 @@
+##LINQ to Entities
+
+#Method Syntax
+
+(Method Syntax is also called Fluent Syntax)
+
+LINQ to Entities includes all the LINQ to Objects Method Syntax options.
+
+<code>
+using (var context = new MyEntities())
+{
+	return context.Students.Where(x => x.LastName == "Roberts").FirstOrDefault();
+}
+</code>
+
+Explicitly loading data when using lazy loading.
+
+<code>
+Student student = context.Students.Include("Classes").Include("History.PreviousSchools").FirstOrDefault();
+</code>
+
+Filtering by a subtype.
+
+<code>
+Student student = context.People.OfType<Student>().FirstOrDefault();
+</code>
+
+#Query Syntax
+
+LINQ to Entities includes all the LINQ to Objects Syntax Syntax options.
+
+<code>
+using (var context = new MyEntities())
+{
+	return (from student in context.Students where student.LastName == "Roberts" select student).First();
+}
+</code>
+
+#Entity SQL
+
+You can also query the entities with a SQL-like language.
+
+<code>
+string queryString = "SELECT VALUE s FROM MyEntities.Students AS s WHERE s.LastName == 'Roberts'";
+var objectContext = (context as IObjectContextAdapter).ObjectContext;
+ObjectQuery<Student> students = objectContext.CreateQuery<Student>(queryString);
+</code>
+
+#Native SQL
+
+<code>
+using (var context = new MyEntities())
+{
+	return context.Students.SqlQuery("SELECT Id, FirstName FROM Student WHERE LastName == 'Roberts'");
+}
+</code>
+

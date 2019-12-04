@@ -1,0 +1,36 @@
+##Indexes
+
+Topic for Code-First only.
+
+#ForeignKeyIndexConvention
+
+By default, migrations will add an index for each foreign key on each table. These indexes will be "non-unique" and "non-clustered".
+
+To remove this convention:
+<code>
+modelBuilder.Conventions.Remove<ForeignKeyIndexConvention>();
+</code>
+
+#Index a Column
+
+Data Annotation: tell EF to add an index for this property/column:
+<code>
+//include reference to EntityFramework.dll in project
+using System.ComponentModel.DataAnnotations.Schema;
+
+public class Country
+{
+	[Index]
+	public string Language { get; set; }
+	[Index(IsClustered=true)] //this would, of course, conflict with the default clustered index created for the primary key
+	public int Something { get; set; }
+	[Index(IsUnique=true)] //note that this will be enforced in the database, but in the Entity Framework at runtime
+	public int SomethingElse { get; set; }
+}
+</code>
+
+Fluent API: tell EF to add an index for this property/column:
+<code>
+//adding the data annotation at runtime
+modelBuilder.Entity<Country>().Property(p => p.Language).HasColumnAnnotation("Index", new IndexAnnotation(new IndexAttribute()));
+</code>

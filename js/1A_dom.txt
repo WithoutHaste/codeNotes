@@ -1,0 +1,219 @@
+##DOM
+
+DOM stands for Document Object Model. All major browsers support DOM.
+
+The document object model is an object view of the xml structure of the webpage.  <HTML> is the root object, and all other nodes are children of the root, in the tree structure defined by the XML.
+
+#onload
+
+Wait for document to load before starting your script:
+<code>
+//this will overwrite any previous document.onload events
+document.onload = function() {
+};
+
+//this will add you event to the list of event listeners
+document.addEventListener("load", function() {
+});
+</code>
+
+With for both the document and the window object to load before starting your script:
+<code>
+//this will overwrite any previous window.onload events
+window.onload = function() {
+};
+
+//this will add you event to the list of event listeners
+window.addEventListener("load", function() {
+});
+</code>
+
+#HTMLCollection
+
+Queries like "document.getElementsByTagName('div')" return HTMLCollections, which are live collections that update as you update the DOM.
+
+A NodeList object is a collection of DOM elements that may or may not be live.
+
+To convert either an HTMLCollection or NodeList to an array (which will not be live):
+<code>
+var collection = document.getElementsByTagName('div');
+var array = Array.from(collection);
+//or
+var array = [...collection];
+</code>
+
+#Elements
+
+Lookup element
+<code>
+document.getElementById('id'); //element
+document.getElementsByName('name'); //array
+document.getElementsByClassName('class'); //array
+document.getElementsByTagName('tag'); //array
+</code>
+
+Create element
+<code>
+var element = document.createElement('div');
+</code>
+
+Loop through children:
+<code>
+for(var i=0; i<element.children.length; i++)
+{
+	var child = element.children[i];
+}
+</code>
+
+Add child:
+<code>
+element.appendChild(childElement);
+element.insertBefore(childElement, siblingElement);
+element.insertBefore(childElement, element.firstChild);
+</code>
+
+Add child after element:
+<code>
+element.parentNode.insertBefore(childElement, element.nextSibling);
+</code>
+
+Navigate:
+<code>
+var nextSiblingNode = element.nextSibling(); //could be an element, or text, or comment
+var nextSiblingElement = element.nextElementSibling(); //just elements
+
+var previousSiblingNode = element.previousSibling();
+var previousSiblingElement = element.previousElementSibling();
+</code>
+
+#Window
+
+"window" is a variable made available to JavaScript by the browser. It gives you access to the current browser window.
+
+Show an alert popup
+<code>
+window.alert("An error");
+</code>
+
+#Console
+
+"console" is a variable made available to JavaScript by the browser. It gives you access to the browser's console window.
+
+<code>
+console.log("A message");
+</code>
+
+#Document
+
+"document" is a variable made available to JavaScript by the browser.  It gives you access to the DOM for your webpage.
+
+<code>
+var myElement = document.getElementById("myId"); //references HTML tag with id="myId"
+</code>
+
+Append HTML to the end of your document. This content will be interpreted as HTML.
+<code>
+document.write("some more text<br/>more text on lower line");
+</code>
+Warning: using document.write after the DOM has fully loaded will cause it to overwrite the whole DOM.  Subsequent uses will still append.
+
+#Editing Elements
+
+Editing element inner html:
+<code>
+var myElement = document.getElementById("myId");
+myElement.innerHTML = "Edited html";
+</code>
+
+Editing element attributes:
+<code>
+var myImage = document.getElementById("myImage");
+myImage.src = "anotherImage.png";
+</code>
+
+Editing element styles:
+<code>
+var myDiv = document.getElementById("myDiv");
+myDiv.style.fontSize = "25px";
+</code>
+
+Editing classes
+<code>
+element.classList.add('class');
+element.classList.remove('class');
+</code>
+
+Quickly replace all classes on an element (much faster than removing them individually from the list)
+<code>
+element.className = "class";
+</code>
+
+#Form
+
+<code>
+var myForm = document.forms["myFormName"];
+var myField = myForm["myFieldName"];
+var myFieldValue = myField.value;
+
+myFieldValue = document.forms["myFormName"]["myFieldName"].value;
+</code>
+
+Form validation example. The form won't actually submit until the validation passes.
+<code>
+<form name="myForm" onsubmit="return validateForm()" action="submitForm.php" method="post">
+	Name: <input type="text" name="firstName" />
+	<input type="submit" value="Submit" />
+</form>
+
+<script>
+function validateForm() {
+	var firstName = document.forms["myForm"]["firstName"].value;
+	if(firstName == "") {
+		alert("Name is required.");
+		return false;
+	}
+	return true;
+}
+</script>
+</code>
+
+#Data Attributes
+
+You can add any custom attribute to an HTML element. 
+By convention, use the prefix "data-" to name custom attributes.
+<code>
+&ltinput id='address' data-address-type='billing' />
+</code>
+
+Custom attributes with the prefix "data-" can be accessed through javascript.
+<code>
+var addressType = document.getElementById('address').dataset.addressType;
+</code>
+
+HTML attribute "data-address" becomes JavaScript element.dataset.address.
+HTML attribute "data-address-type" becomes JavaScript element.dataset.addressType.
+
+#Object
+
+Include an entire other html page within your html page:
+<code>
+<html>
+	<body>
+		<object type="text/html" data="otherFileA.html"></object>
+		<object type="text/html" data="otherFileB.html"></object>
+	</body>
+</html>
+</code>
+
+The other files will display in their own frame.
+
+Access the DOM of those other files:
+<code>
+var objects = document.getElementsByTagName("object");
+for(var i = 0; i < objects.length; i++)
+{
+	var object = objects[i];
+	var objectDocument = object.contentDocument;
+	//access "objectDocument" just like local "document"
+}
+</code>

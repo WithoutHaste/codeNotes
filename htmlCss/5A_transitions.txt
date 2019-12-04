@@ -1,0 +1,76 @@
+##Transitions
+
+Transitions let you change property values smoothly, over a given period of time. You must specify the property and the duration.
+
+#Single Property
+
+This example causes the div width that change from 100px to 200px over a 2 second period.
+<code>
+div {
+	width: 100px;
+	transition: width 2s;
+	-webkit-transition: width 2s; /* for Safari */
+}
+div:hover {
+	width: 300px;
+}
+</code>
+
+#Multiple Properties
+
+<code>
+div {
+	transition: width 2s, height 4s;
+}
+</code>
+
+#All Properties
+
+<code>
+div {
+	transition: all 1s;
+}
+</code>
+
+#Transition Delay
+
+Specifies the number of seconds to delay the transition.
+
+#Transition Timing Function
+
+The transition timing function specifies the curve of the speed of the transition.
+
+<code>
+div {
+	transition: width linear 2s 0s;
+}
+//or
+div {
+	transition-property: width;
+	transition-duration: 2s;
+	transition-timing-function: linear;
+	transition-delay: 0s;
+}
+</code>
+
+Options:
+	ease = slow, fast, slow (default)
+	linear = same speed throughout
+	ease-in = slow, fast, fast
+	ease-out = fast, fast, slow
+	ease-in-out = ??
+	cubic-bezier(a,b,c,d) = define your own bezier curve
+	
+#Fade In/Out Loop
+
+<code>
+@keyframes fadeLoop {
+	0% { opacity: 1; }
+	50% { opacity: 0; }
+	100% { opacity: 1; }
+}
+.animateFadeLoop {
+	opacity: 1;
+	animation: fadeLoop 1s infinite;
+}
+</code>

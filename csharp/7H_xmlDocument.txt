@@ -1,0 +1,99 @@
+##XmlDocument
+
+To convert XmlDocument or XmlNode contents to a string:
+<code>
+using System.IO;
+using System.Xml;
+
+StringWriter stringWriter = new StringWriter();
+XmlTextWriter xmlTextWriter = new XmlTextWriter(stringWriter);
+xmlDocument.WriteTo(xmlTextWriter);
+string text = stringWriter.ToString();
+
+//Or
+StringWriter stringWriter = new StringWriter();
+XmlTextWriter xmlTextWriter = new XmlTextWriter(stringWriter);
+xmlNode.WriteTo(xmlTextWriter);
+string text = stringWriter.ToString();
+</code>
+
+#Namespace
+
+All elements with be given a default attribute "xmlns=''" unless your specify the namespace. To get an element with no explicit "xmlns" attribute, specify the same namespace as the root element.
+<code>
+using System.Xml;
+
+XmlDocument xmlDocument = new XmlDocument();
+XmlNode root = xmlDocument.CreateElement(rootNodeName, namespaceUri);
+XmlNode node = xmlDocument.CreateElement(nodeName, root.NamespaceURI);
+root.AppendChild(node);
+</code>
+Result:
+<code lang="xml">
+<rootNodeName xmlns="namespaceUri">
+  <nodeName>
+  </nodeName>
+</rootNodeName>
+</code>
+
+To add namespace aliases to the root node:
+<code>
+using System.Xml;
+
+XmlDocument xmlDocument = new XmlDocument();
+XmlNode root = xmlDocument.CreateElement(rootNodeName, namespaceUri);
+XmlAttribute attribute = xmlDocument.CreateAttribute("xmlns:"+alias);
+attribute.Value = otherNamespaceUri;
+workbookNode.Attributes.Append(attribute);
+</code>
+Result:
+<code lang="xml">
+<rootNodeName xmlns="namespaceUri" xlmns:alias="otherNamespaceUri">
+</rootNodeName>
+</code>
+
+To specify an aliased namespace for a child node:
+<code>
+using System.Xml;
+
+XmlDocument xmlDocument = new XmlDocument();
+XmlNode root = xmlDocument.CreateElement(rootNodeName, namespaceUri);
+XmlAttribute attribute = xmlDocument.CreateAttribute("xmlns", alias);
+attribute.Value = otherNamespaceUri;
+workbookNode.Attributes.Append(attribute);
+
+XmlNode childNode = xmlDocument.CreateElement(alias, childNodeName, otherNamespaceUri);
+root.AppendChild(childNode);
+</code>
+Result:
+<code lang="xml">
+<rootNodeName xmlns="namespaceUri" xlmns:alias="otherNamespaceUri">
+  <alias:childNodeName>
+  </alias:childNodeName>
+</rootNodeName>
+</code>
+
+To add an attribute under an aliased namespace:
+<code>
+using System.Xml;
+
+XmlDocument xmlDocument = new XmlDocument();
+XmlNode root = xmlDocument.CreateElement(rootNodeName, namespaceUri);
+XmlAttribute attribute = xmlDocument.CreateAttribute("xmlns", alias);
+attribute.Value = otherNamespaceUri;
+workbookNode.Attributes.Append(attribute);
+
+XmlNode childNode = xmlDocument.CreateElement(childNodeName, root.NamespaceURI);
+XmlAttribute childAttribute = xmlDocument.CreateAttribute(alias, childAttributeName, otherNamespaceUri);
+childAttribute.Value = attributeValue;
+childNode.Attributes.Append(childAttribute);
+root.AppendChild(childNode);
+</code>
+Result:
+<code lang="xml">
+<rootNodeName xmlns="namespaceUri" xlmns:alias="otherNamespaceUri">
+  <childNodeName alias:childAttributeName="attributeValue">
+  </childNodeName>
+</rootNodeName>
+</code>
+

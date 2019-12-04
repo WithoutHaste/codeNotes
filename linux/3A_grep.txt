@@ -1,0 +1,61 @@
+##Grep
+
+Search input files for lines containing a match to a given pattern list.  Matching lines are (by default) copied to standard output.
+
+<code>
+grep [options] pattern input_file_names
+</code>
+
+#Multiple Patterns
+
+<code>
+grep -e patternA -e patternB input_file_names
+grep --regex=patternA --regex=patternB input_file_names
+</code>
+or
+<code>
+grep -f pattern_file_name input_file_names
+grep --file=pattern_file_name input_file_names
+</code>
+Where pattern_file_name contains a list of patterns, separated by endlines.
+
+#Options
+
+Ignore case
+-i or --ignore-case
+
+Select non-matching lines instead
+-v or --invert-match
+
+Select whole word matches only
+-w or --word-regexp
+
+Select whole line matches only
+-x or --line-regexp
+
+Output just the count of matching lines per file
+-c or --count
+
+Output list of files containing no matches only
+-L or --files-without-match
+
+Output list of files containing a match only
+-l or --files-with-matches
+
+Stop searching a file after x matching lines are found
+-m x or --max-count=x
+
+Print just the matching section of lines
+-o or --only-matching
+
+Print line number by each output (starting at 1)
+-n or --line-number
+
+Include x lines after each matching line
+-A x or --after-context=x
+
+Include x lines before each matching line
+-B x or --before-context=x
+
+Include x lines before and after each matching lines
+-C x or --context=x or -x

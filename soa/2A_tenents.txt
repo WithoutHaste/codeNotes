@@ -1,0 +1,23 @@
+##Don Box's 4 Tenets of SOA
+
+#Boundaries are explicit
+
+Services interact by sending messages across boundaries. The boundaries are formal and explicit. No assumption is made about what is behind the boundary.
+
+Ex: the client does not know what kind of database or file system the service is using.
+
+#Services are autonomous
+
+A service does not care how a message was created, or what will happen in the client after the service performs its actions.
+
+Therefore, version and deploy the service independently from the client.
+
+Therefore, design service contracts assuming that once published, they cannot change.
+
+#Services share schema and contract, not class
+
+Only message pass between services, not code. The messages are not random; they have been agreed upon.
+
+#Service compatibility is based upon policy
+
+A service must express what it does and how a client should communicate with it in a standard representation.

@@ -1,0 +1,118 @@
+##Data Types
+
+#Undefined
+
+"undefined" is the null value in GMS.
+
+#Number
+
+Convert number to string
+<code>
+var myString = string(myNumber);
+</code>
+
+Numbers are stored with 32-bits, signed, so the upper limit is just over 2 billion (2,147,483,647).  Overflow loops back through zero. ** I suspect the limit is actually lower due to problems with (11334 div 86400000) **
+
+Convert large numbers to 64-bit when needed.
+<code>
+var x = int64(numA) + int64(numB);
+</code>
+
+Convert ascii code to character
+<code>
+var myChar = chr(ascii);
+</code>
+
+#String
+
+Length
+<code>
+var length = string_length("fullString");
+</code>
+
+Find substring. Returns 0 if substring not found, else returns 1-indexed position.
+<code>
+var position = string_pos("subString", "fullString");
+</code>
+
+Get character at 1-indexed position. Returns "" if index is out of range.
+<code>
+var character = string_char_at("fullString", index);
+</code>
+
+Get substring. StartIndex is 1-based.
+<code>
+var substring = string_copy("fullString", startIndex, length);
+</code>
+
+Convert string to number
+<code>
+var num = real(myString);
+</code>
+
+Convert char to ascii number
+<code>
+var ascii = ord(myChar);
+</code>
+
+<code>
+var upperCase = string_upper("string");
+var lowerCase = string_lower("string");
+</code>
+
+#Array version 2
+
+An array can contain multiple data types at once, including other arrays.
+
+Initialize:
+<code>
+var myEmptyArray = [];
+var myArray = ["x", 3, 5.7, ["abc", "def"]];
+</code>
+
+#Array version 1.4
+
+An array can contain multiple data types at once.
+
+Initialization is as you need it.
+<code>
+var myArray;
+myArray[0] = 1;
+myArray[1] = 56;
+</code>
+
+These are invalid ways of initializing an array.
+<code>
+var myArrayA = [];
+
+var myArrayB = [1, 2, 3];
+</code>
+
+Array length
+<code>
+var lengthA = array_length_1d(arrayA);
+
+var heightB = array_height_2d(arrayB); //refers to first dimension
+var lengthB = array_length_2d(arrayB, heightIndex); //refers to second dimension for a specific first index
+</code>
+
+If you want a script to edit an array, you can pass the array in as an argument and then you must return the edited array.
+<code>
+myArray = script_execute(scr_EditArray, myArray);
+</code>
+
+#Enum
+
+Enums are implicitly global.
+Enums have static values.
+
+By default, enums are numbered 0 to N.  You can also specify the integer values.
+<code>
+enum Colors { Red, Orange, Yellow, Green, Blue, Purple };
+
+enum Styles { Bold=1, Italic=2, Underlined=4, Superscript=8 };
+
+var x = Colors.Red;
+var y = Styles.Italic;
+</code>
+

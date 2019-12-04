@@ -1,0 +1,9 @@
+##Debugging
+
+#Console.log
+
+<code>
+console.log('a'); //outputs 'a'
+
+console.log('a', 'b', 'c'); //outputs 'a b c'
+</code>

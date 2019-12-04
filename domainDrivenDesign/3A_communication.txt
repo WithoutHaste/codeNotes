@@ -1,0 +1,13 @@
+##Communication
+
+It is critical to communicate extensively with the domain experts (your clients) throughout the project.
+
+One draw back is that your clients need a lot of time and willingness to talk to you about the project throughout it.
+
+#Ubiquitous Language
+
+It is critical to communicate using the langauage of your clients. Do not attempt to make them learn your language, they won't. Learn the terminology your clients use, and use that terminology in your documentation, in your database, and in your code.
+
+Always seek confirmation from the client about your understanding of the business. If their terminology is ambiguous, reach a shared agreement with them about what terms mean what.
+
+You may have a different ubiquituous language for different bounded contexts.

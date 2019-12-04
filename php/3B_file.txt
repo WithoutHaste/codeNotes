@@ -1,0 +1,9 @@
+##File
+
+#Write
+
+<code>
+$file = fopen($fileName, 'w');
+fwrite($file, $fullText);
+fclose($file);
+</code>

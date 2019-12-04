@@ -1,0 +1,28 @@
+##Custom Filters
+
+#app/core/core.module.js
+<code>
+angular.module('core', []);
+</code>
+
+#app/core/checkmark/checkmark.filter.js
+<code>
+angular.module('core').filter('checkmark', function() {
+	return function(input) {
+		//these are the unicode chars for check-mark and x-mark
+		return input ? '\u2713' : '\u2718';
+	};
+});
+</code>
+
+#app/app.module.js
+<code>
+angular.module('appName', ['core']);
+</code>
+
+#template
+<code>
+Features:<br/>
+	Infrared {{ $ctrl.phone.connectivity.infrared | checkmark }}<br/>
+	GPS {{ $ctrl.phone.connectivity.gps | checkmark }}
+</code>

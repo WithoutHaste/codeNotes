@@ -1,0 +1,10 @@
+##Tables
+
+#Temp
+
+<code>
+CREATE TEMPORARY TABLE myTable (
+	id int not null
+	//and other columns
+);
+</code>

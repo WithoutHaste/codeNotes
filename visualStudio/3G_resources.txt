@@ -1,0 +1,17 @@
+##Resources
+
+To include an image in a class library, it must be a Resource in the project.
+To add a Resource:
+1) Open project properties
+2) Go to the Resources tab
+3) Click Add Resource in tool bar and select the type of file you are adding
+4) Name the Resource as you would a constant
+5) Resources will be added in "Resources" folder in project
+6) Select resource file to see properties
+7) Set Build Action to "None"
+8) Set Copy to Output Direction to "Copy Always"
+
+To access a Resource in the code:
+<code>
+Image myImage = MyNamespace.Properties.Resources.MY_IMAGE;
+</code>

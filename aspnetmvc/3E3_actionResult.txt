@@ -1,0 +1,57 @@
+##Action Results
+
+Return types from action methods.
+
+#Types
+
+ViewResult:             a view is rendered and returned
+PartialViewResult:      a partial view is rendered and returned
+ContentResult:          returns string literal
+JsonResult:             returns JSON-formatted string
+JavaScriptResult:       returns a script to execute
+FileResult:             returns a file
+RedirectResult:         redirects to another url
+RedirectToRouteResult:  redirects to another controller/action
+EmptyResult:            nothing is returned
+HTTPUnauthorizedResult: returns HTTP 403 status
+
+#View Result Execution
+
+<code>
+return View();
+</code>
+
+<code>
+return View(model);
+</code>
+
+Default Razor view engine search locations:
+	~/Views/{controller}/{action}.cshtml
+	~/Views/Shared/{action}.cshtml
+	~/Areas/{area}/Views/{controller}/{action}.cshtml
+	~/Areas/{area}/Shared/{action}.cshtml
+The "conventional view" is one found in these locations.
+	
+<code>
+return View("nonConventionalView", model);
+</code>
+
+#JSON Result
+
+<code>
+//data will be converted to JSON-formatted and returned; also specifies that a GET request is allowed to receive this data
+return Json(myObject, JsonRequestBehavior.AllowGet);
+</code>
+
+#Redirect Result
+
+Returns a new url to the browser, which will issue another GET request for that url.
+
+Examples:
+<code>
+//redirects to url for Home Controller > Index Action > with argument name="Smith"
+return new RedirectToAction("Index", "Home", new { name = "Smith" });
+
+//redirects to a specific route mapper
+return new RedirectToRoute("Default");
+</code>

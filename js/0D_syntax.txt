@@ -1,0 +1,141 @@
+##Syntax
+
+#Comments
+
+<code>
+//comments
+
+/*
+multiline comments
+*/
+</code>
+
+#Variables
+
+JavaScript is loosely typed, meaning all variables have type 'var' and any value can be assigned to any variable. 
+
+<code>
+var x, y, z;
+x = 5;
+y = "text";
+z = [a, "b", 3];
+x = y;
+</code>
+
+Declare several variables in one statement
+<code>
+var x, y, z;
+</code>
+
+Define several variables in one statement
+<code>
+var x = 5, y = "text", z = [a, "b", 3];
+</code>
+
+Re-declaring a variable does not change the value - still, don't do this
+<code>
+var x = 5;
+var x;
+</code>
+
+#Literals
+
+Numbers
+<code>
+var x = 10.50;
+var y = 1001;
+</code>
+
+Strings can be surrounded by single or double quotes.
+<code>
+var x = "string";
+var y = 'string';
+var z = "inner ' ' quotes without escape characters";
+</code>
+
+#Expression
+
+An expression is any combination of values, variables, and operators that compute to a single value.
+
+The computation is called an evaluation.
+
+Ex: The expression "5 * 10" evaluates to "50".
+
+#Identifiers
+
+Identifiers include variable names, function names, labels, and keywords.
+
+The first character must be a letter, underscore (_), or dollar sign ($).  Usually, start with a letter.
+Other characters may be letters, digits, underscores, or dollar signs.
+
+Identifiers are case-sensitive.
+
+By convention, JavaScript identifiers are written in lower camel case. The first character is lowercase, the first character of each subsequent word is uppercase, and there are no spaces or underscores between words.
+<code>
+var inputLastName;
+var _countContents;
+</code>
+
+By convention, JavaScript global variables are named in all uppercase.
+
+By convention, JavaScript constants are named in all uppercase.
+
+#Statement
+
+Each JavaScript statement ends with a semicolon (;). You can put multiple statements on a single line, but by convention it is usually one line per statement.
+
+<code>
+var x = 5;
+var y = 6; var z = x + y; console.log(z);
+</code>
+
+A statement can stretch across multiple lines.
+
+#Whitespace
+
+JavaScript ignores extra whitespaces. Use them to make your code more legible.
+
+#Code Block
+
+JavaScript defines code blocks with { curly braces }.
+
+The convention in JavaScript is to use Egyptian style braces.
+
+Roman
+<code>
+function Display()
+{
+	//code here
+}
+</code>
+
+Egyptian
+<code>
+function Display() {
+	//code here
+}
+</code>
+
+Usually code blocks are functions, or loops, or switch statements. 
+You can also define named code blocks anywhere you want.
+To use breaks in this case, you must specify the code block's label.
+<code>
+var x = ["a", "b", "c", "d"];
+var text = "";
+myLabel: {
+	text += x[0];
+	text += x[1];
+	break myLabel;
+	text += x[2];
+	text += x[3];
+}
+console.log(text); //"ab"
+</code>
+
+#Keyword
+
+aka Reserved Word
+
+Keywords are special words with meaning in the programming language. You cannot use these words as variable names or function names.
+
+Ex: break, continue, do, while, for, function, if, else, return, switch, try, catch, var

@@ -1,0 +1,323 @@
+##Publish
+
+#Windows
+
+Assumes you are running Game Maker on Windows.
+
+To make an executable installer:
+1) File > Create Application
+2) Select Windows NSIS Installer
+3) Save
+4) Run the installer to install the game on Windows
+
+##Publish with Steamworks
+
+Version: Game Maker 2 with Steamworks SDK 1.42
+
+#Misc
+
+Windows files locations:
+- Steam games are installed at "Program Files (x86)\Steam\steamapps\common\"
+- Steam game icons are saved at "Program Files (x86)\Steam\steam\games\"
+
+Steamworks locations:
+- Your Steam App Id is the number in parentheses after your game name in the "Unreleased Apps" table on https://partner.steamgames.com/home.
+- It is also visible at the end of the url for the Steamworks pages for your app
+
+Check [https://help.yoyogames.com/hc/en-us > Guides > GMS2 Required SDKs] for updates to what Steamworks SDK goes with what version of Game Maker.
+
+Good walkthrough of store page setup and steps to release game: https://www.youtube.com/watch?v=lU1SFAa3QqM
+
+More references:
+Watch https://youtu.be/SoNH-v6aU9Q (how to use Steampipe to upload games to Steam)
+read https://partner.steamgames.com/doc/sdk/uploading
+
+#Steamworks SDK
+
+One-time setup:
+1) Download the version of the Steamworks SDK specific to your operating system.
+2) Unzip the sdk to a stable location
+
+Windows:
+1) ...there's a thing you need to run once...
+
+Mac:
+1) open Terminal > navigate to sdk/tools/ContentBuilder/builder_osx/osx32/
+2) run "chmod +x steamcmd"
+3) in Terminal still > navigate to sdk/tools/ContentBuilder/
+4) run "sh ./builder_osx/steamcmd.sh"
+(to open Terminal, open Finder > Applications > Utilities > Terminal)
+
+Per-game setup:
+1) Navigate to Steamworks sdk folder > tools > ContentBuilder > scripts
+2) rename the "app_build" script to include your game's App Id
+3) edit the app_build script
+- - replace the default App Id with your App Id
+- - edit Description if you want to (it will show up on Steamworks App Admin > Edit Steamwork Settings > SteamPipe tab > Builds page)
+- - under Depots, make sure the actual Depot Id and app_depot script filename are set
+4) rename the "depot_build" script to include your game's Depot Id for this platform
+5) edit the depot_build script
+- - replace the default Depot Id with your Depot Id
+- - set Content Root to the full path to the SDK's ContentBuilder folder
+- - set Local Path to a folder such that everything inside the folder will be packaged for this depot
+- - - the starting . location of Local Path is the Content Root folder
+- - - so I added a Windows_Content folder there and set Local path to ".\content\Windows_Content\*"
+6) copy all files from your Game Maker build to that "Local Path" folder
+7) navigate to Steamworks sdk folder > tools > ContentBuilder
+8) rename default run_build.bat to run_build_<game>.bat
+9) edit run_build_<game>.bat
+- - replace "account password" with just your Steam username (this will prompt you to enter your Steam password when the command is run)
+- - replace "app_build_1000.vdf" with "app_build_<yourAppId>.vdf"
+- - add line "pause" at the end so that you can read any messages before the command prompt closes
+- - (Mac only) make sure it starts with "builder_osx/steamcmd +login"
+
+#Steam
+
+Instructions valid as of 6/25/2018.
+
+Download the Steamworks SDK and unzip it to a stable location.
+
+Game Maker > Game Options > Main Options > General
+- set the "Steam Id" to your Steam App Id
+
+Game Maker > Game Options > Platforms > Windows
+- check "Enable Steam"
+
+Game Maker > File > Preferences > Platform Settings > Steam
+- set the "Steam SDK Location" to the "sdk" folder that was part of the Steamworks SDK download
+(You should now be able to run your game from Game Maker and use SHIFT+TAB to open/close the Steam overlay. That will prove you have setup Game Maker with Steamworks properly.)
+
+Steamworks home is at https://partner.steamgames.com
+Steamworks App Admin > Edit Steamworks Settings
+- fill in Application Name, Application Type, Supported Operating Systems, and anything else applicable
+Steamworks App Admin > Edit Steamworks Settings > Installation tab > General
+- fill in Installation Folder
+- click "Add New Launch Option"
+- - set Executable to the actual name of the executable
+- - set Operating System
+- - if the game will run on multiple platforms, add one Launch Option per OS
+- - - for Windows, I used
+- - - - "<game>.exe"
+- - - - Launch Type "Launch (Default)"
+- - - - Operating System "Windows"
+- - - - CPU Architecture "Any"
+- - - for Mac, I used 
+- - - - "<game>.app\Contents\MacOS\Mac_Runner"
+- - - - - "<game>.app\Contents\MacOS\<game>" was recommended but did not work
+- - - - Launch Type "Launch (Default)"
+- - - - Operating System "Mac OS X"
+- - - - CPU Architecture "Any"
+- - - for Linux (haven't verified)
+- - - - "<game>.x64"
+- - - - Launch Type "Launch (Default)"
+- - - - Operating System "Linux"
+- - - - CPU Architecture "Any"
+Steamworks App Admin > Edit Steamworks Settings > SteamPipe tab > Depots
+(a depot is a package of all the files Steam will download when the user downloads a game)
+(you can have several depots under one Steam App Id)
+- on the default depot, set the name to "<game> Depot Windows", set OS to Windows
+- click Add New Depot
+- on the new depot, set the name to "<game> Depot Mac", set OS to Mac
+- click Save
+Steamworks App Admin > Edit Steamworks Settings > Publish tab
+(yes you do this before uploading game files to Steam)
+(if your game is already released, this will affect your users)
+- click Prepare For Publishing > enter the confirmation text > click Really Publish
+- - there should be a message at the bottom of the page like "Publishing successful"
+
+Follow instructions for uploading files from each operation system before continuing here.
+
+Steamworks App Admin > click "Edit Steamworks Settings" > SteamPipe tab > Builds
+- you can click on a Depot Id to see a list of files in the depot
+- for the depot that customers should download by default, set "Set Build Live on Branch..." to "default" for that depot
+- click "Preview Change"
+- - if you then click "Set Build Live Now", then your build will be set live to users
+- - if your game is unreleased, this will not make your game live to customers
+- click "Set Build Live Now"
+
+If you are uploading more than one depot, set the first depot's build as default, then set the second depot's build as default. Steam will automatically combine the two builds into one default build.
+
+open Steam normally on your desktop > open Library > install your game
+play-test your game
+
+You can update a game even after it's release by uploading a new build, setting it as the default, and setting it live. The changes will be auto-downloaded when the user next opens Steam.
+	
+Steamworks ratings for games
+if you do not have an official rating from an agency, leave the rating blank
+- - from https://www.youtube.com/watch?v=lU1SFAa3QqM
+
+partner.steamgames.com > App Admin > Steamworks Settings > Community menu > Assets
+- - setup the community capsule (jpg file) and icon (ico file)
+
+partner.steamgames.com > App Admin > Steamworks Settings > Installation menu > Client Images
+- - setup all these images
+(this is the icon that will be used when installing the game, the Game Maker icon setup is irrelevant)
+		
+set pricing at App Admin > All Associated Packages... > select package > Propose Pricing
+- - it will take about a day for Steam to approve proposed prices
+
+recording game trailer in Windows 10
+1) open game
+2) type Window+G to open XBox game bar
+3) type Window+Alt+R to start recording
+4) type Window+Alt+R to stop recording again
+5) click the folder icon to open the location the recordings are saved to
+	
+#Windows
+
+Assumes you are running Game Maker on Windows.
+
+Assumes you've already setup the Windows Steamworks SDK.
+
+Export executable from Game Maker:
+1) Click the "Create Executable" button in the toolbar
+2) Save the compressed zip file
+3) Extract the compressed zip
+4) Copy the extract files to the "Local Path" location listed in your "depot_build" script
+
+Upload game to Steamworks:
+1) navigate to Steamworks sdk folder > tools > ContentBuilder
+2) run batch file "run_build_<game>.bat"
+- - you should get a message like "Successfully finished appId <your app id> build (BuildId <build id>)
+Your Windows build has now been uploaded to Steamworks.
+			
+#Mac: One-Time Setup
+
+Assumes you are running Game Maker on a Mac.
+
+Assumes you've already setup the Mac Steamworks SDK.
+
+General Setup:
+1) Get an Apple Id
+2) Get an Apple Developer Account
+3) Associate your Mac account with your Apple Id
+4) Mac desktop > click on the Apple icon in the upper left corner > System Preferences > Users & Groups > select your user and set the Apple Id
+- - (I couldn't get this option to show up for me, so I only have the Apple Id set in XCode)
+5) Install XCode on the Mac (requires MacOS version 10.13.2 or later)
+6) Link your XCode to your Apple Id (this is so the right certificates are loaded)
+- - XCode > Preferences > Accounts > add Apple Id account
+
+You will need to set up Apple certificates on your developement Mac, even if you aren't selling your app through the Apple App Store.
+
+You'll need one User Certificate per development Mac - it will be used for all games developed on the computer.
+
+You'll need one Development Certificate per development Mac to test your game locally.
+
+You'll need one Distribution Certificate per development Mac to publish your game.
+
+Setup Apple User Certificate:
+1) from your Mac > sign into https://developer.apple.com > Account with Apple Id
+2) click Certificates, IDs, and Profiles
+3) click Certificate Signing Request
+4) select iOS App Development under Development
+5) select App Store and Ad Hoc under Production
+6) follow the instructions for requesting a User Certificate
+- - do this once per computer, it will be used for all games made on that computer:
+- - - Mac desktop > Finder > Applications > Utilities > Keychain Access > Keychain Access menu > Certificate Assistant > Request a Certificate From a Certificate Authority
+- - - - User Email Address = your email address
+- - - - Common Name = name of certificate such as "John Smith Dev Key"
+- - - - CA Email Address - leave it empty
+- - - - Request Is = Saved to Disk
+- - - click Save
+7) back in the browser > Continue > Choose file (select your newly saved certificate request) > Continue
+8) Download the certificate to your Mac > double click the downloaded *.cer file > add the files to default (login) keychain > Done
+
+===============================================================================================
+XCode Certificate Types
+From https://stackoverflow.com/questions/29039462/which-certificate-should-i-use-to-sign-my-mac-os-x-application
+Apple Codesigning Certificate Types: Names:
+- iOS Development: iPhone Developer: Team member name used to run an iOS app on devices and use certain app services during development
+- iOS Distribution: iPhone Distribution: Team name used to distribute your iOS app on designated devices for testing or to submit it to the App Store
+- Mac Development: Mac Developer: Team member name used to enable certain app services during development and testing
+- Mac App Distribution: 3rd Party Mac Developer Installer: Team name used to sign and submit a Mac Installer Package, containing your signed app, to the Mac App Store
+- Developer Id Application: Developer Id Application: Team name used to sign a Mac app before distributing it outside the Mac App Store
+- Developer Id Installer: Developer Id Installer: Team name used to sign and distribute a Mac Installer Package, containing your signed app, outside the Mac App Store
+===============================================================================================
+
+Setup Apple Development Certificate:
+1) Mac desktop > XCode > XCode menu > Preferences > Accounts > select your account > Manage Certificates
+- - (you should see your User Certificate listed)
+2) click + (plus)
+3) click "Developer Id Application"
+(This will add a Development Certificate to your Mac
+
+Setup Apple Distribution Certificate:
+1) Mac desktop > XCode > XCode menu > Preferences > Accounts > select your account > Manage Certificates
+2) click + (plus)
+3) click "Developer Id Installer"
+
+That's it, XCode will add the certificates to your Keychain Access.
+If you think you've made a mistake, you can delete the certificates and start over.
+Certificates can also be Revoked through the Apple Developer webpage.
+You can view and delete the certificates at
+- Finder > Applications > Utilities > Keychain Access > My Certificates in left-hand sidebar
+- - right-click on a certificate > Get Info to view details
+- - right-click on a certificate > Delete to delete certificate
+
+#Mac: Per-Game Setup
+
+Create an Apple App Id
+1) login into developer.apple.com > Account > Overview > Certificates, Identifiers, and Profiles
+2) click App Ids
+3) click + (plus) to add a new one, fill in the form
+- - (Apple App Ids are formated as XXX.YYY, where XXX is your Team Id and YYY is a bundle id)
+- - App Id Description = name of your App
+- - default is to select Explicit App Id
+- - Bundle Id = com.<company name>.<app name>
+- - select the App Services your game needs
+4) click Continue > Register > Done
+
+Your Apple Team Id is visible on your developer Account page https://developer.apple.com/account/#/membership > Membership > Team Id
+
+Game Make Settings
+1) Game Maker > Preferences > Platform Settings > macOS
+- - set Team Id > Apply
+2) Game Maker > Preferences > Platform Settings > Steam > set Steamworks sdk location to the "sdk" folder
+3) Game Maker > Game Options > Platform Settings > Mac OS
+- - set "App Id" to the "com.<company>.<game>" id you created online
+- - set "Team Identifier" to the one listed on developer website > My Account as "Team Id"
+- - set "Signing Identifier" to the name of your distribution certificate (usually the default of "Developer ID Application:" is fine)
+4) Game Maker > Game Options > Platform Settings > Mac OS > Images
+- - set 1024x1024 png icon (not required if publishing through Steamworks)
+4) Game Maker > Game Options > Platform Settings > Mac OS > Packaging
+- - uncheck Build for Mac App Store
+
+Export game from Game Maker
+1) Game Maker > Click the "Create Executable" button in the toolbar > save <game>.zip
+- - you may need to enter your Mac password into a dialog for Codesign, if so select "Always Allow" because it will keep asking
+2) copy the files extracted from that zip to the ContentBuilder/content/Content_Mac folder
+3) open Terminal > navigate to ContentBuilder folder
+4) run "bash run_build_<game>.bat"
+	
+Steamworks Settings
+1) Log into partner.steamgames.com
+2) navigate to your game's App Admin page > All Associated Packages, DLC, Demos and Tools
+3) click on your game's package
+4) make sure all your depots are listed in "Depots Included"
+5) publish again if you made an changes
+
+If you are testing installation on Mac from Steam, and you need to uninstall and try again, you may need to manually remove the folder \Users\<you>\Library\Application Support\com.<company>.<game>"
+- - you can easily go to a file location in Mac with Command+Shift+G
+
+#Mac: icon
+
+Mac icon file format: *.icns
+
+How to make one on a Mac by copying and modifying an existing incs file
+1) Go to /System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/
+2) Copy one of those icns files to a working location
+3) Open the copy in Preview, should see the 4 resolution sizes it contains
+4) You'll need 4 sizes of your custom tiff (or png): 16x16, 32x32, 128x128, 512x512
+5) For each size:
+- - open the tiff in Preview
+- - select the corresponding size in the copied icns Preview
+- - click the enlarged image itself one time
+- - type Command-a to select all
+- - type Delete to remove that image
+- - click the enlarged image itself in the tiff Preview
+- - type Command-a to select all
+- - type Command-c to copy the selection
+- - click in the empty icns Preview window
+- - type Command-v to paste
+6) save the icns file when complete
+	

@@ -1,0 +1,287 @@
+##Customize Build
+
+If you make changes to the *.csproj file, or any file it imports, you'll need to unload and reload the project from Visual Studio for the changes to be picked up. 
+
+#Display Message
+
+Very simple example of extending the Visual Studio build process.
+1) Open the *.csproj file for your project.
+2) Scroll to the bottom where the "Target" tags are commented out.
+3) Uncomment the "AfterBuild" Target tag and add a Message to it:
+<code>
+	<Target Name="AfterBuild">
+		<Message Importance="High" Text="Test after build"/>
+	</Target>
+</code>
+The "Importance" is set to "High" so the message is certain to be shown.
+4) Build the project normally and see the message in the Output Window.
+
+#Targets
+
+Targets group tasks together in order and allow the build process to be factored into smaller units.
+
+To run a target as part of your build process, import it into your *.csproj file.
+See the default import as an example:
+<code>
+	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</code>
+
+You can create your own target files:
+<code>
+	<?xml version="1.0" encoding="utf-8"?>
+	<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<Target Name="PrintFromTarget" BeforeTargets="Build">
+			<Message Importance="High" Text="Printing from imported target"/>
+		</Target>
+	</Project>
+</code>
+Save the target text file "test.targets" in the same directory as the *.csproj file.
+
+The target "Name" can be set to anything. If two targets have the same Name, the last one defined will overwrite the earlier one.
+Do not use the standard Names "BeforeBuild" or "AfterBuild".
+
+A target will only be run once per build.
+
+Use the "BeforeTargets" and "AfterTargets" attributes to specify when during the build this target should be run.
+
+When specifying a directory path, use variables like these:
+Project="$(SolutionDir)\test.targets"
+Project="$(ProjectDir)\test.targets"
+Include="$(TargetDir)$(TargetName).txt"
+!![These are called Macros.](https://msdn.microsoft.com/en-us/library/c02as0cs.aspx)
+
+If you edit a *.targets file, you will need to manually unload and reload the project in Visual Studio for the changes to be loaded.
+Use "Rebuild" instead of "Build" when testing targets.
+
+#Incremental Build
+
+MSBuild will compare the timestamps of input and output files for a build/target command, and decide whether the command needs to be run.
+This speeds up builds by not redoing already completed work.
+
+To enable this in custom targets, you must have a one-to-one mapping between input and output files.
+
+#Exec Command
+
+To run a console command as part of the build:
+<code>
+<Target Name="Test" AfterTargets="AfterBuild">
+	<Exec Command="Path\Test.exe" IgnoreExitCode="True"/>
+</Target>
+</code>
+The "Test.exe" will be run.
+Any error codes from the exe will be ignored. If "IgnoreExitCode" were not specified, then an error in the exe would stop the build.
+
+To display the error from an Exec in the Output Window":
+<code>
+<Exec Command="Path\Test.exe" IgnoreExitCode="True" ConsoleToMSBuild="True">
+	<Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
+</Exec>
+<Message Importance="High" Text="$(OutputOfExec)"/>
+</code>
+
+To capture the exit code and only show the message if an error occurred:
+<code>
+<Exec Command="Path\Test.exe" IgnoreExitCode="True" ConsoleToMSBuild="True">
+	<Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
+	<Output TaskParameter="ExitCode" ItemName="ExitCodes"/>
+</Exec>
+<Message Importance="High" Text="$(OutputOfExec)" Condition="'%(ExitCodes.identity)'!=0"/>
+</code>
+
+#Tasks
+
+You can compile .Net classes that implement the ITask interface (in the Microsoft.Build.Framework library).
+These operations can be called from MSBuild Tasks.
+
+Either implement the ITask interface entirely, or derive from the Task class and override the functionality you need.
+The method Execute is required. This is what is run by MSBuild.
+Execute accepts no parameters and returns True if the task succeeds.
+
+<code>
+using System;  
+using Microsoft.Build.Framework;  
+using Microsoft.Build.Utilities;  
+  
+namespace MyTasks  
+{  
+	public class SimpleTask : Task  
+	{  
+		public override bool Execute()  
+		{  
+			return true;  
+		}  
+	}  
+}  
+</code>
+
+<code>
+<UsingTask TaskName="SimpleTask" AssemblyName="MyTasks"/>
+<Target Name="MyTarget">  
+	<SimpleTask />
+</Target>  
+</code>
+
+Instead of passing parameters to Execute, you can add Properties to the Task which will be set by MSBuild just before the Task is run.
+
+<code>
+using System;  
+using Microsoft.Build.Framework;  
+using Microsoft.Build.Utilities;  
+  
+namespace MyTasks  
+{  
+	public class SimpleTask : Task  
+	{  
+		public string MyProperty { get; set; }
+		public override bool Execute()  
+		{  
+			return true;  
+		}  
+	}  
+}  
+</code>
+
+<code>
+<UsingTask TaskName="SimpleTask" AssemblyName="MyTasks"/>  
+<Target Name="MyTarget">  
+	<SimpleTask MyProperty="SomeValue" />  
+</Target>  
+</code>
+
+If you add the "[Required]" attribute to a Task property, the build will fail if the property is not set in the project or target file.
+
+Specifying "AssemblyName" has not worked for me, using "AssemblyFile" instead:
+<code>
+<UsingTask TaskName="SimpleTask" AssemblyName="$(ProjectDir)$(OutputDir)MyTasks.dll"/>  
+</code>
+Assuming the dll is included in the project.
+If referencing a "ref" dll added by NuGet, make the path relative to $(SolutionDir).
+
+Errors in the task will stop the build. To ignore errors:
+<code>
+	<SimpleTask MyProperty="SomeValue" ContinueOnError="True" />  
+</code>
+
+To return output from a Task, mark the property as Output:
+<code>
+		[Output]
+		public string MyProperty { get; set; }
+</code>
+And capture the output in the target:
+<code>
+	<SimpleTask MyProperty="SomeValue">
+		<Output TaskParameter="MyProperty" PropertyName="LocalName"/>
+	</SimpleTask>
+</code>
+
+#Aliases
+
+You can alias a referenced library from within the *.csproj file.
+<code>
+    <Reference Include="WithoutHaste.DataFiles, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\WithoutHaste.DataFiles.1.0.0\lib\net20\WithoutHaste.DataFiles.dll</HintPath>
+      <Private>True</Private>
+	  <Aliases>EarlyDocs_WithoutHaste_DataFiles</Aliases>
+    </Reference>
+</code>
+This occurs before "using alias = namespace;" in the code.
+
+You cannot use periods (.) in the alias.
+
+Seems to be ignored by command line msbuild, which has no alternative method.
+
+#MSBuild Macros
+
+$(Configuration) The name of the current project configuration, for example, "Debug".
+
+$(DevEnvDir) The installation directory of Visual Studio (defined as drive + path); includes the trailing backslash '\'.
+
+$(FrameworkDir) The directory into which the .NET Framework was installed.
+
+$(FrameworkSDKDir) The directory into which you installed the .NET Framework. The .NET Framework could have been installed as part of Visual Studio or separately.
+
+$(FrameworkVersion) The version of the .NET Framework used by Visual Studio. Combined with $(FrameworkDir), the full path to the version of the .NET Framework use by Visual Studio.
+
+$(FxCopDir) The path to the fxcop.cmd file. The fxcop.cmd file is not installed with all Visual C++ editions.
+
+$(IntDir) Path to the directory specified for intermediate files. If this is a relative path, intermediate files go to this path appended to the project directory. This path should have a trailing slash. This resolves to the value for the Intermediate Directory property. Do not use $(OutDir) to define this property.
+
+$(OutDir) Path to the output file directory. If this is a relative path, output files go to this path appended to the project directory. This path should have a trailing slash. This resolves to the value for the Output Directory property. Do not use $(IntDir) to define this property.
+
+$(Platform) The name of current project platform, for example, "Win32".
+
+$(ProjectDir) The directory of the project (defined as drive + path); includes the trailing backslash '\'.
+
+$(ProjectExt) The file extension of the project. It includes the '.' before the file extension.
+
+$(ProjectFileName) The file name of the project (defined as base name + file extension).
+
+$(ProjectName) The base name of the project.
+
+$(ProjectPath) The absolute path name of the project (defined as drive + path + base name + file extension).
+
+$(RemoteMachine) Set to the value of the Remote Machine property on the Debug property page. See Changing Project Settings for a C/C++ Debug Configuration for more information.
+
+$(RootNameSpace) The namespace, if any, containing the application.
+
+$(SolutionDir) The directory of the solution (defined as drive + path); includes the trailing backslash '\'. Defined only when building a solution in the IDE.
+
+$(SolutionExt) The file extension of the solution. It includes the '.' before the file extension. Defined only when building a solution in the IDE.
+
+$(SolutionFileName) The file name of the solution (defined as base name + file extension). Defined only when building a solution in the IDE.
+
+$(SolutionName) The base name of the solution. Defined only when building a solution in the IDE.
+
+$(SolutionPath) The absolute path name of the solution (defined as drive + path + base name + file extension). Defined only when building a solution in the IDE.
+
+$(TargetDir) The directory of the primary output file for the build (defined as drive + path); includes the trailing backslash '\'.
+
+$(TargetExt) The file extension of the primary output file for the build. It includes the '.' before the file extension.
+
+$(TargetFileName) The file name of the primary output file for the build (defined as base name + file extension).
+
+$(TargetName) The base name of the primary output file for the build.
+
+$(TargetPath) The absolute path name of the primary output file for the build (defined as drive + path + base name + file extension).
+
+$(VCInstallDir) The directory that contains the C++ content of your Visual Studio installation. This property contains the version of the targeted Visual C++ toolset, which might be different that the host Visual Studio. For example, when building with $(PlatformToolset) = v140, $(VCInstallDir) contains the path to the Visual C++ 2015 installation.
+
+$(VSInstallDir) The directory into which you installed Visual Studio. This property contains the version of the targeted Visual Studio toolset, which might be different that the host Visual Studio. For example, when building with $(PlatformToolset) = v110, $(VSInstallDir) contains the path to the Visual Studio 2012 installation.
+
+$(WebDeployPath) The relative path from the web deployment root to where the project outputs belong. Returns the same value as RelativePath.
+
+$(WebDeployRoot) The absolute path to the location of <localhost>. For example, c:\inetpub\wwwroot.
+
+#Command Line
+
+Build a project with default configuration:
+<code>
+msbuild MyProject.csproj
+</code>
+
+Build a project with a specific configuration:
+<code>
+msbuild MyProject.csproj /P:Configuration=Debug
+msbuild MyProject.csproj /P:Configuration=Release
+</code>
+
+Build a project with a specific output path:
+(Path starts at *.csproj folder)
+<code>
+msbuild MyProject.csproj /P:OutDir=.\bin\Debug\net20\;Configuration=Debug
+</code>
+Alternative is to update the "OutputPath" tag in the *.csproj file.
+
+Build a project with a specific target framework, regardless of the one specified in the csproj file:
+<code>
+msbuild MyProject.csproj /P:TargetFrameworkVersion=v2.0;Configuration=Debug
+</code>
+
+Clean a project before rebuilding it:
+<code>
+msbuild MyProject.csproj /t:Clean;Rebuild /P:Configuration=Debug
+</code>
+There are several intermittent errors that cleaning (instead of just building) MIGHT fix. More testing is required.
+The errors I encountered looked like settings from other versions of the project were leaking, somehow, into the compiling version.
+(1) Sometimes the project built to the wrong Runtime Version, even though the TargetFrameworkVersion was specified.
+(2) Sometimes the project thought it needed extra dependencies that other versions of the project needed, but this one did not.

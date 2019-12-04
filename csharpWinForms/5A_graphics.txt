@@ -1,0 +1,8 @@
+##Graphics
+
+If you need to use a Graphics object, like for measuring text size, but none is available:
+<code>
+using(Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+{
+}
+</code>

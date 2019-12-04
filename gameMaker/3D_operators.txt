@@ -1,0 +1,16 @@
+##Operators
+
+Comparisons and arithmetic function as expected.
+
+div: integer result of division
+<code>
+var x = 60 div 49; //1 because 49 fits into 60 once
+var y = 60 div 100; //0 because 100 doesn't fit into 60
+</code>
+
+mod: remainder result of division
+<code>
+var x = 60 mod 49; //11
+var y = 60 mod 100; //60
+</code>
+

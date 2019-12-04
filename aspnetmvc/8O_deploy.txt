@@ -1,0 +1,134 @@
+##Deploying
+
+Assumes deployment to full version of IIS (Internet Information Services).
+
+#IIS Installation
+
+1) Download "Microsoft Web Platform Installer"
+2) Use it to install "IIS: ASP.Net 4.5"
+3) Use it to install "IIS Management Console"
+4) Use it to install "SQL Server Express 2008 R2"
+5) Use it to install "SQL Server 2008 R2 Management Studio Express with SP1"
+
+(IIS is not intended to be used with LocalDb, it requires a lot of configuration, so switching to SQL Server Express now.)
+
+SQL Server Express will ask for the "sa" password - the administrator password for the SQL Server.
+
+#Verify Installation
+
+1) Go to "localhost" in a browser
+2) You'll see the IIS splash screen.
+
+1) Open SQL Server Management Studio (SSMS)
+ - either specify <serverName>\SQLEXPRESS
+ - or .\SQLEXPRESS
+2) The connection will work, and there won't be any database yet.
+
+(SSMS can also connect to LocalDB, using the same "server name" as in your Web.config file)
+
+1) Open the IIS Management Console
+2) "...stay connected with latest Web Platform Components?" - No, if just learning the tool
+3) The console opens.
+
+#Application Pools
+
+In IIS Management Console, this is a process that one or more applications will run inside of.
+
+We'll use the DefaultAppPool to get started.
+
+#Sites
+
+In IIS Management Console, this is where all websites are listed. The default is just "Default Web Site".
+
+#Prepare for Deployment
+
+Turn off automatic database migrations:
+<code>
+internal sealed class Configuration : DbMigrationConfiguration<AppDb>
+{
+	public Configuration()
+	{
+		AutomaticMigrationsEnabled = false;
+	}
+}
+</code>
+
+Delete the initial database migration script - it is out of date. (~/Migrations/*_InitialCreate.cs)
+Delete the dev database from LocalDb. (easy to do through SSMS)
+In Package Manager Console: "Add-Migration InitialCreate".
+(If it makes sense) Tell the application to run the migration when it first starts:
+<code>
+using System.Data.Entity.Migrations;
+using MyApp.Migrations;
+...
+public class MvcApplication : System.Web.HttpApplication
+{
+	protected void Application_Start()
+	{
+		var migrator = new DbMigrator(new Configuration());
+		migrator.Update();
+		...
+		AreaRegistration.RegisterAllAreas();
+		...
+	}
+}
+//only do this if NOT using "Run Code First Migrations" in Publishing Profile
+</code>
+
+#First Deployment
+
+1) In Visual Studio > Right-click on web project > Publish
+2) Select a Publishing Profile
+ 2A) New Profile
+ 2B) Name: "Release"
+ 2C) Publish Method: Web Deploy
+ 2D) Service URL: localhost (requires administrator privileges, so run Visual Studio as admin)
+ OR
+ 2C) Publish Method: Web Deploy Package
+ 2D) Package Location: <somewhere on the file system>.zip
+ 2E) Site: "Default Web Site" (i.e. localhost)
+3) Configuration: Release
+4) Default Connection: ".\sqlexpress" using Windows Authentication with database name "MyAppProduction"
+ - the Web.config will be deployed with this default connection string
+5) Publish
+6) Open Command Prompt as Administrator
+7) Navigate to the *.zip directory
+8A) Run "release.deploy.cmd /T" to test the deployment, telling you about errors that may occur
+8B) Run "release.deploy.cmd /Y" to deploy
+9) Go to "localhost" in browser to see the site
+
+IIS worker process: w3wp.exe runs under identity "IIS APPPOOL\DefaultAppPool".
+This user account will need permission to access your database.
+
+1) Open SSMS > Security > Logins > New Login
+2) Login Name: "IIS APPPOOL\DefaultAppPool"
+3) User Mapping > check next to "MyAppProduction"
+4) Check off "db_datareader", "db_datawriter", and "db_ddladmin"
+5) Ok
+
+#Future Deployments
+
+1) In Visual Studio > Right-click on web project > Publish
+2) Select Publishing Profile "Release"
+3) Publish
+4) Open Command Prompt as Administrator
+5) Navigate to the *.zip directory
+6) Run "release.deploy.cmd /Y" to deploy
+7) Refresh web page to see changes
+
+#Deploy to Azure
+
+1) Go to WindowsAzure.com (Microsoft's cloud platform, to host websites, database, and virtual machines)
+2) Log in to Azure Portal
+3) Add new website, with database
+ 3A) URL: MyApp.azurewebsites.net
+ 3B) Region: West US (what region the datacenter is in)
+ 3C) Database: Create new SQL Database
+ 3D) Connection string name: "MyAppDb"
+4) Go into website dashboard > Download Publishing Profile > save as MyAzureProfile
+
+5) In Visual Studio > Right-click on web project > Publish
+6) Select Publishing Profile "MyAzureProfile" (might need to import it)
+7) Publish
+8) View web page at MyApp.azurewebsites.net
+ 

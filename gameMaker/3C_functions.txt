@@ -1,0 +1,35 @@
+##Misc Functions
+
+#Min Max
+
+<code>
+var myMin = min(numA, numB, numC, ...);
+var myMax = max(numA, numB, numC, ...);
+</code>
+
+#Random
+
+GameMaker always initialized with the same random seed. Therefore, you must run randomize at the beginning of your game to get a new random seed.
+<code>
+randomize();
+</code>
+
+Get random decimal from 0 to limit, not including limit
+<code>
+var a = random(limit);
+</code>
+
+Get random decimal from min to limit, not including limit
+<code>
+var a = random(min, limit);
+</code>
+
+Get random integer from 0 to max, including max
+<code>
+var a = irandom(max);
+</code>
+
+Get random integer from min to max, including both
+<code>
+var a = irandom_range(min, max);
+</code>

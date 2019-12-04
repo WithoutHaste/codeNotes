@@ -1,0 +1,8 @@
+##Sections
+
+When RenderSection("SectionName") is called, this is the what is rendered:
+<code>
+@section SectionName {
+	//stuff
+}
+</code>

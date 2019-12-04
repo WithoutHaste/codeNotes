@@ -1,0 +1,213 @@
+##Controlled Components
+
+HTML elements "input", "textarea", and "select" usually maintain their own state.
+But React expects all state to maintained internally.
+
+Controlled components are these HTML elements where React controls the state.
+
+For data validation and other advanced techniques:
+!![Formik](https://jaredpalmer.com/formik/)
+
+#Input
+
+Input example:
+<code>
+class NameForm extends React.Component 
+{
+	constructor(props) 
+	{
+		super(props);
+		this.state = {value: ''};
+
+		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+
+	handleChange(event) 
+	{
+		//occurs on every change to the input value
+		this.setState({value: event.target.value});
+		
+		//if you wanted the text to always be upper case
+		this.setState({value: event.target.value.toUpperCase()});		
+	}
+
+	handleSubmit(event) 
+	{
+		//pop up an alert instead of submitting the form
+		alert('A name was submitted: ' + this.state.value);
+		event.preventDefault();
+	}
+
+	render() 
+	{
+		return (
+			<form onSubmit={this.handleSubmit}>
+				<label>
+					Name:
+					<input type="text" value={this.state.value} onChange={this.handleChange} />
+				</label>
+				<input type="submit" value="Submit" />
+			</form>
+		);
+	}
+}
+</code>
+
+#Textarea
+
+Textarea example:
+<code>
+class EssayForm extends React.Component 
+{
+	constructor(props) 
+	{
+		super(props);
+		this.state = {
+			//initial text in textarea
+			value: 'Please write an essay about your favorite DOM element.'
+		};
+
+		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+
+	handleChange(event) 
+	{
+		this.setState({value: event.target.value});
+	}
+
+	handleSubmit(event) 
+	{
+		alert('An essay was submitted: ' + this.state.value);
+		event.preventDefault();
+	}
+
+	render() 
+	{
+		return (
+			<form onSubmit={this.handleSubmit}>
+				<label>
+					Essay:
+					<textarea value={this.state.value} onChange={this.handleChange} />
+				</label>
+				<input type="submit" value="Submit" />
+			</form>
+		);
+	}
+}
+</code>
+
+#Select
+
+For "select" tags, React marks the selected value in the "value" attribute of the "select" tag instead of on the "option".
+
+Select (drop down) example:
+<code>
+class FlavorForm extends React.Component 
+{
+	constructor(props) 
+	{
+		super(props);
+		this.state = {value: 'coconut'};
+
+		this.handleChange = this.handleChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+
+	handleChange(event) 
+	{
+		this.setState({value: event.target.value});
+	}
+
+	handleSubmit(event) 
+	{
+		alert('Your favorite flavor is: ' + this.state.value);
+		event.preventDefault();
+	}
+
+	render() 
+	{
+		return (
+			<form onSubmit={this.handleSubmit}>
+				<label>
+					Pick your favorite flavor:
+					<select value={this.state.value} onChange={this.handleChange}>
+						<option value="grapefruit">Grapefruit</option>
+						<option value="lime">Lime</option>
+						<option value="coconut">Coconut</option>
+						<option value="mango">Mango</option>
+					</select>
+				</label>
+				<input type="submit" value="Submit" />
+			</form>
+		);
+	}
+}
+</code>
+
+Multi-select: pass an array to "value"
+<code>
+	<select multiple={true} value={['B', 'C']}>
+</code>
+
+#Controlling Multiple Inputs
+
+<code>
+class Reservation extends React.Component 
+{
+	constructor(props) 
+	{
+		super(props);
+		this.state = {
+			isGoing: true,
+			numberOfGuests: 2
+		};
+
+		this.handleInputChange = this.handleInputChange.bind(this);
+	}
+
+	handleInputChange(event) 
+	{
+		const target = event.target;
+		const value = target.type === 'checkbox' ? target.checked : target.value;
+		const name = target.name;
+
+		//set state based on the name of the element
+		//this uses ES6 computed property name
+		this.setState({
+			[name]: value
+		});
+		
+		//ES5 equivalent
+		var partialState = {};
+		partialState[name] = value;
+		this.setState(partialState);
+	}
+
+	render() 
+	{
+		return (
+			<form>
+				<label>
+					Is going:
+					<input
+						name="isGoing"
+						type="checkbox"
+						checked={this.state.isGoing}
+						onChange={this.handleInputChange} />
+				</label>
+				<br />
+				<label>
+					Number of guests:
+					<input
+						name="numberOfGuests"
+						type="number"
+						value={this.state.numberOfGuests}
+						onChange={this.handleInputChange} />
+				</label>
+			</form>
+		);
+	}
+}
+</code>

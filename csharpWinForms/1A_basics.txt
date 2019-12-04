@@ -1,0 +1,33 @@
+##Basics
+
+My preference is to create forms entirely in code, so when I add a new file I select "class" instead of "form" to get a simple *.cs file.
+
+#Setup
+
+Set project icon file through Properties > Application.
+
+Start with a Windows Form application with output type Windows Application.
+
+Add a Setup-type project to the solution.
+...configuration details I didn't write down...
+1) Property AddRemoveProgramsIcon: set icon like the Shortcut instructions below
+2) Property Author: informational
+3) Property Manufacturer: program will be installed in this folder - no spaces
+4) Property ProductName: 
+5) Property Title:
+6) Property Version: set to version number
+
+To make the installation also add a desktop-shortcut to your program:
+1a) Right-click on the Setup project in Visual Studio
+1b) Select View > File System
+2a) Select Application Folder folder
+2b) Right-click on Primary Output From <your program>
+2c) Select Create Shortcut To Primary Output From <your program>
+3a) Drag the Shortcut to the User's Desktop folder
+4a) Click on the Shortcut to see its Properties
+4b) Select the Icon Property > Browse > Browse
+4c) Change Files Of Type to .exe
+4d) Click on Application Folder > Click on Primary Output From <your program> > Ok
+4e) The current icon should be selected already > Click Ok 
+5a) Back in the File System window, right-click on the Shortcut > Select Rename
+5b) Rename the Shortcut to just the display name of your program

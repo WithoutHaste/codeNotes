@@ -1,0 +1,96 @@
+##DbContext
+
+#OnModelCreating
+
+You can extend the creation of the model.
+
+This example shows keeping all persistence-related code in the DbContext, instead of spreading it among your Entities. (Optional, just someone's opinion).
+<code>
+public class GeographyContext : DbContext
+{
+	public DbSet<Country> Countries { get; set; }
+	public DbSet<City> Cities { get; set; }
+
+	protected override void OnModelCreating(DbModelBuilder modelBuilder)
+	{
+		modelBuilder.Types().Configure(t => t.Ignore("LocalField")); //ignore "LocalField" on every/any type
+		base.OnModelCreating(modelBuilder); //still run default behavior
+	}
+}
+</code>
+
+More configuration that cannot be set through Data Annotations:
+<code>
+public class GeographyContext : DbContext
+{
+	public DbSet<Country> Countries { get; set; }
+	public DbSet<City> Cities { get; set; }
+
+	protected override void OnModelCreating(DbModelBuilder modelBuilder)
+	{
+		modelBuilder.Entity<Country>().HasMany(country => country.Cities).WithRequired(city => city.Mayor).WillCascadeOnDelete(false);
+		
+		modelBuilder.Entity<Country>().Property(country => country.FoundedTimeStamp).IsFixedLength();
+	}
+}
+</code>
+This is called "Fluent Configurations" because the configuration is set using the fluent api.
+
+It is common to see these Fluent Configurations grouped into one-class-per-Entity, for organization purposes.
+<code>
+public class CountryConfiguration : EntityTypeConfiguration<Country>
+{
+	public CountryConfiguration()
+	{
+		HasMany(country => country.Cities).WithRequired(city => city.Mayor).WillCascadeOnDelete(false);
+		Property(country => country.FoundedTimeStamp).IsFixedLength();
+	}
+}
+
+public class GeographyContext : DbContext
+{
+	public DbSet<Country> Countries { get; set; }
+	public DbSet<City> Cities { get; set; }
+
+	protected override void OnModelCreating(DbModelBuilder modelBuilder)
+	{
+		modelBuilder.Configurations.Add(new CountryConfiguration());
+	}
+}
+</code>
+
+#SaveChanges
+
+You can extend the save method.
+
+This example shows setting CreatedDate/ModifiedDate fields on every/any type that has them.
+<code>
+public class GeographyContext : DbContext
+{
+	public DbSet<Country> Countries { get; set; }
+	public DbSet<City> Cities { get; set; }
+
+	protected override int SaveChanges()
+	{
+		var objQuery = this.ChangeTracker.Entries().Where(e => e.Entity is ITrackModification && (e.State == EntityState.Added || e.State == EntityState.Modified)).Select(e => e.Entity as ITrackModification);
+		foreach(var obj in objQuery)
+		{
+			obj.DateModified = DateTime.Now;
+			if(obj.DateCreated == DateTime.MinValue)
+			{
+				obj.DateCreated = obj.DateModified;
+			}
+		}
+		int result = base.SaveChanges(); //still run default behavior
+		return result;
+	}
+}
+</code>
+
+#ChangeTracker
+
+As of EF 6, you can easily check if any changes exist in a DbContext to be saved. This checks for changes to entities AND changes to relationships.
+
+<code>
+dbContext.ChangeTracker.HasChanges();
+</code>

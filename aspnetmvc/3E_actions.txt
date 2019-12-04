@@ -1,0 +1,114 @@
+##Actions
+
+An "action" is a public method in a controller.
+An action will handle an HTTP request and return a response.
+An action is selected (mostly) based on the name of the method.
+
+#Action Invoker
+
+<code>
+class MyActionInvoker : IActionInvoker { }
+//you'll usually use the default ControllerActionInvoker
+</code>
+
+The action invoker:
+	selects the controller method that best matches the request
+	runs authentication and authorization with Filters
+	Model Binding
+	Pre Action Filters
+	Execute Method (an ActionResult is returned)
+	Post Action Filters
+	Pre Result Filters
+	Execute Action Result
+	Post Result Filters
+	
+#Action Method Selection
+
+1) Find all the controller methods with the same name as in the route
+	Methods with incompatible Accept Verbs are not selected
+	Methods must be public, non-static, and non-special (ex: not constructors)
+1b) If only one method is possible, it is selected now
+2) Now disregard methods with custom Action Selectors that return false
+2b) If only one method is possible, it is selected now
+2c) If only one possible method has Action Selectors, it is selected now
+3) If there is more than one possible method still, an error is thrown (ambiguous call)
+
+(note that the parameter list is not taken into account)
+
+#Child Action
+
+A child action is a normal action that you intend to call from a View to render a partial view.
+
+You have the option of making an Action into just a child action by marking it with the ChildActionOnly Attribute. These actions cannot be reached by URL.
+
+<code>
+//in controller
+[ChildActionOnly]
+public ActionResult MyAction()
+{
+	bool isChildAction = controllerContext.IsChildAction; //true when action is called from a View
+
+	return PartialView();
+}
+
+//in view
+@Html.Action(...)       //returns the results as a string
+@Html.RenderAction(...) //renders results directly to the Response
+</code>
+
+Some sources say child action results are not cached, some say they are. So try that out.
+
+#Examples
+
+Differentiating getting a page from submitting a form:
+<code>
+[HttpGet]
+public ActionResult Edit(int id)
+{
+	var model = LoadModel(id);
+	return View(model);
+}
+
+[HttpPost]
+public ActionResult Edit(int id, FormCollection formData)
+{
+	var model = LoadModel(id);
+	if(TryUpdateModel(model)) //uses model binding to update "model" with the formData
+	{
+		SaveModel(model);
+		return RedirectToAction("Index");
+	}
+	return View(model); //update failed, let user try again
+}
+</code>
+On a successful update, the user is returned to a page where they can view the update and decide on another action.
+This also keeps the user from hitting "refresh" on the "submit form" action.
+
+Basic validation and save:
+<code>
+using System.Data;
+
+[HttpPost]
+public ActionResult Create(MyModel model)
+{
+	if(ModelState.IsValid) //checks that model binding worked smoothly, and all data validations passed
+	{
+		_db.MyModels.Add(model);
+		_db.SaveChanges();
+		return RedirectToAction("Index", new { id = model.Id });
+	}
+	return View(model); //display the Create page again, with data already filled in and validation errors displayed
+}
+
+[HttpPost]
+public ActionResult Edit(MyModel model)
+{
+	if(ModelState.IsValid)
+	{
+		_db.Entry(model).State = EntityState.Modified;
+		_db.SaveChanged();
+		return RedirectToAction("Index", new { id = model.Id });
+	}
+	return View(model);
+}
+</code>

@@ -1,0 +1,41 @@
+##Memory-Mapped Files
+
+Enables separate processes on the same machine to share data files.
+
+##Side-by-Side Execution
+
+Allows multiple versions of an application to run at the same time on the same machine.
+
+##Dispose vs Finalize
+
+Both methods perform garbage collection on an object on the heap.
+Finalize() is called by the CLR (Common Language Runtime) only.
+Dispose() can be called explicitly in the programmer's code.
+
+##Covariance and Contravariance
+
+(New in C# 4.0)
+
+#Covariance or "out"
+
+Casting a generic type to its base type.
+Ex: cast IEnumerable<string> to IEnumerable<Object>
+
+#Contravariance or "in"
+
+Casting a generic type to a derived type.
+Ex: cast IComparer<Object> to IComparer<string>
+
+##Localization and Globalization
+
+#Globalization
+
+Making an application ready for localization, by separating user-facing text and images from the application code. These resources are placed in a separate assembly.
+
+Making an application culture-neutral and language-neutral, and supporting localized user interfaces and regional data.
+
+#Localization
+
+Customizing an application for specific cultures/regions by creating different satellite assemblies with the applications resources (text and images) translated variously.
+
+Resources such as error messages, dialog boxes, menus, and so on.

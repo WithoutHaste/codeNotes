@@ -1,0 +1,147 @@
+##Security Scenarios
+
+#Intranet
+
+Both the services and the clients are inside the same firewall.
+
+The services use TCP bindings.
+- The default security mode is Transport.
+- The default protection level is Encrypted & Signed.
+
+The services use Windows-based authentication and authorization.
+- This is called Client Credential Type: Windows.
+
+These are all binding settings, so both the service and the client must use the same settings.
+Also, bindings are set per service contract, so you may divide your services into multiple contracts (interfaces) so that they can use different binding settings.
+
+Web.config or App.config on service:
+<code lang="xml">
+	<system.serviceModel>
+		<services>
+			<service name="GeographyManager"> <!-- this service implements both service contracts -->
+				<endpoint 
+					address="net.tcp://localhost:8009/GeographyService"
+					binding="netTcpBinding"
+					contract="IGeographyService"
+					/>
+				<endpoint
+					address="net.tcp://localhost:8009/GeographyAdminService"
+					binding="netTcpBinding"
+					contract="IGeographyAdminService"
+					bindingConfiguration="admin"
+					/>
+			</service>
+		</services>
+		<bindings>
+			<netTcpBinding>
+				<binding transactionFlow="true" sendTimeout="00:20:00">
+					<security mode="None" />
+				</binding>
+				<binding name="admin" transactionFlow="true" sendTimeout="00:20:00">
+					<security mode="Transport"> <!-- Transport is the default in TCP, but we're setting it explicitly to be clear -->
+						<transport 
+							clientCredentialType="Windows" <!-- use a Windows token passed in from the client -->
+							protectionLevel="EncryptAndSign" <!-- EncryptAndSign is the TCP default -->
+							/>
+					</security>
+				</binding>
+			</netTcpBinding>
+		</bindings>
+	</system.serviceModel>
+</code>
+This is an intranet application, so it is assumed that anyone with access to a computer that can access this application is allowed to use the normal read operations. So there's no security (beyond the defaults) set on that service contract.
+Only the administrative operations have security.
+
+#Internet
+
+The services are inside the firewall, the clients are outside the firewall.
+
+The services use HTTP bindings.
+
+The services use custom certificate-based authentication and authorization.
+
+Web.config or App.config on service:
+<code lang="xml">
+	<system.serviceModel>
+		<services>
+			<service name="GeographyManager"> <!-- this service implements both service contracts -->
+				<endpoint 
+					address="http://localhost/GeographyService"
+					binding="wsHttpBinding"
+					contract="IGeographyService"
+					/>
+				<endpoint
+					address="http://localhost/GeographyAdminService"
+					binding="wsHttpBinding"
+					contract="IGeographyAdminService"
+					bindingConfiguration="admin"
+					/>
+			</service>
+		</services>
+		<bindings>
+			<wsHttpBinding>
+				<binding transactionFlow="true" sendTimeout="00:20:00">
+					<security mode="None" />
+				</binding>
+				<binding name="admin" transactionFlow="true" sendTimeout="00:20:00">
+					<security mode="Message">
+						<message 
+							clientCredentialType="UserName" <!-- client will pass in a username/password token -->
+							negotiateServiceCredential="false" <!-- the client is not expected to have a copy of the public-key-certificate -->
+							/>
+					</security>
+				</binding>
+			</wsHttpBinding>
+		</bindings>
+	</system.serviceModel>
+</code>
+wsHttpBinding is a clear pipe by default - meaning we must setup encryption ourselves, using certificates.
+
+(You can set security mode to "Transport" with wsHttpBinding, which means using SSL and https endpoints. The SSL certificate will be installed on your server.)
+
+The service can choose to authenticate the username/password token in a few ways.
+By Windows Authentication, in the service config file:
+<code lang="xml">
+	<system.serviceModel>
+		<behaviors>
+			<serviceBehaviors>
+				<behavior>
+					<!-- convert the token into a Windows token and use it to Authenticate and to Authorize -->
+					<!-- use the specified certificate for encryption -->
+					<serviceCredentials>
+						<userNameAuthentication userNamePasswordValidationMode="Windows" />
+						<serviceCertificate 
+							storeLocation="LocalMachine"
+							storeName="Root"
+							findValue="MyCertificateName"
+							x509FindType="FindBySubjectName"
+							/>
+					</serviceCredentials>
+					<serviceAuthorization principalPermissionMode="UseWindowsGroups" />
+				</behavior>
+			</serviceBehaviors>
+		</behaviors>
+	</system.serviceModel>
+</code>
+
+If the service starts up without error, you've setup the certificate configuration correctly.
+
+#Protection Level
+
+In TCP, the protection levels are None, Signed, and Encrypted & Signed.
+- Encrypted means the data is not legible as it passes through the pipe. It is encrypted at one end and decrypted at the other.
+- When you don't use Encryption, it can be called using a "clear pipe", because the data is visible.
+- Signed means that each message comes with a checksum. If the checksum does not match the message, then the message has been tampered with and it is discarded.
+- The TCP default protected level is Encrypted & Signed.
+
+You can enforce the protection level a service contract will accept:
+(You can also enforce this at the operation level)
+<code>
+[ServiceContract(ProtectionLevel=ProtectionLevel.EncryptAndSign)]
+public interface IMySecureService
+{
+}
+</code>
+This defines the minimum acceptable protection level. It escalates through None, Sign, EncryptAndSign.
+
+If the binding protection level is less than the service contract protection level, you'll get an error like "The request message must be protected. This is required by an operation of the contract."

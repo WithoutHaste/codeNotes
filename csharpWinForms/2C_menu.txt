@@ -1,0 +1,32 @@
+##Menu
+
+Building the menu bar:
+<code>
+private void InitMenus()
+{
+	MenuItem fileMenu = new MenuItem("File");
+	fileMenu.MenuItems.Add("Open", new EventHandler(OpenFile));
+
+	this.Menu = new MainMenu();
+	this.Menu.MenuItems.Add(fileMenu);
+}
+
+private void OpenFile(object sender, EventArgs e)
+{
+}
+</code>
+
+Add context menu (right-click menu) to any control:
+<code>
+ContextMenu contextMenu = new ContextMenu();
+contextMenu.MenuItems.Add("Delete", OnDelete);
+
+myControl.ContextMenu = contextMenu;
+
+private void OnDelete(object sender, EventArgs e)
+{
+	Control myControl = (sender as MenuItem).GetContextMenu().SourceControl;
+}
+</code>
+Nothing else is required to enable the context menu.
+You can associate the same context menu with many different controls.

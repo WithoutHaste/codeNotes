@@ -1,0 +1,72 @@
+##Example from my work
+
+!![Names demo project](https://github.com/WithoutHaste/Names)
+
+<pinker>
+Layout:
+	[GUI]
+	[Service][Service Contracts]
+	[Use Case][Domain][Data Access][Data Store]
+Relate:
+	[GUI]->[Service],[Service Contracts]
+	[Service]->[Use Case],[Service Contracts],[Data Access.DataGateway]
+	[Use Case]->[Domain]
+	[Data Access]->[Domain]
+	[Data Access]->[Data Store]
+	
+[GUI]:
+	Define:
+		Names.Read.MvcSite
+		Names.Edit.MvcSite
+[Service Contracts]:
+	Define:
+		Names.Read.SoapService.Contracts
+		Names.Edit.SoapService.Contracts
+[Service]:
+	Define:
+		Names.Read.SoapService
+		Names.Edit.SoapService
+		|
+		Calls new SampleUseCase(new DataGateway)
+[Use Case]:
+	Layout:
+		[SampleUseCase]
+	Relate:
+		[SampleUseCase]->[Domain.Entities]
+		[SampleUseCase]-D[Domain.IUseCase]
+		[SampleUseCase]->[Domain.IDataGateway]
+	Define:
+		Names.Read.UseCases
+		Names.Edit.UseCases
+[Use Case.SampleUseCase]:
+	Define:
+		constructor(IDataGateway)
+[Domain]:
+	Layout:
+		[Entities]
+		[IDataGateway]
+		[IUseCase]
+	Define:
+		Names.Domain
+[Domain.Entities]:
+	Define:
+		Name.Domain.Entities
+[Domain.IUseCase]:
+	Define:
+		void Execute(Input)
+[Domain.IDataGateway]:
+	Define:
+		SampleEntity GetSampleEntity()
+[Data Access]:
+	Layout:
+		[DataGateway]
+		[DbContext]
+	Relate:
+		[DataGateway]->[Domain.Entities]
+		[DataGateway]-D[Domain.IDataGateway]
+	Define:
+		Names.DataAccess.EntityFramework
+[Data Store]:
+	Define:
+		SQL Server
+</pinker>

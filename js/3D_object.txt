@@ -1,0 +1,391 @@
+##Object
+
+A reference data type. In Javascript, they are structurally similar to maps/dictionaries.
+
+Objects are made up of properties and methods.
+- Properties are name:value pairs.
+- Methods are name:function pairs.
+
+#Declaration
+
+Object literal:
+<code>
+var obj = { 
+	firstName: "John", 
+	lastName: "Smith",
+	fullName: function() { 
+		return this.firstName + " " + this.lastName; 
+	}
+};
+</code>
+
+Object constructor:
+<code>
+var obj = new Object();
+obj.firstName = "John";
+obj.lastName = "Smith";
+obj.fullName = function() { 
+	return this.firstName + " " + this.lastName; 
+};
+</code>
+
+Reusable object definition:
+<code>
+function objFactory(lastName, firstName) 
+{
+	return {
+		firstName: firstName, 
+		lastName: lastName,
+		fullName: function() { 
+			return this.firstName + " " + this.lastName; 
+		}
+	};
+}
+var obj = objFactory("Smith", "John");
+console.log(obj.fullName()); //outputs "John Smith"
+</code>
+
+Constructor Design Pattern:
+<code>
+function MyObject(lastName, firstName) 
+{
+	this.lastName = lastName;
+	this.firstName = firstName;
+	this.fullName = function() { 
+		return this.firstName + " " + this.lastName; 
+	};
+}
+
+var obj = new MyObject("Smith", "John");
+console.log(obj.fullName()); //outputs "John Smith"
+</code>
+
+Create from prototype:
+<code>
+var myPrototype = {
+	firstName: "John", 
+	lastName: "Smith",
+	fullName: function() { 
+		return this.firstName + " " + this.lastName; 
+	}
+};
+var myCustomer = Object.create(myPrototype);
+console.log(myCustomer.fullName()); //outputs "John Smith"
+</code>
+
+#Properties
+
+<code>
+var x = obj.lastName;
+var y = obj["lastName"];
+</code>
+
+Property names can be strings. You can reference string indexes with dot notation or bracket notation.
+<code>
+var a = { firstName: "John" };
+console.log(a.firstName); //outputs "John"
+console.log(a["firstName"]); //outputs "John"
+
+var b = { "firstName": "John" };
+console.log(b.firstName); //outputs "John"
+console.log(b["firstName"]); //outputs "John"
+</code>
+
+Property names can be numbers. To reference number indexes, bracket notation is required.
+<code>
+var c = { 9: "a number" };
+console.log(c[9]); //outputs "a number"
+</code>
+
+Properties have attributes that all default to true:
+- configurable: can be deleted or changed/edited
+- enumerable: property can be returned in a for/in loop
+- writable: property can be changed/edited
+(ECMAScript also has access modifiers (getters/setters))
+
+All properties on built-in prototypes are non-enumerable, by standard.
+When adding your own methods or properties to built-in prototypes, it is suggested to use the "defineProperty" method so you can make the property non-enumerable.
+
+Inherited properties are defined on the object's prototype. Inherited properties can be overridden without affecting the prototype.
+<code>
+var prototypeA = { a: "Apple" };
+var objectC = Object.create(prototypeA);
+
+console.log(objectC.a); //Apple
+
+objectC.a = "Animal";
+console.log(objectC.a); //Animal
+console.log(prototypeA.a); //Apple
+
+prototypeA.a = "Almond";
+console.log(objectC.a); //Animal
+console.log(prototypeA.a); //Almond
+</code>
+
+Own properties are defined on just an instance of the object. The own properties of a prototype are the inherited properties of a derived object.
+
+Some operations consider all properties in the prototype chain, some consider only the own properties.
+
+#Methods
+
+<code>
+var z = obj.fullName();
+</code>
+
+#JSON
+
+JSON stands for JavaScript Object Notation. It is the syntax JavaScript expects when defining objects.
+
+Since it is a simple, clear text format, many other programs use JSON as well.
+
+Syntax:
+- Data is in name:value pairs
+- Data is separated by commas
+- Curly braces hold objects
+- Square brackets hold arrays
+
+In the strictest format, all labels and values are written as strings.
+
+Ex:
+<code>
+var x = {
+	"people": [
+		{ "name": "john" },
+		{ "name": "dick" },
+		{ "name": "harry" }
+	],
+	"time": "12:30"
+};
+</code>
+
+Convert Javascript object to JSON string:
+<code>
+var obj = { a: 1 };
+var x = JSON.stringify(obj);
+</code>
+
+Convert JSON string into JavaScript object:
+<code>
+var str = "{ a: 1 }";
+var x = JSON.parse(str);
+</code>
+
+#Prototype
+
+Prototypes are like parent classes in C#.
+
+All objects have a "prototype" property. This points to the parent object of this object. Prototypes can point to other prototypes, in what is called the "prototype chain".
+
+Example:
+<code>
+var prototypeA = { a: "Apple" };
+
+var prototypeB = Object.create(prototypeA);
+Object.defineProperty(prototypeB, "b", { value: "Banana" });
+
+var objectC = Object.create(prototypeB);
+objectC.c = "Citrus";
+
+console.log(objectC.a); //Apple
+console.log(objectC.b); //Banana
+console.log(objectC.c); //Citrus
+
+console.log(prototypeA.isPrototypeOf(prototypeB)); //true
+console.log(prototypeA.isPrototypeOf(objectC));    //true
+console.log(prototypeB.isPrototypeOf(objectC));    //true
+
+console.log(prototypeB.isPrototypeOf(prototypeA)); //false
+console.log(objectC.isPrototypeOf(prototypeB));    //false
+console.log(objectC.isPrototypeOf(prototypeA));    //false
+</code>
+"isPrototypeOf" differs from "instanceof". "prototypeA.isPrototypeOf" will compare "prototypeA" while "instanceof prototypeA" will compare "prototypeA.prototype".
+
+Changes to the prototype immediately affect all derived objects:
+<code>
+prototypeA.a = "Almond";
+console.log(objectC.a); //Almond
+</code>
+
+#Operations
+
+List all enumerable own properties:
+<code>
+var keys = Object.keys(myObject);
+</code>
+
+List all own properties:
+<code>
+var keys = Object.getOwnPropertyNames(myObject);
+</code>
+
+Example:
+<code>
+var prototypeA = { a: "Apple" };
+var objectB = Object.create(prototypeA);
+objectB.b = "Banana";
+Object.defineProperty(objectB, "c", { value: "Carrot", enumerable: false });
+
+console.log(Object.keys(objectB));                //["b"]
+console.log(Object.getOwnPropertyNames(objectB)); //["b", "c"]
+</code>
+
+Check that an object has a particular own property:
+<code>
+var hasProperty = myObject.hasOwnProperty(propertyName);
+</code>
+
+List all enumerable own AND inherited properties:
+<code>
+for(var propertyName in myObject)
+{
+}
+</code>
+
+Check that an object has a particular inherited property:
+<code>
+var hasProperty = ("propertyName" in myObject);
+</code>
+
+Remove property (only affects current object, not entire prototype chain):
+<code>
+delete myObject.propertyName;
+//or
+delete myObject["propertyName"];
+</code>
+
+Set property:
+<code>
+myObject.propertyName = "value";
+//or
+myObject["propertyName"] = "value";
+//or
+Object.defineProperty(myObject, "propertyName", { value: "value", enumerable: false });
+//or
+Object.defineProperty(myObject, { propertyA: { value: "value", enumerable: false }, propertyB: { value: "otherValue", enumerable: true } });
+</code>
+
+#Destructuring
+
+(see also Array Destructuring)
+
+Always surround the whole statement with the grouping operator ( ) so that the { object } is not interpreted as a code block.
+- Grouping operator is not needed if the statement starts with a keyword, such as "var".
+- If you do use the grouping operator, make sure the previous statement ends with a semi-colon (;) so that this ( ) is not interpreted as function arguments.
+
+Pull out multiple property values by name:
+<code>
+var a, b, c;
+({ b, a, c } = { a: 10, b: 20, x: 30 });
+console.log(a); // outputs 10
+console.log(b); // outputs 20
+console.log(c); // outputs undefined because no property named 'c'
+</code>
+
+Pull out multiple property values by different names:
+<code>
+var {a: x, b: y} = {a: 42, b: true};
+console.log(x); // outputs 42 
+console.log(y); // outputs true				
+</code>
+Convert invalid names to valid names:
+<code>
+var { 'fizz-buzz': fizz_buzz } = { 'fizz-buzz': true };
+console.log(fizz_buzz); //outputs true
+</code>
+
+Default values:
+<code>
+var {a = 1, b = 2} = {a: 3};
+console.log(a); // outputs 3
+console.log(b); // outputs 2
+</code>
+
+Different names plus default values:
+<code>
+var {a: x = 1, b: y = 2} = {a: 3};
+console.log(x); // outputs 3
+console.log(y); // outputs 2
+</code>
+
+Computed property names:
+<code>
+var key = 'x';
+var {[key]: name} = {x: 'Bob'};
+console.log(name); //outputs Bob
+</code>
+
+Nested data:
+<code>
+var metadata = {
+	title: 'Scratchpad',
+	translations: [
+		{
+			locale: 'de',
+			localization_tags: [],
+			last_edit: '2014-04-14T08:43:37',
+			url: '/de/docs/Tools/Scratchpad',
+			title: 'JavaScript-Umgebung'
+		},
+		{
+			locale: 'en',
+			localization_tags: [],
+			last_edit: '2018-11-14T03:02:59',
+			url: 'google.com',
+			title: 'Other'
+		}
+	]
+};
+var {title: englishTitle, translations: [{title: localeTitle}, {title: otherTitle}]} = metadata;
+console.log(englishTitle); // outputs Scratchpad
+console.log(localeTitle);  // outputs JavaScript-Umgebung
+console.log(otherTitle);   // outputs Other
+</code>
+
+Looping through data:
+<code>
+var people = [
+  {
+    name: 'Mike Smith',
+    family: { mother: 'Jane Smith', father: 'Harry Smith', sister: 'Samantha Smith' },
+    age: 35
+  },
+  {
+    name: 'Tom Jones',
+    family: { mother: 'Norah Jones', father: 'Richard Jones', brother: 'Howard Jones' },
+    age: 25
+  }
+];
+for (var {name: n, family: {father: f}} of people) 
+{
+	console.log('Name: ' + n + ', Father: ' + f);
+}
+// outputs Name: Mike Smith, Father: Harry Smith
+// outputs Name: Tom Jones, Father: Richard Jones
+</code>
+
+Default values in function parameters:
+<code>
+function myFunc({size = 'big', coords: {x = 0, y = 0}, radius = 99} = {}) {
+	console.log(size, x, y, radius);
+}
+myFunc({ coords: {x: 18}, radius: 22 }); //outputs big 18 0 22 
+</code>
+The final "= {}" is so that the function can be called with zero parameters.
+
+Default values in function parameters can refer to earlier parameters:
+<code>
+function myFunc([a, b] = [1, 2], {x: c} = {x: a + b}) 
+{
+	return a + b + c;
+}
+console.log(myFunc()); //outputs 6 because 1 + 2 + (1 + 2)
+</code>
+
+#Spread Syntax
+
+Create clones of objects:
+<code>
+var objA = { a: 0, b: 1, c: { d: 2 } };
+var objB = { x: { ...objA } };
+console.log(objB); //outputs { x: { a: 0, b: 1, c: { d: 2 } } }
+</code>

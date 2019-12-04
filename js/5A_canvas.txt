@@ -1,0 +1,72 @@
+##Canvas
+
+#Initialize
+
+HTML
+<code lang="markup">
+<canvas width='200px' height='200px' id='myCanvas'></canvas>
+</code>
+
+JS
+<code>
+var canvas = document.getElementById('myCanvas');
+var context = canvas.getContext('2d');
+</code>
+
+#Styles
+
+Colors
+<code>
+context.fillStyle = '#FF0000';
+context.strokeStyle = '#00FF00';
+</code>
+
+Solid line (default) or dashed line
+<code>
+context.setLineDash([]); //solid line
+context.setLineDash([lineDashLength, lineDashSpacing]); //dashed line
+</code>
+
+Line width
+<code>
+context.lineWidth = 5;
+</code>
+
+#Shapes
+
+<code>
+//basic shapes
+context.fillRect(25, 25, 100, 100);
+context.strokeRect(50, 50, 50, 50);
+
+//custom shapes
+context.beginPath();
+context.moveTo(75, 50);
+context.lineTo(100, 75);
+context.lineTo(100, 25);
+context.fill(); //fill in the shape
+
+context.beginPath();
+context.moveTo(75, 50);
+context.lineTo(100, 75);
+context.lineTo(100, 25);
+context.closePath(); //return to origin
+context.stroke(); //draw outline of path
+
+//given circle center (x,y) with radius
+//draw arc from start to end radians
+context.arc(x, y, radius, startRadians, endRadians); //0 radians = east point, clockwise
+context.stroke(); //actually draws the arc outline
+context.fill(); //actually draws the arc filled in
+</code>
+
+#Text
+
+<code>
+//draw text
+context.font = "12px Georgia";
+context.fillText(elementId, 10, 10);
+var textWidth = context.measureText(text).width;
+</code>
+
+There is not built-in measurement for text height.

@@ -1,0 +1,7 @@
+##Enterprise Service Bus
+
+ESB stands for Enterprise Service Bus.
+
+A service bus implements a communication system between mutually interacting software.
+
+Instead of N services each communicating with (N-1) services, all services communicate with the service bus only, resulting in only N lines of communication.  The service bus passes messages through to the target service.

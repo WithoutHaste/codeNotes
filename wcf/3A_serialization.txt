@@ -1,0 +1,54 @@
+##Serialization
+
+The old XmlSerializer has been replaced with the DataContractSerializer (System.Runtime.Serialization).
+
+The DataContractSerializer is an opt-in serializer, where the XmlSerializer was opt-out. 
+It looks for the DataContract and DataMember attributes on classes and their properties.
+
+Although, as of .Net 4.0, classes with an explicit DataContract attribute are assumed to be DataContracts with all public properties as DataMembers.
+
+Serialization calls "get" on each property.
+Deserialization calls "set" on each property.
+
+#Version Tolerance
+
+If the client sends extra data (parameters) to the service, the serializer will discard them instead of throwing an error.
+
+If the service returns an object with fewer properties than the client expects, those properties will be set to null.
+
+Now, if you DO want to catch those extra parameters, use the System.Runtime.Serialization interface IExtensibleDataObject.  The extra parameters will be placed in the ExtensionData property during deserialization.
+
+<code>
+[DataContract]
+public class MyObject : IExtensibleDataObject
+{
+	[DataMember]
+	public int PropertyA
+	{
+		get;
+		set;
+	}
+	
+	public ExtensionDataObject ExtensionData
+	{
+		get;
+		set;
+	}
+}
+</code>
+
+#varSpecified parameters
+
+When a .Net 1.1 client or ASMX client connects to a WCF service, it is using the old serializer. The result is that the client proxies add a "varSpecified" boolean parameter to each parameter in the operation signatures.
+
+<code>
+//WCF operation
+void MyMethod(int a, string b, string c);
+
+//becomes client proxy
+void MyMethod(int a, bool aSpecified, string b, bool bSpecified, string c, bool cSpecified);
+</code>
+
+This is because the client cannot handle nullable parameters, so it requires you to specify which parameters are set and which are not.
+
+You can avoid this by specifying the XmlSerializerFormat attribute on the service contract.

@@ -1,0 +1,98 @@
+##Transform
+
+Transform can rotate, scale, move, skew, etc.
+
+#Example
+
+<code>
+div {
+	transition: width 2s, transform 3s;
+	transform: rotate(45deg);
+	-ms-transform: rotate(45deg); /*IE 9 */
+	-webkit-transform: rotate(45deg); /* Chrome, Safari, Opera */
+}
+</code>
+
+#None
+
+No transform
+
+#Initial
+
+Return to the original value.
+
+#Inherit
+
+Copy parent element.
+
+#Matrix
+
+matrix(a,b,c,d,e,f)
+
+For each corner (x,y) of the element, calculates the new point as (a*x + c*y + e, b*x + d*y + f).
+
+<code>
+Matrix Dot Product
+[ a c e ]   [ x ]   [ a*x + c*y + e*1 ]
+[ b d f ] * [ y ] = [ b*x + d*y + f*1 ]
+[ 0 0 1 ]   [ 1 ]   [ 0*x + 0*y + 1*1 ]
+</code>
+
+#Matrix3d
+
+matrix3d(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p)
+(there are 16 arguments)
+
+#Translate
+
+translate(x,y)
+translate(x)
+
+Shifts the element origin point (a,b) to (a+x, b+y).
+
+#Translate3d
+
+translate3d(x,y,z)
+translateX(x)
+translateY(y)
+translateZ(z)
+
+#Scale
+
+The center of the element remains static, while the width and height are multiplied by the values provided.
+
+scale(widthX, heightX)
+
+Element with dimensions WxH changes to W*widthX x H*heightX.
+
+#Scale3d
+
+scale3d(widthX, heightX, depthX)
+scaleX(widthX)
+scaleY(heightX)
+scaleZ(depthX)
+
+#Rotate
+
+Rotates the element clockwise around its center.
+
+rotate(degrees)
+
+#Rotate3d
+
+Rotates the shape around the specified axis.
+
+rotate3d(x,y,z,degrees)
+rotateX(degrees)
+rotateY(degrees)
+rotateZ(degrees)
+
+#Skew
+
+skew(xDegrees, yDegrees)
+skewX(degrees)
+skewY(degrees)
+
+#Perspective
+
+perspective(n)

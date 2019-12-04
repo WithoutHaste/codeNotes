@@ -1,0 +1,37 @@
+##Variables
+
+This section discusses local variables. SQL Server does not allow global variables.
+
+Variables can be used in queries anywhere you could use a literal value.
+
+#Naming Convention
+
+Variable names must start with a "@" (at-sign).
+
+#DECLARE
+
+<code>
+DECLARE @variable dataType;
+DECLARE @variable AS dataType; --the AS is optional
+DECLARE @varA dataType, @varB dataType; --separate variables with a comma
+</code>
+
+#SET
+
+<code>
+SET @variable = value;
+
+SET @variable = (
+	SELECT COUNT(*) FROM tableName
+);
+</code>
+
+#SELECT
+
+Set variable values with a SELECT statement.
+<code>
+SELECT
+	@varA = columnA,
+	@varB = columnB
+FROM tableName;
+</code>

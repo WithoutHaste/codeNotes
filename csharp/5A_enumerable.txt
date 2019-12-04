@@ -1,0 +1,29 @@
+##Enumerating
+
+When you write
+<code>
+foreach(int x in list) { ... }
+</code>
+It is compiled to 
+<code>
+IEnumerator y = list.GetEnumerator();
+while(y.MoveNext())
+{
+	int x = (int)y.Current;
+}
+</code>
+
+#IEnumerable 
+
+Method signature IEnumerator GetEnumerator();
+
+#IEnumerator
+
+Property Current returns the currently selected element.
+
+Method signature bool MoveNext() returns true if there is an element available to get.
+
+Method signature void Reset() starts you back at the beginning of the enumerable.
+
+Confirmed: when the enumerator is first created, or is reset, the pointer is BEFORE the first element in the collection, thus you start by calling MoveNext().
+

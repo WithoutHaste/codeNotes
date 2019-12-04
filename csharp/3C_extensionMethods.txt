@@ -1,0 +1,35 @@
+## Extension Methods
+
+Extension methods allow you to "add" methods to existing types without creating a derived type. In actuality, you are creating static methods that take in the specified type as a parameter, but you are able to call these methods as if they were a part of that type.
+
+It is recommended to use them sparingly.
+
+Ex: LINQ query operators which extend IEnumerable
+
+<code>
+public static class MyExtensions
+{
+	public static int WordCount(this String s)
+	{
+		return s.Split(new char[] {' ','.','?'}, 
+			StringSplitOptions.RemoveEmptyEntries
+		).Length;
+	}
+}
+...
+int count = "Multi word test".WordCount();
+</code>
+
+The first parameter of an extension method specifies the type it extends, and uses the "this" keyword.
+
+Both the extension method, and the class it is a part of, must be static.
+
+You can organize extension methods into any part of your project.
+
+Because extension methods are not actually a part of their objects, they cannot access private or protected members of that object.
+
+Because extension methods are not actually a part of their objects, they can be called on null values, provided the type of the null is explicit.
+
+Extension methods cannot override class/interface methods, so make sure their signature is unique.
+
+.Net 2.0 does not support extension methods, only .Net 3.0 and higher.

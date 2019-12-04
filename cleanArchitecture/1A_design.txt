@@ -1,0 +1,35 @@
+##Design
+
+#Design vs Architecture
+
+Design (generally, low-level details) and Architecture (generally, high-level structure) are the same thing, at different ends of a continuum.
+
+Low-level design decisions must support the high-level architecture decisions.
+
+In either case, the measure of design quality is the measure of the effort required to meet the needs of the customer. If that effort is low, and stays low throughout the lifetime of the system, the design is good.
+
+If programmer productivity drops with each software release, that indicates the design is very bad.
+
+If architecture comes last [in considerations], then the system will become ever more costly to develop, and eventually change will become practically impossible for part or all of the system.
+
+#Speed
+
+"We can clean it up later; we just have to get to market first."
+If you don't have time for clean code now, you also won't have time for it later.
+
+"Writing messy code will speed us up in the short term."
+Making a mess is always slower than writing clean code, even in the short term.
+(Specific example of using TDD or not to complete the same task.)
+
+The only way to go fast, is to go well.
+
+#Restart from scratch
+
+You've got a mess. Should you restart from scratch, or do gradual refactoring?
+
+If you made a mess once, you'll do again, because your habits haven't changed.
+Implied that going through refactoring will teach you better habits.
+
+From my own experience: 
+We lost knowledge of many edge cases when we restarted a code base from scratch - those edge cases had to be rediscovered as bugs, gradually.
+We also grossly underestimated the time it would take to get a new, minimum product up and running.

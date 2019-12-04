@@ -1,0 +1,52 @@
+##Insert
+
+#Default Order
+
+Insert values in the default order:
+<code>
+INSERT INTO tableName VALUES (3, 'Texas', '2015/09/30');
+</code>
+
+#Custom Order
+
+Insert values in a specific order:
+<code>
+INSERT INTO tableName (columnB, columnD, columnA) VALUES ('Texas', 343.55, 3);
+</code>
+
+#Transfer Data
+
+You can also transfer data between tables with SELECT INTO:
+<code>
+SELECT * INTO tableB FROM tableA WHERE columnA = value;
+
+SELECT * INTO backupTable IN 'filename.mdb' FROM tableA;
+
+INSERT INTO backupTable SELECT * FROM tableA;
+
+INSERT INTO backupTable (columnA, columnB) SELECT columnA, columnB FROM tableA;
+</code>
+
+#Bulk Insert
+
+Bulk insert data from file.
+
+<code>
+BULK INSERT TableName
+FROM 'fileNameWithFullPath.csv'
+WITH (FIRSTROW = 2, --1st row is headers, skip it
+    FIELDTERMINATOR = ',',
+	ROWTERMINATOR='\n' );
+</code>
+The data needs to be in the same order as the table columns, and cover all columns.
+
+For identity columns: include the column in the CSV file, but leave the data blank.
+
+You cannot bulk insert multiple tables at once, where the tables have foreign key relations. Instead, bulk insert into a staging table and run a script to relate the data.
+
+Note that BULK INSERT does not support parameterization from (for instance) C# code. The entire query must be entered as one string.
+
+I've had trouble with BULK INSERT when the last column is a BIT. It works fine from SSMS, but from C# it gives a conversion error. This does not happen if the BIT column has other columns after it.
+
+Errors:
+- "Unexpected end of file" may indicate that you have too many columns in the data file.

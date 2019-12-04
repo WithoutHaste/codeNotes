@@ -1,0 +1,79 @@
+##CTE
+
+CTE stands for Common Table Expression. CTEs enable recursive queries, which can operate over hiearchical data.
+
+A CTE is a common result set that you can reference within another CRUD statement. It's like a temporary view.
+
+CTEs can help with:
+- legibility, because you've broken a complex query into separate pieces
+- instead of a view, if you only need it for one query
+- recursion, search hierarchical data
+
+You cannot use ORDER BY in a CTE definition, unless you also use TOP.
+
+#Non-Recursive
+
+<code>
+WITH cteName (columnA, columnB)
+AS
+(
+	SELECT
+		columnA,
+		columnB
+	FROM tableName
+)
+SELECT
+	columnA,
+	columnB
+FROM cteName;
+</code>
+
+You can define multiple CTEs within one statement.
+<code>
+WITH cteNameA (columnA, columnB)
+AS
+(
+	SELECT
+		columnA,
+		columnB
+	FROM tableName
+),
+cteNameB (columnC, columnD)
+AS
+(
+	SELECT
+		columnC,
+		columnD
+	FROM tableName
+)
+SELECT
+	columnA,
+	columnB,
+	columnC
+FROM cteNameA
+INNER JOIN cteNameB ON cteNameA.columnA = cteNameB.columnB;
+</code>
+
+#Recursive
+
+CTEs have a maximum recursion depth of 100.
+
+Example: count from 1 to 50
+<code>
+WITH cteName (columnA, columnB)
+AS
+(
+	--anchor member
+	SELECT 1 AS n
+
+	UNION ALL
+
+	--recursive member
+	SELECT n+1
+	FROM cteName --invocation
+	WHERE n < 50 --terminator
+)
+--select
+</code>
+
+Recursive CTEs cannot use GROUP BY, HAVING, LEFT/RIGHT/OUTER JOIN, SELECT DISTINCT, TOP, subqueries, or scalar aggregation.

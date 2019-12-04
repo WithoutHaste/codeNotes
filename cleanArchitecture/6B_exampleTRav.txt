@@ -1,0 +1,147 @@
+## Example from T-Rav
+
+!![T-Rav Clean Architecture demo project](https://github.com/T-rav/Reference-CleanArchitecture-DotNet)
+!![StoneAgeTechnologies Clean Architecture library](https://github.com/StoneAgeTechnologies/CleanArchitecture-DotNetCore)
+
+One use-case end-to-end:
+<pinker>
+Layout:
+	[{M1}Microsoft.Extensions.DependencyInjection][{C2}CleanArchitecture.Domain.Output]
+	[Reports]
+	[{C1}CleanArchitecture.Domain]
+[Reports]:
+	Layout:
+		[Example]
+		[UseCase][Data][Domain]
+		
+{M1}:
+	Layout:
+		[IServiceCollection]
+		[ServiceCollection][ServiceProvider]
+	Relate:
+		[ServiceCollection]-D[IServiceCollection]
+		
+[Reports.Data]:
+	Layout:
+		[ReportGateway]
+	Relate:
+		[ReportGateway]-D[Reports.Domain.Report.IReportGateway]
+		
+[Reports.UseCase]:
+	Layout:
+		[Word]
+		[Pdf]
+[Reports.UseCase.Word]:
+	Layout:
+		[RenderWordUseCase]
+	Relate:
+		[RenderWordUseCase]-D[Reports.Domain.Report.Word.IRenderWordUseCase]
+		[RenderWordUseCase]->[Reports.Domain.Report.IReportGateway]
+[Reports.UseCase.Word.RenderWordUseCase]:
+	Define:
+		constructor(IReportGateway)
+		Execute(RenderWordInput, IRespondWithSuccessOrError<IFileOutput, ErrorOutput>
+		- result = gateway.CreateWordReport(RenderWordInput)
+		- if result has errors, Respond_With_Errors(presenter, result)
+		- else Respond_With_File(RenderWordInput, presenter, result)
+[Reports.UseCase.Pdf]:
+	Layout:
+		[RenderAsWordThenPdfUseCase]
+	Relate:
+		[RenderAsWordThenPdfUseCase]-D[Reports.Domain.Pdf.IRenderAsWordThenPdfUseCase]
+
+[Reports.Example]:
+	Layout:
+		[Console]
+[Reports.Example.Console]:
+	Layout:
+		[Presenter][Domain]
+		[Program][ReportController]
+	Relate:
+		[Program]->[ReportController]
+		[Program]->{M1}.[ServiceCollection]
+		[Program]->{M1}.[ServiceProvider]
+		[Program]->[Reports.Example.Console.Presenter.ConsolePresenter]
+		[Program]->[Reports.UseCase.Word.RenderWordUseCase]
+		[Program]->[Reports.UseCase.Pdf.RenderAsWordThenPdfUseCase]
+		[Program]->[Reports.Data.ReportGateway]
+		[ReportController]->[Reports.Domain.Pdf.IRenderAsWordThenPdfUseCase]
+		[ReportController]->[Reports.Domain.Report.Word.IRenderWordUseCase]
+		[ReportController]->[Reports.Example.Console.Domain.IConsolePresenter]
+		[ReportController]->[Reports.Domain.Report.Word.RenderWordInput]
+[Reports.Example.Console.Program]:
+	Define:
+		Main
+		- setup ServiceCollection
+		- get a ReportController from ServiceCollection
+		- call ReportController.Run(writeLocation, dataLocation)
+[Reports.Example.Console.Presenter]:
+	Layout:
+		[ConsolePresenter]
+	Relate:
+		[ConsolePresenter]-D[Reports.Example.Console.Domain.IConsolePresenter]
+[Reports.Example.Console.ReportController]:
+	Define:
+		constructor(IRenderAsWordThenPdfUseCase, IRenderWordUseCase, IConsolePresenter)
+		Run(writeLocation, dataLocation)
+		- calls Render_Word_Report(writeLocation, dataLocation)
+		Render_Word_Report(writeLocation, dataLocation)
+		- calls Read_Report_Data(dataLocation)
+		- converts to RenderWordInput
+		- IRenderWordUseCase.Execute(RenderWordInput, IConsolePresenter)
+		- IConsolePresenter.Render(writeLocation, fileExtension)
+		Render_Pdf_Report(writeLocation, dataLocation)
+		- calls Read_Report_Data(dataLocation)
+		- converts with Create_Word_Input_Message(data)
+		- IRenderAsWordThenPdfUseCase.Execute(RenderWordInput, IConsolePresenter)
+		- IConsolePresenter.Render(writeLocation, fileExtension)
+		Read_Report_Data(dataLocation)
+		Create_Word_Input_Message(data)
+
+[Reports.Example.Console.Domain]:
+	Layout:
+		[IConsolePresenter]
+	Relate:
+		[IConsolePresenter]-D{C2}.[IRespondWithSuccessOrError<IFileOutput,ErrorOutput>]
+		
+[Reports.Domain]:
+	Layout:
+		[Report]
+		[Pdf]
+[Reports.Domain.Pdf]:
+	Layout:
+		[IRenderAsWordThenPdfUseCase]
+	Relate:
+		[IRenderAsWordThenPdfUseCase]-D{C1}.[IUseCase<RenderWordInput,IFileOutput>]
+		
+[Reports.Domain.Report]:
+	Layout:
+		[IReportGateway]
+		[Word]
+	Relate:
+		[IReportGateway]->[Reports.Domain.Report.Word.RenderWordInput]
+[Reports.Domain.Report.IReportGateway]:
+	Define:
+		RenderedDocumentOutput CreateWordDocument(RenderWordInput)
+		RenderedDocumentOutput CreateExcelReport(RenderExcelInput)
+[Reports.Domain.Report.Word]:
+	Layout:
+		[IRenderWordUseCase][RenderWordInput]
+	Relate:
+		[IRenderWordUseCase]-D{C1}.[IUseCase<RenderWordInput,IFileOutput>]
+[Reports.Domain.Report.Word.RenderWordInput]:
+	Define:
+		data structure
+
+{C2}:
+	Layout:
+		[IRespondWith<Error>]
+		[IRespondWithSuccessOrError<IFileOutput,ErrorOutput>]
+	Relate:
+		{C2}.[IRespondWithSuccessOrError<IFileOutput,ErrorOutput>]-D{C2}.[IRespondWith<Error>]
+		
+{C1}:
+	Layout:
+		[IUseCase<RenderWordInput,IFileOutput>]
+</pinker>
+

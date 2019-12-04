@@ -1,0 +1,36 @@
+##Mistakes
+
+Fear of over-committing: causes heavily padded time estimates and light sprints.
+- First, this isn't a terrible thing to make cautious estimates. As the team gains confidence in the amount of work they can complete, they will give more accurate estimates.
+- Second, management must give teams the leeway to make mistakes. Missing a few commitments is forgivable.
+
+Lack of team empowerment.
+- Management not supporting Agile is probably the #1 killer of switching to Agile.
+- Engage the team to actively help with planning, and provide their insights about the work.
+- Actually allow the team to make important decisions instead of just telling them what to do.
+- Management provides priorities, the team decides how the work will proceed.
+- This will involve negotiations between management and the team about what work can be completed by what deadlines.
+
+Poor communication: always harms a project.
+- Agile recommends daily face-to-face meetings (brief meetings) as a starting point.
+
+Assigning blame: Agile places team success above individual performance.
+- To engender trust in the team, management must not use individual metrics.
+
+The team doesn't have the skills to complete the project.
+
+The team isn't stable - people come and go.
+
+Estimating the actual time is will take to complete a task, instead of abstractly estimating its difficulty/complexity: Agile recommends abstract ranking of tasks as coming out more accurately.
+- I'm not sure about this part of Agile. It takes time to learn to accurately make time estimates, but you can learn it. And once you're selecting tasks for a sprint, you HAVE to have a good idea of how long they will take because you are committing to completing them in a set amount of time. So it seems easier to me to just train people to make accurate time estimates.
+- "Different team members give different time estimates based on their abilities" - absolutely, it makes sense that a time estimate is based on the people that will complete the task. So why not use a task system that can track multiple time estimates paired with developers? And you can still track the abstract magnitude of the task at the same time.
+
+Poor planning: Agile does not mean not planning anything.
+- Expect to spend 20% of your time on planning.
+- Planning includes backlog preparation, a daily stand-up, iteration and sprint planning, and release planning meetings.
+
+Poor testing: a task is not complete until it is thoroughly tested.
+- Do not try to be faster by skipping testing.
+- Test continuously throughout development.
+
+Ignoring customer feedback: you can't make the customer happy by ignoring them.

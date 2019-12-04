@@ -1,0 +1,17 @@
+##Icon
+
+Icon files (.ICO) include multiple copies of the image, at sizes 16x16, 32x32, 48x48, and 256x256 pixels.
+
+To create an ICO file from Inkscape:
+	1) save the image at each size
+	2) install ImageMagick
+	3) in console, run "magick convert 16.png 32.png 48.png 256.png icon.ico"
+	4) verify the file is correct with "identify icon.ico"
+	
+If you don't want to save multiple sizes from Inkscape, you can use ImageMagick for that, too.
+	1) "magick convert master.png -resize 32x32 32.png"
+	
+To load the icon into GameMaker:
+	1) open Global Game Settings
+	2) in the Windows tab, update the Game Icon
+	3) probably the same thing on the Mac tab

@@ -1,0 +1,90 @@
+##Index
+
+An ordered lookup for records in a table or view.
+
+#Naming Conventions
+
+Indexes are named "IX_TableName_ColumnNameA_ColumnNameB...".
+
+#Create
+
+<code>
+CREATE CLUSTERED INDEX indexName ON tableName(columnA, columnB);
+
+CREATE NONCLUSTERED INDEX indexName ON tableName(columnA, columnB);
+
+CREATE NONCLUSTERED INDEX indexName ON tableName(columnA, columnB) 
+WHERE columnA > 0;
+</code>
+
+<code>
+CREATE TABLE MyTable (
+	Id BIGINT IDENTITY(1,1),
+	Name VARCHAR(64) NOT NULL,
+	INDEX PK_MyTable_Name (Name)
+);
+</code>
+
+#Drop
+
+<code>
+DROP INDEX tableName.indexName;
+</code>
+
+#Search
+
+Table Sys.Indexes contains all clustered and non-clustered indexes.
+The object_id column is the object_id of the index's table.
+<code>
+SELECT * FROM Sys.Indexes WHERE Object_ID = Object_ID ('TableName')
+</code>
+
+#Clustered
+
+Limit one Clustered Index per table, this is the order the table will be physically stored in.
+
+Creating a non-clustered primary key
+<code>
+CREATE TABLE tableName
+(
+	columnName INT IDENTITY(1,1) PRIMARY KEY NONCLUSTERED
+);
+</code>
+If your table has no clustered index, it will have an index type "HEAP" in the Sys.Indexes table.
+
+How to choose a clustered index if it isn't your primary key?
+- Selective: many distinct values
+- Narrow: few columns
+- Immutable: or at least changes rarely (changes to clustered index value cause table re-ordering and fragmentation)
+- Searched: frequently used in queries that scan a range sequentially
+- Ordered: ideally, new records always have a higher value than previous records, so they just append to the end
+
+Your clustered index will be referenced by every non-clustered index, so a bad clustered index will affect everything.
+
+An example of a non-primary-key clustered index would be the Sale Date on a Sales table. It does not change, it always increases for new records, and it is frequently queried in ORDER BY and GROUP BY clauses.
+
+#Non-Clustered
+
+Unlimited number of Non-Clustered Indexes per table, but too many will significantly slow down Insert/Update/Delete operations.
+
+The slow-down effects don't generally happen until you get above 12-ish indexes.
+
+Create a non-clustered indexes for:
+- A column frequently used in WHERE clauses
+- A column frequently used in JOINs
+- A column frequently used in GROUP BY clauses
+
+Also sometimes for Included columns (i.e. columns in the SELECT clause). If every column mentioned in the entire query is in one Index, then no further I/O will be required to complete the query.
+
+I've read that Indexes will only be used for WHERE clauses if the columns in the Index exactly match the columns in the WHERE clause. But I can't remember if that was applicable to MS SQL Server.
+
+#Filtered
+
+Filtered Indexes are a type of Non-Clustered Indexes.
+
+The Index definition contains a WHERE clause, so not all records are Indexed.
+
+For example, you could create a Filtered Index to support a set of reports. If you know that the reports only focus on sales of amounts X to Y, and ignores outliers, then you can make an index with just those values included.
+
+Filtered Indexes cannot use CASE, NOT IN, BETWEEN, or date functions.
+

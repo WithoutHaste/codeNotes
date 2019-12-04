@@ -1,0 +1,9 @@
+##Basics
+
+The python file extension is *.py
+
+To execute (assuming Python is in your PATH variable) run "python myFile.py" from the console.
+
+Python is interpreted, not compiled.
+
+(todo: look up detailed list of differences between 2 and 3)

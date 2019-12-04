@@ -1,0 +1,8 @@
+##Preferences
+
+Settings menu > Preferences
+
+# Multi-instance
+
+Allows you to open more than one window at a time:
+Multi-instance > Always in multi-instance mode

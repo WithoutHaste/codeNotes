@@ -1,0 +1,20 @@
+##Postman
+
+#About
+
+!![Postman](https://www.getpostman.com/)
+
+Postman is a development environment for APIs.
+
+Features:
+- Send REST, SOAP, or GraphQL requests
+- Automate testing and integrate it into your pipeline
+- Design and Mock expected behavior
+- Generate and Publish documentation of your API
+- Monitor the health of your API
+- Collaborate in real-time with other developers
+- Built-in version control
+
+#Make a request
+
+Open Postman > Click + to open a new window > Select a HTTP Verb > enter the URL > click Send

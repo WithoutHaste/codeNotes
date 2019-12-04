@@ -1,0 +1,8 @@
+##Autos Window
+
+The Autos Windows displays variables used in the current (about to be executed) and previous statements.
+
+Debug menu > Windows > Autos
+(only available during debugging)
+
+When on a break, you can double-click a value and change it. (Or single-click, tab)

@@ -1,0 +1,169 @@
+##Request Life Cycle
+
+The events that occur every time an HTTP request is handled by the application.
+
+#Overview
+
+Request is received
+
+Routing
+
+	URL Routing Module
+	MVC Route Handler
+	MVC HTTP Handler
+
+Controller Initialization
+
+	Controller Factory
+	Activator
+	Dependency Resolution
+
+Action Execution
+
+	Model Binding
+	Action Filters
+	Action Execution
+	Post Action Filters
+	Action Result
+
+Result Execution
+
+	Result Filter
+	Invoke Action Result
+		if ViewResult type: View Engine, Find View, Render View
+	Post Result Filters
+
+Response is returned
+
+#Events
+
+These events are available to any ASP.Net framework.
+The events with "Post" prefix will run after that event occurs. The events with "Pre" or no prefix will (mostly) run before that event occurs.
+
+Application_Start
+	only runs on the first request
+HttpApplication.Init
+	only runs when a new HttpApplication is instantiated
+IHttpModule.Init
+	only runs when a new HttpApplication is instantiated
+	runs for each custom HttpModule registered in Web.config
+
+BeginRequest
+
+AuthenticateRequest
+	occurs after the request has been authenticated
+PostAuthenticateRequest
+
+AuthorizeRequest
+	occurs after the request has been authorized
+PostAuthorizeRequest
+
+ResolveRequestCache
+	if the request can be fulfilled from cache
+	then the result is returned and the rest of the process is skipped
+PostResolveRequestCache
+	occurs only if the request is fulfilled from cache
+	this is the event the URL Routing Module listens for
+
+MapRequestHandler
+	selects a handler to fulfill the request
+	usually uses an MvcHandler
+PostMapRequestHandler
+
+AcquireRequestState
+	acquires state data, such as session state
+PostAcquireRequestState
+
+PreRequestHandlerExecute
+RequestHandlerExecute
+---	all your MVC code executes between these events ---
+PostRequestHandlerExecute
+
+ReleaseRequestState
+	causes state modules to save the current state
+PostReleaseRequestState
+	after this event, any Response Filters will be run
+
+UpdateRequestCache
+	lets caching modules store responses for later use
+PostUpdateRequestCache
+
+LogRequest
+	performs logging
+PostLogRequest
+
+EndRequest
+	raised when the CompleteRequest method is called
+	
+#Request Handler Details
+
+Between RequestHandlerExecute and PostRequestHandlerExecute, all your MVC code gets run.
+Here are more details of what runs between those events.
+
+!![Diagram](https://opdhsblobprod04.blob.core.windows.net/contents/ed5efb1947c04bb29402a0c08d68958e/d0ed2e012c44fea6a368d4591ea14088?sv=2015-04-05&sr=b&sig=Vwa6FaICCyI9y4FYx6JFp1WxqggruTWbZZET4uLIPlk%3D&st=2019-10-14T17%3A19%3A10Z&se=2019-10-15T17%3A29%3A10Z&sp=r)
+
+HttpApplication.BeginProcessRequest
+
+IControllerFactory.CreateController (called by the MvcHandler)
+Controller Constructor
+Controller.BeginExecute (can be overriden)
+Controller.Initialize (can be overriden, but still needs to call the base)
+Controller.BeginExecuteCore
+Controller.CreateTempDataProvider (can be overriden)
+Controller.CreateActionInvoker (can be overriden)
+
+Authentication Filters invoked
+Authorization Filters invoked
+
+Model Binding to parameters
+
+Controller.OnActionExecuting
+each Action Filter is executed
+if action is async, it is run here
+Controller.EndExecute
+Controller.EndExecuteCore
+
+HttpApplication.EndProcessRequest
+	if action is synchronous, it is run here
+
+each Post Action Filter is executed
+Controller.OnActionExecuted
+
+each Authentication Filters is run
+	Controller.OnAuthenticationChallenge
+	AuthenticationFilter.OnAuthenticationChallenge
+	
+results are executed
+	Controller.OnResultExecuting
+	ResultFilter.OnResultExecuting
+	action result is invoked
+		for instance, find view and render it
+	ResultFilter.OnResultExecuted
+	Controller.OnResultExecuted
+	
+Controller.Dispose
+
+#Versions
+
+MapRequestHandler, LogRequest, and PostLogRequest are newer events. 
+They require:
+- IIS 7.0 Integrated Mode (or a later version of IIS)
+- .Net Framework 3.0 or later
+
+#HttpApplication
+
+Instances of HttpApplication are only created by the ASP.Net infrastructure.
+
+One instance of HttpApplication can only process on Http Request at a time.
+One instance of HttpApplication may be used to process multiple Http Requests over time.
+
+You can override the HttpApplication.Init method in Global.asax. This will run each time an HttpApplication is instantiated.
+<code>
+public class MvcApplication : System.Web.HttpApplication
+{
+	public override void Init()
+	{
+		//initialization code
+	}
+}
+</code>

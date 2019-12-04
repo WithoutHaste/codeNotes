@@ -1,0 +1,14 @@
+##Web
+
+Fetch document as text
+<code>
+$content = file_get_contents($url);
+echo $content;
+
+//cannot handle badly formed HTML
+$dom = new domDocument;
+$dom->loadHTML($content); 
+$dom->preserveWhiteSpace = false;
+$bodyTable = $dom->getelementsbytagname('body');
+echo $bodyTable->item(0);
+</code>

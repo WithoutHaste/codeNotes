@@ -1,0 +1,9 @@
+##Editors
+
+You can change the default editor a file type opens in by:
+- Right-Clicking on the file
+- Open With...
+- select the editor from the list of choices
+- click Set As Default
+
+I use this so my WinForms open in Source View instead of Design View.

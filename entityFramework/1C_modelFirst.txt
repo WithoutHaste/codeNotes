@@ -1,0 +1,5 @@
+##Model First
+
+Install the Entity Framework Power Tools to get the designer. This installation is a separate MSI you'll need to download.
+
+1) Right-click on Project > Add New Item > ADO.Net Entity Data Model > Empty EF Designer Model

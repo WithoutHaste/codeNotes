@@ -1,0 +1,86 @@
+##Basics
+
+JavaScript is a coding language that defines the behavior of web pages.
+
+#Languages
+
+JavaScript is a programming language.  It is usually used with HTML and CSS, which are not programming languages.  The difference is that a programming language defines a process, while a markup language adds context and structure to text.
+
+A programming language is a formal language capable of expressing computable functions.  More simply, with JavaScript you can use branching and loops to define a complex process.
+
+A markup language is a formal language that adds structure to normal text.  So with HTML alone, you can only define static web pages.  HTML describes the data.  It contains no logic.
+
+#Template
+
+Empty template for an HTML document that includes HTML, CSS, and JavaScript.  Save text as filename.html.
+
+<code>
+<html>
+	<head>
+		<!-- head tags here -->
+		<style type="text/css">
+			/*css here*/
+		</style>
+	</head>
+	<body>
+		<!-- page contents here -->
+	</body>
+</html>
+
+<script type="text/javascript">
+	//javascript here
+</script>
+</code>
+
+#Internal
+
+JavaScript can also be placed in the head element, but that is not standard practice.
+
+<code>
+<html>
+	<head>
+		<script type="text/javascript">
+			//javascript here
+		</script>
+	</head>
+	<body>
+	</body>
+</html>
+</code>
+
+You can also put the JavaScript element directly in the body of the HTML. This is not standard practice.  If you do follow this model, place the script tag after all other content so that compiling the JavaScript does not slow down display.
+
+<code>
+<html>
+	<body>
+		<script type="text/javascript">
+			//javascript here
+		</script>
+	</body>
+</html>
+</code>
+
+#External
+
+The convention is to only put references to external JavaScript files in the head.
+
+External javascript files improve loading speeds because they can be cached.  They separate the scripts from the HTML which makes both easier to read and maintain, and allows the scripts to be reused by other HTML pages.
+
+myHTML.html
+<code>
+<html>
+	<head>
+		<script type="text/javascript" src="myExternalScripts.js"></script>
+		<script type="text/javascript" src="http://a.really/specific/path.js"></script>
+	</head>
+	<body>
+		<div id="main">
+		</div>
+	</body>
+</html>
+</code>
+
+myExternalScripts.js
+<code>
+document.getElementById("main").innerHTML = "JavaScript test";
+</code>

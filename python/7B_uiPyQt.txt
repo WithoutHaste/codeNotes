@@ -1,0 +1,4 @@
+##UI PyQt
+
+Python implementation of the Qt library.
+Not sure about the license, but it looks like the free PyQt isn't available for commercial applications.

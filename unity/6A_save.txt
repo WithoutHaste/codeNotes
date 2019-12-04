@@ -1,0 +1,140 @@
+##Save Game
+
+#Data Class
+
+Create a serializable data class that contains the structure of the data you want to save.
+
+Example:
+<code>
+using System;
+
+[Serializable]
+public class CharacterData
+{
+    public string name;
+    public float progress;
+    public int gold;
+}
+</code>
+
+#PlayerPrefs
+
+PlayerPrefs is a built-in system for saving basic data in key/value pairs.
+
+Probably best used for application level settings.
+
+PlayerPrefs data is saved in the registry and is relatively easy to edit.
+
+Confirmed: you can test persistence of PlayerPrefs when testing game in Unity across multiple "Plays" of game.
+
+Example:
+<code>
+using System;
+using UnityEngine;
+
+public class CharacterData
+{
+    public string name;
+    public float progress;
+    public int gold;
+
+	public static void Save(CharacterData data, int slot)
+	{
+		PlayerPrefs.SetString("slot" + slot + "_name", data.name);
+		PlayerPrefs.SetFloat("slot" + slot + "_progress", data.progress);
+		PlayerPrefs.SetInt("slot" + slot + "_gold", data.gold);
+		PlayerPrefs.Save();
+	}
+	
+	public static CharacterData Load(int slot)
+	{
+		CharacterData data = new CharacterData();
+		data.name = PlayerPrefs.GetString("slot" + slot + "_name", defaultName);
+		data.progress = PlayerPrefs.GetFloat("slot" + slot + "_progress", defaultProgress);
+		data.gold = PlayerPrefs.GetInt("slot" + slot + "_gold", defaultGold);
+		return data;
+	}
+}
+</code>
+
+#JSON
+
+JSON files are easily read and edited by people.
+
+JSON is not suggested for very long strings as it can cause memory management errors.
+
+If you need to save more than basic data types, like if you need to save objects that reference other objects, you should probably use Binary format instead of JSON.
+
+Example:
+<code>
+using System.IO;
+using UnityEngine;
+
+public class JsonCharacterSaver
+{
+	private string dataPath;
+
+	void Start ()
+	{
+		dataPath = Path.Combine(Application.persistentDataPath, "CharacterData.txt");
+	}
+
+	static void Save(CharacterData data)
+	{
+		string jsonString = JsonUtility.ToJson(data);
+
+		using(StreamWriter streamWriter = File.CreateText(dataPath))
+		{
+			streamWriter.Write (jsonString);
+		}
+	}
+
+	static CharacterData Load()
+	{
+		using (StreamReader streamReader = File.OpenText(dataPath))
+		{
+			string jsonString = streamReader.ReadToEnd();
+			return JsonUtility.FromJson<CharacterData>(jsonString);
+		}
+	}
+}
+</code>
+
+#Binary
+
+It is safe to assume that no user can read or edit a binary file in-place.
+
+Example:
+<code>
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine;
+
+public class BinaryCharacterSaver
+{
+	private string dataPath;
+
+	void Start ()
+	{
+		dataPath = Path.Combine(Application.persistentDataPath, "CharacterData.dat");
+	}
+
+	static void Save(CharacterData data)
+	{
+		BinaryFormatter binaryFormatter = new BinaryFormatter();
+		using(FileStream fileStream = File.Open(dataPath, FileMode.OpenOrCreate))
+		{
+			binaryFormatter.Serialize(fileStream, data);
+		}
+	}
+
+	static CharacterData Load()
+	{
+		BinaryFormatter binaryFormatter = new BinaryFormatter();
+		using(FileStream fileStream = File.Open(dataPath, FileMode.Open))
+		{
+			return (CharacterData)binaryFormatter.Deserialize(fileStream);
+		}
+	}
+}
+</code>

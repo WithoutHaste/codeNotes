@@ -1,0 +1,28 @@
+##Images
+
+#Bitmap
+
+Basics:
+<code>
+using(Bitmap bitmap = new Bitmap(width, height))
+{
+	bitmap.SetResolution(resolutionX, resolutionY);
+	using(Graphics graphics = Graphics.FromImage(bitmap))
+	{
+		graphics.SmoothingMode = SmoothingMode.AntiAlias;
+		graphics.PageUnit = GraphicsUnit.Pixel;
+		//draw on bitmap
+	}
+	bitmap.Save("filename.png", ImageFormat.Png);
+}
+</code>
+
+C# bitmap runs on GDI Plus, which imposes size limits. The limit seems to be about here:
+(maybe)
+<code>
+//works
+Bitmap b = new Bitmap(23170,23170);
+
+//doesn't work
+Bitmap b = new Bitmap(23171,23170);
+</code>

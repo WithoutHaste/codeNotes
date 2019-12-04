@@ -1,0 +1,47 @@
+##Form
+
+Basic code for a form:
+<code>
+using System;
+using System.Windows.Forms;
+
+namespace MyNamespace
+{
+	static class MyProgram
+	{
+		[STAThread]
+		static void Main()
+		{
+			Application.Run(new MyForm());
+		}
+	}
+
+	public class MyForm : Form
+	{
+		public MyForm()
+		{
+			this.Text = "My Program";
+			this.Width = 800;
+			this.Height = 600;
+		}
+	}
+}
+</code>
+
+Form.ClientSize: The size of the client area of the form is the size of the form excluding the borders and the title bar. The client area of a form is the area within a form where controls can be placed.
+
+Toggle minimize and maximize options off with booleans:
+Form.MinimizeBox
+Form.MaximizeBox
+
+Hide minimize, maximize, and close buttons:
+<code>
+myForm.ControlBox = false;
+</code>
+If you don't want to hide all the buttons, you'll need to catch the FormClosing event instead and do something there.
+
+Hide just minimize or maximize buttons:
+<code>
+myForm.MinimizeBox = false;
+myForm.MaximizeBox = false;
+</code>

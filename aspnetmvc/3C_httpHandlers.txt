@@ -1,0 +1,19 @@
+##HTTP Handlers
+
+<code>
+class MyHTTPHandler : IHTTPHandler { }
+</code>
+
+These handlers are responsible for actually generating a response to a request. Only one HTTP Handler can execute per request.
+
+You usually do not need to make custom HTTP Handlers. Maybe if you need to handle an unusual file type. If so, you can register custom HTTP Handlers when registering routes - reference a Route Handler that returns your custom HTTP Handler.
+
+The default handler is MVCHandler.
+
+Your controller is initialized by:
+<code>
+	MVCHandler.ProcessRequest()
+		MVCHandler.ProcessRequestInit()
+			//gets Controller from ControllerFactory based on the supplied route
+		Controller.Execute()
+</code>

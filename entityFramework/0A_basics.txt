@@ -1,0 +1,21 @@
+##About
+
+The ADO.Net Entity Framework is an ORM (Object-Relational Mapping).
+A tool for simplifying your Data Access Layer.
+
+It's used to convert data between two incompatible type systems (in this case, between a relational database and a .Net object-oriented language).
+It allows you to work with relational data as domain-specific objects.
+
+Entity Framework automates databased-related activities so you don't have to write all the ADO.Net code yourself.
+This guarantees consistency in the generated SQL, and saves time.
+Creates connections, creates and executes commands.
+
+Queries are issued using LINQ To Entities, data is returned as strongly-typed objects.
+
+Also provides services like:
+	change tracking
+	identity resolution
+	lazy loading
+	query translation
+	
+Entity Framework can be pointed at many possible databases: SQL Server, SQL Compact, an Azure cloud, Oracle, DB2, etc.

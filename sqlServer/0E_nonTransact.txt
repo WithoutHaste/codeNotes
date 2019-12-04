@@ -1,0 +1,22 @@
+##Non-Transact
+
+Commands which are not Transact-SQL.
+They are only recognized by the sqlcmd and osql utilities, and SSMS code editor.
+
+#GO
+
+GO signals the end of a batch of Transact-SQL. Execution will not continue until the previous batch is complete.
+
+Note that local variable scope is limited to the current batch, so they cannot be referenced after a GO command.
+
+<code>
+some sql;
+GO
+some sql;
+</code>
+Note that GO is not followed by a semicolon.
+
+You can add a count to GO, which will cause the previous batch to run that many times before execution continues.
+<code>
+GO 5
+</code>

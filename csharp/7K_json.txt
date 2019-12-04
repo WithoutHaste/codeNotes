@@ -1,0 +1,186 @@
+##JSON.Newtonsoft
+
+#About
+
+You can install JSON.Newtonsoft from NuGet.
+It's a widely used library for working with JSON data.
+
+<code>
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+</code>
+
+#Dynamic Deserialize
+
+Unknown object structure:
+<code>
+using Newtonsoft.Json;
+
+dynamic obj = JsonConvert.DeserializeObject(jsonString);
+foreach(dynamic item in obj)
+{
+	string name = item.Name;
+	string value = item.Value;
+}
+</code>
+
+#Default Deserialize
+
+Deserialize to known object structure:
+<code>
+using Newtonsoft.Json;
+
+MyType obj = JsonConvert.DeserializeObject<MyType>(jsonString);
+</code>
+
+Object structure:
+<code>
+public class MyType
+{
+	public string propertyNameA { get; set; }
+	public string propertyNameB { get; set; }
+	public string[] arrayNameC { get; set; }
+	public MySubType objectNameD { get; set; }
+}
+
+public class MySubType
+{
+	public string propertyNameA { get; set; }
+	public string propertyNameB { get; set; }
+}
+</code>
+
+JSON string:
+<code lang="json">
+{
+	"propertyNameA": "valueA",
+	"propertyNameB": "valueB",
+	"arrayNameC": [
+		"valueC1",
+		"valueC2",
+		"valueC3"
+	],
+	"objectNameD": {
+		"propertyNameA": "valueA",
+		"propertyNameB": "valueB"
+	}
+}
+</code>
+
+#Custom Deserialize
+
+You'll need a custom converter if you are handling collections of objects in different formats.
+
+Deserialize with custom converter:
+<code>
+using Newtonsoft.Json;
+
+MyType myType = JsonConvert.DeserializeObject<MyType>(jsonString, new MyTypeConverter());
+</code>
+
+Custom converter:
+<code>
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+public class MyTypeConverter : JsonConverter
+{
+	//convert object to string
+	public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+	{
+		throw new NotImplementedException();
+	}
+
+	//return true if this Converter can convert to/from this Type
+	public override bool CanConvert(Type objectType)
+	{
+		return (objectType.Name == "MyType");
+	}
+
+	//convert string to object
+	public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+	{
+		if(reader.TokenType == JsonToken.StartObject)
+		{
+			MyType myType = new MyType();
+			JObject root = JObject.Load(reader);
+
+			//conversion code here
+
+			return myType;
+		}
+		return null;
+	}
+}
+</code>
+
+"reader.TokenType" can be any of these JsonToken values:
+!![JsonToken enum](https://www.newtonsoft.com/json/help/html/T_Newtonsoft_Json_JsonToken.htm)
+
+The JToken class hierarchy is:
+JToken (abstract)
+	JContainer (abstract)
+		JArray = a JSON array
+		JObject = a JSON object
+		JProperty = a JSON property key/value pair
+		JConstructor (is not part of the JSON specification)
+	JValue = a data value (any type: string, long, date, etc)
+		JRaw = a raw JSON string
+		
+Loop through the children of a JContainer:
+<code>
+forach(JToken child in container)
+{
+}
+//or
+foreach(JToken child in container.Children())
+{
+}
+//or: to see just children of a particular type
+foreach(JProperty property in container.Children<JProperty>())
+{
+}
+</code>
+
+Check the name of a JProperty and get the Value:
+<code>
+JProperty property = new JProperty("A", new JValue(1)); 
+if(property.Name == "A")
+{
+	if(property.Value is JValue)
+	{
+		long value = (long)(property.Value as JValue).Value;
+	}
+}
+</code>
+Note that all int will be stored as long.
+		
+#Serialize
+
+Example:
+<code>
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
+string result = new JObject( 
+	new JProperty("array1", 
+		new JArray("a", "b", "c")
+	), 
+	new JProperty("obj1", 
+		new JObject(
+			new JProperty("prop1", new JValue(1)), 
+			new JProperty("prop2", new JValue(2))
+		)
+	)
+).ToString();
+</code>
+Results in:
+<code lang="text">
+{
+	"array1": ["a", "b", "c"],
+	"obj1": { 
+		"prop1": 1, 
+		"prop2": 2 
+	} 
+) 
+</code>

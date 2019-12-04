@@ -1,0 +1,97 @@
+##Compiler Optimizations
+
+The Common Language Runtime (CLR) uses a Just In Time (JIT) compiler to compile each method in the Common Intermediate Language (CIL) into native code, and then runs the native code.
+
+Some compiler optimizations are made when the C# code is compiled into the Intermediate Language. Some are made when the IL is compiled into native code.
+
+#Constant Folding
+
+Computing constants at compile time.
+
+<code>
+//original
+int i = 320 * 220 * 49;
+
+//optimized
+int i = 3449600;
+</code>
+
+<code>
+//original
+int i = x * 0;
+
+//optimized
+int i = 0;
+</code>
+
+<code>
+//original
+string s = "abc" + "def";
+
+//optimized
+string s = "abcdef";
+</code>
+
+#Constant Propagation
+
+Replacing constant variables with their values. Constant propagation and folding are used alternately until no more changes can be made.
+
+<code>
+//original
+int x = 14;
+return y + (x/2);
+
+//optimized
+return y + 7;
+</code>
+
+#Common Subexpression Elimination
+
+<code>
+//original
+a = b * c + g;
+d = b * c * e;
+
+//optimized
+temp = b * c;
+a = temp + g;
+d = temp * e;
+</code>
+
+#Dead Code Elimination
+
+Removing code that does not affect the program result.  Include unreachable code and code that only affects dead variables.
+
+<code>
+//original
+int a = Method();
+int b = 7;
+return a + 3;
+b = 24;
+return 0;
+
+//optimized
+int a = Method();
+return a + 3;
+</code>
+
+#Loop Invariant Motions
+
+Code withing a loop that can be moved outside the loop without changing the result is moved.
+
+#Loop Unrolling
+
+Small loops with small bodies are "unrolled" into their linear steps.
+
+#Method Inlining
+
+Aka Inline Expansion. Replaces a method call with the full body of the method.
+
+May result in a small performance gain due to avoiding Function Call Overhead.
+May also cause a large memory penalty, like if a 10-line method is inlined in 10 locations, resulting in longer code.
+
+The .Net rule of thumb is methods < 32 bytes long, with no complex branching logic and no exception handling, may be inlined. The compiler errs on the side of not inlining methods.
+
+#Register Allocation
+
+Deciding which of your variables will first be allocation to the few available registers.

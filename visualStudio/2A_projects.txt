@@ -1,0 +1,8 @@
+##Projects
+
+#Start Multiple
+
+You can start multiple projects in on solution at the same time, with debugging enabled.
+
+Solution > right-click > Properties > Common Properties > Startup Project
+Select "multiple startup projects" and set Action to "start" on the ones you want to debug.

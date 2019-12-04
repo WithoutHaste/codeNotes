@@ -1,0 +1,27 @@
+##Error Handling
+
+#INI
+
+Set script to output error details to standard-out.
+<code>
+ini_set('display_errors', 'On');
+</code>
+
+#Try Catch
+
+<code>
+try
+{
+}
+catch(Exception $exception)
+{
+	echo $exception->getMessage();
+}
+</code>
+
+#Exception
+
+Throwing exceptions:
+<code>
+throw new Exception("Error message.");
+</code>

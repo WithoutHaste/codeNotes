@@ -1,0 +1,116 @@
+##Binding Configurations
+
+Remember that both service and client must use the exact same settings, to be able to communicate.
+
+For some settings, like timeouts, there can be a mismatch and the shorter setting will win.
+
+#Declarative Configuration
+
+<code lang="xml">
+<system.serviceModel>
+	<services>
+		<service name="MyService">
+			<endpoint
+				address="net.tcp://localhost:8080/MyService"
+				binding="netTcpBinding"
+				contract="IMyService"
+				bindingConfiguration="bindingConfigA"
+				/>
+		</service>
+	</services>
+	<bindings>
+		<netTcpBinding>
+			<binding name="bindingConfigA">
+				<!-- configuration here -->
+			</binding>
+		</netTcpBinding>
+	</bindings>
+</system.serviceModel>
+</code>
+
+If you don't give the "binding" a name, it will become the default settings to all "netTcpBinding" (or whatever the parent tag is) that do not specify a "bindingConfiguration".
+
+#Procedural Configuration
+
+<code>
+NetTcpBinding binding = new NetTcpBinding();
+binding.{property} = {value};
+</code>
+
+#Reliability
+
+Reliability: ensuring that the message reached the recipient.
+- netTcpBinding is reliable by default, other bindings have to configure this
+
+#Ordered Messaging
+
+Ordered messaging: ensuring that messages are serviced in the same order they were dispatched.
+- requires Reliability
+- useful for one-way communication
+
+<code lang="xml">
+<netTcpBinding>
+	<binding name="bindingConfigA">
+		<reliableSession ordered="true" />
+	</binding>
+</netTcpBinding>
+</code>
+
+#Inactivity Timeout
+
+Inactivity timeout: keeps the pipe open for X amount of time between messages, to see if another message arrives.
+- requires Reliability
+- enables transport sessions
+
+This is called a sliding timeout because it restarts each time activity occurs.
+
+<code lang="xml">
+<netTcpBinding>
+	<binding name="bindingConfigA" receiveTimeout="00:00:05"> <!-- must also be set when using inactivityTimeout -->
+		<reliableSession inactivityTimeout="00:00:05" /> <!-- 5 seconds -->
+	</binding>
+	<binding name="bindingConfigB" receiveTimeout="infinite">
+		<reliableSession inactivityTimeout="infinite" /> <!-- no timeout -->
+	</binding>
+</netTcpBinding>
+</code>
+
+#Receive Timeout
+
+Receive timeout: keeps the pipe open for X amount of time between messages, to see if another message arrives.
+- when not using Reliability
+- although this setting is still used when using Reliability?
+
+This is called a sliding timeout because it restarts each time a message is received.
+
+#Send Timeout
+
+Send timeout: the amount of time the client will wait to receive a response to their request.
+- default is 45sec
+
+<code lang="xml">
+<binding name="bindingConfigA" sendTimeout="00:00:05"> <!-- 5 seconds -->
+</binding>
+</code>
+
+#Message Size
+
+Message size: maximum size of a single message
+- default is 64kB
+
+<code lang="xml">
+<binding name="bindingConfigA" maxReceivedMessageSize="2000000"> <!-- 2MB -->
+</binding>
+</code>
+
+#Transaction flow
+
+#Transport-Level Sessions
+
+A transport session is an open pipe maintained between a service and client.
+- allows the service to identify a client (with the handshake) and maintain a connection to them
+
+These bindings support transport sessions:
+- netTcpBinding
+- netNamedPipeBinding
+- wsHttpBinding (with reliability or security turned on)

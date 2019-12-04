@@ -1,0 +1,43 @@
+##Conditionals
+
+#If
+
+<code>
+IF x > 10 THEN
+	//statements
+END IF;
+</code>
+
+<code>
+IF x > 10 THEN
+	//statements
+ELSIF
+	//statements
+ELSE
+	//statements
+END IF;
+</code>
+
+#Case
+
+<code>
+CASE
+	WHEN x == 0 THEN
+		//statements
+	WHEN x == 1, x == 2 THEN
+		//statements
+	ELSE
+		//statements
+END CASE;
+</code>
+
+<code>
+CASE x
+	WHEN 0 THEN
+		//statements
+	WHEN 1,2 THEN
+		//statements
+	ELSE
+		//statements
+END CASE;
+</code>

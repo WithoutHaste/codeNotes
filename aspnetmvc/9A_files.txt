@@ -1,0 +1,7 @@
+##Files
+
+#Global.aspx
+
+This is a default file included in MVC applications.
+
+Global.aspx includes class MVCApplication (derived from HTTPApplication). This class exposes many lifecycle events you can hook into.

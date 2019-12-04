@@ -1,0 +1,22 @@
+##DbSet
+
+#Get
+
+Search for an entity by id:
+<code>
+//returns object or null
+Country country = _db.Countries.Find(id);
+</code>
+
+Include an associated collection when loading data:
+<code>
+//the country plus all its associated cities will load with one query (Eager Loading)
+Country country = _db.Countries.Include(country => country.Cities).First();
+</code>
+
+#Add
+
+<code>
+_db.Countries.Add(new Country(name, etc));
+_db.SaveChanges();
+</code>

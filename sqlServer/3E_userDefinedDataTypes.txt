@@ -1,0 +1,56 @@
+##User-Defined Data Types
+
+You can create a reusable named type which is a built-in type with constraints already applied.
+
+#Create
+
+Format:
+<code>
+CREATE TYPE typeName
+FROM dataType constraints;
+</code>
+
+Example:
+<code>
+CREATE TYPE socialSecurityNumber
+FROM CHAR(11) NOT NULL;
+</code>
+
+#Default
+
+Bind a default value to a user-defined data type:
+<code>
+CREATE DEFAULT default_PhoneNumber
+AS 'Unknown Number';
+
+EXEC sp_bindefault('Default_PhoneNumber', dataTypeName);
+</code>
+
+#Rule
+
+Bind a rule to a user-defined data type:
+<code>
+CREATE RULE rule_CountryCode
+AS
+	@CountryCode NOT LIKE 'A%';
+	
+EXEC sp_bindrule(rule_CountryCode, "CountryCode");
+</code>
+
+<code>
+CREATE RULE rule_PhoneNumber
+AS
+	(@phone='UnknownNumber')
+	OR (
+		LEN(@phone)=14
+		AND SUBSTRING(@phone,1,1)= '+'
+		AND SUBSTRING(@phone,4,1)= '-'
+	);
+	
+EXEC sp_bindrule(rule_PhoneNumber, "PhoneNumber");
+</code>
+
+To remove a rule:
+<code>
+EXEC sp_unbindrule("dataTypeName");
+</code>

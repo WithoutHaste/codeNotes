@@ -1,0 +1,31 @@
+##Values
+
+#Behavior vs Structure
+
+Software provides two values to stakeholders:
+1) Behavior - it does the task
+2) Structure - it can be extended and modified
+
+Software developers are responsible for both values, but frequently focus on just Behavior to the detriment of the system.
+
+The "soft" in "software" means that software is intended to be an easily modified way to tell machines to complete tasks. Machines are "hardware" - difficult to change. "Software" greatly increases the usefulness of the machine, by making it easy to change the tasks it completes.
+
+Therefore, the main goal of software is to be easy to modify.
+
+When stakeholders change their mind about a feature, it should be simple and easy to make that change to the software. The difficulty of making a change should be proportional only to the scope of the change, and not to the shape of the change.
+
+Is it more important for a software system to work, or to be easy to change? If you give me a program that works but is (practically) impossible to change, it won't work after the requirements change, and I won't be able to make it work. If you give me a program that doesn't work but is easy to change, then I can make it work. Therefore, it is more important that a program be easy to change, than that it works now.
+
+Once a program becomes practically impossible to change (due to labor and time costs), it will be discarded.
+
+#Urgent vs Important
+
+Dwight D. Eisenhower:
+I have two kinds of problems, the urgent and the important. The urgent are not important, and the important are never urgent.
+
+1) Important + Urgent         = Structure + Behavior
+2) Important + Not urgent     = Structure
+3) Not important + Urgent     = Behavior
+4) Not important + Not urgent = ?
+
+(3) is often placed at the highest priority by both managers and programmers.

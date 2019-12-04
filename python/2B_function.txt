@@ -1,0 +1,243 @@
+##Functions
+
+Functions must be defined before they are called (higher in the text file).
+Functions that are in an imported file can call each other in any order.
+
+<code>
+def funcName(): #definition
+	print("my function")
+	
+funcName() #invocation
+</code>
+
+Empty function:
+<code>
+def empty():
+	pass
+</code>
+
+#First Class
+
+Functions are first class objects in Python.
+
+They can be passed as arguments.
+They can be returned from functions.
+
+They can be nested within other functions.
+Nested functions are only in-scope to their direct parent.
+Nested functions have access to parent variables.
+
+#Scope
+
+Variables assigned a value anywhere in the function are assumed local, unless explicitly declared global.
+<code>
+x = 1
+
+def funcA():
+	global x
+	x = 2
+	print(x) #prints 2
+	
+funcA()	
+print(x) #prints 2
+</code>
+
+Declaring a new variable global within a function will define it as a global variable, but you should not rely on this because the variable does not exist until the function is run
+<code>
+def funcA():
+	global x
+	x = 2
+	print(x)
+	
+funcA()	
+print(x) #throws an error if funcA is not run first
+</code>
+
+#Method Overloading
+
+Python does not support method overloading.
+
+This example won't work, because the last function definition overwrites the earlier ones of the same name.
+<code>
+ #!!! This won't work !!!
+def myFunc(a):
+	print("a")
+def myFunc(a, b):
+	print("a b")
+def myFunc(a, b, c):
+	print("a b c")
+myFunc(1)
+myFunc(1, 2)
+myFunc(1, 2, 3)
+</code>
+
+#Monkey Patching
+
+Monkey patching is overwriting the behavior of a function or object after it is defined. Do not do this.
+
+#Default Parameters
+
+You can use default parameter values to get close to method overloading.
+
+<code>
+def myFunc(a, b=None, c=None):
+	if c == None:
+		if b == None:
+			print(a)
+			return
+		print(a, b)
+		return
+	print(a, b, c)
+myFunc(1)
+myFunc(1, 2)
+myFunc(1, 2, 3)
+</code>
+
+#Passing Parameters
+
+Python passes all arguments as pass-by-object-reference.  That means that all object operations used in a function will affect the original argument, except for instantiation.
+
+Immutable objects are de-facto pass-by-value because any edit operation automatically re-instantiates the object.
+
+<code>
+def funcA(listA):
+	listA.append("a") #most object operations affect the original argument
+def funcB(listB):
+	listB = ["b", "b", "b"] #instantiate does not affect the original argument
+
+x = [1, 2, 3]
+print(x) #[1, 2, 3]
+
+funcA(x)
+print(x) #[1, 2, 3, "a"]
+
+funcB(x)
+print(x) #[1, 2, 3, "a"]
+</code>
+
+#*args **kwargs
+
+args is a tuple containing an undefined number of function arguments.
+
+kwargs is a dictionary containing an undefined number of named (aka keyword) arguments.
+
+<code>
+def myMethod(a, b, *args, **kwargs):
+	print(a)
+	print(b)
+	print(args)
+	print(kwargs["name"])
+
+myMethod(1, 2, 3, 4, 5, name="Bob", age=6)
+	#prints:
+	#1
+	#2
+	#(3, 4, 5)
+	#Bob
+</code>
+
+"args" and "kwargs" are conventions. You can call these parameters anything you want, provided they start with "*" and "**".
+
+You cannot list normal parameters between the *args and *kwargs.
+
+You cannot enter keyword arguments into the *args tuple, and you cannot enter normal arguments into the **kwargs dictionary.
+
+#Closures
+
+Functions can be defined within in functions in Python, like in Javascript.
+
+The inner function has access to the outer function's local variables and parameters, even after the outer function has completed.
+
+See Javascript notes about closures.
+
+#Lambda
+
+Lambdas are single-expression, anonymous functions. They do not use a "return" keyword, they simply return the result of their single expression, if any.
+
+<code>
+myDisplay = lambda: print("hey")
+myDisplay() #prints "hey"
+
+myCalc = lambda: 5 + 3
+print(myCalc()) #prints 8
+</code>
+
+Lambdas with parameters:
+<code>
+myCalc = lambda x: x + 3
+print(myCalc(6)) #prints 9
+
+myCalc = lambda x, y, z: x + y + z
+print(myCalc(3, 4, 5)) #prints 12
+</code>
+
+#Type Hinting
+
+Python 3.5 and higher.
+
+Specify what parameter types are expected, and what type will be returned.
+
+The types of parameters passed in are checked at runtime; sending in the wrong type will result in a TypeError exception.
+Subtypes of the specified type are accepted.
+
+The return type is not verified, so you can actually return any value you want.
+
+<code>
+	#expects a string parameter, and returns a string
+	def hello_world(name: str) -> str:
+		return(f"Hello {name}")
+</code>
+
+Python 3.5.2 and higher: type hinting for function signatures.
+<code>
+	from typing import Callable
+
+	#parameter is expected to be a function that accepts two integers as arguments and returns a string
+	def method_a(callback: Callable[[int,int],str]) -> None:
+		print(callback(1,2))
+
+	#parameter is expected to be a function (with any arguments) that returns a string
+	def method_b(callback: Callable[...,str]) -> None:
+		print(callback([], "a", 1)
+</code>
+
+#Type Aliasing
+
+Python 3.5 and higher. Related to type hinting.
+
+You can define an alias for a type, and then use the alias anywhere you'd use the type.
+
+<code>
+	MyAlias = str
+
+	def hello_world(name: MyAlias) -> MyAlias:
+		return(f"Hello {name}")
+
+	print(hello_world("Bob")) #outputs "Hello Bob"
+	print(hello_world(1))     #throw TypeError
+	</code>
+
+	Example from documentation:
+	<code>
+	from typing import List, Dict, Tuple, Sequence
+
+	Vector = List[float]
+	ConnectionOptions = Dict[str,str]
+	Address = Tuple[str,int]
+
+	#these alias can be used to enforce parameter types
+</code>
+
+#New Type
+
+Python 3.5 and higher. (Maybe belongs in a different section of notes)
+
+Easily define a new subtype of a type, with a distinct name.
+
+<code>
+from typing import NewType
+
+UserId = NewType('UserId', int)
+</code>
+
+Note that using UserId in an operation will return an int.

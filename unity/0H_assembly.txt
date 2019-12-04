@@ -1,0 +1,33 @@
+##Adding References
+
+#Core .Net
+
+To include assemblies in your Unity project:
+
+1. Create a text file named "mcs.rsp" in the project's "Assets" directory.
+2. Add lines to the text file like "-r:System.Net.Http.dll". This example includes the assembly "System.Net.Http".
+3. Restart the Unity editor after any change to this file.
+4. You'll still need the "using System.Net.Http;" line in the C# file.
+
+#NuGet
+
+To include a NuGet package:
+
+1. Browse NuGet and download the package you want.
+2. Open the download location and rename the *.nupkg file to *.zip.
+3. Within the zip file, find the *.dll (such as lib/netstandard2.0/Newtonsoft.Json.dll) and copy it.
+4. Add folder "Plugins" to the project's "Assets" folder. This is a special folder name in Unity.
+5. Paste the *.dll file into the "Plugins" folder.
+6. Create text file "link.xml" in the project's "Assets" folder. This will fix reflection errors.
+- link.xml contents:
+<code>
+	<linker>
+	  <assembly fullname="System.Core">
+		<type fullname="System.Linq.Expressions.Interpreter.LightLambda" preserve="all" />
+	  </assembly>
+	</linker>
+</code>
+7. Give focus to Unity program and let it think through those changes.
+8. Add the "using Newtonsoft.Json;" line to your C# file.
+
+Any dependencies the package have must be added manually in the same way.

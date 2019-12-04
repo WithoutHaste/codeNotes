@@ -1,0 +1,15 @@
+##Model
+
+#Strongly Typed
+
+A strongly-typed view expects a particular data type to be passed in as its model. Declare the data type at the top of the file, like this:
+
+<code>
+@model DataType
+</code>
+
+#Naming Convention
+
+The variable "Model" is automatically available within your view.
+
+When using a lambda expression, do not use "Model". Use something like "model" or "m" instead. It can cause problems to step on the name of the actual model variable.

@@ -1,0 +1,69 @@
+##User-Defined Function
+
+You can use the result of a table-valued function as a normal table in a JOIN clause.
+
+You can use a scalar-valued function in a SELECT clause, WHERE clause, or HAVING clause. Be careful of performance issues, since the UDF will be called on every row in the result set.
+
+#Naming Convention
+
+"fn_FunctionName"
+
+#Table-Valued Function
+
+A function that returns a table-type value.
+
+<code>
+CREATE FUNCTION fn_functionName (
+	@paramA dataType
+) RETURNS TABLE
+AS
+RETURN
+	SELECT
+		*
+	FROM tableName
+	WHERE columnA = @paramA
+</code>
+
+#Scalar-Valued Function
+
+A function that returns a scalar-value, such as an int or varchar.
+
+<code>
+CREATE FUNCTION fn_functionName (
+	@paramA dataType
+) RETURNS INT
+AS
+BEGIN
+	DECLARE @count INT;
+	SELECT
+		@count = COUNT(*)
+	FROM tableName
+	WHERE columnA = @paramA;
+	RETURN(@count);
+END;
+</code>
+
+#SP vs UDF
+
+Stored Procedures vs User-Defined Functions
+
+A stored procedure is a collection of any statements. A user-defined function is much more limited.
+Generally, stored procedures are used to complete a specific task, and user-defined functions are used to make generic computations.
+
+SP can return 0 to N values.
+UDF must return 1 value.
+
+SP support input and output parameters.
+UDF only supports input parameters.
+
+SP can contain any DML statement (CRUD operations).
+UDF only supports SELECT statements. UDF can't even use TRY/CATCH. UDF can't use transaction commands.
+
+SP can call a UDF.
+UDF cannot call an SP.
+
+SP cannot be called within a SELECT statement, WHERE clause, or HAVING clause.
+UDF can be called within a SELECT statement, WHERE clause, and HAVING clause. UDF that returns a table can be treated as a normal table within a query.
+
+SP are stored in compiled form, so they will run quickly.
+UDF are interpreted each time they run.

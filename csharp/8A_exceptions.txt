@@ -1,0 +1,85 @@
+##Exceptions
+
+#Recommended Usage
+
+You can throw:
+	NotImplementedException
+	InvalidOperationException
+	NotSupportedException
+	PlatformNotSupportedException
+	ArgumentException
+	ArgumentNullException
+	ArgumentOutOfRangeException
+	FileNotFoundException
+	DirectoryNotFoundException
+	DriveNotFoundException
+	PathTooLongException
+	UriFormatException
+	DivideByZeroException
+	FormatException
+	IndexOutOfRangeException
+	KeyNotFoundException
+	ObjectDisposedException
+	OverflowException
+	RankException (array with wrong number of dimensions)
+	TimeoutException
+	+ any of your custom exceptions
+
+Only the system should throw:
+	Exception
+	SystemException
+	ApplicationException
+	NullReferenceException
+	AccessViolationException
+	IndexOutOfRangeException (?? conflicting suggestions from microsoft ??)
+	StackOverflowException
+	OutOfMemoryException
+	ComException
+	SEHException
+	ExecutionEngineException
+	
+#Exception Filters
+
+(.Net 4.6)
+
+Only catch an exception type if a condition is true. The condition is evaluated in the current scope.
+
+<code>
+try
+{
+}
+catch(XException ex) if (condition)
+{
+}
+catch(YException ey) if (condition)
+{
+}
+catch(Exception e)
+{
+}
+</code>
+	
+##Global Exception Handling
+
+Event System.AppDomain.CurrentDomain.UnhandledException will be triggered when an exception goes unhandled in your application.
+
+<code>
+using System;
+
+class Program
+{
+	static void Main(string[] args)
+	{
+		System.AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionTrapper;
+		throw new Exception("Kaboom");
+	}
+
+	static void UnhandledExceptionTrapper(object sender, UnhandledExceptionEventArgs e) 
+	{
+		Console.WriteLine(e.ExceptionObject.ToString());
+		Console.WriteLine("Press Enter to continue");
+		Console.ReadLine();
+		Environment.Exit(1);
+	}
+}
+</code>

@@ -1,0 +1,196 @@
+##Basic UI
+
+#Event Propagation
+
+Unlike Game Maker Studio, only the top active UI object will take a user interaction. Meaning that if you click on a stack of UI objects, only the top object will react.
+
+#Methods
+
+You cannot easily size and position ui elements relative to each other in code.
+
+#GameObject
+
+Looks like all UI objects derive from GameObject.
+
+Attributes:
+<code>
+string name = myGameObject.name; //the name of the GameObject as seen in the Hierarchy pane
+string tag = myGameObject.tag; //the tag can be set at the top of the Inspector pane
+</code>
+
+To show/hide UI objects:
+<code>
+myObject.gameObject.SetActive(true);
+myObject.gameObject.SetActive(false);
+
+//for GameObject type variables
+myGameObject.SetActive(bool);
+</code>
+
+To loop through all the children of a UI element in script, it's a bit weird but this works:
+<code>
+foreach(Transform child in myGameObject.transform)
+{
+	Debug.Log("child: " + child.gameObject);
+}
+</code>
+"transform" also has attribute "childCount" available.
+
+Persist GameObject across scenes:
+<code>
+public class MyScript : MonoBehaviour
+{
+	void Awake()
+	{
+		DontDestroyOnLoad(gameObject);
+	}
+}
+</code>
+Add this script to a GameObject to make it persistent.
+If you add this to an object on the Canvas, it won't persist unless you also add this to the Canvas itself.
+So it's best used for global behaviors.
+
+#Panel
+
+There is not an actual "Panel" type object in Unity.
+When you add a Panel to the scene, you are adding a GameObject with RectTransform and Image components already added.
+
+So to reference a Panel from a script, use the GameObject data type.
+
+#Button
+
+Change button text in script:
+<code>
+myButton.GetComponentInChildren<Text>().text = myText;
+</code>
+
+#InputField
+
+Focus on field and select its text:
+<code>
+myInputField.Select();
+</code>
+
+#Dropdown
+
+GameObject menu > UI > Dropdown
+
+The new dropdown asset will be listed in the Hierarchy pane under "Canvas".
+
+Static list of options:
+Set the options in the Inspector pane, under Dropdown > Options.
+
+Dynamic list of options:
+Add a script to set the dropdown options.
+1. Right-click in Project Pane in Assets > Create > C# Script.
+2. The script will appear in the Assets folder.
+3. You can rename the script.
+4. Double-click the script to open it in Visual Studio.
+  * Downloading and installing Developer Pack 4.7.1 since it is the default target for this.
+  * https://dotnet.microsoft.com/download/thank-you/net471-developer-pack
+5. Example of loading options:
+<code>
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class OptionsAccounts : MonoBehaviour
+{
+	private List<string> options = new List<string>(); //options maintained on backend
+
+	public Dropdown dropdown; //will point to the dropdown ui element in the scene
+
+	// Start is called before the first frame update
+	public void Start()
+	{
+		PopulateOptions();
+	}
+
+	// Update is called once per frame
+	public void Update()
+	{
+	}
+
+	/// <param name="index">0-based index of selected option</param>
+	public void OnSelectionChanged(int index)
+	{
+		Debug.Log(options[index]);
+	}
+
+	private void PopulateOptions()
+	{
+		//todo: load account names from configuration, if possible
+		options.Add("Player 1");
+		options.Add("Player 2");
+		options.Add("Player 3");
+
+		dropdown.ClearOptions();
+		dropdown.AddOptions(options);
+	}
+	
+}
+</code>
+6. Back in the Hierarchy pane, create an Empty GameObject and put it in the highest level (even with Canvas). Rename it "SceneController".
+7. Drag-n-Drop new script from Project pane into the Inspector pane for the SceneController.
+8. Drag-n-Drop new dropdown object from Hierarchy pane to the empty "Dropdown" input in the script in the "SceneController" Inspector pane.
+9. In new dropdown's Inspector > Dropdown section > click "+" on the "On Value Changed" input. Select "SceneController". Select Function "new script name" > OnSelectionChanged.
+10. Run the scene to see the options are loaded.
+
+If you are using your own code, and you want to do something, say, when the selection changes, it is recommended that you maintain the list of options within the script object rather than relying on looking up in the index in "dropdown.options". Basically the recommendation is to feed display information to the UI but not rely on the UI to store your information.
+
+#ScrollView
+
+To use a Layout component (Vertical Layout, Grid Layout, etc) in a ScrollView:
+1. Add the X Layout component to the ScrollView.ViewPort.Content object
+2. Add a Content Size Fitter component as well, with Vertical set to Preferred Size
+
+When populating the ScrollView, add new objects to the ScrollView.ViewPort.Content object.
+
+#Image
+
+To change the coloring of an Image:
+<code>
+Color color = myImage.color;
+color.a = 1.0f;
+myImage.color = color;
+</code>
+
+#Remain Square
+
+How to keep a panel square, while automatically resizing it to be as large as possible in the window?
+
+1. Create the panel
+2. Add component "Layout" > "Aspect Ratio Fitter"
+3. Set "Aspect Mode" to "Fit In Parent"
+4. Set "Aspect Ratio" to 1 (indicating a square)
+
+#Searching
+
+Search through active GameObjects:
+<code>
+GameObject x = GameObject.FindGameObjectWithTag("tag");
+GameObject y = GameObject.Find("name");
+</code>
+
+#Removing Children
+
+Detach all children from parent:
+<code>
+myObject.transform.DetachChildren();
+</code>
+
+Detach children from parent with loop:
+<code>
+//NOT SURE THIS WORKS - was an infinite loop in testing
+while(myObject.transform.childCount > 0)
+{
+	Transform child = myObject.transform.GetChild(0);
+	child.parent = null;
+} 
+</code>
+
+Destroy child:
+<code>
+Destroy(child);
+</code>

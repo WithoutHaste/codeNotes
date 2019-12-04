@@ -1,0 +1,16 @@
+##Boolean
+
+A data type
+
+<code>
+var x = true;
+var y = false;
+</code>
+
+#Values
+
+Anything with a real value will evaluate to true.
+Ex: 100, -3.14, "word", "false", true
+
+Anything without a real value will evaluate to false.
+Ex: 0, -0, "", undefined, false, NaN

@@ -1,0 +1,82 @@
+##Styles
+
+#Selectors
+
+Multiple selectors:
+<code>
+selecterA, selectorB { }
+</code>
+
+Element has tag name:
+<code>
+div { }
+</code>
+
+Element has id:
+<code>
+#myId { }
+</code>
+
+Element has class:
+<code>
+.myClass { }
+</code>
+
+Element has both classes:
+<code>
+.classA.classB { }
+</code>
+
+Direct descendants:
+(any div tag that is a direct child of a "classA" tag)
+<code>
+.classA > div { }
+</code>
+
+Any descendants
+(any div tag that is somewhere within a "classA" tag)
+<code>
+.classA div { }
+</code>
+
+#Cursor
+
+Change cursor to pointer icon when user hovers over a table cell.
+<code>
+	td:hover {
+		cursor: pointer;
+	}
+</code>
+
+Display a custom cursor. The image be small; 16x16 pixels worked in testing.
+<code>
+	body {
+		cursor: url(images/myCursor.png),auto;
+	}
+</code>
+You can change the location of the cursor so it is centered over the hotspot correctly.
+<code>
+	body {
+		//delta x=5 delta y=10
+		cursor: url(images/myCursor.png) 5 10,auto;
+	}
+</code>
+
+#Show/Hide
+
+Show element. Block means it acts like a div. Inline means it acts like a span.
+<code>
+	div.a {
+		display: block;
+	}
+	div.b {
+		display: inline;
+	}
+</code>
+
+Hide element
+<code>
+	div {
+		display: none;
+	}
+</code>

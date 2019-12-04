@@ -1,0 +1,84 @@
+##Graphics
+
+#Create
+
+Create and save a PNG
+<code>
+using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+
+using (Bitmap bitmap = new Bitmap(50, 50)) 
+{
+	using (Graphics graphics = Graphics.FromImage(bitmap)) 
+	{
+		graphics.Clear(Color.Green);
+	}
+	bitmap.Save("green.png", ImageFormat.Png);
+}
+</code>
+
+#Settings
+
+Resolution
+<code>
+bitmap.SetResolution(dpiX, dpiY); 
+</code>
+
+Anti-Aliasing
+<code>
+using System.Drawing.Drawing2D;
+
+graphics.SmoothingMode = SmoothingMode.AntiAlias; //same as SmoothingMode.HighQuality
+graphics.SmoothingMode = SmoothingMode.None; //same as SmoothingMode.HighSpeed
+</code>
+
+Page Unit
+<code>
+graphics.PageUnit = GraphicsUnit.Display; //usually pixels for video and 1/100 inch for printers
+graphics.PageUnit = GraphicsUnit.Document; //1/300 inch
+graphics.PageUnit = GraphicsUnit.Inch;
+graphics.PageUnit = GraphicsUnit.Millimeter;
+graphics.PageUnit = GraphicsUnit.Pixel;
+graphics.PageUnit = GraphicsUnit.Point; //for printers, 1/72 inch
+graphics.PageUnit = GraphicsUnit.World; //world coordinate system unit
+</code>
+
+#Draw
+
+Draw line
+<code>
+graphics.DrawLine(pen, new Point(x1, y1), new Point(x2, y2));
+//or
+graphics.DrawLine(pen, x1, y1, x2, y2);
+</code>
+
+Draw rectangle
+<code>
+graphics.DrawRectangle(pen, new Rectangle(originPoint, new Size(width, height)));
+//or
+graphics.DrawRectangle(pen, originX, originY, width, height);
+</code>
+
+Draw image file: cover graphics with repeating image
+<code>
+Image pattern = Image.FromFile(patternFilename);
+for(int x = 0; x < bitmap.Width + pattern.Width; x += pattern.Width)
+{
+	for(int y = 0; y < bitmap.Height + pattern.Height; y += pattern.Height)
+	{
+		graphics.DrawImage(pattern, x, y);
+	}
+}
+</code>
+
+#Text
+
+Draw vertical text
+<code>
+Font font = new Font("Times New Roman", 14, FontStyle.Regular);
+StringFormat format = new StringFormat();
+format.FormatFlags = StringFormatFlags.DirectionVertical;
+graphics.DrawString("Text", font, Brushes.Black, new Point(0, 0), format);
+</code>
+Text will be drawn rotated 90* clockwise, with the bottom along the X provided.

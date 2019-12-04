@@ -1,0 +1,23 @@
+##Architecture
+
+A common application architecture is Layered Architecture.
+
+The UI Layer relies on the Business Logic Layer which relies on the Data Layer.  All three layers rely on the Intrastructure.
+
+#Onion Architecture
+
+The recommended domain driven design architecture is the Onion Architecture. This is only appropriate for large, long-lived applications, or for applications with complex business behavior.
+
+Onion architecture uses interfaces for behavior contracts, and forces externalization of the infrastructure.
+
+The Domain Model (objects) lies in the center. The Domain Services rely on the Domain Model. The Application Services rely on the Domain Services. This makes up the Application Core.
+
+The UI, Tests, and Infrastructure are all satellites to the Application Code. These outer layer concerns are expected to change often, far more often that the business behavior.
+
+The basic idea of Onion is that Layer X can rely on more-central layers, but never of more-outer layers.
+
+#Domain Model Layer
+
+The domain model layer (or just domain layer) is the heart of the business application.
+
+The domain layer is for representing concepts of the business, information about the business situation, and business rules.

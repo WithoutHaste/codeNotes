@@ -1,0 +1,7 @@
+##Images
+
+ng-src keeps the browser from trying to interpreting "{{...}}" as a url.
+
+<code>
+<img ng-src="{{ x.imageUrl }}" alt="{{ x.name }}" />
+</code>

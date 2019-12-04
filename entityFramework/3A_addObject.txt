@@ -1,0 +1,35 @@
+##Add Object
+
+#Stand-Alone Object
+
+Stand alone new object:
+<code>
+Country country = new Country(name);
+context.Countries.add(country);
+context.SaveChanges();
+</code>
+Or:
+<code>
+Country country = new Country();
+context.Entry(country).State = EntityState.Added;
+context.SaveChanges();
+</code>
+
+Stand alone new object with children:
+<code>
+Country country = new Country();
+context.Countries.add(country);     //add parent object to dbContext before attaching children
+country.Cities = new List<City>();  //this could be done in the Country constructor
+country.Cities.Add(new City(name)); //city is not explicitly added to dbContext
+context.SaveChanges();
+</code>
+
+#Attach To Existing
+
+Attaching new object to existing object:
+<code>
+City city = new City(name);
+Country country = context.Countries.First();
+country.Cities.Add(city);
+context.SaveChanges();
+</code>

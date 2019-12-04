@@ -1,0 +1,148 @@
+##LINQ to Objects
+
+#Comprehension Query Syntax
+
+Basic example:
+<code>
+var query = from x in _db.Table 
+			where x.Property < 5 
+			orderby x.Name ascending
+			select x;
+</code>
+
+Projection example:
+<code>
+var query = from x in _db.Table 
+			where x.Property < 5 
+			orderby x.Name ascending
+			select new Result() {
+				Id = x.Id,
+				Name = x.Name,
+				CountInstances = x.Instances.Count()
+			};
+</code>
+
+#Method Syntax
+
+Method syntax makes use of Extension Methods and Lambda Expression.
+Method syntax is also called Fluent syntax.
+<code>
+var query = _db.Table
+			.Where(x => x.Property < 5)
+			.OrderBy(x => x.Name)
+			.Take(10);
+</code>
+
+The method syntax uses Method Chaining to combine as many query clauses as you need.
+<code>
+List<Part> parts = new List<Part>() { partA, partB... };
+
+IQueryable<Part> list = parts.Skip(10);
+list = list.Take(4).OrderBy(x => x.PartNumber);
+</code>
+
+Method Chaining means that each method returns the object the method is a part of, allowing you to immediately call another method on that object.
+
+<code>
+public class MethodChaining
+{
+	private int sum = 0;
+	public MethodChaining Add(int x)
+	{
+		sum += x;
+		return this;
+	}
+	public MethodChaining Substract(int x)
+	{
+		sum -= x;
+		return this;
+	}
+}
+...
+MethodChaining methodChaining = new MethodChaining();
+methodChaining.Add(5).Add(3).Subtract(4).Add(9);
+</code>
+
+#Custom Functions
+
+You can use Extension Methods to create your own custom LINQ clauses.
+
+<code>
+public static class LINQExtensions
+{
+	public static IEnumerable<T> Alternates(this IEnumerable<T> query)
+	{
+		List<T> alternates = new List<T>();
+		for(int i=0; i<query.Count(); i+=2)
+		{
+			alternates.Add(query.ElementAt(i));
+		}
+		return alternates;
+	}
+}
+</code>
+
+<code>
+public static class LINQExtensions
+{
+	public static double Median(this IEnumerable<double> query)
+	{
+		int count = query.Count();
+		if(count == 0) throw new InvalidOperationException("Set is empty");
+
+		query = query.OrderBy(x => x);
+		int midIndex = (int)(count / 2);
+		if(count % 2 == 0)
+		{
+			return (query.ElementAt(midIndex) + query.ElementAt(midIndex-1)) / 2;
+		}
+		else
+		{
+			return query.ElementAt(midIndex);
+		}
+	}
+}
+</code>
+
+#Query Syntax
+
+<code>
+List<Part> parts = new List<Part>() { partA, partB... };
+
+var subList = from x in parts select x;
+
+Part[] subList = (from x in parts select x).ToArray();
+</code>
+
+<code>
+var subList = from x in parts where x.Name.StartsWith("R") select x;
+</code>
+
+OrderBy
+<code>
+var subList = from x in parts orderby x.PartNumber ascending select x;
+</code>
+
+Select
+<code>
+var subList = from x in parts select new { Number = x.PartNumber, WeightLbs = x.Ounces/16 };
+</code>
+
+Group
+<code>
+var byLastName = 
+	from s in students
+	group s by s.LastName into newGroup
+	orderby newGroup.Key
+	select newGroup;
+
+foreach(var nameGroup in byLastName)
+{
+	Console.WriteLine("Group key = {0}", nameGroup.Key);
+	foreach(var student in nameGroup)
+	{
+		Console.WriteLine("Group member = {0}", student.Name);
+	}
+}
+</code>
+

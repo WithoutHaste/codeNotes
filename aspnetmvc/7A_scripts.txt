@@ -1,0 +1,59 @@
+##Scripts
+
+The Scripts folder will hold your javascript files.
+
+Default javascript libraries for ASP.Net MVC applications include jQuery, jQuery Validation, and jQuery UI.
+
+#Minification
+
+ASP.Net 4 and above includes a feature that will automatically minify javascript files, or find the already minified version if the file is named correctly.
+
+#_references.js
+
+File Project/Scripts/_references.js is a list of javascript files commonly used in your project.
+This list is used by Visual Studio to provide better Intellisense when editing javascript.
+
+It is correct that these references are inside comments.
+
+This file should not be sent to the client.
+
+#jquery-<version>.intellisense.js
+
+This file helps Visual Studio provide Intellisense for jQuery.
+
+This file should not be sent to the client.
+
+#jquery-<version>.js
+
+This and "min" version of the file are the core jQuery library.
+The "unobtrusive-ajax" files are a bridge between ASP.Net and the base jQuery library.
+
+Send this to the client to use the jQuery API on the client-side.
+
+To write your own javascript code that uses the jQuery library, start with this:
+<code>
+$(function() {
+	//your code here
+});
+</code>
+
+#jquery-ui-<version>.js
+
+This and the "min" version of the file are a UI extension for jQuery that provides common UI elements such as Dialog or Accordion.
+
+Send this to the client to use the jQuery API on the client-side.
+
+#jquery-validate.js
+
+This and the "min" version of the file are an extension for jQuery that provides the client-side data validation.
+The "unobtrusive" files are a bridge between ASP.Net and the base jQuery library.
+
+ASP.Net MVC expects this to be present for form validation.
+
+#Knockout
+
+Knockout is a javascript library that provides a View/Model/Controller design on the client-side.
+
+#Modernizr
+
+Moderinzr is a javascript library that can detect and enable HTML5 features in a browser.

@@ -1,0 +1,15 @@
+##Security
+
+#Current Information
+
+Functions to get information about current user, etc.
+<code>
+USER_ID()
+USER_NAME()
+SYSTEM_USER()
+SESSION_USER()
+CURRENT_USER()
+USER()
+SUSER_ID()
+HOST_NAME()
+</code>

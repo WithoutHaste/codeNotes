@@ -1,0 +1,59 @@
+##Lists
+
+Lists vs Arrays:
+
+- Lists are stored in heap memory, Arrays are stored in stack memory.
+- List length is dynamic, Array length is static.
+- You can insert nodes and remove nodes from a List quickly. With Arrays, you have to recreate the Array each time.
+- Binary search works on Arrays because you can easily access any index of the Array. Binary search doesn't work on Lists because the indexes have to be accessed sequentially.
+- Lists take more memory to store the same data as an Array because each node in the List requires a pointer to the next node.
+- Arrays can be cached more easily because all the memory locations are right next to each other.
+
+#Linked List
+
+A linked list is an ordered collection of nodes. Unlike an array, each node of a linked list may be stored at any location in memory. Each node includes a pointer to the location of the next node in memory.
+
+<code>
+          (head)   (tail)
+variable → █ → █ → █ → █ → null
+</code>
+
+<code>
+class ListNode
+{
+	Object Data;
+	ListNode NextNode = null;
+}
+</code>
+
+#Circular Linked List
+
+The tail node points back to the head node, forming a full circle.
+
+<code>
+          (head)   (tail)
+variable → █ → █ → █ → █
+           ↑           │
+           └───────────┘
+</code>
+
+#Doubly Linked List
+
+Each node includes a pointer both forward to the next node and one backwards to the previous node.
+
+If the tail node also connects to the head node, it makes a Circular Doubly Linked List.
+
+<code>
+          (head)   (tail)
+variable → █ ↔ █ ↔ █ ↔ █ → null
+</code>
+
+<code>
+class ListNode
+{
+	Object Data;
+	ListNode NextNode = null;
+	ListNode PreviousNode = null;
+}
+</code>
+

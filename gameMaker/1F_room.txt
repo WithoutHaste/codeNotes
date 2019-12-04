@@ -1,0 +1,19 @@
+##Room
+
+A room is like a screen or a page.  A menu, credits, tutorial, starting room, etc.
+
+Rooms can contain a background image and instances of objects.
+
+The first room in the list of rooms will be the room the games starts with.
+
+#Variables
+
+room_width: width of current room in pixels
+room_height: height of current room in pixels
+
+#Settings
+
+<code>
+room_set_background_colour(rm_myRoom, colour, true); //true means "make visible"
+</code>
+You cannot set the color of the current room.

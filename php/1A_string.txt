@@ -1,0 +1,41 @@
+##String
+
+#Operations
+
+. = string concatenation
+<code>
+$name = $first . $last;
+</code>
+
+strlen = string length
+<code>
+$characterCount = strlen("apple");
+</code>
+
+trim = remove leading and trailing white-space characters from a string
+<code>
+$trimmedString = trim($string);
+</code>
+
+contains
+<code>
+if(strpos($string, $substring) !== false)
+{
+	echo "string contains substring";
+}
+</code>
+
+strtoupper = convert entire string to upper-case
+<code>
+$upperCase = strtoupper($string);
+</code>
+
+ord = convert a character to its ascii code (integer)
+<code>
+$asciiCode = ord($char);
+</code>
+
+chr = convert an ascii code (integer) to a character
+<code>
+$char = chr($asciiCode);
+</code>

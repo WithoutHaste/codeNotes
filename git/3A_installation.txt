@@ -1,0 +1,27 @@
+##Installing Git
+
+#Windows
+
+!![Here](msysgit.github.com)
+
+#Mac OSX
+
+Install with Home Brew
+<code>
+brew install git
+</code>
+
+Or download DMG package
+!![Here](http://git-scm.com/download/mac)
+
+#Linux
+
+Debian and Ubuntu
+<code>
+apt-get install git-core
+</code>
+
+Fedora
+<code>
+yum install git-core
+</code>

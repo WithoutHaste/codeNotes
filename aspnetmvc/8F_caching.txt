@@ -1,0 +1,65 @@
+##Caching
+
+#OutputCache
+
+(ASP.Net Framework, not specific to ASP.Net MVC)
+
+The OutputCache action filter lets you store the return value of an Action in memory. Future HTTP Requests to that Action (with the same parameter values) can be responded to with the cached result very quickly. This is handled by ASP.Net.
+
+This is most effectively used on actions that are called frequently, or on actions that take a long time to respond.
+
+<code>
+[OutputCache]
+public ActionResult MyAction()
+{
+	...
+}
+</code>
+
+Options:
+<code>
+//how long until the cached value is cleared
+[OutputCache(Duration=minutes)]
+
+//specify which parameters matter
+//the default is "*" meaning "every parameter"
+//"none" means no parameters
+[OutputCache(VaryByParam="myParamA;myParamB")]
+
+//"Server", "Client", "ServerAndClient", etc - see System.Web.UI.OutputCacheLocation enum
+[OutputCache(Location=OutputCacheLocation.Server)]
+
+//vary caching by HTTP header values
+[OutputCache(VaryByHeader="Accept-Language")] //what language is the user reading - critical if you use localization
+[OutputCache(VaryByHeader="X-Requested-With")] //this header will be set for AJAX requests only
+
+//write your own custom logic - requires overriding a method in Global.asax
+OutputCache(VaryByCustom="??")]
+</code>
+
+Option to make performance tuning easier:
+<code>
+	//in controller
+	[OutputCache(CacheProfile="Aggressive")]
+
+	//in Project/Web.config
+	<system.webServer>
+		<caching>
+			<outputCacheSettings>
+				<outputCacheProfiles>
+					<add name="Aggressive" duration="300" />
+					<add name="Mild" duration="10" />
+				</outputCacheProfiles>
+			</outputCacheSettings>
+		</caching>
+	</system.webServer>
+</code>
+
+A use case to watch out for:
+Your site is paging results, and only returns the internal part of the web page when you page. That operates using Asynchronous Requests.
+The user saves a bookmark and then opens the bookmark later. That operates using a GET Request.
+The user may get just the internal part of the web page, which will look a mess, instead of the entire page they expect.
+Options:
+A)  this specific problem can be solved by taking HTTP headers into account when caching
+A2) since browsers may implement their own caching, specify that Location="Server" so only your site decides what is cached
+B)  alternately, separate your actions by request type

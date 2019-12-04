@@ -1,0 +1,13 @@
+##Directives
+
+#model
+
+Make a strongly-typed view by specifying the expected model.
+
+<code>
+//at top of *.cshtml view file
+@model MyProject.Models.MyModel
+
+//to access the model
+<h1>@Model.MyAttribute</h1>
+</code>

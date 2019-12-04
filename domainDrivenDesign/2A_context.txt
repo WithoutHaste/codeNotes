@@ -1,0 +1,17 @@
+##Bounded Context
+
+A bounded context defines where a model is valid.
+
+For example, an application includes an appointment scheduler and billing. The model "Client" in the scheduler just includes "Name". The model "Client" in billing includes "Credit Card" and "Address". Both "Client" models are part of a different bounded context.
+
+By explicitly dividing these contexts, you can use focused models instead of sharing a single too-large model.
+
+All models are only valid without their contexts. Do not try to make a multi-context model.
+
+#Sub domain vs Bounded context
+
+A sub domain is a piece of the problem space. A bounded context is a piece of the solution space. Usually, they will correspond to each other.
+
+##Context Map
+
+A diagram showing the relationships among all the bounded contexts, and how each is defined.

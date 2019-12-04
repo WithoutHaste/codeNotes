@@ -1,0 +1,123 @@
+##Sed
+
+Sed = Stream EDitor.  It is for modifying files automatically.
+
+#Substitution
+
+Replace text based on regular expressions.  By default, sed will only replace the FIRST occurance of a substring in each line.
+
+Replace substring "current" with string "new" throughout old_filename. Save the output to new_filename.
+<code>
+sed s/current/new/ old_filename > new_filename
+</code>
+
+Use quotes if you have metacharacters in the regular expression.
+<code>
+sed 's/current/new/' old_filename > new_filename
+</code>
+
+The regular expression delimiter is the first character after s. You can use any delimiter.
+<code>
+sed 's_/usr/bin_/common/bin_' old_filename > new_filename
+
+sed 's:/usr/bin:/common/bin:' old_filename > new_filename
+</code>
+The error "unterminated 's' command" means you forgot a delimiter.
+
+Use & to refer to the matched string, so you can use it in the replacement.
+<code>
+sed 'a/[aeiou]*/(&)/' old_filename > new_filename
+</code>
+
+Use escaped () to mark multiple patterns for later use.  They will be refered to as \1 \2...\9.  9 is the limit.
+<code>
+sed 's:\([aeiou]*\).*:\1:' old_filename > new_filename
+</code>
+
+#Addressing
+
+Addressing specified which lines to apply the replacement to.
+<code>
+--only make replacements in lines that contain 'IF'
+sed '/IF/s/current/new/' old_filename > new_filename
+</code>
+
+#Flags
+
+The global flag replaces ALL instances of matching strings in each line.
+<code>
+sed 's/current/new/g' old_filename > new_filename
+</code>
+
+Replace just the Xth instance in each line.
+<code>
+sed 's/current/new/X' old_filename > new_filename
+
+--just the 4th 'current' is replaced
+sed 's/current/new/4' old_filename > new_filename
+</code>
+
+Option -n means don't print output.  Flag p means print only lines that contain a match.
+<code>
+sed -n 's/current/new/p' old_filename > new_filename
+
+--print just lines with matches, like grep
+sed -n 's/current/ p' old_filename > new_filename
+
+--print just lines without a match
+sed -n 's/current/ !p' old_filename > new_filename
+</code>
+
+Flag w means print only the matches. If you use multiple flags, w must be the last one.
+<code>
+sed -n 's/current/new/w' old_filename > new_filename
+</code>
+
+The ignore case flag.
+<code>
+sed 's/current/new/I' old_filename > new_filename
+</code>
+
+#Options
+
+Make multiple substitutions at once.
+<code>
+sed -e 's/A/a/' -e 's/B/b/' old_filename > new_filename
+
+--or specify a file of endline-delimited substitution expressions
+sed -f pattern_filename old_filename > new_filename
+</code>
+
+#Restriction
+
+Only apply changes to the Xth line.
+<code>
+sed 'X s/current/new/' old_filename > new_filename
+
+--only the 3rd line
+sed '3 s/current/new/' old_filename > new_filename
+
+--only lines 3 through 90 inclusive
+sed '3,90 s/current/new/' old_filename > new_filename
+
+--only lines 3 through end of file
+sed '3,$ s/current/new/' old_filename > new_filename
+</code>
+
+Only apply changes where the line starts with '#'.
+<code>
+sed '/^#/ s/current/new/' old_filename > new_filename
+</code>
+
+Only apply changes that occur between START and STOP. So, the from line that includes START to the next line that includes STOP. This can occur multiple times per file.
+<code>
+sed '/START/,/STOP/ s/current/new/' old_filename > new_filename
+
+--from the 3rd line to the next instance of /STOP/
+sed '3,/STOP/ s/current/new/' old_filename > new_filename
+</code>
+
+Delete all lines from the 3rd to the end of file.
+<code>
+sed '3,$ d' old_filename > new_filename
+</code>

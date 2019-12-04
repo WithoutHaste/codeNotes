@@ -1,0 +1,58 @@
+##Testing
+
+There are many many different Javascript unit testing libraries.
+
+QUnit is very easy to get started with because it only requires importing a file, no installations.
+
+#QUnit
+
+Template for results page:
+
+<code lang="xml">
+	<html>
+		<head>
+			<meta charset="utf-8">
+			<meta name="viewport" content="width=device-width">
+			<title>QUnit Example</title>
+			<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.6.1.css">
+		</head>
+		<body>
+			<div id="qunit"></div>
+			<div id="qunit-fixture"></div>
+			<script src="https://code.jquery.com/qunit/qunit-2.6.1.js"></script>
+			<script src="MyTests.js"></script>
+			<script src="MyJavascript.js"></script>
+		</body>
+	</html>
+</code>
+
+MyTests.js contents:
+
+<code>
+QUnit.test("sum: positive integers", function( assert ) {
+	assert.ok(sum(1, 2) == 3, "Passed!" );
+});
+</code>
+
+MyJavascript.js contents:
+
+<code>
+function sum(a, b) {
+	return a + b;
+}
+</code>
+
+Basic assertions available in QUnit; there are more.
+
+<code>
+QUnit.test("Title of Test", function( assert ) {
+	assert.ok(boolean, "Boolean True Message" );
+	
+	assert.notOk(boolean, "Boolean False Message" );
+	
+	assert.equal(actual-value, expected-value, "Values Match Message" );
+	
+	assert.throws(function-that-throws-exception, expected-exception-type, "Expected Exception Thrown Message" );
+});
+</code>
+

@@ -1,0 +1,31 @@
+##Misc Commands
+
+#NOCOUNT
+
+This prevents the default message about "rows affected by query" from being displayed; also prevents DONE_IN_PROC messages from stored procedures.
+<code>
+SET NOCOUNT ON;
+</code>
+Commonly used in Stored Procedures and Triggers. Turning this I/O operation off can significantly improve performance.
+
+Allow the default message to be displayed.
+<code>
+SET NOCOUNT OFF;
+</code>
+
+#UPDATE STATISTICS
+
+Updates query optimization statistics on a table or indexed view.
+
+This already runs by default, but you can call it more frequently yourself. Don't do it constantly, though, because it causes affected queries to re-compile.
+
+<code>
+UPDATE STATISTICS tableNameOrViewName indexName;
+</code>
+
+#@@ROWCOUNT
+
+Returns the number of rows affected by the last statement.
+<code>
+SET @count = @@ROWCOUNT;
+</code>

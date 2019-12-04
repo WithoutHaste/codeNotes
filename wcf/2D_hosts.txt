@@ -1,0 +1,189 @@
+##Hosts
+
+This is the application responsible for listening for web calls to your service and then initializing a service class to handle the call.
+
+#Service Configuration
+
+WCF supports declarative configuration (everything in a config file) and procedural configuration (settings in the code).
+
+For declarative configuration, look in the App.config file of the service implementation project (for IIS hosted projects) or the service host project (for self-hosted projects).
+
+Each section is marked for when it is needed:
+<code lang="xml">
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+	<connectionStrings>
+		<!-- REQUIRED FOR repository (DbContext class) -->
+		<!-- Ex: public GeographyDbContext() : base(name="main") {} -->
+		<add name="main" connectionString="Data Source=.\sqlexpress;Initial Catalog=GeographyData..." />
+	</connectionStrings>
+	
+	<system.serviceModel>
+		<services>
+			<!-- REQUIRED FOR hosting a service -->
+			<!-- you need 1 service tag for each service you are hosting -->
+			<service name="fully qualified Type of the service implementation">
+				<!-- each service requires at least 1 endpoint -->
+				<!-- each endpoint corresponds to 1 service contract -->
+				<endpoint 
+					address="url where clients can find this endpoint" <!-- ex: "net.tcp://localhost:8009/GeographyService" -->
+					binding="netTcpBinding" <!-- defines the transport mechanism; this example is for TCP; this will affect the protocol identifier in the URL address -->
+					contract="fully qualified Type of the service contract (interface)" />
+			</service>
+		</services>
+		
+		<serviceHostingEnvironment>
+			<!-- REQUIRED FOR virtual SVC files -->
+			<serviceActivations>
+				<add 
+					service="fully qualified Type of service implementation -->" 
+					relativeAddress="GeographyService.svc" 
+					factory="fully qualified Type of custom service factory" <!-- REQUIRED FOR custom service factory -->
+					/>
+			</serviceActivations>
+		</serviceHostingEnvironment>
+	</system.serviceModel>
+</configuration>
+</code>
+
+#Web Hosting HTTP
+
+You can host with IIS (Internet Information Services). 
+It is easy to setup (plug and play), but is mostly limited to HTTP bindings. 
+This is usually used for externally facing services.
+
+IIS will instantiate ServiceHost automatically.
+	
+IIS used to require an SVC file per service. This was the browsing point for the site. Ex: "GeographyManager.svc".
+With .Net 4.0, the physical SVC file can be replaced with a virtual file. 
+To do this, reference System.ServiceModel.Activations in the App.config file.
+
+<code lang="xml">
+<system.serviceModel>
+	<serviceHostingEnvironment>
+		<serviceActivations>
+			<add service="fully qualified Type of service class"
+				relativeAddress="name.svc"
+				/>
+			<!-- the client will still address url/name.svc -->
+		</serviceActivations>
+	</serviceHostingEnvironment>
+</system.serviceModel>
+</code>
+
+When using IIS, the endpoint address set in the configuration file will not be the complete address. IIS will set an address, and if anything is in the endpoint configuration address, it will be appended to the IIS address.
+
+You can also provide IIS with a custom host factory to regain control of the host, like with self-hosting.
+
+If you are using IIS Express, you can set this in your web host project > properties.
+
+To create a web hosting project:
+- Visual Studio > add new project > Web > ASP.Net Web Application > Empty
+- This will give you an empty web project with just a config file, which is all you need.
+- Add the configurations you need to the Web.config.
+- Open the project properties > Web > Server should be set to IIS Express with a default Project URL. This URL plus the address plus the SVC filename plus the configuration endpoint will be where the service host listens for the client. (Or something like that, not sure what order it all gets concatenated in.)
+
+To use a virtual SVC file:
+- Make sure the web hosting project references System.ServiceModel.Activation.
+- Add the configurations for service activations to the Web.config.
+
+#Web Hosting WAS
+
+WAS requires the full version of IIS, not just IIS Express.
+
+1) Open Visual Studio as Admin > Web host project > Properties > Web
+- use "Local IIS" instead of "IIS Express"
+- and click "Create Virtual Directory"
+
+2) Open command prompt as Admin > C:\Windows\System32\inetsrv
+- run: appcmd.exe set site "Default Web Site" -+bindings.[protocol='net.tcp',bindingInformation='808:*']
+- The "Default Web Site" part is because this web host is listed under that in IIS Manager.
+- This command modifies the applicationHost.config file.
+
+3) IIS Manager > select this web host > Advanced Settings
+- update Enabled Protocols from "http" to "http,net.tcp"
+
+4) Update the App.config file to use one of these bindings instead of HTTP.
+<code lang="xml">
+<system.serviceModel>
+	<services>
+		<service name="fully qualified Type of the service implementation">
+			<endpoint 
+				address=""
+				binding="netTcpBinding"
+				contract="GeorgaphyLibrary.Contracts.IGeographyService" />
+		</service>
+	</services>
+</system.serviceModel>
+</code>
+
+Result: the service will listen at net.tcp://localhost/GeographyLibrary.WebHost/GeographyService.svc
+
+#Self Hosting
+
+You can write your own hosting application, be it a console app, a winforms app, or a windows service. Self hosting requires additional coding, and does not automatically have all the features IIS offers, but it does give you the ability to create your own features.
+
+You create a host by deriving from class ServiceHost. You will need one host per service implementation class.
+
+<code>
+public class MyHost : ServiceHost
+{
+}
+</code>
+
+ServiceHost.CloseHost: waits for in-progress calls to complete, then closes
+ServiceHost.AbortHost: closes immediately, sending a fault to clients cut off in the middle
+
+You can host without a configuration file by providing the endpoint procedurally in your host project.
+The endpoint tells the host how and where to listen for incoming calls.
+
+Hosting example:
+<code>
+using System.ServiceModel;
+using System.Runtime.Serialization;
+
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		//GeographyManager is the service implementation class of the IGeographyService interface
+		ServiceHost hostGeographyManager = new ServiceHost(typeof(GeographyManager));
+		
+		//to add endpoints procedurally, add them before opening the host
+		//aka "configless binding"
+		string address = "net.tcp://localhost:8009/GeographyService";
+		Binding binding = new NetTcpBinding();
+		Type contract = typeof(IGeographyService);
+		hostGeographyManager.AddServiceEndpoint(contract, binding, address);
+
+		//opens the host
+		hostGeographyManager.Open();
+		
+		//a use-case for self-hosting is to put this into a desktop application that will be a dashboard for your service, providing up-to-date information as it runs and handles requests
+		
+		//closes the host
+		hostGeographyManager.Close();
+	}
+}
+</code>
+
+#Custom Host Factory
+
+IIS automatically instantiates all the ServiceHosts you need, using a service host factory.
+
+You can create you own factory.
+
+1) In the web host project, add new class CustomHostFactory.
+
+<code>
+using System.ServiceModel.Activation;
+
+public class CustomHostFactory : ServiceHostFactory
+{
+	protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
+	{
+		ServiceHost host = new ServiceHost(serviceType, baseAddresses);
+		return host;
+	}
+}
+</code>

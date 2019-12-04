@@ -1,0 +1,64 @@
+##What is REST?
+
+#Basics
+
+REST stands for REpresentational State Transfer.
+
+It is an architectural style for APIs (Application-Program Interfaces). It focuses on element interactions rather than implementations.
+
+REST is language-independent concept.
+
+REST is designed for performance, scalability, simplicity, modifiability, visibility, portability, and reliability.
+
+REST systems usually communicate over HTTP, using the verbs GET, POST, PUT, DELETE.
+
+#Concepts
+
+Separation of Client and Server
+Stateless Server Requests
+Cacheable Requests
+Uniform Interface (URI)
+
+You're API can be RESTful without following 100% of the REST architecture.
+
+#Benefits
+
+REST is built on pre-existing standards, such as HTTP, instead of making new ones.
+
+Encryption and data transport integrity rely on pre-existing standards, such as SLL (Secure Sockets Layer) and TLS (Transport Layer Security).
+
+Most web programmers will already be familiar with the building blocks of REST.
+
+#Disadvantages
+
+REST is stateless because HTTP is stateless (no data is stored between request-response cycles).
+
+REST does not support push-notifications from the server to the client. The client would have to poll the server for updates, or use some other web hook.
+
+There is room for disagreement about which applications are "RESTful".
+
+#Architecture
+
+REST takes a resource-based approach. You locate a resource on the server, and then update it or delete it or get some information about it.
+
+With SOAP, the client does not choose a resource directly. The client use calls a web service method (or operation) which may set off any number of tasks before returning a value.
+
+The basic idea of REST is that retrieving information about a resource should be as simple as invoking its URL. For example, invoking "www.techtarget.com/restfulapi/quizzes" could return the JSON "{ "quizzes" : [ "Java", "DevOps", "IoT"] }". And the URLs are designed to be human-readable.
+
+#Microservices
+
+REST is a light-weight messaging solution appropriate to the microservices architecture.
+
+REST over HTTP offers little more than message exchange. For instance, it does not contribute to security.
+
+#Data Format
+
+RESTful services usually return data in JSON or XMl format. REST itself does not restrict what data formats can be used.
+
+#HTTP Methods
+
+GET: returns the resource
+PUT: saves a new resource
+DELETE: deletes a resource
+
+POST: some more complex operation

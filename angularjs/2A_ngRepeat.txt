@@ -1,0 +1,165 @@
+##ng-repeat
+
+#Data Source
+
+Hard coded array:
+<code>
+<table>
+	<tr><th>Row Number</th></tr>
+	</tr ng-repeat="i in [0,1,2,3,4]"><td>{{ i }}</td></tr>
+</table>
+</code>
+
+Array set in controller:
+<code>
+//in template
+<table>
+	<tr><th>Row Number</th></tr>
+	</tr ng-repeat="i in myList"><td>{{ i }}</td></tr>
+</table>
+//in controller
+$scope.myList = [0,1,2,3,4];
+</code>
+
+Array returned from controller function:
+<code>
+//in template
+<table>
+	<tr><th>Row Number</th></tr>
+	</tr ng-repeat="i in GetMyList()"><td>{{ i }}</td></tr>
+</table>
+//in controller
+$scope.GetMyList = function() { return [0,1,2,3,4]; };
+</code>
+
+#In-scope Variables
+
+$index: index of current element, starting at 0
+$first: true if is first element
+$last: true if is last element
+$middle: true if is not first or last element
+$even: true when $index is even
+$odd: true when $index is odd
+
+Example: comma-separated list
+<code>
+<span ng-repeat="x in list">{{ x }}{{ $last ? '' : ', ' }}</span>
+</code>
+
+Because ng-repeat has its own scope, it must reference its $parent to update the model.
+<code>
+<div>{{ sortBy }}</div>
+<div ng-repeat="item in list">
+	<input type="radio" ng-model="$parent.sortBy" name="sortBy" ng-value="item" />
+</div>
+</code>
+
+#Sort
+
+<code>
+Sort: <select ng-model="$ctrl.sort">
+		<option value="name">Alphabetical</option>
+		<option value="age">Newest</option>
+	</select>
+<br/>
+<ul>
+	<li ng-repeat="phone in $ctrl.phones | orderBy: $ctrl.sort">
+		<span>{{ phone.name }}</span>
+		<p>{{ phone.snippet }} ({{ phone.age }} years old)</p>
+	</li>
+</ul>
+</code>
+
+OrderBy returns an array of elements ordered by the 'comparator' function. The 'comparator' functions uses the values returned by the 'expression'. 'Reverse' can be true or false.
+
+<code>
+{{ x in list | orderBy: expression : reverse : comparator }}
+
+{{ x in list | orderBy: 'property' }} //uses x['property']
+{{ x in list | orderBy: property }} //uses x[property] where property is a variable
+</code>
+
+'expression' can be a list of properties (order by x, then by y, then by z...)
+<code>
+{{ x in list | orderBy: [a, b, c] }}
+</code>
+
+You can also use a method as the 'expression'. This can be useful if the property name contains spaces.
+<code>
+//in template
+{{ x in list | orderBy: MyExpression }}
+//in controller
+$scope.MyExpression = function(collection) {
+	return collection[$scope.sortBy];
+};
+</code>
+
+Custom comparator:
+<code>
+//in template
+<p ng-repeat="x in list | orderBy: x : MyComparator"></p>
+//in controller
+$scope.MyComparer = function(obj1, obj2) {
+	return (obj1.value < obj2.value) ? -1 : 1;
+};
+</code>
+
+The custom comparator parameters have three properties. 
+Obj.type = data type
+Obj.index = index in list
+Obj.value = value
+
+To pass extra parameters into a custom comparator, return a closure:
+<code>
+//in template
+<p ng-repeat="x in list | orderBy: x : MyComparator(y)"></p>
+//in controller
+$scope.MyComparer = function(y) {
+	return function(obj1, obj2) {
+		//can use y, obj1, and obj2 here
+	};
+};
+</code>
+
+#Filters
+
+This filter is applied to the array $ctrl.phones before the repeater iterates over it.
+<code>
+Search: <input ng-model="$ctrl.query" /><br/>
+<ul>
+	<li ng-repeat="phone in $ctrl.phones | filter: $ctrl.query">
+		<span>{{ phone.name }}</span>
+		<p>{{ phone.snippet }}</p>
+	</li>
+</ul>
+</code>
+
+This custom filter function is defined in code first.
+<code>
+//in javascript
+app.filter('reverse', function() {
+	return function(list) { return list.slice().reverse(); }
+});
+
+//in html
+<td ng-repeat="x in list | reverse"></td>
+</code>
+
+#Duplicate Data
+
+ng-repeat defaults to using the current value as the id of the element. If you know your list may have duplicate values, explicitly set the id value.
+
+<code>
+<div ng-repeat="x in list track by $index"></div>
+</code>
+
+#Repeat Multiple Elements
+
+You can repeat a set of elements, as well as just a single element.
+Everything from ng-repeat-start to ng-repeat-end will be repeated. Make sure these are place in sibling elements.
+
+<code>
+<p ng-repeat-start="x in list">Title: {{ x.title }}</p>
+<span>{{ x.description }}</span><br/>
+<span ng-repeat-end>{{ x.notes }}</span>
+</code>

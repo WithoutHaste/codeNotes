@@ -1,0 +1,155 @@
+##Document
+
+Save a text document with a .tex file format. The LaTeX compiler will interpret that text file and generate a .pdf file from it.
+
+Minimal document:
+<code>
+\documentclass{article}
+\begin{document}
+  Hello World!
+\end{document}
+</code>
+
+#Commands
+
+Commands start with a \ (backslash) and may be followed by {options}.
+
+<code>
+\command{options}
+</code>
+
+#Environment
+
+An environment defines a section of the document with shared layout settings.
+
+You define environments with "begin" and "end" commands
+<code>
+\begin{document}
+	\begin{environment1}
+		\begin{environment1}
+		\end{environment2}
+	\end{environment2}
+\end{document}
+</code>
+
+Environments must be nested like a valid xml document.
+
+The "document" environment must be the root environment of all other environments.
+
+#Preamble
+
+The area before the \begin{document} command. Global variables, like Title, can be set here.
+
+#Comments
+
+Start a line with %, everything to the end of line will be ignored by the compiler.
+
+<code>
+% my comments
+</code>
+
+You can also use the "comment" package to create whole environments that will be ignored.
+
+<code>
+\usepackage{comment}
+\begin{comment}
+	comments
+	comments
+\end{comment}
+</code>
+
+#Sections
+
+Sections and subsections will be automatically numbered.
+
+<code>
+\section{}
+\subsection{}
+\subsubsection{}
+\paragraph{}
+\subparagraph{}
+</code>
+
+#Package
+
+You can import additional LaTeX packages.
+
+<code>
+\usepackage{package_name}
+</code>
+
+#Image
+
+To subtitle an image or figure
+<code>
+\usepackage{graphicx}
+\begin{figure}
+  \includegraphics[width=\linewidth]{boat.jpg}
+  \caption{A boat.}
+  \label{fig:boat1}
+\end{figure}
+
+Figure \ref{fig:boat1} shows a boat.
+</code>
+
+Two images with individual subtitles and one shared subtitle
+<code>
+\usepackage{graphicx}
+\begin{figure}[h!]
+  \centering
+  \begin{subfigure}[b]{0.4\linewidth}
+    \includegraphics[width=\linewidth]{coffee.jpg}
+    \caption{Coffee.}
+  \end{subfigure}
+  \begin{subfigure}[b]{0.4\linewidth}
+    \includegraphics[width=\linewidth]{coffee.jpg}
+    \caption{More coffee.}
+  \end{subfigure}
+  \caption{The same cup of coffee. Two times.}
+  \label{fig:coffee}
+\end{figure}
+</code>
+
+#Table of Contents
+
+<code>
+\documentclass{article}
+
+\begin{document}
+
+\tableofcontents
+\newpage
+
+\section{Section}
+
+Dummy text
+
+\subsection{Subsection}
+
+Dummy text
+
+\end{document}
+</code>
+
+#Appendix
+
+List of tables, list of figures.
+
+<code>
+\begin{document}
+
+\begin{figure}
+  \caption{Dummy figure}
+\end{figure}
+
+\begin{table}
+  \caption{Dummy table}
+\end{table}
+
+\begin{appendix}
+  \listoffigures
+  \listoftables
+\end{appendix}
+
+\end{document}
+</code>

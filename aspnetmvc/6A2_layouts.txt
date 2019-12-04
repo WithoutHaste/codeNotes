@@ -1,0 +1,112 @@
+##Layouts
+
+Layouts provide consistent page designs for a website.
+
+The default layout is Project/Views/Shared/_Layout.cshtml. You can add custom layouts in the same place. 
+This default is set in Project/Views/_ViewStart.cshtml, which runs before every view.
+
+The layout must contain exactly one RenderBody call. This is where the full view will be inserted.
+
+<code>
+<html>
+	<head>
+	</head>
+	<body>
+		<!-- some standard html -->
+		@RenderBody()
+		<!-- some standard html -->
+	</body>
+</html>
+</code>
+
+Individual views can set the layout they will use with:
+<code>
+@{ Layout = "customLayout"; }
+</code>
+
+#Sections
+
+You can add additional pieces of a view to the layout.
+
+In the layout:
+<code>
+<html>
+	<head>
+	</head>
+	<body>
+		<!-- some standard html -->
+		@RenderSection("sidebar", required:false)	
+		<!-- some standard html -->
+		@RenderBody()
+		<!-- some standard html -->
+	</body>
+</html>
+</code>
+
+In the view:
+<code>
+//normal view stuff here - to be inserted at RenderBody
+
+@section sidebar {
+	//more view stuff
+}
+</code>
+
+#Bundles
+
+A bundle is when ASP.Net takes several server-side files and combines into a single file to send to the client. At the same time, the files can be minified.
+
+This simplifies the application as seen from the client side, and provides better page load time.
+
+Bundles are registered in Project/Global.asax > Application_Start
+which calls Project/App_Start/BundleConfig.cs > RegisterBundles
+
+The bundler knows not to include "intellisense" files, and knows how to select "min" files.
+
+Example:
+<code>
+bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+	"~/Scripts/bootstrap.js",
+	"~/Scripts/respond.js"));
+</code>
+
+When running in debug mode, the bundler will not do these operations because minified, bundled files are very difficult to debug.
+Debug mode can be turned on/off in Project/Web.config:
+<code>
+	<system.web>
+		<compilation debug="true" targetFramework="4.5" />
+	</system.web>
+</code>
+
+#Styles
+
+"Styles.Render" provides a virtual path to a css bundle.
+
+Example:
+<code>
+	<head>
+		@Styles.Render("~/Content/css")
+	</head>
+</code>
+
+#Scripts
+
+"Scripts.Render" provides a virtual path to a javascript bundle.
+
+Generate a script tag for a bundle:
+<code>
+	<head>
+		@Scripts.Render("~/bundles/modernizr")
+	</head>
+</code>
+Modernizr, in particular, is at the top of the page because it needs to start running before the rest of the HTML is rendered.
+
+Most scripts will be included at the bottom of the page:
+<code>
+			@Scripts.Render("~/bundles/jquery")
+			@Scripts.Render("~/bundles/bootstrap")
+			@RenderSection("scripts", required: false)
+		</body>
+	</html>
+</code>
+Putting most scripts at the bottom of the page will give a better load-time to the page, because the HTML can be rendered before all the javascript files are downloaded.

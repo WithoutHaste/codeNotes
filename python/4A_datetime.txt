@@ -1,0 +1,10 @@
+##DateTime
+
+Using the datetime library.
+
+<code>
+import datetime
+
+currentDateTime = datetime.datetime.now()
+currentTime = currentDateTime.time()
+</code>

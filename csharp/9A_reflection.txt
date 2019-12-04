@@ -1,0 +1,81 @@
+##Reflection
+
+#Assembly
+
+Load an assembly:
+<code>
+Assembly assembly = Assembly.LoadFrom(assemblyFilename);
+</code>
+This locks the *.dll file. When used through MSBuild, the lock is not released.
+
+Load an assembly without locking the file:
+<code>
+Assembly assembly = Assembly.Load(File.ReadAllBytes(assemblyFilename));
+</code>
+Because of the way this is loaded, any libraries referenced by this one will not be resolvable. 
+Even if the secondary library is already loaded, it will not be recognized as the referenced library.
+
+Enabling "shadow copying" on the app domain will solve both problems.
+This requires creating a whole new app domain because existing ones cannot be edited.
+<code>
+using System;
+//...
+AppDomainSetup newDomainSetup = new AppDomainSetup();
+newDomainSetup.ShadowCopyFiles = "true";
+
+AppDomain newDomain = AppDomain.CreateDomain("", AppDomain.CurrentDomain.Evidence, newDomainSetup);
+
+// Run an executable
+newDomain.ExecuteAssembly("path\\program.exe", AppDomain.CurrentDomain.Evidence, commandLineArguments);
+//OR run a library method
+newDomain.CreateInstance("assemblyName", "typeNameInLibrary");
+
+//...The library type must extend MarshalByRefObject
+using System;
+using System.Reflection;
+public class MyInstance : MarshalByRefObject
+{
+	public MyInstance()
+	{
+		//your code here
+	}
+}
+</code>
+"Shadow copying" means that referenced *.dll files are copied to a temporary directory before being loaded.
+This way they are fully loaded without locking the original *.dll file.
+
+Another alternative is to force the current app domain to close when you are done with it. This will release all locked files.
+It will only work if it is the last thing done by the application.
+<code>
+public class MyClass
+{
+	public MyClass()
+	{
+		Assembly assembly = Assembly.LoadFrom("assemblyFilename");
+	}
+	
+	~MyClass()
+	{
+		AppDomain.Unload(AppDomain.CurrentDomain);
+	}
+}
+</code>
+
+#NameOf
+
+Succinct reflection. Works on classes, methods, properties, and variables.
+
+As of C# 6.0 (.Net Framework 4.6)
+
+<code>
+public class MyClass
+{
+	Public double Cost;
+}
+
+private string MyMethod(int x)
+{
+	Return String.Format("{0} {1} {2} {3}", nameof(MyClass), nameof(MyClass.Cost), nameof(MyMethod), nameof(x));
+}
+//returns “MyClass Cost MyMethod x”
+</code>

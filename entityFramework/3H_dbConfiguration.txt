@@ -1,0 +1,193 @@
+##DbConfiguration
+
+#About
+
+Uses for the DbConfiguration class:
+- an alternative to XML configurations in Web.config
+- new features like "set execution strategy"
+- provides hooks into the EF pipeline
+- works with Code-First and EDMX models
+
+#Basic
+
+<code>
+using System.Data.Entity
+
+internal class MyDbConfiguration : DbConfiguration
+{
+	public MyDbConfiguration()
+	{
+		//code goes here
+	}
+}
+</code>
+
+Entity Framework is auto-discover the DbConfiguration in your project, and will auto-apply it to the DbContext you instantiate.
+
+A DbConfiguration object will be initialized as the DbContext object is initialized for the first time. You cannot have more than one DbConfiguration instantiated in an application, even if you have multiple DbContext classes.
+
+If your DbConfiguration is in an external project:
+<code lang="xml">
+	<entityFramework codeConfigurationType="MyClassName,MyAssemblyName">
+	</entityFramework>
+</code>
+OR
+<code>
+[DbConfigurationType(typeof(MyDbConfiguration))]
+public class GeographyContext
+{
+}
+</code>
+
+#Replace XML
+
+Configurations you can set in a DbConfiguration class, instead of in the Web.config.
+
+<code>
+public MyDbConfiguration()
+{
+	this.SetDefaultConnectionFactory(new LocalDbConnectionFactory(connectionString));
+}
+</code>
+Replaces:
+<code lang="xml">
+	<entityFramework>
+		<defaultConnectionFactory type="System.Data.Entity.Infrastructure.LocalDbConnectionFactory,EntityFramework">
+			<parameters>
+				<parameter value="v11.0"/>
+			</parameters>
+		</defaultConnectionFactory>
+	</entityFramework>
+</code>
+If you use both, the XML will override the code.
+Setting a "connectionString" in the XML will also override the in-code ConnectionFactory. (This will also result in the default Provider Service not being set.)
+
+<code>
+public MyDbConfiguration()
+{
+	this.SetDatabaseInitializer(new DropCreateDatabaseIfModelChanges<GeographyContext>());
+	//if your DbContext is in a separate assembly from the DbConfiguration, this is probably not the place to set the DatabaseInitializer
+}
+</code>
+Replaces:
+<code lang="xml">
+	<entityFramework>
+		<contexts>
+			<context type="GeographyApp.DataLayer.GeographyContext,DataLayer">
+				<databaseInitializer type="System.Data.Entity.DropCreateDatabaseIfModelChanges,EntityFramework"/>
+			</context>
+		</contexts>
+	</entityFramework>
+</code>
+
+To disable all database initialization:
+<code>
+SetDatabaseInitializer<GeographyContext>(null);
+//OR
+SetDatabaseInitializer(new NullDatabaseInitializer<GeographyContext>());
+</code>
+
+#Provider Services
+
+Provider Services are APIs that provide Entity Framework with database-specific methods and functions.
+
+Setting a provider in Web.config
+<code lang="xml">
+	<connectionStrings>
+		<add name="GeographyContext" connectionString="stuff" providerName="System.Data.SqlClient"/>
+	</connectionStrings>
+	<!-- OR -->
+	<entityFramework>
+		<providers> <!-- will be ignored if you also have a connectionString -->
+			<provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices"/>
+		</providers>
+	</entityFramework>
+</code>
+
+In code:
+<code>
+public MyDbConfiguration()
+{
+	//this only works for custom providers where you have access to the constructor
+	SetProviderServices("System.Data.SqlClient", new SqlProviderServices());
+}
+</code>
+Normally, you allow the ConnectionFactory to set the Provider Service.
+
+#Interceptors
+
+For example, the IDbCommandInterceptor allows you to grab Entity Framework commands just before they are sent to the database, or the results as they return. This is commonly used to logging database interactions.
+
+Interceptor Interfaces:
+- IDbCommandInterceptor
+- IDbConnectionInterceptor
+- IDbCommandTreeInterceptor
+- IDbConfigurationInterceptor
+
+You can use multiple interceptors, of any type, at one time. Interceptors of the same type will be used in the order they are added to the DbConfiguration.
+<code>
+//add interceptors when DbConfiguration is initialized
+internal class MyDbConfiguration : DbConfiguration
+{
+	public MyDbConfiguration()
+	{
+		AddInterceptor(new InterceptorA());
+		AddInterceptor(new InterceptorB());
+		RemoveInterceptor(new InterceptorA());
+	}
+}
+
+//add interceptors on the fly
+//this code could execute anywhere
+DbInterception.Add(new InterceptorC());
+DbInterception.Remove(new InterceptorC());
+</code>
+
+Setup example:
+<code>
+using System.Data.Entity.Infrastructure.Interception;
+
+public class CustomInterceptor : IDbCommandInterceptor
+{
+	public void ReaderExecuting(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
+	{
+	}
+	//etc for the rest of the Interface methods
+}
+...
+internal class MyDbConfiguration : DbConfiguration
+{
+	public MyDbConfiguration()
+	{
+		AddInterceptor(new CustomInterceptor());
+	}
+}
+</code>
+
+Example: Use IDbCommandTreeInterceptor to perform Soft Deletes (marking a row as "deleted" instead of truly deleting it)
+This examples lets you use the normal "delete" command to perform soft deletes, AND auto-filters all queries to not return "deleted" records.
+
+<code>
+[SoftDelete("IsDeleted")] //custom attribute sets which property indicates deleted-state
+public class Country
+{
+	public int CountryId { get; set; }
+	public string Name { get; set; }
+	public bool IsDeleted { get; set; }
+}
+</code>
+The SoftDeleteInterceptor code is too extensive to show here.
+Summary: Queries are updated to always filter on "WHERE IsDeleted = 0" and Delete commands are changed into "UPDATE SET IsDeleted = 1".
+For all details, see Rowan Miller on channel9.msdn.com/Events/TechEd/NorthAmerica/2014/DEV-B417.
+
+On GitHub, there is also the project jbogard/EntityFramework.Filters, which is a library to applying filters to your queries using this same design pattern.
+
+#Dependency Resolution
+
+<code>
+System.Data.Entity.Infrastructure.DependencyResolution.IDbDependencyResolver
+</code>
+
+This is a pattern of relying on Interfaces, so a particular implementation is easy to set or remove.
+
+The "RootDependencyResolver" class sets all the default implementations that Entity Framework uses.

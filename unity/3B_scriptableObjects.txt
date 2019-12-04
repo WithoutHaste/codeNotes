@@ -1,0 +1,67 @@
+##ScriptableObjects
+
+Scriptable objects do not need to be added to GameObjects in a scene, they are simply Assets.
+
+Scriptable objects are serializable objects.
+They let you store large quantities of shared data independent of script instances.
+Frequently used just as data containers.
+
+Define global variable:
+<code>
+[CreateAssetMenu]
+public class Stats : ScriptableObject
+{
+	public int Strength;
+	public int Dexterity;
+	public int Intelligence;
+}
+</code>
+You can add a "Stats" type field anywhere in the code, and they will all be editing this one shared object.
+For instance, one MonoBehavior could update Stats.Strength and another could read it to display in the GUI.
+
+The intended usage of ScriptableObjects is:
+1) create the ScriptableObject script
+2) create instances of the ScriptableObject with specific data values set
+Ex: one "InventoryItem" ScriptableObject, and then instances for "Armor", "Weapon", etc.
+
+#Fields
+
+As with normal Scripts, all public non-static fields will be visible in the Inspector pane.
+
+You can also make private non-static fields visible by marking them "serializable".
+<code>
+[SerializeField]
+private int goldAmount;
+</code>
+
+#Events
+
+Awake() is called when a ScriptableObject instance is created in a script.
+
+Start() is not used on ScriptableObjects.
+
+OnEnable() is called when the the ScriptableObject is loaded.
+This does not seem to work when calling Static methods on the object without creating an instance of it.
+
+#Asset Menu
+
+You can configure any ScriptableObject to be listed in the normal Assets > Create menu.
+
+<code>
+[CreateAssetMenu]
+public class MyObject : ScriptableObject
+{
+}
+</code>
+Now you can easily create instances of this object in your project.
+
+<code>
+[CreateAssetMenu(fileName = "DefaultFileName", menuName = "AssetMenuLabel", order = 51)]
+public class MyObject : ScriptableObject
+{
+}
+</code>
+fileName: default file name of new instances of object
+menuName: how this object is labeled in the Asset > Create menu
+order: where in the Asset > Create menu this object will show up
+- the normal options are in reserved indexes 0 - 50

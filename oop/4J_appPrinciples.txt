@@ -1,0 +1,53 @@
+##Twelve-Factor App Principles
+
+Principles for building software-as-a-service applications. The goal is portability and resilience when deployed to the web.
+
+#Codebase
+
+There should be only one codebase for a deployed service.
+
+#Dependencies
+
+All dependencies should be declared explicitly, including dependencies on system tools and libraries.
+
+#Config
+
+Configuration that varies between deployments should be stored in the environment.
+
+#Backing Services
+
+??
+All backing services are treated as attached resources and attached and detached by the execution environment.
+
+#Build, Release, Run
+
+The delivery pipeline should strictly consist of Build, Release, Run.
+
+#Processes
+
+Applications should be deployed as stateless processes. Persistent data should be stored on a backing service.
+
+#Port Binding
+
+Self-contained services should make themselves available to other services by specified ports.
+
+#Concurrency
+
+??
+Concurrency is advocated by scaling individual processes.
+
+#Disposability
+
+Fast startup and shutdown support a robust and resilient system.
+
+#Dev/Prod Parity
+
+All environments should be as similar as possible.
+
+#Logs
+
+Applications should produce logs as event streams and leave aggregation to the execution environment.
+
+#Admin Processes
+
+Admin tasks should be included in source control and be packaged with the application.

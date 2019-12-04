@@ -1,0 +1,286 @@
+##Identities
+
+#IIdentity
+
+<code>
+using System.Security.Principal;
+
+//type IIdentity
+//string IIdentity.Name, Windows example "DOMAIN\\username"
+</code>
+
+The "host identity" or "token identity" is the identity of the host process. It is used to access resources on the file system, in the registry, or in a database.
+<code>
+IIdentity hostIdentity = WindowsIdentity.GetCurrent();
+string name = hostIdentity.Name;
+</code>
+
+The "primary identity" or "client identity" is the identity that the client passes to the service. This identity is accessible after the service constructor starts.
+<code>
+//available in the WCF application
+IIdentity primaryIdentity = ServiceSecurityContext.Current.PrimaryIdentity;
+</code>
+If security is turned off on the binding, then primary identity will be null.
+
+The "Windows identity" will be the same as the "primary identity" when Windows authentication is being used. Otherwise it will be null.
+<code>
+IIdentity windowsIdentity = ServiceSecurityContext.Current.WindowsIdentity;
+</code>
+
+The "thread identity" (after the service constructor has completed) will be the same as the "primary identity".
+<code>
+//available in anything running downstream (on the same thread) of the WCF application
+IIdentity threadIdentity = Thread.CurrentPrincipal.Identity;
+</code>
+
+#Intranet Clients
+
+If the client is an intranet desktop application, then the client is using the user's credentials.
+<code lang="xml">
+	<system.web>
+		<!-- turn on Windows authentication -->
+		<authentication mode="Windows" />
+		
+		<!-- do not allow anonymous users -->
+		<authorization>
+			<deny users="?" />
+		</authorization>
+	</system.web>
+</code>
+
+If the client is an intranet web application running on IIS, then the client is using IIS's credentials.
+- In IIS > select web site > Authentication > enable Windows Authentication and disable Anonymous Authentication.
+
+The intranet IIS client can explicitly use the credentials of the browser user. This is called Soft Impersonation.
+- In IIS > select web site > Basic Settings > Connect As > check Pass Through Authentication.
+-- If the user is anonymous, IIS will default to the user of the App Pool.
+Or, to ensure the user of the browser is used:
+- This can be done with the User property of an MVC Controller.
+- For testing this, run the client application through IIS rather than IIS Express.
+<code>
+using(((WindowsIdentity)User.Identity).Impersonate())
+{
+	MyClient proxy = new MyClient();
+	proxy.DoSomething();
+	proxy.Close();
+}
+</code>
+
+#Internet Clients with Chain Trust
+
+This application does not assume the user is logged into Windows, so it does not use Windows authentication:
+<code lang="xml">
+	<system.web>
+		<!-- manually send in username and password -->
+		<authentication mode="UserName" />
+	</system.web>
+</code>
+
+If the service is using Chain Trust certificate trust level, the client will need the public key in the config file:
+<code lang="xml">
+	<system.serviceModel>
+		<client>
+			<endpoint 
+				address="http://localhost/GeographyService"
+				binding="wsHttpBinding"
+				contract="IGeographyService"
+				/>
+			<endpoint
+				address="http://localhost/GeographyAdminService"
+				binding="wsHttpBinding"
+				contract="IGeographyAdminService"
+				bindingConfiguration="admin"
+				behaviorConfiguration="admin" <!-- references the endpointBehavior -->
+				>
+				<identity>
+					<certificate encodedValue="COPY THE 64 BASED PUBLIC KEY TO HERE" />
+				</identity>
+			</endpoint>
+		</service>
+		<bindings>
+			<wsHttpBinding>
+				<binding transactionFlow="true" sendTimeout="00:20:00">
+					<security mode="None" />
+				</binding>
+				<binding name="admin" transactionFlow="true" sendTimeout="00:20:00">
+					<security mode="Message">
+						<message 
+							clientCredentialType="UserName" <!-- client will pass in a username/password token -->
+							negotiateServiceCredential="false" <!-- the client is not expected to have a copy of the public-key-certificate -->
+							/>
+					</security>
+				</binding>
+			</wsHttpBinding>
+		</bindings>
+		<behaviors>
+			<endpointBehaviors>
+				<behavior name="admin">
+					<clientCredentials>
+						<serviceCertificate>
+							<authentication certificateValidationMode="ChainTrust" />
+						</serviceCertificate>
+					</clientCredentials>
+				</behavior>
+			</endpointBehaviors>
+		</behaviors>
+	</system.serviceModel>
+</code>
+
+The public key is copied from the public-key-certificate file created from the server certificate.
+- open the public key file in notepad > copy the key (just the part between the ---LABELS---)
+
+To send in a custom username/password token:
+<code>
+MyClient proxy = new MyClient();
+proxy.ClientCredentials.UserName.UserName = "username";
+proxy.ClientCredentials.UserName.Password = "password";
+proxy.DoSomething();
+proxy.Close();
+</code>
+
+#Internet Clients with Peer Trust
+
+If the service certificate is in the Personal store (certificate create with "My" instead of "Root"):
+
+Client config:
+<code lang="xml">
+	<system.serviceModel>
+		<client>
+			<endpoint 
+				address="http://localhost/GeographyService"
+				binding="wsHttpBinding"
+				contract="IGeographyService"
+				/>
+			<endpoint
+				address="http://localhost/GeographyAdminService"
+				binding="wsHttpBinding"
+				contract="IGeographyAdminService"
+				bindingConfiguration="admin"
+				behaviorConfiguration="admin" <!-- references the endpointBehavior -->
+				>
+				<identity>
+					<!-- by default, the client will look for a certificate with the same name as the service host -->
+					<!-- so override that with the actual certificate name -->
+					<dns value="ActualCertificateName" />
+				</identity>
+			</endpoint>
+		</service>
+		<bindings>
+			<wsHttpBinding>
+				<binding transactionFlow="true" sendTimeout="00:20:00">
+					<security mode="None" />
+				</binding>
+				<binding name="admin" transactionFlow="true" sendTimeout="00:20:00">
+					<security mode="Message">
+						<message 
+							clientCredentialType="UserName" <!-- client will pass in a username/password token -->
+							negotiateServiceCredential="true" <!-- the client is expected to have a copy of the public-key-certificate -->
+							/>
+					</security>
+				</binding>
+			</wsHttpBinding>
+		</bindings>
+		<behaviors>
+			<endpointBehaviors>
+				<behavior name="admin">
+					<clientCredentials>
+						<serviceCertificate>
+							<authentication certificateValidationMode="PeerTrust" />
+						</serviceCertificate>
+					</clientCredentials>
+				</behavior>
+			</endpointBehaviors>
+		</behaviors>
+	</system.serviceModel>
+</code>
+
+The service will (ahead of time) give the client the full certificate. The private key is fully encrypted inside there, so the client will only have access to the public key part of the certificate.
+
+The client will import the certificate into their machine's Trusted People store.
+- In certificate manager console > right-click on Trusted People folder > Tasks > Import > select the certificate file
+- Note that the icon does not show the private key part, indicating that only the public key is available.
+
+Note that in service config, the serviceCertificate storeName="My" instead of "Root".
+
+#Providers
+
+ASP.Net Providers use the Strategy Pattern to determine authentication and authorization.
+
+Note that this model has been deprecated as an ASP.Net security solution. It has been replaced by ASP.Net Identity.
+
+WCF has no built-in caching mechanisms for Roles, so if you want that you'll need to implement it yourself. ASP.Net MVC does support caching Roles.
+
+Membership Provider for authentication:
+<code>
+using System.Web.Security;
+
+public class MyMembershipProvider : MembershipProvider
+{
+	private string connectionString;
+
+	public override bool ValidateUser(string username, string password)
+	{
+		//verify, in your own way, that this username is valid
+		//example:
+		return (users.FindByName(username) != null);
+	}
+	
+	//if you need to send in settings, override the initialize method
+	public override void Initialize(string name, NameValueCollection config)
+	{
+		//example:
+		connectionString = config["connStr"]; //this name/value pair came from the Service config
+	
+		base.Initialize(name, config); //this name is the one the Service config file will reference
+	}
+}
+</code>
+
+Role Provider for authorization:
+<code>
+using System.Web.Security;
+
+public class MyRoleProvider : RoleProvider
+{
+	public override bool IsUserInRole(string username, string roleName)
+	{
+		//verify, in your own way, that this username has this role
+		//example:
+		return users.FindByName(username).IsInRole(roleName);
+	}
+}
+</code>
+
+Service config uses Providers:
+<code lang="xml">
+	<system.serviceModel>
+		<behaviors>
+			<serviceBehaviors>
+				<serviceCredentials>
+					<userNameAuthentication userNamePasswordValidationMode="MembershipProvider" 
+						membershipProviderName="MyProvider" <!-- the name of the provider in the system.web membership config section -->
+						/>
+				</serviceCredentials>
+				<serviceAuthorization principalPermissionMode="UseAspNetRoles" 
+					roleProviderName="MyProvider" <!-- the name of the provider in the system.web roleManager config section -->
+					/>
+			</serviceBehaviors>
+		</behaviors>
+	</system.serviceModel>
+	<system.web>
+		<membership>
+			<providers>
+				<add name="MyProvider" type="<fully qualified type of MyMembershipProvider>,<assembly name>" 
+					connStr="connectionString"
+					/>
+				<!-- you can add any name/value pairs to this tag, and they will passed into MembershipProvider.Initialize -->
+			</providers>
+		</membership>
+		<roleManager enabled="true">
+			<providers>
+				<add name="MyProvider" type="<fully qualified type of MyRoleProvider>,<assembly name>" />
+			</providers>
+		</roleManager>
+	</system.web>
+</code>
+

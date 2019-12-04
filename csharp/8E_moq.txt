@@ -1,0 +1,179 @@
+##Moq
+
+#About
+
+Moq is a popular mocking framework for C#. You can install Moq (and its dependencies) with the NuGet Package Manager.
+
+"Mocking" means creating a derived class of the class you want to test, and overriding its methods to respond the way you want. This is used to setup test scenarios without actually setting up your end-to-end system for each scenario. This allows you to test each part of your system in isolation.
+
+If you find yourself mocking a normal class, you should probably refactor so the class implements an interface and you are mocking the interface. See "Dependency Inversion" for more.
+
+#Basic Example
+
+<code>
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+
+[TestClass]
+public class MyClass
+{
+	[TestMethod]
+	public void MyTest()
+	{
+		Mock<IMyInterface> mock = new Mock<IMyInterface>();
+		//setup the mock here
+		//run test here, using mock.Object
+		//use verify methods on mock, and/or use asserts
+		Assert.AreEqual(mock.Object.Property1, "value");
+	}
+}
+</code>
+
+#Options
+
+Strict Moq will raise an exception for anything invoked in the mock that was not setup first:
+<code>
+Mock<IMyInterface> mock = new Mock<IMyInterface>(MockBehavior.Strict);
+</code>
+
+Invoke base class implementation if no expectation was setup to override the member.
+See "Partial Mocks".
+This is required for mocking Web/Html controls in System.Web.
+<code>
+Mock<IMyInterface> mock = new Mock<IMyInterface>() { CallBase = true };
+</code>
+
+If some member is called that was not setup, automatically create and return a new Mock for that member. This is default recursive Mocks.
+<code>
+Mock<IMyInterface> mock = new Mock<IMyInterface>() { DefaultValue = DefaultValue.Mock };
+</code>
+
+#Setup Methods
+
+Method with parameter and return value:
+<code>
+mock.Setup(i => i.Method("parameter")).Returns("result");
+</code>
+
+Method that will return each value, in order, as it is called multiple times:
+<code>
+mock.SetupSequence(i => i.Method()).Returns("resultA").Returns("resultB").Returns("resultC").Throws(new InvalidOperationException());
+</code>
+
+Method with an out parameter and a return value:
+<code>
+int outParameter = 0;
+mock.Setup(i => i.Method("parameter", out outParameter)).Returns("result");
+</code>
+
+Method with a ref parameter:
+<code>
+int refParameter = 0;
+mock.Setup(i => i.Method("parameter", ref refParameter));
+</code>
+
+Throw an exception:
+<code>
+mock.Setup(i => i.Method("parameter")).Throws<InvalidOperationException>();
+</code>
+
+Accept any parameter of the correct data type:
+<code>
+mock.Setup(i => i.Method(It.IsAny<string>()));
+</code>
+
+Accept any parameter that is passed by ref: (As of Moq 4.8)
+<code>
+mock.Setup(i => i.Method(ref It.Ref<MyType>.IsAny));
+</code>
+
+Accept any parameter by type and condition:
+<code>
+mock.Setup(i => i.Method(It.Is<int>(i => i % 2 == 0)));
+</code>
+
+Accept any parameter by type and range:
+<code>
+mock.Setup(i => i.Method(It.IsInRange<int>(0, 10, Range.Inclusive)));
+</code>
+
+Accept any parameter by regular expression:
+<code>
+mock.Setup(i => i.MethodCondition5(It.IsRegex("\s+", RegexOptions.IgnoreCase)));
+</code>
+
+#Setup Properties
+
+A property value:
+<code>
+mock.Setup(i => i.Property1).Returns("value");
+</code>
+
+Mock a hierarchy of objects with one command:
+<code>
+mock.Setup(i => i.Property2.SubProperty3.SubSubProperty4).Returns("value");
+</code>
+
+Wait for this value to be set during the test:
+<code>
+mock.Setup(i => i.Property3 = "value");
+</code>
+
+Setup stub: track gets and sets of this property during the test:
+<code>
+mock.SetupProperty(i => i.Property5);
+mock.SetupProperty(i => i.Property5, "defaultValue");
+</code>
+
+Setup all stubs: create stubs for all properties at once:
+<code>
+mock.SetupAllProperties();
+</code>
+
+#Verification
+
+Method was not called:
+<code>
+mock.Verify(i => i.Method("parameter"), Times.Never());
+</code>
+
+Method was called at least once:
+<code>
+mock.Verify(i => i.Method("parameter"), Times.AtLeastOnce());
+</code>
+
+Property was got:
+<code>
+mock.VerifyGet(i => i.Property1);
+</code>
+
+Property was set:
+<code>
+mock.VerifySet(i => i.Property1);
+</code>
+
+Property was set to specific value:
+<code>
+mock.VerifySet(i => i.Property1 = "value");
+</code>
+
+Property was set to something in this range:
+<code>
+mock.VerifySet(i => i.Property1 = It.IsInRange(0, 10, Range.Inclusive));
+</code>
+
+No other invocations were made, except those already verified:
+<code>
+mock.VerifyNoOtherCalls();
+</code>
+
+#Errors
+
+Error: "Mock does not contain a definition for Setup".
+Solution: use strongly-typed Mock
+<code>
+//use this
+Mock<IMyInterface> mock = new Mock<IMyInterface>();
+//instead of this
+Mock mock = new Mock<IMyInterface>();
+</code>

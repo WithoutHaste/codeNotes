@@ -1,0 +1,127 @@
+body {
+	font-family: Arial;
+	font-size: 16;
+	background-color: #333333;
+	color: #cccccc;
+}
+#pageHeader {
+	font-size: 40;
+	font-weight: bold;
+	padding-top: 0.25em;
+	padding-left: 0.5em;
+	padding-bottom: 0.5em;
+	font-family: verdana, arial black, arial;
+	color: #888888;
+}
+title {
+	font-size: 28;
+	font-weight: bold;
+	display: block;
+}
+a {
+	text-decoration: none;
+	color: #cccccc;
+}
+a:hover {
+	color: white;
+}
+a.offset {
+	display: block;
+	position: relative;
+	top: -6.5em; /*same as height of fixedHeader plus a little*/
+	visibility: hidden;
+}
+a.external {
+	color: #d16c00; /* rusty orange */
+}
+
+#pageHeader a {
+	color: #36AECF; /*dark chalky blue*/
+}
+#pageHeader a:hover {
+	color: #6CE0FF; /*chalky blue*/
+}
+
+.sidebarHeader {
+	font-weight: bold;
+	font-size: larger;
+}
+.header {
+	font-weight: bold;
+	font-size: larger;
+	margin-top: 0.2em;
+	margin-bottom: 0.2em;
+}
+.subheader {
+	font-weight: bold;
+	margin-top: 0.15em;
+	margin-bottom: 0.15em;
+}
+
+div.fixedHeader {
+	display: block;
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	height: 6em;
+	width: 100%;
+	padding-top: 0.25em;
+	padding-left: 0.5em;
+	border-bottom: 4px solid black;
+	background-color: #333333;
+}
+div.mainContent {
+	position: static;
+	margin-top: 6.5em; /*same as height of fixedHeader plus a little*/
+}
+div.sidebar {
+	top: 6.5em; /*same as height of fixedHeader plus a little*/
+	left: 0px;
+	width: 250px;
+	/* Firefox */
+	height: -moz-calc(100% - 6.5em); /*offset based on top*/
+	/* WebKit */
+	height: -webkit-calc(100% - 6.5em); /*offset based on top*/
+	/* Opera */
+	height: -o-calc(100% - 6.5em); /*offset based on top*/
+	/* Standard */
+	height: calc(100% - 6.5em); /*offset based on top*/
+	
+	overflow-y: auto;
+	border-right: 1px solid black;
+	padding: 0.25em;
+	display: block;
+	position: fixed;
+}
+div.fullText {
+	margin-left: 280px; /*sidebar width plus buffer*/
+	padding: 0.25em;
+}
+div.inset {
+	padding-left: 1em;
+	border-left: 1px solid #333333;
+	margin-bottom: 1em;
+	border-left: 2px solid #333333; /* background color */
+}
+div.inset:hover {
+	border-left: 2px solid #d16c00; /* rusty orange */
+}
+
+pre[class*="language-"] {
+	padding-top: 0em;
+}
+code[class*="language-"] {
+	line-height: 1.2;
+}
+
+div.nomnoml {
+	margin: 0.25em;
+	background-color: #fdf6e3;
+}
+
+div.highlight-text, a.highlight {
+	color: #d16c00; /* rusty orange */
+}
+/*div.highlight-section {
+	border-left: 2px solid #d16c00; /* rusty orange */
+}*/

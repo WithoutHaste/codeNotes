@@ -1,0 +1,98 @@
+##Math
+
+#Constants
+
+Math.PI
+Math.E
+...others
+
+#Random
+
+Math.random() returns a random number in range [0, 1) : includes 0, excludes 1
+
+<code>
+var x = Math.floor(Math.random() * 100); //random value from 0 to 99
+</code>
+
+general function to get an integer from min to max, both included
+<code>
+function getRandomInteger(min, max) 
+{
+    return Math.floor(Math.random() * (max - min + 1) ) + min;
+}
+</code>
+
+#Min Max
+
+<code>
+var x = Math.min(0, 150, -37, 45.7, -19); //-37
+var y = Math.max(0, 150, -37, 45.7, -19); //150
+</code>
+
+getting the min/max value from an array
+<code>
+var x = [5, 8, 2, 3, 8, 4, 6, 2];
+var y = Math.min.apply(null, x); //2
+var z = Math.max.apply(null, x); //8
+</code>
+
+#Round
+
+Math.round(number) returns integer
+
+<code>
+var x = Math.round(4.7); //5
+var y = Math.round(4.4); //4
+</code>
+
+Math.ceil(number) rounds up
+
+<code>
+var x = Math.ceil(4.7); //5
+var y = Math.ceil(4.4); //5
+</code>
+
+Math.floor(number) rounds down
+
+<code>
+var x = Math.floor(4.7); //4
+var y = Math.floor(4.4); //4
+</code>
+
+#Pow
+
+Math.pow(base, exponent) returns number = base ^ exponent
+
+<code>
+var x = Math.pow(5, 2); //25
+</code>
+
+#Sqrt
+
+Math.sqrt(number) returns number
+
+<code>
+var x = Math.sqrt(64); //8
+</code>
+
+#Abs
+
+Math.abs(number) returns the absolute value of the number
+
+<code>
+var x = Math.abs(64); //64
+var y = Math.abs(-64); //64
+</code>
+
+#Misc
+
+sin
+cos
+tan
+
+asin
+acos
+atan
+
+exp
+log

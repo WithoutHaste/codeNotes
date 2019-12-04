@@ -1,0 +1,10 @@
+##Syntax
+
+First, valid JavaScript is always valid TypeScript.
+
+For instance, if you want an anonymous immediately invoking function, just write a JavaScript one:
+<code>
+(function() {
+	console.log("run");
+})();
+</code>

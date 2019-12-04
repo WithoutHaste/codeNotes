@@ -1,0 +1,366 @@
+##Regular Expression Object
+
+Regular expressions quickly parse large amounts of text to find specific character patterns. They extract, edit, replace, and delete text substrings.
+
+<code>
+using System.Text.RegularExpressions;
+</code>
+
+#RegexStringValidator
+
+If you are just validating a string conforms to a pattern, use a RegexStringValidator.
+
+<code>
+RegexStringValidator validator = new RegexStringValidator(@"^[A-Z]{3}$");
+try
+{
+	validator.Validate(myString);
+}
+catch(ArgumentException)
+{
+	//validation failed
+}
+</code>
+
+Validate is a void method, it just throws an exception if the comparison fails.
+
+#Specific Substring
+
+If you are looking for a specific substring (rather than a pattern) use the String class methods.
+
+<code>
+myString.Contains(substring);
+myString.StartsWith(substring);
+myString.EndsWith(substring);
+myString.IndexOf(substring);
+myString.LastIndexOf(substring);
+</code>
+
+#Static vs Instance Methods
+
+All the Regex methods have both a static version and an instance version.
+
+Regex is an immutable object, so when using instance methods, it will compile your search pattern once and let you use it over and over.
+
+If you use the static methods, your search pattern will be compiled and cached. Usually the cache holds up to 15 pattern, so performance is similar for either method, up to a point.
+
+#Examples
+
+<code>
+Regex r = new Regex(@"\b(\w+)\s\1\b", RegexOptions.IgnoreCase);
+MatchCollection matches = r.Matches(myString);
+foreach(Match match in matches)
+{
+	Console.WriteLine(match.Value);
+}
+</code>
+
+<code>
+if(r.IsMatch(myString))
+{
+	//at least one match was found
+}
+</code>
+
+<code>
+Match match = r.Match(myString); //returns first match
+while(match.Success)
+{
+	Console.WriteLine("'{0}' found at index {1}", match.Value, match.Index);
+	match = match.NextMatch();
+}
+</code>
+
+<code>
+string[] splits = r.Split(myString); //splits string at beginning of each match
+</code>
+
+<code>
+//instance version
+string result = r.Replace(myString, replacementString); //replace all matches with replacement
+
+//static version
+string result = Regex.Replace(myString, @"\b(\w+)\s\1\b", replacementString);
+</code>
+
+<code>
+public MyClass
+{
+	public static string MyMethod(Match m)
+	{
+		//return replacement string for this particular match
+	}
+}
+string result = r.Replace(myString, new MatchEvaluator(MyClass.MyMethod));
+</code>
+
+Capture groups:
+<code>
+Match match = Regex.Match(searchString, @"([a-z]+) ([a-z]+)", RegexOptions.IgnoreCase);
+while(match.Success) //one match per "word word" found
+{
+	string value = match.Value;
+	int index = match.Index;
+	string wholeMatch = match.Groups[0].Value;
+	string word1 = match.Groups[1].Value;
+	string word2 = match.Groups[2].Value;
+	
+	match = match.NextMatch();
+}
+</code>
+
+##Regular Expression Patterns
+
+#Character Escapes
+
+\a = \u0007 = alarm sound
+\b = \u0008 = backspace
+\t = \u0009 = tab
+\n = \u000A = new line
+\v = \u000B = vertical tab
+\f = \u000C = form feed
+\r = \u000D = carriage return
+\e = \u001B = escape key
+\nn or \nnn (where each n is a digit) = octal character (ex: \040 = space)
+\xnn (where each n is a hex-digit) = hexadecimal character (ex: \x20 = space)
+\cX or \cx (where X and x are alphabet characters) = control-character (ex: \cC = Ctrl-C)
+\unnnn (where each n is a hex-digit) = unicode character (ex: \u0020 = space)
+\x (where x is any character) = use the character as is (ex: \* = asterisk)
+
+#Anchors
+
+Anchors are "atomic zero-width assertions", meaning they cause a match to succeed or fail based on the current position in the string, and they do not cause the current position to change.
+
+^ = beginning of string or line
+$ = end of string or line
+\A = beginning of string
+\Z = end of string or line ??
+\z = end of string
+\G = beginning of string, or end of previous match
+\b = boundary between \w and \W (or vice versa)
+\B = not \b
+
+<code>
+Pattern "\Gx\dx"
+String "x1xx3xx5xy7yx9x"
+Matches "x1x", "x3x", "x5x"
+</code>
+
+#Character Classes
+
+[x] = matches any single character inside braces (case sensitive by default)
+[^x] = matches any single character NOT inside braces
+[x-y] = matches any single character in the range from x to y (including x and y)
+[x^y] = matches x, ^, or y (equivalent to [\^xy])
+
+<code>
+"[abg-mx]" = "[abghijklmx]"
+</code>
+
+. = wildcard, matches any single character (except "\n")
+\p{name] = matches any single character in the named Unicode category or block
+\P{name} = not \p{name}
+
+<code>
+\p{Lu} or \p{IsCyrillic}
+</code>
+
+\w = matches any single "word" character = alphabet and digits and underscore
+\W = not \w
+\s = matches any single whitespace character
+\S = not \s
+\d = matches any single digit
+\D = not \d
+
+#Grouping Constructs
+
+Grouping constructs delineate subexpressions and capture substrings.
+
+(subexp) = captures subexp match and assigns it to an ordinal group (starting at 1)
+
+<code>
+Pattern "(\w)\1"
+String "AaBBccdeed"
+Matches "BB", "cc", "ee"
+</code>
+
+(?<name>subexp) = captures subexp match and assigns it to a named group
+
+<code>
+Pattern "(?<letter>\w)\k<letter>"
+String "AaBBccdeed"
+Matches "BB", "cc", "ee"
+</code>
+
+(?<nameA-nameB>subexp = creates a balancing group (see Balancing Group Definition below)
+
+(?:subexp) = does not capture subexp match
+(?imnsx-imnsx:subexp) = toggles match options within the subexp (see Miscellaneous Constructs)
+
+<code>
+"(?i:\w)" //turns ignore case on within the subexp
+"(?-i:\w)" //turns ignore case off withint the subexp
+"(?i-s:\w)" //turns ignore case on, and single line mode off
+</code>
+
+(?=subexp) = zero-width positive look ahead assertion, like an Anchor looking for a specific pattern
+
+<code>
+Pattern "\w+(?=\.)"
+String "The dog. Is Happy."
+Matches "dog", "Happy" because they have a period after them
+</code>
+
+(?!subexp) = zer-width negative look ahead assertion, like an Anchor looking for anything but this specific pattern
+
+(?<=subexp) = zero-width positive look behind assertion, like an Anchor looking for a specific pattern
+
+<code>
+Pattern "(?<=19)\d{2}\b"
+String "1851 1999 1950 1905 2003"
+Matches "99", "50", "05" because they have a 19 before them
+</code>
+
+(?<!subexp) = zero-width negative look behind assertion, like an Anchor looking for anything but this specific pattern
+
+(?>subexp) = greedy subexpression, meaning no backtracking
+
+The greedy subexpression is used to speed up large processes. No backtracking means that if (ex) string index 5 through 9 seem to match but index 10 makes the match fail, then checking will continue forward from 10 instead of backtracking to 6.
+
+#Quantifiers
+
+* = match previous element 0 or more times
++ = match previous element 1 or more times
+? = match previous element 0 or 1 times
+
+<code>
+"x*" matches "", "x", "xx", "xxx"...
+"(xyz)*" matches "", "xyz", "xyzxyz"...
+</code>
+
+{n} or {n}? = matches previous element exactly n times
+{n,} = matches previous element at least n times
+{n,m} = matches previous element from n to m times
+
+You can append a ? to end of any quantifier to make it match as few times as possible.
+
+*? = matches previous element 0 or more times AND ALSO as few times as possible
++? = matches previous element 1 or more times AND ALSO as few times as possible
+?? = matches previous element 0 or 1 times AND ALSO as few times as possible
+{n,}? = matches previous element at least n times AND ALSO as few times as possible
+{n,m}? = matches previous element n to m times AND ALSO as few times as possible
+
+#Backreference Constructs
+
+\number = matches the value of a numbered subexpression
+
+These groups are numbered left to right, starting at 1, and can go above 9.
+
+<code>
+Pattern "(aaa)x\1"
+String "aaaxaaa"
+Matches "aaaxaaa"
+</code>
+
+\k<name> = matches the value of a named subexpression
+
+These named groups are still given a number, in sequence with the non-named groups.
+
+<code>
+Pattern "(?<abc>ddd)x\k<abc>x\1"
+String "dddxdddxddd"
+Matches "dddxdddxddd"
+</code>
+
+#Alternation Constructs
+
+| = matches any 1 element separated by vertical bar
+
+<code>
+Pattern "th(e|is|at)"
+String "the house is this way, not that"
+Matches "the", "this", "that"
+</code>
+
+(?(subexp)yes|no) = the subexp is a zero-width assertion, if assertion is true then match yes otherwise match no
+
+<code>
+Pattern "(?(Wh)at|one)"
+String "What is the tone?"
+Matches "What", "one"
+</code>
+
+(?(name)yes|no) = name is the name or number of a backreference construct, if that construct got a match then match yes otherwise match no
+
+<code>
+Pattern "(xxx)(?(1)a|b)"
+String "bxxxabb"
+Matches "b" (the first one), "a"
+</code>
+
+#Substitutions
+
+These are language elements supported in replacement patterns.
+
+$n = (where n is a number) uses substring captured by group n
+${name} = uses substring captured by group "name"
+$$ = literal $ character
+$& = uses whole match
+$` = (that is a backtic) uses all of input string up to the match
+$' = (that is a quote) uses all of input string after the match
+$+ = uses substring captured by last group
+$_ = uses entire input string
+
+#Options
+
+i = case insensitive
+m = multiline mode (^ and $ match start and end of lines, instead of whole input)
+n = do not capture unnamed groups
+s = single line mode
+x = ignore unescaped whitespace in the pattern (use for legibility)
+
+<code>
+(with x option) "\b(?x) \d+ \s \w+" = "\b(?x)\d+\s\w+"
+</code>
+
+#Miscellaneous Constructs
+
+(?imnsx-imnsx) = toggles the match option for everything to the right
+
+<code>
+Pattern "A(?i)b\w+"
+String "ABC Able aBC"
+Matches "ABC", "Able"
+</code>
+
+(?#comments) = comment your pattern
+ # = comment starts at unescaped # and goes to end of line
+
+#Balancing Group Definition
+
+Matching recursive (nested) structures.
+
+(?<nameA-nameB>subexp)
+(?'nameA-nameB'subexp)
+(?<-nameB>subexp)
+
+Consider all the matches for nameB to be on a stack. When this match for nameA is found, one match from nameB is popped off the stack. All the text from the last match for nameB to this current match for nameA is pushed onto nameA's stack.
+
+If regex attempts to pop from the nameB stack when the stack is empty, the match fails.
+
+One use is to validate that nested open/close angle braces are valid:
+<code>
+string plainPattern = "^[^<>]*(((?'Open'<)[^<>]*)((?'Close-Open'>)[^<>]*)+)*(?(Open)(?!))$";
+
+//ignore these line breaks, they were added for commenting
+string explainedPattern = "
+^[^<>]* //allow any number of non-brace characters at beginning
+(
+	((?'Open'<)[^<>]*) //"<" pushed onto "Open" stack
+	((?'Close-Open'>)[^<>]*)+ //text pushed onto "Close" stack and one "<" popped from "Open" stack
+)*
+(?(Open)(?!))$ //success if "Open" stack is empty at the end of the input, because the (?!) is not executed
+";
+</code>
+
+The example above uses (?!). This is a zero-width negative look ahead assertion that will always fail, because it checks for an empty string and you can always find an empty string. Thus this assertion always fails.

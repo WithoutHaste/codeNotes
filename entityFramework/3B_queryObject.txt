@@ -1,0 +1,147 @@
+##Query DbSet
+
+#About
+
+Note that queries against a DataSet will not take new entities into account. These queries are only run against the data store. (This is avoid having to merge the data store with local cached values.)
+
+#LINQ
+
+You can query DbSets using LINQ To Entities.
+
+The query will not be executed until you either run a LINQ Execution Method (such as .ToList()) or enumerate the results (such as in a foreach statement).
+
+See LINQ Notes for a lot more specifics.
+
+Simple example:
+<code>
+List<Country> countries = dbContext.Countries.ToList();
+</code>
+
+If you use implicit enumeration to run a query, the database connection will remain open until the loop is complete. This can cause terrible slow-downs.
+<code>
+foreach(Country country in dbContext.Countries)
+{
+	...
+}
+</code>
+
+Make sure all filtering you do on data is done before any Execution Method or Enumeration. That way the minimum amount of data will be returned from the database.
+
+The SqlClientProvider supports many SQL Server database functions as LINQ methods.
+The SqlCEProvider(using System.Data.Entity.SqlServerCompact) is similar for SQL CE database functions.
+
+EF 6 introduces LINQ support for ToString, Concat, and HasFlag (for enums).
+<code>
+[Flags] //can combine bitwise values
+public enum Access
+{
+	Read = 1,
+	Write = 2,
+	Update = 4,
+	Delete = 8
+}
+...
+List<User> users = dbContext.Users.Where(u => u.Access.HasFlag(Access.Write)).ToList();
+</code>
+
+#Find
+
+<code>
+Country country = dbContext.Countries.Find(idValue);
+</code>
+If the object already exists in memory, the result will be returned from local memory instead of querying the database.
+
+This executes with the "SingleOrDefault" logic - if more than one record with this Id exists, it will throw an error.
+
+#SqlQuery
+
+The query must return results that match the schema of the selected DbSet type.
+
+<code>
+List<Country> countries = dbContext.Countries.SqlQuery("exec MyStoredProc").ToList();
+</code>
+
+This is ok for stored procedures.
+It is not recommended for custom SQL statements that could have been written in LINQ.
+
+#Raw SQL
+
+<code>
+dcContext.Database.ExecuteSqlCommand("UPDATE TableName SET Name = 'Other Name' WHERE Id = 1");
+</code>
+
+With parameters:
+<code>
+using System.Data.SqlClient;
+
+string sql = @"UPDATE TableName SET FirstName = @FirstName WHERE Id = @Id";
+
+dbContext.Database.ExecuteSqlCommand(
+	sql, 
+	new SqlParameter("@FirstName", firstName),
+	new SqlParameter("@Id", id)
+	);
+</code>
+
+#Retrieve Related Objects
+
+Eager Loading: bring all data back from database in one query.
+<code>
+Country country = dbContext.Countries.Include(c => c.Cities).First();
+</code>
+The more paths you include, the slower the query will run.
+The data is flattened in the database query, and is materialized as different objects by Entity Framework.
+
+Explicit Loading: run extra queries to retrieve related data as needed.
+<code>
+Country country = dbContext.Countries.First();
+dbContext.Entry(country).Collection(c => c.Cities).Load();
+</code>
+
+Lazy Loading: run extra queries to retrieve related data as needed. The property must be marked as "virtual" to enable this.
+<code>
+public virtual List<City> Cities { get; set; }
+...
+Country country = dbContext.Countries.First();
+List<City> cities = country.Cities.ToList();
+</code>
+
+Projections: return data that does not match a known entity type.
+<code>
+var anonymousObject = dbContext.Countries.Select(c => new { c.Name, c.Cities.Count(), c.Leader.Name } ).ToList();
+</code>
+
+#AsNoTracking
+
+Load data without the overhead of tracking the state of the object. Use this in disconnected applications when you know the object is about to pass out of the current context.
+
+<code>
+Country country = dbContext.Countries.AsNoTracking().First();
+</code>
+
+#Async
+
+Asynchronous queries
+
+#Performance
+
+Before EF 6, a query like "dbContext.Countries.Where(c => idList.Contains(c.Id))" would generate a slow query using many "OR" statements. This was translated to an "IN" statement before the query was run on the database, but generating the first query was, itself, a slow process. In EF 6 and later, the first query will be generated using an "IN" statement, skipping that slow step.
+
+The start up time (to instantiate a new DbContext) used to be much slower than it is now. Part of the problem was the "Mapping View Generation" step, which pre-generated some common-use SQL (specifically, a basic SELECT statement for each Entity type). Now you can set this generation to run at compile-time instead of run-time.
+- To do this at design-time: Right-click on project > Entity Framework > Generate Views
+- and the views will be compiled into your project
+
+With EF 6 and later (distributed by NuGet), the compiler uses Just In Time compilation of the library. If this is a problem for you, you can use "ngen".
+NGen will compile a C# assembly to the native-machine code of the current computer. That compiled library can be used by .Net instead of the uncompiled library. This will improve the start-up time of your program.
+
+With EF 6, you can reuse an open database connection.
+<code>
+//Example test from EF 5, causing an error when you try to reuse an open connection
+using(GeographyDbContext dbContext = new GeographyDbContext())
+{
+	DbConnection conn = dbContext.Database.Connection;
+	conn.Open();
+	dbContext.Countries.ToList(); //accessing the database throw exception "EntityConnection can only be constructed with a closed DbConnection
+}
+Assert.IsTrue(true);
+</code>

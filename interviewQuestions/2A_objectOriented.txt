@@ -1,0 +1,18 @@
+##Object-Oriented Programming
+
+Name the differences between object-oriented design and component-based design.
+
+What are the differences between functional and object-oriented programming?
+
+How would you refactor this class for easier unit testing? 
+
+How would you refactor this class for parallel and concurrent processing? 
+
+What do you know about multi-threading?
+
+What is MVC?
+
+How familiar are you with OOP analysis and design?
+
+How do you organize your class modules and assets?
+

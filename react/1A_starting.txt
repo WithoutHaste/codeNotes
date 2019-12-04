@@ -1,0 +1,89 @@
+##Getting Started
+
+You can use a little React in your Javascript, or a lot.
+
+Loading ReactJS into webpage:
+<code>
+	<!DOCTYPE html>
+	<html lang="en">
+
+		<!-- Load React API -->
+		<script src= "https://unpkg.com/react@16/umd/react.production.min.js"></script>
+		<!-- Load React DOM-->
+		<script src= "https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+		<!-- Load Babel Compiler -->
+		<script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+
+		<body>
+
+			<script type="text/babel">
+				// JSX Babel code goes here
+			</script>
+
+		</body>
+	</html> 
+</code>
+
+For *.js pages:
+<code>
+import React from 'react';
+</code>
+
+#Like Button
+
+"Like" Button example.
+
+likeButton.html
+<code>
+	<html>
+		<head>
+			<meta charset="UTF-8">
+
+			<!-- Load React. -->
+			<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+			<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+
+		</head>
+		<body>
+			<div id="like_button_container"></div>
+
+			<!-- Load our React component. -->
+			<script src="likeButton.js"></script>
+		</body>
+	</html>
+</code>
+The "likeButton.js" must be loaded at the end of the "body" element. 
+If you load it in the "head" element, before the "div" is defined, you'll get a "target container is not a dom element" error.
+
+likeButton.js (contains React component "LikeButton")
+<code>
+'use strict';
+
+const e = React.createElement;
+
+class LikeButton extends React.Component 
+{
+	constructor(props) 
+	{
+		super(props);
+		this.state = { liked: false };
+	}
+
+	render() 
+	{
+		if (this.state.liked) 
+		{
+			return 'You liked this.';
+		}
+
+		return e(
+			'button',
+			{ onClick: () => this.setState({ liked: true }) },
+			'Like'
+		);
+	}
+}
+
+const domContainer = document.querySelector('#like_button_container');
+ReactDOM.render(e(LikeButton), domContainer);
+</code>

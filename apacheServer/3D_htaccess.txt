@@ -1,0 +1,28 @@
+##.htaccess
+
+#About
+
+.htaccess files can sit in any/every directory. Each file applies to the directory it is in and all subdirectories. A lower file will override any higher files.
+
+.htaccess is read on every web request, so changes take immediate effect.
+
+.htaccess uses the same syntax as Apache configuration files, but not all directives valid in the config files is valid here. 
+
+#Sources
+
+!![The Ultimate Htaccess](https://www.askapache.com/htaccess/)
+!![Key to directives](http://httpd.apache.org/docs/trunk/mod/directive-dict.html)
+!![List of directives](http://httpd.apache.org/docs/trunk/mod/directives.html)
+
+!![Test RewriteCond and RewriteRule Here](https://htaccess.madewithlove.be/)
+
+#Comments
+
+<code>
+ # Comments
+</code>
+My server throws a 500 error if you use comments at the end of an executed line. So only use full-line comments.
+
+#Syntax
+
+If an argument contains a space, the argument must be enclosed in double quotes (").

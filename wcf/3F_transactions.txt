@@ -1,0 +1,209 @@
+##Transactions
+
+#About
+
+A transaction is about ensuring that an operation ends (on success or failure) with the system in a consistent state.
+On a success, every step in the operation completed.
+On a failure, every step in the operation was rolled back.
+
+The namespace System.Transactions supports .Net transactions.
+
+WCF is a fully qualified transaction resource manager.
+
+DTC stands for Distributed Transaction Coordinator. This can coordinate transactions that span multiple machines, from the client through to the database.
+All resources in the chain vote on the transaction. Only if they all agree, will the transaction be committed. Any of them can have the whole transaction rolled back.
+
+If WCF, or another transaction resource manager, starts a transaction that ends up including the database, then you do not need to manually handle the database transaction. It will be handled as part of the overall transaction. (This is called "carry in".)
+
+Example of a service operation that needs a transaction:
+You send in a shopping cart (list) of items to purchase. If one cannot be purchased, you want the whole purchase rolled back.
+
+There is no need to make a read/get/lookup operation part of a transaction, because the system state is not changing.
+It is recommended to make all insert/update/delete operations transaction-friendly. Especially when you allow flow through, you cannot know what larger operation this single operations is going to become a part of.
+
+#Terminology
+
+I've heard these all use interchangeably:
+- transaction flows in
+- transaction propagates in
+- transaction is carried in
+
+#Transaction Voting
+
+Transaction voting is when each transaction resource manager is asked "should this transaction be committed"?
+If anything votes "no", then the transaction is rolled back.
+
+WCF handles transaction voting automatically.
+This is based on OperationBehavior attribute TransactionAutoComplete=true property (defaults to true).
+The operation will vote against a commit if an exception occurs.
+<code>
+using System.ServiceModel;
+
+public MyService : IMyService
+{
+	[OperationBehavior(TransactionScopeRequired=true, TransactionAutoComplete=false)]
+	public void DoSomething()
+	{
+		//stuff
+	}
+}
+</code>
+
+You can also tell an operation to vote "no" on the commit by calling:
+<code>
+Transaction.Current.Rollback();
+</code>
+
+If you set TransactionAutoComplete=false, then run this to vote "yes" on committing the transaction:
+<code>
+OperationContext.Current.SetTransactionComplete();
+</code>
+
+Example of manually voting:
+You want to report back to the client which item(s) failed to process.
+So you keep a record of success/failures, then vote to commit/rollback, then return the report to the client. No exceptions occur in this case.
+
+#Configuration
+
+The endpoint binding must have TransactionFlow allowed. This must match on both the service and client bindings.
+
+The operation contract must have the TransactionFlow attribute enabled.
+"NotAllowed" is the default. Other settings are "Allowed" and "Mandatory".
+- This allows (or not) a transaction started on the client side to flow/carry into this operation.
+- A transaction from the client may be halted at this operation, but I think the operation is still completed?
+
+Set the TransactionScopeRequired property on the OperationBehavior attribute.
+If TransactionScopeRequired=true, this operation will vote on the transaction commit.
+-- When a transaction is allowed to flow/carry in, and it does so, then that transaction continues through this operation.
+-- When a transaction is not allowed to flow/carry in, this operation will start a new transaction at this point (this operation is the root of the transaction).
+-- When no transaction exists yet, this operation will start a new transaction at this point.
+If TransactionScoptRequired=false, this operation will not join any ongoing transaction, nor will it vote on any commit.
+-- If a transaction flowed in, this operation will still complete but will not be part of the success or failure of that transaction.
+
+Service config:
+<code lang="xml">
+<system.serviceModel>
+	<bindings>
+		<netTcpBinding> <!-- or whichever type of binding it is -->
+			<binding transactionFlow="true" />
+		</netTcpBinding>
+	</bindings>
+</system.serviceModel>
+</code>
+
+Client config:
+<code lang="xml">
+<system.serviceModel>
+	<bindings>
+		<netTcpBinding> <!-- or whichever type of binding it is -->
+			<binding transactionFlow="true" />
+		</netTcpBinding>
+	</bindings>
+</system.serviceModel>
+</code>
+
+Service contract:
+<code>
+using System.ServiceModel;
+
+[ServiceContract]
+public interface IMyService
+{
+	[OperationContract]
+	[TransactionFlow(TransactionFlowOption.Allowed)]
+	void DoOperation();
+}
+</code>
+
+Service implementation:
+<code>
+using System.ServiceModel;
+
+public class MyService : IMyService
+{
+	[OperationBehavior(TransactionScopeRequired=true)]
+	public void DoSomethiing()
+	{
+		//stuff
+	}
+}
+</code>
+
+#Sessions
+
+When you have a sessionful service, and at least one operation with TransactionScopeRequired=true, then the service automatically becomes a Per Call service. The entire service becomes Per Call.
+This is because the session boundaries are equated to the transaction boundaries.
+Each session is dropped after the transaction is committed.
+
+To be both sessionful and transactionful, set attribute ReleaseServiceInstanceOnTransactionComplete=false on the service behavior.
+The default setting is "true".
+
+This is also required when using transactions with multiple concurrency.
+
+Service implementation:
+<code>
+using System.ServiceModel;
+
+[ServiceBehavior(ReleaseServiceInstanceOnTransactionComplete=false)]
+public class MyService : IMyService
+{
+}
+</code>
+
+#Manual Transactions
+
+Sometimes you need to handle transactions manually.
+Example: you want to save an audit report whether or not the transaction succeeds, so you can't just mark the whole operation is one transaction.
+- This is called "suppressing a transaction".
+Example: you want to separate an operation into multiple transactions.
+
+If you are using Web API, this is how you'd manually implement transactions.
+
+You'll use the System.Transactions.TransactionScope object.
+This lets you start transactions, suppress transactions, and join transactions.
+
+Manual transactions do not have auto-voting, so you must manually vote to commit or rollback.
+
+Example:
+<code>
+using System.ServiceModel;
+using System.Transactions;
+
+public class MyService : IMyService
+{
+	[OperationBehavior(TransactionScopeRequired=false)] //this is the default setting, but by being explicit we tell other programmers not to change this
+	public void DoSomething()
+	{
+		using(TransactionScope transactionScope = new TransactionScope())
+		{
+			//stuff
+			
+			transactionScope.Complete(); //vote to commit transaction
+		}
+	}
+}
+</code>
+
+Other constructors:
+new TransactionScope(TransactionScopeOption.Required) will use/join the current transaction or create a new one if none exists. This is the default.
+new TransactionScope(TransactionScopeOption.RequiresNew) will create a new transaction just for this code block.
+new TransactionScope(TransactionScopeOption.Suppress) will execute this code block outside any current transactions.
+
+#Client Transactions
+
+A client could be a proxy, it could be another service, it could be anything.
+And the client may try to propagate their transactions to your service.
+
+If the client is also a WCF web service with automatic transactions, then no problem. The settings described above will handle transactions automatically.
+
+If the client is using manual transactions, and your service uses Per Call instancing:
+- each client call starts a new service instance
+- the client may make multiple calls within one of their transactions
+- the client can close the transaction before or after closing the proxy
+- if the client fails the transaction (and the transaction was flowing into the service operation(s)), then it will cause the service to rollback that(those) operation(s)
+
+If the client is using manual transactions, and your service uses Per Session instancing:
+- the client must close their session (by closing the proxy) within their transaction
+- so the client can make some calls on the proxy, then close the proxy, then close (and vote) on the transaction
+- (the transaction and proxy can be opened in any order)
+- if the client fails the transaction (and the transaction was flowing into the service operation), then it will cause the service to rollback that operation

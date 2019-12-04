@@ -1,0 +1,205 @@
+##Custom Conventions
+
+This topic is for Code-First only.
+
+You can create your own mapping conventions to override the defaults by using the Light Weight Conventions API or the more advanced Model-Based Conventions.
+
+#Light Weight Conventions API
+
+These conventions specify how the Model will be generated.
+
+Default convention example: String maps to varchar(4000) when using the SQL Server Provider.
+<code>
+public class GeographyContext : DbContext
+{
+	protected override void OnModelCreating(DbModelBuilder modelBuilder)
+	{
+		//Property Conventions By Type
+		//overriding the default string convention to varchar(150) instead of varchar(4000)
+		modelBuilder.Properties<String>().Configure(s => s.HasMaxLength(150));
+		
+		//Property Conventions By Predicate
+		//overriding the default column names for foreign keys
+		modelBuilder.Properties().Where(p => p.Name.EndsWith("Id") && p.Name.Length > 2).Configure(
+			c => {
+				string propName = c.ClrPropertyInfo.Name;
+				c.HasColumnName("fk" + propName.CapitalizeFirstLetter());
+			}
+		);
+		
+		//Type Conventions
+		//placing all IHistory classes into the "History" schema
+		modelBuilder.Types<IHistory>().Configure(c => c.ToTable(c.ClrType.Name, "History"));
+	}
+}
+</code>
+Todo: look through all the conventions you can override.
+
+#Custom Attributes
+
+You can create custom Attributes and wire them into your custom Conventions.
+
+Example: marking string properties as non-Unicode:
+<code>
+//custom attribute
+[AttributeUsage(AttributeTargets.Property, AllowMultiple=false)] //this attribute can be placed on Properties only, and cannot be repeated on a Property
+public class NonUnicode : Attribute
+{
+}
+
+//using the custom attribute
+[NonUnicode]
+public string Description { get; set; }
+
+//custom convention
+modelBuilder.Properties().Where(p => p.GetCustomAttributes(false).OfType<NonUnicode>().Any()).Configure(c => c.IsUnicode(false));
+</code>
+
+Example: setting with schema a table should be under
+<code>
+//custom attribute
+[AttributeUsage(AttributeTargets.Class, AllowMultiple=false)]
+public class Schema : Attribute
+{
+	public string SchemaName { get; set; }
+	public Schema(string schemaName)
+	{
+		SchemaName = schemaName;
+	}
+}
+
+//using the custom attribute
+[Schema("History")]
+public class Customer : IHistory
+{
+}
+
+//custom convention
+modelBuilder.Types().Where(t => t.GetCustomAttributes(false).OfType<Schema>().Any()).Configure(c => c.ToTable(c.ClrType.Name, c.ClrType.GetCustomAttribute<Schema>().SchemaName));
+</code>
+
+EF has a built-in pluralization function:
+<code>
+new EnglishPluralizationService().Pluralize(word)
+</code>
+
+#Convention Class
+
+You can place all your custom Conventions into standard classes:
+<code>
+public class TableSchemaAttributeConvention : Convention
+{
+	public TableSchemaAttributeConvention()
+	{
+		Types().Where(t => t.GetCustomAttributes(false).OfType<Schema>().Any()).Configure(c => c.ToTable(c.ClrType.Name, c.ClrType.GetCustomAttribute<Schema>().SchemaName));
+	}
+}
+
+public class GeographyContext : DbContext
+{
+	protected override void OnModelCreating(DbModelBuilder modelBuilder)
+	{
+		modelBuilder.Conventions.Add(new TableSchemaAttributeConvention());
+	
+		base.OnModelCreating(modelBuilder);
+	}
+}
+</code>
+
+#Execution Order
+
+Execution order of Conventions:
+(1) Internal Conventions 
+(2) Custom Conventions, in Code Order 
+(3) Configurations
+The early Conventions/Configurations will be overriden by the later Conventions/Configurations, so put the most specific rules last.
+
+Custom Conventions can be explicitly ordered:
+<code>
+public static class ConventionRules
+{
+	public static void Apply(DbModelBuilder modelBuilder)
+	{
+		//final order is A, B, C, D
+		modelBuilder.Conventions.Add(new CustomConventionA());
+		modelBuilder.Conventions.Add(new CustomConventionD());
+		modelBuilder.Conventions.AddAfter<CustomConventionA>(new CustomConventionC());
+		modelBuilder.Conventions.AddBefore<CustomConventionC>(new CustomConventionB());
+	}
+}
+</code>
+
+"modelBuilder.Conventions.Remove(x)" can be used to skip specific Internal Conventions.
+
+#Model-Based Conventions
+
+Model-Based Conventions let you edit the Model, after its been generated.
+
+Implement "IConceptualModelConvention<EntityMetadataType>" or "IStoreModelConvention<StoreMetadataType>".
+
+<code>
+modelBuilder.Conventions.Add(new CustomConceptualModelConvention()); //add these conventions in the same way
+</code>
+
+Example: apply foreign key naming convention to foreign keys in the database schema that are not Entity properties
+<code>
+public class ForeignKeyNameWithFkConvention : IStoreModelConvention<AssociationType>
+{
+	public void Apply(AssociationType associationType, DbModel model)
+	{
+		if(!associationType.IsForeignKey)
+			return;
+		if(!associationType.Constraint.FromRole.RelationshipMultiplicity != RelationshipMultiplicity.One)
+			return;
+		var associationProperty = associationType.Constraint.ToProperties;
+		if(associationProperty[0].Name.EndsWith("Id"))
+		{
+			associationProperty[o].Name = "fk" + associationProperty[0].Name.CapitalizeFirstLetter();
+		}
+	}
+}
+</code>
+
+#Extensions
+
+You can inherit from an existing class that implements one of the Convention interfaces, and override or extend its behavior.
+
+Example: expect primary keys to be named "Key" instead of "Id" by overriding the KeyDiscoveryConvention.
+
+#AddFromAssembly
+
+Add every single applicable class (convention or configuration) from an assembly to the modelBuilder.
+You cannot control the order this way, so only use AddFromAssembly if the order does not matter at all.
+
+<code>
+modelBuilder.Configurations.AddFromAssembly(assembly);
+modelBuilder.Conventions.AddFromAssembly(assembly);
+</code>
+
+<code>
+//to add all from current assembly
+modelBuilder.Configurations.AddFromAssembly(Assembly.GetExecutingAssembly());
+
+//to add all from an external assembly already referenced by your project
+modelBuilder.Configurations.AddFromAssembly(typeof(MyConventionsContext).Assembly);
+</code>
+
+If you use an external assembly, it will need to include this minimal code:
+<code>
+using System.Data.Entity;
+
+public class MyConventionsContext : DbContext //this class name is the one used to find the assembly in the example above
+{
+	//intentionally empty
+}
+
+using System.Data.Entity.Migrations;
+
+internal sealed class MyMigrationConfiguration : DbMigrationConfiguration
+{
+	public Configuration()
+	{
+		AutomaticMigrationsEnabled = false;
+	}
+}
+</code>

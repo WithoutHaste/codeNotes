@@ -1,0 +1,78 @@
+##Cursors
+
+Cursors let you process a result set one row at a time. 
+
+It is recommended that you avoid cursors whenever possible, since they are slow. You can often use set-based operations instead.
+A SELECT query will return its full result set with one trip to the server, while a CURSOR will continually ping the server for more sections of the result set.
+
+If you must a cursor, consider storing the query results in a temp table first so that the cursor does not have to keep hitting the table.
+
+#Basic
+
+<code>
+DECLARE cursorName CURSOR 
+FOR 
+	SELECT 
+		* 
+	FROM tableName;
+OPEN cursorName;
+FETCH NEXT FROM cursorName INTO @A, @B;
+WHILE(@@FETCH_STATUS = 0)
+BEGIN
+	--multiple lines
+	FETCH NEXT FROM cursorName INTO @A, @B;
+END;
+CLOSE cursorName;
+DEALLOCATE cursorName;
+</code>
+
+@@FETCHSTATUS returns the status of the last cursor fetch statement. 0 means successful.
+
+#Default Settings
+
+SQL Server defaults to static cursors.
+
+To verify the default settings, you can create a cursor and view its settings.
+<code>
+DECLARE c CURSOR FOR SELECT 1;
+SELECT properties FROM sys.dm_exec_cursors(@@spid);
+</code>
+
+#Static
+
+A static cursor displays the result set as it was when the cursor was opened.
+<code>
+DECLARE cursorName CURSOR STATIC
+FOR 
+	--select statement
+</code>
+
+#Dynamic
+
+A dynamic cursor reflects ongoing changes in the base table.
+<code>
+DECLARE cursorName CURSOR DYNAMIC
+FOR 
+	--select statement
+</code>
+
+#Forward Only
+
+<code>
+DECLARE cursorName CURSOR FORWARD_ONLY
+FOR 
+	--select statement
+</code>
+
+#Fast Forward
+
+FAST_FORWARD is almost the same as READ_ONLY, FORWARD_ONLY.
+FAST_FORWARD is usually faster than just FORWARD_ONLY.
+
+<code>
+DECLARE cursorName CURSOR FAST_FORWARD
+FOR 
+	--select statement
+</code>
+
+TODO: there's a lot more to cursors than this

@@ -1,0 +1,104 @@
+##Unit Testing
+
+#Testable Code
+
+To make it possible to automate testing of your code:
+- Do not instantiate dependencies.
+
+Example of instantiating a dependency:
+<code>
+using System.ServiceModel;
+
+public class GeographyManager : IGeographyService
+{
+	public CountryData GetCountryInfo(string country)
+	{
+		CountryData countryData = null;
+		ICountryRepository countryRepository = new CountryRepository();
+		Country countryEntity = countryRepository.GetByName(country);
+		if(countryEntity != null)
+		{
+			countryData = new CountryData() {
+				Name = countryEntity.Name,
+				Capital = countryEntity.Capital,
+				Flag = countryEntity.Flag
+			};
+		}
+		return countryData;
+	}
+}
+</code>
+
+Example of injecting the dependency instead:
+When the service implementation is instantiated by the application, the repositories will be null, so they will be instantiated by the service implementation.
+When the service implementation is instantiated by the unit test, the repositories will be injected.
+<code>
+using System.ServiceModel;
+
+public class GeographyManager : IGeographyService
+{
+	private ICountryRepository _CountryRepository = null;
+
+	public GeographyManager() {} //default constructor used by the application
+	
+	public GeographyManager(ICountryRepository countryRepository) //dependency injection constructor used by unit tests
+	{
+		_CountryRepository = countryRepository;
+	}
+	
+	public CountryData GetCountryInfo(string country)
+	{
+		CountryData countryData = null;
+		ICountryRepository countryRepository = _CountryRepository ?? new CountryRepository();
+		Country countryEntity = countryRepository.GetByName(country);
+		if(countryEntity != null)
+		{
+			countryData = new CountryData() {
+				Name = countryEntity.Name,
+				Capital = countryEntity.Capital,
+				Flag = countryEntity.Flag
+			};
+		}
+		return countryData;
+	}
+}
+</code>
+
+Alternate dependency injection logic:
+<code>
+using System.ServiceModel;
+
+public class GeographyManager : IGeographyService
+{
+	private ICountryRepository _countryRepository = null;
+	private ICountryRepository CountryRepository {
+		get {
+			if(_countryRepository == null)
+				_countryRepository = new CountryRepository();
+			return _countryRepository;
+		}
+	}
+
+	public GeographyManager() {} //default constructor used by the application
+	
+	public GeographyManager(ICountryRepository countryRepository) //dependency injection constructor used by unit tests
+	{
+		_countryRepository = countryRepository;
+	}
+	
+	public CountryData GetCountryInfo(string country)
+	{
+		CountryData countryData = null;
+		Country countryEntity = CountryRepository.GetByName(country);
+		if(countryEntity != null)
+		{
+			countryData = new CountryData() {
+				Name = countryEntity.Name,
+				Capital = countryEntity.Capital,
+				Flag = countryEntity.Flag
+			};
+		}
+		return countryData;
+	}
+}
+</code>

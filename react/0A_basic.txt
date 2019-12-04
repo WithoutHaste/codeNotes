@@ -1,0 +1,14 @@
+##Basic
+
+An open-source Facebook project.
+
+React/ReactJS was invented to manipulate website DOM faster than Javascript Core, using a virtual DOM model.
+React/ReactJS is a Javascript library.
+React/ReactJS can run on the front or back end.
+
+React Native was built after React, as a platform for building native apps using Javascript. (As opposed to using Java on Android and Objective-C on iPhone)
+React Native is built on ReactJS.
+To run a React Native app, you'll need XCode (Mac) or Android Studio (Android).
+React Native does not use HTML to render the app; instead it uses native UI components.
+
+Prerequisites: Javascript, HTML

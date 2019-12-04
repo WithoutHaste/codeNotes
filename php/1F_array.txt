@@ -1,0 +1,68 @@
+##Array
+
+Print full array:
+<code>
+print_r($myArray);
+</code>
+
+#Associative Array
+
+An associative array can be called a hash or a dictionary in other languages. Each element is a key/value pair.
+<code>
+$array = array( "key1"=>"value1", "key2"=>"value2" );
+$value1 = $array["key1"];
+</code>
+
+#Operations
+
+push = add new element to the end of an array
+<code>
+array_push($array, $element);
+</code>
+
+count = array length
+<code>
+$elementCount = count($array);
+</code>
+
+contains
+<code>
+$isInArray = in_array($element, $array);
+</code>
+
+sort (as of php 5 at least)
+<code>
+sort($array);    //sort arrays in ascending order
+rsort($array);   //sort arrays in descending order
+natsort($array); //sort alphanumeric strings the way a human would
+usort($array);   //sort arrays with a user-defined function
+
+asort($array);   //sort associative arrays in ascending order, according to the value
+ksort($array);   //sort associative arrays in ascending order, according to the key
+arsort($array);  //sort associative arrays in descending order, according to the value
+krsort($array);  //sort associative arrays in descending order, according to the key
+</code>
+Note that php sorts considers underscore "_" character to be after alphabetic characters, which is not the usual directory sorting order. Possible solution here:
+<code>
+function cmp($a, $b) {
+	$aTemp = str_replace('_', '0', $a);
+	$bTemp = str_replace('_', '0', $b);     
+	return strcmp($aTemp,$bTemp);
+}
+usort($arr, "cmp");
+</code>
+
+explode = split a string into an array of string, based on the delimiter
+<code>
+$array = explode(",", $string);
+</code>
+
+sets array's internal pointer to the first element and returns it
+<code>
+$firstElement = reset($array);
+</code>
+
+sets array's internal pointer to the last element and returns it
+<code>
+$lastElement = end($array);
+</code>

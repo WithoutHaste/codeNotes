@@ -1,0 +1,13 @@
+##Radio Buttons
+
+<code>
+<input type="radio" name="color" ng-model="$ctrl.color" value="red" />
+<input type="radio" name="color" ng-model="$ctrl.color" value="blue" />
+</code>
+
+<code>
+//in controller
+$scope.optionA = { id:2, value:"green" };
+//in template
+<input type="radio" name="color" ng-model="$ctrl.color" ng-value="$ctrl.optionA" />
+</code>

@@ -1,0 +1,26 @@
+##API Design
+
+Design your API before you start coding it.
+
+Once you publish an API, you'll have clients building their code on top of yours.
+The cost of altering your API goes up quickly, the more people rely on it.
+
+#Parts of the API
+
+Request = Verb + URI (with Query String) + Headers + Content
+
+Response = Status Code + Headers + Content
+
+#URI
+
+A URI is a path to a resource on your server.
+Ex: api.myserver.com/people is a path to the "people" resources.
+
+Your URIs should be Nouns. Ex: Repositories, Customers, Contracts, Books.
+Leave the Verbs to the HTTP Request Verbs.
+
+#Query String
+
+Query strings should always be optional.
+
+They are commonly used for Formatting, Sorting, Searching, etc.

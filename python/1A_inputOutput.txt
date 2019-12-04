@@ -1,0 +1,62 @@
+##I/O
+
+#Print
+
+Writing output to the console. Print has an implicit end-line character.
+String literals can be written with single or double quotes.
+<code>
+ #python 2
+print "text"
+
+ #python 3
+print("text")
+</code>
+
+Print will concatenate strings together, with a default space (" ") delimitor.
+<code>
+x = 1
+print("a", x) #outputs "a 1"
+</code>
+
+Formatted strings: everything inside a { } will be interpreted as a python expression in the current scope.
+<code>
+myCount = 5
+myVar = "A"
+print(f"count: {myCount}, var: {myVar}") #"count: 5, var: A"
+</code>
+
+#Input
+
+The user will see a prompt at the command line. When the user hits Enter, whatever they just typed will be returned to you.
+
+Input - converts user text to the (seemingly) appropriate type
+<code>
+x = input("Enter a number:") #user input is assigned to x
+print(x)
+</code>
+
+Raw Input - returns all input as a string
+<code>
+y = raw_input("Prompt:") #treats all input as string
+y = int(y) #make sure of type #throws error if value cannot be converted to int
+print(y)
+</code>
+
+Cleaning input
+<code>
+x = ""
+while not x.isdigit():
+	x = input("Prompt: ")
+x = int(x)
+</code>
+
+#Print
+
+<code>
+x = 5
+y = "hey"
+print(x) #5
+print(y) #"hey"
+print(str(x)+y) #"5hey"
+print(f'{x} {y}') #"5 hey"
+</code>

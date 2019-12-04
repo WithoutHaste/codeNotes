@@ -1,0 +1,5 @@
+##Kanban
+
+"Rather than planning work items upfront and pushing them into the work queue, the team signals when they are ready for more work and pulls it into their queue."
+
+Kanban uses a visual organization of tasks to display the state of development - what is being worked on and what state it is in. This is the Kanban Board.

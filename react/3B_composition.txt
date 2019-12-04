@@ -1,0 +1,97 @@
+##Composition
+
+It is recommended to use composition over inheritance to reuse code between components.
+
+#Containment
+
+For container-type components (don't know exactly what their children will be) it is recommended to use the special "children" prop. Other components can easily pass children to the container with nested JSX.
+
+<code>
+//container
+function FancyBorder(props) 
+{
+	return (
+		<div className={'FancyBorder FancyBorder-' + props.color}>
+			{props.children}
+		</div>
+	);
+}
+
+//another component passes "h1" and "p" into "props.children"
+function WelcomeDialog() 
+{
+	return (
+		<FancyBorder color="blue">
+			<h1 className="Dialog-title">
+				Welcome
+			</h1>
+			<p className="Dialog-message">
+				Thank you for visiting our spacecraft!
+			</p>
+		</FancyBorder>
+	);
+}
+</code>
+
+If you need to specify more than one collection of children, you'll need to roll your own solution.
+
+<code>
+function SplitPane(props) 
+{
+	return (
+		<div className="SplitPane">
+			<div className="SplitPane-left">
+				{props.left}
+			</div>
+			<div className="SplitPane-right">
+				{props.right}
+			</div>
+		</div>
+	);
+}
+
+function App() 
+{
+	return (
+		<SplitPane
+			left={<Contacts />}
+			right={<Chat />} 
+		/>
+	);
+}
+</code>
+
+#Specialization
+
+Say you have a "Dialog" and a more specific "WelcomeDialog".
+In object oriented programming, object "WelcomeDialog" would inherit from object "Dialog".
+In React, "WelcomeDialog" will render "Dialog", with whatever specific settings it needs.
+
+So it's actually like methods in any paradigm: the specific method calls on the general method.
+
+You should not need any React components to inherit from each other.
+
+<code>
+function WelcomeDialog() 
+{
+	return (
+		<Dialog
+			title="Welcome"
+			message="Thank you for visiting our spacecraft!" />
+	);
+}
+
+function Dialog(props) 
+{
+	return (
+		<FancyBorder color="blue">
+			<h1 className="Dialog-title">
+				{props.title}
+			</h1>
+			<p className="Dialog-message">
+				{props.message}
+			</p>
+		</FancyBorder>
+	);
+}
+</code>

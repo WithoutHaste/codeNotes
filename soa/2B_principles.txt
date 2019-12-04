@@ -1,0 +1,41 @@
+##Principles of SOA Design
+
+#Standardized Service Contract
+
+Services adhere to an explicit service description.
+
+#Loose Coupling
+
+Services minimize dependence on each other.
+
+#Service Abstraction
+
+Services hide the logic they encapsulate.
+
+#Service Reusability
+
+Divide business logic into several services with the intent of maximizing reuse.
+
+#Service Autonomy
+
+Services have control over the logic they encapsulate.
+
+#Service Statelessness
+
+Services should be stateless.
+
+The client should not be required to know that operation A, B, and C must be called in a specific order, or that operation D must be followed by E.
+
+Such specific ordering should be contained in a single operation.
+
+#Service Discoverability
+
+Services can be discovered, usually in a service registry. Ie, a client can invoke a service regardless of its actual location in the network.
+
+#Service Composability
+
+Services break big problems into little problems.
+
+#Service Interoperability
+
+Services use standards that allow diverse clients to use the service.

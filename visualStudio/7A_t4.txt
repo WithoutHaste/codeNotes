@@ -1,0 +1,190 @@
+##T4
+
+T4 stands for Text Template Transformation Toolkit.
+
+This is a built-in tool in Visual Studio. As of 2016, it does not have any intellisense or syntax highlighting support.
+
+It is a mixture of text blocks and control logic that can generate a text file, using C# or Visual Basic.
+
+Add a "Text Template" file to your project to create a T4 file. The generated file will be listed under it.
+To re-generate the file: Right-click >> Run Custom Tool 
+To debug generation: Right-click >> Debug T4 Template
+
+#Run Time
+
+Runtime T4 templates are run by your program. The computer running the program does not have to have Visual Studio installed.
+
+<code>
+string response = new MyTemplate().TransformText();
+</code>
+
+#Design Time
+
+Design time T4 templates are executed in Visual Studio to define part of your source code or other resources.
+
+To do this, add a "Text Template" file to your project (*.tt extension). Or add a plain text file and set property "Custom Tool" to "TextTemplatingFileGenerator".
+
+#Default Contents
+
+<code>
+<#@ template debug="true" hostspecific="false" language="C#" #>
+<#@ output extension=".txt" #>
+//any plain text below here will output as-is
+</code>
+
+If this file is called x.tt, it will generate file x.txt.
+
+You can leave the debug statement in even when in Release mode. It is required for setting breakpoints in the template.
+
+#Include Assembly
+
+You do not need to include assembly System.dll, it is assumed.
+
+<code>
+<#@ assembly name="MyAssembly.dll" #>
+<#@ import namespace="System.Xml" #>
+<#@ import namespace="System.IO" #>
+</code>
+
+Confirmed that a design-time T4 template can use assemblies that are for a higher target framework than the current project.
+
+#Standard Control Block
+
+Contains statements.
+Embed plain text to print it directly to the output file.
+
+<code>
+	<#
+	int count = 10;
+	for(int i=0; i<=count; i++)
+	{
+		#>
+		The square of <#= i #> is <#= i*i #>.
+		<#
+		//OR
+		WriteLine(String.Format("The square of {0} is {1}.", i, i*i));
+	}
+	#>
+ 
+	<# 
+	//another code block
+	MyFunction(5);
+	#>
+</code>
+ 
+#Expression Control Block
+
+Contains expressions that resolve to strings that are printed to the output file.
+
+<code>
+	<#
+	for(int i=0; i<=10; i++)
+	{
+		#>
+		The square of <#= i #> is <#= i*i #>.
+		<#
+	}
+	#>
+</code>
+
+#Class Feature Control Block
+
+Contains methods, fields, properties, and nested classes.
+Usually used for helper functions.
+
+You cannot place Standard Control Blocks after a Class Feature Control Block in the T4 file.
+This restriction does not apply to "<#@include#>" commands.
+
+<code>
+	<#+ //defines a method block 
+	private void MyFunction(int x)
+	{
+		#>
+		some output
+		<#+
+	}
+	#>
+</code>
+
+#Read File
+
+Reading a text file:
+<code>
+<# var properties = File.ReadLines("C:\\propertyList.txt"); #>
+...
+<# 
+	foreach(string property in properties)
+	{
+		...
+	}
+ #>
+</code>
+
+Using a relative path name:
+<code>
+<#@ template hostspecific="true" language="C#" #>
+<# string filename = this.Host.ResolvePath("file.txt"); #>
+</code>
+
+Getting the name of this template file:
+<code>
+<# string currentFilename = this.Host.TemplateFile; #>
+</code>
+
+#Variables
+
+Output variables:
+<code>
+Plain text and then <#= myVariable #>
+</code>
+
+#Error Handling
+
+Errors and warnings:
+<code>
+<# Error("message"); #>
+<# Warning("message"); #>
+</code>
+
+#Multiple Output Files
+
+<code>
+	<#@ template debug="false" hostspecific="true" language="C#" #>
+	<#@ assembly name="System.Core" #>
+	<#@ import namespace="System" #>
+	<#@ import namespace="System.IO" #>
+	<#@ output extension=".txt" #>
+	<#
+	for (Int32 i = 0; i < 10; ++i) 
+	{
+	#>
+		Content <#= i #>
+	<#
+		SaveOutput("Content" + i.ToString() + ".txt");
+	}
+	#>
+	
+	<#+
+	private void SaveOutput(string outputFileName) 
+	{
+		string templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
+		string outputFilePath = Path.Combine(templateDirectory, outputFileName);
+		File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString()); 
+		this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
+	}
+	#>
+</code>
+
+#Indentation
+
+Managing indentation with built-in fields and methods.
+
+<code>
+	WriteLine(CurrentIndent + "A");
+	PushIndent("\t");
+	WriteLine(CurrentIndent + "A2");
+	PopIndent("\t");
+	WriteLine(CurrentIndent + "B");
+	
+	ClearIndent();
+</code>

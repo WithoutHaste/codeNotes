@@ -1,0 +1,112 @@
+##HtmlHelper
+
+Everything the HtmlHelper outputs is HTML encoded. This protects you from cross-site scripting attacks.
+
+HtmlHelper methods automatically operate on the Model.
+
+#Link
+
+Generate a link to the specified action:
+<code>
+@Html.ActionLink(text, actionName)
+@Html.ActionLink(text, actionName, new { id = model.Id }) //pass additional information
+@Html.ActionLink(text, actionName, controllerName, new { id = model.Id }, null) //link to a different controller
+</code>
+
+#Strings
+
+Generate the display name of the model field based on the field's attributes:
+<code>
+@Html.DisplayNameFor(model => model.Name)
+</code>
+
+Generate the value of the model field, correctly formatted based on field type:
+<code>
+@Html.DisplayFor(model => model.Name)
+</code>
+
+#Form
+
+<code>
+@using(Html.BeginForm())
+{
+	<input type="submit" value="Submit" />
+}
+</code>
+This form will default to posting back to the current URL, with current URL parameters included.
+"BeginForm" has nothing to dispose at the end of this "using" block, it just knows that's when to close the form tag.
+
+BeginForm overloads:
+<code>
+@using(Html.BeginForm("Action")) { }
+@using(Html.BeginForm("Action", "Controller")) { }
+@using(Html.BeginForm("Action", "Controller", FormMethod.Post)) { }
+@using(Html.BeginForm("Action", "Controller", FormMethod.Post, new { id="formId", name="formName", data_custom="becomes data-custom attribute" })) { }
+</code>
+
+Generate a label for the model field, based on field attributes:
+<code>
+@Html.LabelFor(model => model.Name)
+</code>
+
+Generate an input control for the model field, correctly formatted based on field type:
+<code>
+@Html.EditorFor(model => model.Name)
+</code>
+
+Generate a validation message section for the model field, based on field attributes:
+<code>
+@Html.ValidationMessageFor(model => model.Name)
+</code>
+
+Generate a validation section for messages not associated with a particular field:
+<code>
+@Html.ValidationSummary(true)
+</code>
+Passing a "false" argument means that every validation message will be displayed in this section.
+
+Generate a hidden form field for the model field:
+<code>
+@Html.HiddenFor(model => model.Name)
+</code>
+
+#SubRequest
+
+In this example, there is information you want to display as part of your global Layout, regardless of what Model the View is using.
+
+"Html.Action" will generate an entirely new Request that will result in a new Partial View and Model. The results of all this will be included in that View that makes the SubRequest.
+
+This all happens during the current HTTP Request - there is not a new HTTP Request sent from the user's browser.
+
+<code>
+<!-- In View -->
+<div>
+	@Html.Action("MyAction", "MyController")
+</div>
+
+//in controller
+[ChildActionOnly] //this action cannot be called directly with an HTTP Request
+public ActionResult MyAction()
+{
+	var model = GetModel();
+	return PartialView("partialViewName", model);
+}
+</code>
+
+#Partial
+
+Returns partial view result as a string:
+<code>
+<tag>
+	@Html.Partial("ViewName", model)
+</tag>
+</code>
+
+Returns nothing, sends results directly to response object:
+<code>
+<tag>
+@{
+	Html.RenderPartial("ViewName", model);
+}
+</tag>
+</code>

@@ -1,0 +1,84 @@
+##Stylesheets
+
+#External
+
+Html:
+<code>
+<head>
+	<link rel="stylesheet" type="text/css" href="myStyles.css" />
+</head>
+</code>
+
+myStyles.css:
+<code>
+body {
+	font-size: 14pt;
+}
+</code>
+
+#Internal
+
+<code>
+<head>
+	<style type="text/css">
+		body {
+			font-size: 14pt;
+		}
+	</style>
+</head>
+</code>
+
+#Inline
+
+<code>
+<head>
+</head>
+<body style="font-size: 14pt;">
+</body>
+</code>
+
+#Selectors
+
+Selectors can be used in External and Internal stylesheets to specify which elements each style applies to.
+
+Select by id
+<code>
+	#id { ... }
+</code>
+
+Select by class
+<code>
+	.class { ... }
+</code>
+
+Select by tag
+<code>
+	table { ... }
+</code>
+
+Select direct children
+<code>
+	table.class > tr { ... }
+</code>
+
+Select descendents
+<code>
+	table.class td { ... }
+</code>
+
+A list of selectors
+<code>
+	#id, table.class td, p { ... }
+</code>
+
+Modifiers
+<code>
+	td:hover { ... } //when mouse hovers over element
+	
+	button:focus { ... } //when element is in focus
+	
+	a:link { ...} //unvisited links
+	a:visited { ... } //visited links
+	a:active { ... } //active link
+	a:hover { ... } //if using link or visited with hover, make sure hover is last or the style will be overwritten
+</code>

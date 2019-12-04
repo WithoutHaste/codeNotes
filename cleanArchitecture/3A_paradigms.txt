@@ -1,0 +1,68 @@
+##Paradigms
+
+A brief history of how limiting our options, as programmers, has helped us write better code. Each of these paradigms removes capabilities from the programmer.
+
+#Structured Programming
+
+Structured programming imposes discipline on direct transfer of control.
+Structured programming allows modules to be recursively decomposed into provable units (functional decomposition).
+
+Discovered by Edsger Wybe Dijkstra in 1968, who proved that use of unrestrained jumps ("goto" statements) is harmful to program structure. Dijkstra applied the mathematical discipline of proofs to programming. He discovered that certain uses of "goto" statements made it impossible to deconstruct functions into smaller units - which prevented the divide-and-conquer method of proving the function "correct".
+
+The good uses of "goto" followed the patterns of sequencing, selection, and iteration. So Dijkstra discovered that the constructs that made a function provable, were the same as the minimum set of constructs from which all programs can be built [based on the work of Bohm and Jacopini].
+
+The "goto" statement was replaced with "if/then/else" and "do/while/until" constructs.
+
+Structured programming supports testability by limited programmers to creating provable functions.
+
+#Object-Oriented Programming
+
+Object-oriented programming imposes discipline on indirect transfer of control.
+
+Discovered by Ole Johan Dahl and Kristen Nygaard in 1966, who moved the function call stack to heap memory and thereby invented objects. (The function call becomes the class name, local variables become the properties, and nested functions become the methods.)
+
+This paradigm removes function pointers from programmers.
+
+Martin discusses "What is the defining feature of object-oriented programming?"
+1) The combination of data and functions? No, because there is no intrinsic difference between Object.Function() and Function(Object).
+2) A way to model the real world? No, too vague to mean anything.
+3) Encapsulation, inheritance, and polymorphism?
+    3a) Encapsulation? No, C already had perfect encapsulation, which C++ and C# have strayed further from (due to technical compiler reasons). Many newer OO languages don't enforce strong encapsulation at all.
+	3b) Inheritance? No, C could do inheritance manually already. (See technical explanation.) OO languages do make it easier to do this, though.
+	3C) Polymorphism? Polymorphism is an application of pointers to functions (the function call goes to a lookup table to see which function will actually be run). This was being done back in the 1940s manually, but OO languages formalize and automate the tricky bits, making it much easier and safer for the programmers.
+(His point seems to be that OO languages make several techniques easier and more disciplined than programming them all manually.)
+
+Why is polymorphism so important? Because it enables plug-in architectures. Example: in UNIX, writing to STDOUT could go anywhere depending on what device is currently set as STDOUT. These devices must all implement a standard interface, so everyone program writing to STDOUT uses the same command, but what actually happens depends on the device implementation.
+
+Device independence: your program doesn't know what device it is writing out to, because all the devices implement the same interface. So your program can work with any device that implements that interface. Your program is more reusable than one that is tightly tied to a particular device.
+
+Polymorphism enables Dependency Inversion. In that sense, object-oriented programming is the ability (through polymorphism) to gain absolute control over every source code dependency in the system.
+
+#Functional Programming
+
+Functional programming imposes discipline upon assignment.
+
+Discovered by Alonzo Church in 1936 (although it was not adopted for some time), who invented lambda calculus. A foundational notion of lambda calculus is immutability (the values of symbols do not change) - meaning that strictly functional languages have no "assignment" statement and all variables are immutable.
+
+This paradigm removes the "assignment" operator from programmers.
+<code>
+//Clojure example: print the first 25 squares
+(println (take 25 (map (fn [x] (* x x)) (range))))
+</code>
+
+This is important to architecture because all race conditions, deadlock conditions, and concurrent update problems are due to mutable variables. Multi-threading and use multiple processors becomes significantly easier without these problems.
+
+Theoretically, immutability is easy to achieve given infinite storage space and infinite processor speed. Since resources are not infinite, you'll need to decide which parts of a system should be immutable and which should not (Segregation of Mutability). 
+
+Event Sourcing is an immutable way of storing data. Instead of updating records as they change, you store every edit or update as a new record. When you need to know the current state of the data, you run a function that looks at all the records and calculates the current state. A variation on this is to calculate and store the current state once a day. With Event Sourcing, no data ever updated or deleted. Source-control systems work like this.
+
+#In Relation to Architecture
+
+We use polymorphism as the mechanism to cross architectural boundaries.
+We use functional programming to impose discipline on the location of and access to data.
+We use structured programming as the algorithmic foundation of our modules.
+
+These align with the three big concerns of architecture:
+separation of components
+data management
+function

@@ -1,0 +1,36 @@
+##Configuration
+
+#Hierarchy
+
+There is a hierarchy of configuration files on the machine. Lower-level configs will override higher-level configs (however, machine administrators can lock-in certain settings).
+
+(High Level)
+Machine config      (ex: C:\Windows\Microsoft.NET\Framework\v4.0.30319\Config\machine.config)
+Machine web.config  (ex: C:\Windows\Microsoft.NET\Framework\v4.0.30319\Config\web.config)
+Parent's web.config (optional)
+Application web.config
+other web.config   (optional, such as ~\Views\Web.config or ~\Views\Home\Web.config)
+(Low Level)
+
+#Web.config
+
+database connection strings
+globalization settings
+custom errors
+authentication
+
+To store custom settings here:
+<code>
+	<appSettings>
+		<add key="myKey" value="myValue" />
+	</appSettings>
+</code>
+To retrieve that value:
+<code>
+using System.Configuration;
+...
+public ActionResult MyAction()
+{
+	string setting = ConfigurationManager.AppSettings["myKey"];
+}
+</code>

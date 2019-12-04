@@ -1,0 +1,8 @@
+##Styles
+
+<code>
+//in template
+<span ng-style="$ctrl.myStyles"></span>
+//in controller
+$scope.myStyles = { color:"red", padding:"50px" };
+</code>

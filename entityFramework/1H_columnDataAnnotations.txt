@@ -1,0 +1,181 @@
+##Column Data Annotations
+
+Instead of defining everything in a EntityTypeConfiguration<T> configuration class, you can define most column things with data annotations.
+
+#Table
+
+Set the database table name:
+<code>
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+[Table("ThingTable")]
+public class Thing
+{
+	public int Id { get; set; }
+}
+</code>
+
+#Column
+
+<code>
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+public class Thing
+{
+	//set column name
+	[Column("ThingId")]
+	public int Id { get; set; }
+
+	//set column data type
+	[Column(TypeName="text")]
+	public string Name { get; set; }
+}
+</code>
+
+#Primary Key
+
+Single primary key:
+<code>
+using System.ComponentModel.DataAnnotations;
+
+public class Thing
+{
+	[Key]
+	public int Id { get; set; }
+}
+</code>
+
+Composite primary key:
+<code>
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+public class Thing
+{
+	[Key]
+	[Column(Order=1)]
+	public int AId { get; set; }
+	[Key]
+	[Column(Order=2)]
+	public int BId { get; set; }
+}
+</code>
+
+#Foreign Key
+
+<code>
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+public class Thing
+{
+	[Key]
+	public int Id { get; set; }
+}
+
+public class OtherThing
+{
+	[ForeignKey("MyThing")]
+	public int ForeignKeyId { get; set; }
+	
+	public virtual Thing MyThing { get; set; }
+}
+</code>
+OR
+<code>
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+public class Thing
+{
+	[Key]
+	public int Id { get; set; }
+}
+
+public class OtherThing
+{
+	public int ForeignKeyId { get; set; }
+	
+	[ForeignKey("ForeignKeyId")]
+	public virtual Thing MyThing { get; set; }
+}
+</code>
+
+#Inverse Property
+
+Link collection to correct property when there are multiple options:
+<code>
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+public class Person
+{
+	[InverseProperty("WrittenBy")]
+	public virtual List<Message> MessagesWritten { get; set; }
+	[InverseProperty("UpdatedBy")]
+	public virtual List<Message> MessagesUpdated { get; set; }
+}
+
+public class Message
+{
+	public virtual Person WrittenBy { get; set; }
+	public virtual Person UpdatedBy { get; set; }
+}
+</code>
+
+#Database Generated
+
+Identity column:
+<code>
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+public class Thing
+{
+	[Key]
+	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+	public int Id { get; set; }
+}
+</code>
+
+#Required
+
+<code>
+using System.ComponentModel.DataAnnotations;
+
+public class Thing
+{
+	[Required]
+	public string Name { get; set; }
+}
+</code>
+
+#Length
+
+Sets character or byte length:
+<code>
+using System.ComponentModel.DataAnnotations;
+
+public class Thing
+{
+	[MinLength(1)]
+	[MaxLength(150)]
+	public string Name { get; set; }
+}
+</code>
+
+#Not Mapped
+
+Property will not be mapped to a database column:
+<code>
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+public class Thing
+{
+	[NotMapped]
+	public string Name { get; set; }
+}
+</code>

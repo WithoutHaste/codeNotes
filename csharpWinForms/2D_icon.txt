@@ -1,0 +1,28 @@
+##Icons
+
+(If just using icons within an application, you can load your own or use the SystemIcons enum)
+
+You will need to set the icon file for each Form you want it displayed on. Do not do it this way:
+<code>
+myForm.Icon = new Icon("icon.ico");
+</code>
+Even if the icon file has has property Build Action set to Embedded Resource, the installed executable will not be able to find the file.
+
+Instead:
+1) Open project properties > Application tab
+2) Select "Icon and Manifest" option
+3) Select your *.ico icon file
+- the file will be automatically copied to the project's root folder
+4) Open the properties for the icon file located in the project's root folder
+5) Set "Build Action" as "Embedded Resource"
+6) Set "Copy to Output Directory" to "Copy if Newer" or "Always Copy"
+
+To use the icon:
+<code>
+using System.IO;
+using System.Reflection;
+
+Assembly myAssembly = Assembly.GetAssembly(typeof(anyTypeInAssembly));
+Stream iconStream = myAssembly.GetManifestResourceStream("MyFullNamespace.iconFilename.ico");
+this.Icon = new Icon(iconStream);
+</code>

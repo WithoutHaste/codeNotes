@@ -1,0 +1,74 @@
+##HTML Helpers
+
+Simple, a method that returns a string. They are used to abstract standard HTML tags.
+
+Assembly: System.Web.Mvc.Html
+
+#Basics
+
+<code>
+Html.ActionLink(...)
+Html.BeginForm(...) and Html.EndForm(...)
+Html.Hidden(...)
+Html.Password(...)
+Html.CheckBox(...) and Html.CheckBoxFor(...)
+Html.DropDownList(...) and Html.DropDownListFor(...)
+Html.ListBox(...) and Html.ListBoxFor(...)
+Html.RadionButton(...) and Html.RadioButtonFor(...)
+Html.TextArea(...) and Html.TextAreaFor(...)
+Html.TextBox(...) and Html.TextBoxFor(...)
+</code>
+
+The "xFor" versions are strongly-typed (updates when the object changes), the others are weakly-typed. Both render to the same HTML.
+
+Weakly typed:
+<code>
+<label for="FirstName">First Name:</lable>@Html.TextBox("FirstName")
+</code>
+
+Strongly typed:
+<code>
+@model Student
+
+<label for="FirstName">First Name:</lable>@Html.TextBox(m => m.FirstName)
+/*
+In the lambda, "m" is the model, the Student object that was passed to this view.
+Do not call it "model" in the lambda, the variable name will conflict with the implicit "model" variable.
+*/
+</code>
+
+#Custom
+
+You can make your own Helpers with static methods.
+
+<code>
+namespace MyApp.Helpers
+{
+	public static class MyHelpers
+	{
+		public static string Label(string target, string text)
+		{
+			return String.Format("<label for='{0}'>{1}</label>", target, text);
+		}
+	}
+}
+...
+@MyHelpers.Label("target", "text")
+</code>
+
+You can also use extension methods on the Html class.
+
+<code>
+namespace MyApp.Helpers
+{
+	public static class LabelExtensions
+	{
+		public static string MyLabel(this HtmlHelper helper, string target, string text)
+		{
+			return String.Format("<label for='{0}'>{1}</label>", target, text);
+		}
+	}
+}
+...
+@Html.MyLabel("target", "text")
+</code>

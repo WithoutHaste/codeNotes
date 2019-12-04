@@ -1,0 +1,16 @@
+##Plugins
+
+#Display Images in Code
+
+It would be very useful to include small diagrams in comments of certain test cases.
+
+!![Microsoft Image Insertion](https://marketplace.visualstudio.com/items?itemName=VisualStudioProductTeam.ImageInsertion&ssr=false#overview)
+Can't get the installation working, even though it says it is supported by Visual Studio 2010 and I'm on 2015.
+
+3rd party solutions:
+
+!![ImageComments Website](https://marketplace.visualstudio.com/items?itemName=MsBishop.ImageComments&ssr=false#overview)
+and
+!![Memful Comments Website](https://marketplace.visualstudio.com/items?itemName=MariusBancila.memefulcomments)
+
+Both extensions only support Visual Studio version 15 and above, so I can't test them with VS Community 2015.

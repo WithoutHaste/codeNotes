@@ -1,0 +1,9 @@
+##Visual Studio Errors
+
+#Access is denied
+
+A generic error with no details. Occurs when you run a project.
+
+1) Try closing and reopening Visual Studio. This sometimes fixes the problem.
+
+2) ?

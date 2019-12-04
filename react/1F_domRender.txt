@@ -1,0 +1,19 @@
+##DOM Render
+
+Render React elements to the HTML DOM.
+
+Example:
+<code>
+	<div id="id01">Hello World!</div>
+
+	<script type="text/babel">
+		ReactDOM.render(
+			<h1>Hello React!</h1>,
+			document.getElementById('id01')
+		);
+	</script> 
+</code>
+
+React DOM compares the React element(s) with the current state of the HTML DOM. The minimum of necessary changes are made to update the HTML DOM.
+
+The idea is to specify how the UI should look at each moment in time, instead of focusing on the exact series of changes being made.

@@ -1,0 +1,235 @@
+##Sort
+
+#Terminology
+
+In-Place Sort
+	Any algorithm that rearranges the elements in the list.
+	Might use a constant amount of extra memory, at most.
+	Ex: Insertion Sort and Selection Sort are In-Place.
+	Ex: Merge Sort and Counting Sort are not In-Place.
+	
+Internal vs External Sort
+	An external sort is used when the full list cannot be held in memory at one time.
+	Ex: Merge Sort can be used for External Sorting.
+	
+Stable Sort
+	A sort is stable if inputs A and B with the same Key appear in the same order in the output as they appeared in the input.
+	In other words, stability means that equivalent elements retain their relative positions.
+	Ex: Bubble Sort, Insertion Sort, Merge Sort, and Counting Sort are stable by nature.
+	Ex: Quick Sort and Heap Sort can be made stable, but don't start that way.
+	
+#Selection Sort
+
+Selection Sort always takes the same amount of time: Best, Average, and Worst Times are (n^2).
+Selection Sort is an in-place sort.
+Selection Sort is a comparison sort.
+
+Algorithm:
+	Keep track of two sections of the array - the sorted part, and the unsorted part.
+	Until the entire array is sorted:
+		Find the smallest element in the unsorted part.
+		Swap the smallest element with the first element of the unsorted part.
+		Now the sorted part is one element longer than it was.
+		
+Time is always (n^2) because no matter what order the array starts in, you must make N pass-throughs of gradually smaller sections of the array.
+		
+#Bubble Sort
+
+Best Time: Ω(n)
+Average and Worst Time: θ(n^2) O(n^2)
+
+Bubble Sort is an in-place algorithm.
+Bubble Sort is a comparison algorithm.
+
+Algorithm:
+	Loop through the array until it is sorted.
+		For each adjacent pair of elements, swap them if they are in the wrong order.
+		
+Best Time is Ω(n) when the array is already sorted, and one pass-through confirms this.
+
+Worst Time is O(n^2) because if the smallest element starts at the end of the array, it can only be moved toward the front 1 index per pass-through. So you'd need to make N pass-throughs.
+
+#Insertion Sort
+
+Best Time: Ω(n)
+Average and Worst Time: θ(n^2) O(n^2)
+
+Insertion Sort is an in-place algorithm.
+Insertion Sort is a comparison algorithm.
+
+Algorithm:
+	Keep track of two sections of the array - the sorted part, and the unsorted part.
+	Until the entire array is sorted:
+		Take the first element in the unsorted part.
+		Bubble sort that element backwards into its correct position in the sorted part.
+		Now the sorted part is one element longer than it was.
+
+Best Time is Ω(n) when the array is already sorted, and one pass-through confirms this.
+
+Average and Worst Time is (n^2) because this is a modified Bubble Sort.
+
+#Heap Sort
+
+Best, Average, and Worst Times: (n log(n))
+
+Heap Sort is an in-place sort.
+Heap Sort is a comparison algorithm.
+
+Complete Binary Tree:
+	A binary tree in which all levels are completely full, except possibly the last level where all elements are as far left as possible.
+	Can be stored as an array, which is an efficient use of space.
+		Parent at index I means the children are at 2I+1 and 2I+2.
+	
+Binary Heap:
+	A complete binary tree such that each parent is smaller than its children.
+	(Min Heap means the parent is smaller, Max Heap means the parent is larger.)
+
+Algorithm:
+	(To sort into ascending order)
+	Build a Max Heap.
+	Keep track of two sections of the array - the heap part, and the sorted part.
+	Until the heap part is empty:
+		Take the root of the heap (the largest unsorted element).
+		Swap that root with the last element in the heap.
+		Re-heapify the heap, which is now 1 element smaller than it was before.
+			To re-heapify, continually swap the moved element with its largest child that is larger than itself.
+			
+Build Max Heap:
+	Algorithm:
+		For index I = floor(N/2)-1 to I = 0
+			Heapify Ith element
+	Time complexity: O(n log(n))
+		Because N/2 calls to Heapify - the 1/2 part doesn't count in Big-O so that's N calls to Heapify.
+		And Heapify takes O(log(n)) time.
+		So the total is O(n log(n))
+			
+Heap Sort is (n log(n)) because:
+	(N log(N)) to build the heap.
+	N to iterate over the whole array once to put the elements in order TIMES log(N) for re-heapify each time.
+	Results in 2(N log(N)) which in Big O is simply O(N log(N)).
+	
+#Quick Sort
+
+Best and Average Time: Ω(n log(n)) θ(n log(n))
+Worst Time: O(n^2)
+
+Quick Sort is a divide and conquer algorithm.
+Quick Sort is a comparison algorithm.
+Quick Sort is an in-place sort.
+
+Algorithm:
+	Select a pivot element (it can be any element in the array).
+	Partition: move all smaller elements before the pivot and all larger elements after the pivot.
+	Recurse:
+		Run that on each subsection of the array you just created - the section from start to just before the pivot and the section from just after the pivot to end.
+		
+Partition:
+	Partition can be done in linear (N) time.
+	Start index LOW at the first element that is larger than PIVOT.
+	Working backwards from the end of the array:
+		If an element is less than PIVOT, swap it with LOW.
+		Move LOW forward until it is again on an element larger than PIVOT.
+		Continue thus until LOW meets your backwards-moving index.
+	Finally, swap PIVOT into the in-between space.
+	
+Worst case time O(n^2) occurs if the selection of pivot repeatedly results in one section being size N-1.
+
+Best case time Ω(n log(n)):
+	(log(N)) because if the pivot perfectly splits the array in half over and over, we will end up with log(N) number of levels (halves, then quarters, then eighths...).
+	(N) because the entire array is being processed at each level. I.e. processing 2 halves, or 4 quarters, or 8 eighths.
+	Result is N * log(N) time.
+	
+#Merge Sort
+
+Best, Average, Worst Time: (n log(n))
+
+Merge Sort is a divide and conquer algorithm.
+Merge Sort is a comparison algorithm.
+Merge Sort is NOT an in-place sort. It uses a lot of extra memory.
+Merge Sort can be an external sort - meaning the entire array is NOT kept in memory at one time.
+
+Algorithm:
+	Divide the array in half.
+	Call Merge Sort on each half.
+	Merge the sorted halves together.
+		Start at the beginning of each half.
+		Copy the smaller element to the resulting array and increment that one index forward.
+		Continue until both halves have been copied to the resulting array.
+		
+Time complexity is always (N log(N)):
+	log(N) because we're splitting the array in half repeatedly, give us log(N) levels.
+	N because at each level, the entire array is processed.
+	Result is N * log(N) time.
+	
+#Bucket Sort
+
+Best and Average Time: Ω(n+k) θ(n+k) with K referring to the number of buckets.
+Worst Time: O(n^2)
+
+Bucket Sort is a good choice when input values are uniformly spread across a range of value.
+Bucket Sort works on non-integer values, unlike Counting Sort.
+
+Algorithm:
+	Create K empty buckets (arrays, lists).
+	Copy each element (value X) into bucket number K*X.
+	Sort each bucket with Insertion Sort.
+	Concatenate the sorted buckets together.
+	
+Average Time θ(n+k):
+	N because it takes one pass-through to copy elements into buckets.
+		Insertion into the head of a linked list takes O(1) time.
+	N again (on average) to Insertion Sort all the buckets, assuming values are uniformly distributed.
+	K because of concatenating all the buckets together. (If they are linked lists, that means K operations.)
+	Result is 2 * N + K time, or simply (N+K) time complexity.
+	
+Worst Time O(n^2):
+	Because of the worst case time of insertion sort, and if all the elements ended up in one bucket.
+	
+#Radix Sort
+
+Best, Average, and Worst Time: (nk) with K being the number of digits in the elements.
+
+Appropriate when elements are in range 1 to N^2.
+
+Algorithm:
+	For each digit in the elements, from least significant to most significant:
+		Sort array with Stable Counting Sort on just that digit.
+		
+Time Complexity is (NK):
+	N because Counting Sort is O(N + 10). (10 because numbers 0 through 9).
+	K because you run Counting Sort K times, once for each digit-place.
+	Result is N * K time.
+
+#Counting Sort
+
+Time complexity: O(N + K) 
+Space complexity: O(N + K)
+Where N is the number of elements in the unsorted array, and K is the number of possible values.
+
+Appropriate if you know the exact range of values that might be in the list, and they are discrete values (like integers, not decimals), and the range isn't too big.
+
+Sample unsorted array, with possible value range 0-9:
+<code lang="text">
+1, 4, 1, 2, 7, 5, 2
+</code>
+
+Algorithm:
+- Create an array whose length covers the range of possible values. This is the counting array.
+- Iterate through the unsorted data once, incrementing the corresponding slot in the counting array for each value. You're counting up how many times each value occurs.
+<code lang="text">
+Counting array: 0, 2, 2, 0, 1, 1, 0, 1, 0, 0
+</code>
+- If you're just dealing with integers or characters, you can just iterate through the counting array now, outputting each value in the right quantities.
+
+- If you're dealing with more complex objects, continue.
+- Iterate through the counting array, adding to each slot the total counts from previous slots. This is now an array of indexes in the sorted array.
+<code lang="text">
+Counting array: 0, 2, 4, 4, 5, 6, 6, 7, 7, 7
+</code>
+- Iterate through the unsorted array. For each value, place it at the index indicated in the counting array and decrement the slot in the counting array.
+<code lang="text">
+Unsorted array: 1, 4, 1, 2, 7, 5, 2
+Counting array: 0, 2, 4, 4, 5, 6, 6, 7, 7, 7
+Sorted array: 1, 1, 2, 2, 4, 5, 7
+</code>
+

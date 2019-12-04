@@ -1,0 +1,90 @@
+##Modules
+
+#About
+
+The MVC life cycle is a series of events that Modules can listen for. 
+
+You can write your own Modules to add/change functionality. Modules are designed to respond to MVC life cycle events, thus becoming part of the life cycle.
+
+<code>
+class MyModule : IHTTPModule { }
+</code>
+
+Modules frequently read and edit the HTTP Context object. Uses include logging, authentication, or fast redirects.
+
+Most of what your custom HTTP Module can achieve can also be done through the Global.aspx file. But if your separate the functionality into a Module, you can reuse it in other applications.
+
+You can register Modules through code (like in the PreApplicationStart event) or in a configuration file.
+
+#Custom Modules
+
+Create a custom module and hook it into the Request Life Cycle events.
+
+Custom module (MyProject/App_Code/CustomHttpModule.cs):
+<code>
+using System;
+using System.Web;
+
+namespace Samples.AspNet.CS
+{
+	public class CustomHTTPModule : IHttpModule
+	{
+		public CustomHTTPModule()
+		{
+			// Class constructor.
+		}
+
+		public void Init(HttpApplication app)
+		{
+			//attaches this module to request life cycle events
+			app.AcquireRequestState += new EventHandler(app_AcquireRequestState);
+			app.PostAcquireRequestState += new EventHandler(app_PostAcquireRequestState);
+		}
+
+		public void Dispose()
+		{
+			// Add code to clean up the instance variables of a module.
+		}
+
+		public void app_AcquireRequestState(object o, EventArgs ea)
+		{
+			HttpApplication httpApp = (HttpApplication)o;
+			HttpContext ctx = HttpContext.Current;
+			ctx.Response.Write(" Executing AcquireRequestState ");
+		}
+
+		public void app_PostAcquireRequestState(object o, EventArgs ea)
+		{
+			HttpApplication httpApp = (HttpApplication)o;
+			HttpContext ctx = HttpContext.Current;
+			ctx.Response.Write(" Executing PostAcquireRequestState ");
+		}
+	}
+}
+</code>
+
+#Register Module
+
+Custom module registration (IIS 7.0 Classic Mode, or earlier IIS version):
+MyProject/Web.config:
+<code lang="xml">
+	<configuration>  
+		<system.web>  
+			<httpModules>  
+				<add type="Samples.AspNet.CS.CustomHTTPModule" name="CustomHttpModule" />  
+			</httpModules>  
+		</system.web>  
+	</configuration>  
+</code>
+
+Custom module registration (IIS 7.0 Integrated Mode, or later IIS version):
+MyProject/Web.config:
+<code lang="xml">
+	<configuration>  
+		<system.webServer>  
+			<modules>  
+				<add type="Samples.AspNet.CS.CustomHTTPModule" name="CustomHttpModule" />  
+			</modules>  
+		</system.webServer>  
+	</configuration>  
+</code>

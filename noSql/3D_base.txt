@@ -1,0 +1,9 @@
+##Base
+
+Common properties of NoSQL databases. BASE systems do not guarantee consistency.
+
+Basically Available: the system is guaranteed to be available.
+
+Soft state: the state of the system may change over time even without input (see Eventually Consistent Model).
+
+Eventual consistency: the system will become consistent, provided there is zero input for a while

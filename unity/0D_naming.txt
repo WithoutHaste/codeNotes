@@ -1,0 +1,38 @@
+##Naming Conventions
+
+I couldn't find anything online about agreed standards for naming objects/assets/etc in Unity projects.
+
+Here are my arbitrary guidelines.
+
+"Scene<name>"
+- Each scene name has "Scene" prefix.
+- Use the same name that you use for this scene (menu/level/room/etc) in your documentation/notes.
+
+"SceneController"
+- An empty GameObject at the root level of a scene hierarchy. 
+- Contains the controller script for that scene ("Controller<name>").
+- Maximum 1 per scene.
+
+"Controller<name>"
+- A script that contains all the global controller code for a single scene.
+- Each controller script has "Controller" prefix.
+- Use the same name as the scene.
+- All scene controller scripts are in the custom "Assets/Controllers" folder.
+
+Assets:
+- There shouldn't be any files floating at the root level of the "Assets" folder. (Except for technical things like "link.xml")
+
+Assets/Resources:
+- Camel case names, such as "configPlayers.txt".
+- Start name with the category/purpose of the file, followed by the specifics.
+- Assets/Resources/Prefabs: prefabs that can be found and loaded from Scripts
+
+Assets/Scripts:
+- Custom folder to contain all scripts.
+- Assets/Scripts/Controllers: for all controllers
+- Assets/Scripts/Global: for Singletons and ScriptableObjects - anything global that does not need to be attached to GameObjects
+- Assets/Scripts/Utilities: for small, reusable behaviors
+
+Assets/Sprites:
+- Custom folder to contain all sprites.
+

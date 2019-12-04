@@ -1,0 +1,10 @@
+##New View
+
+The new view dialog in Visual Studio:
+
+View engine: Razor
+
+Strongly-Typed View: you can set the model type for the view
+
+Scaffold Template: the view can be generated with some default code to get you started
+	

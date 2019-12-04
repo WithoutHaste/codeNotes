@@ -1,0 +1,25 @@
+##Declarative Programming
+
+A paradigm or style in which the language expresses the logic of a computation without describing its control flow. This is an abstraction, specific implementations of the logic exist within the language.
+
+Ex: SQL
+Ex: Regular Expressions
+Ex: LINQ
+
+The focus is on WHAT must be accomplished rather than the details of HOW.
+
+These languages also Lack Side-Effects or, in other words, is Referentially Transparent. They also frequently have a clear correspondence to mathematical logic.
+
+##Imperative Programming
+
+Uses statements that change a program's state.
+
+Procedural Programming is a subset of Imperative Programming.
+
+##Referential Transparency
+
+A function is referentially transparent if every duplicate call to the function produces duplicate results.
+
+Ex: Console.ReadLine() is opaque because calling it several times will produce different results
+
+Ex: "5 + 5" is transparent because it always produces "10"

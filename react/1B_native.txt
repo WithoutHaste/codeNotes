@@ -1,0 +1,76 @@
+##React Native
+
+#Setup Environment
+
+For Windows:
+!![Setup React Native on Windows](https://shift.infinite.red/getting-started-with-react-native-development-on-windows-90d85a72ae65)
+
+1) Install Node.js. This includes "npm".
+!![Download Node.js](https://nodejs.org/en/download/)
+
+2) Install JDK (Java SE Development Kit)
+!![Download JDK](https://www.oracle.com/technetwork/java/javase/downloads/index.html)
+
+3) Install Android Studio
+!![Download Android Studio](https://developer.android.com/studio)
+
+4a) Add Java SDK path to Windows Environment Variables
+- Add New
+- Name: JAVA_HOME (this name is expected)
+- Path: C:\Program Files\Java\jdk-11.0.2 (or whatever your path is)
+
+4b) Add Android Studio path to Windows Environment Variables
+- Add New
+- Name: ANDROID_HOME (this name is expected)
+- Path: C:\Program Files\Android\Android Studio (or whatever your path is)
+
+5) Configure an Android Virtual Device
+a) Open Android Studio
+b) Start a new project (maybe not this? create react native project in step 6)
+c) Create an Android Virtual Device: Tools menu > ADV Manager > Create
+-- the ADV Manager option will not appear until the application is fully loaded
+-- you'll need to create a virtual device profile for every platform your application will run on
+d) Boot the ADV
+-- click the "Launch" arrow
+
+6) Command Prompt
+a) Open command prompt
+b) Navigate to project folder
+c) Install React Native globally
+<code>
+npm install -g react-native-cli
+</code>
+d) Create new react native project
+<code>
+react-native init MyProject
+</code>
+This will create a folder "MyProject" containing all the files for a new react native application.
+
+7) Configure build.gradle
+Change "android/app/build.gradle" file to use the correct version number of Android Studio SDK
+??????????
+
+Continue from here:
+http://www.ntu.edu.sg/home/ehchua/programming/android/android_howto.html
+
+
+To see the Android SDK version you have installed:
+- Open Android Studio
+- Tools menu > Android SDK
+- select Appearance & Behavior > System Settings > Android SDK
+You'll see a list of available SDKs, and which are installed.
+
+
+8) Start application
+a) Navigate into project folder in Command Prompt
+b) Run application
+<code>
+react-native run-android
+</code>
+Wait awhiiiiiiile for Gradle to start up.
+c) Start the packager
+<code>
+react-native start
+</code>
+
+TODO: complete these steps to test that they work

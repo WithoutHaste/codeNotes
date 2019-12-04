@@ -1,0 +1,50 @@
+##Namespaces
+
+Namespaces have a nested structure. Each segment of a namespace like "System.Collections.Generic" is a namespace:
+- System
+- Collections within System
+- Generic within Collections
+
+Nested namespaces may be declared two ways:
+<code>
+namespace System.Collections { }
+//or
+namespace System 
+{
+	namespace Collections { }
+}
+</code>
+
+The fully qualified name of a type includes the full namespaces it is within:
+- System.Collections.Generic.List<T>
+
+Fully qualified names must be unique within a program.
+
+You cannot declare a namespace within a class, interface, or struct.
+
+#Naming Convention
+
+The conventional organization of a project is for the namespaces to correspond to the file structure.
+- Files at the root of the project are in namespace "MyProject".
+- Files in folder root/Contracts are in namespace "MySpace.Contracts".
+- And so on.
+
+#Including Libraries
+
+(Rules determined by experimentation)
+
+Library-A: the .Net library you are making.
+Library-B: a third-party library you are using within Library-A.
+
+When making Library-A, you can make use of Library-B internally in your project without making it necessary for users of Library-A to also add a reference to Library-B in their project.
+
+When will users of Library-A need to add a reference to Library-B?
+- When calling a Library-A method with Library-B Type arguments.
+- When calling a Library-A method that returns a Library-B Type, whether or not they capture the return value.
+- When referencing a Library-B Type property or field in a Library-A Type object.
+
+Therefore, third-party dependency considerations should not affect how you divide your namespaces. Merely including the namespace in your project does not incur additional references.
+
+Additionally, Visual Studio IntelliSense will report exactly which library you are missing when you try to use a Library-B type.
+
+When referencing Library-B, they will need to reference the same version that Library-A uses.

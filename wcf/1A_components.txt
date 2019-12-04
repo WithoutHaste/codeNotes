@@ -1,0 +1,34 @@
+##Components
+
+Data Contracts
+Service Contracts
+Services
+Hosts
+Client Proxies
+Configuration
+
+#Contracts
+
+The data contracts and service contracts are the only thing shared between client and service, either through a shared assembly or through contract equivalence.
+- It is recommended to put just the contracts into a single assembly, so they are easy to share between service and clients.
+
+#Contract Equivalence
+
+Contract names and member/operation names must match.  Each of the attributes (DataContract, DataMember, ServiceContract, OperationContract) has an optional Name property so you can specify an outward-facing name.
+
+<code>
+[OperationContract(Name="matchingName")]
+</code>
+
+Contract namespaces must also match.  Each of the four attributes also has an optional Namespace property.
+
+<code>
+[ServiceContract(Namespace="matchingNamespace")]
+</code>
+
+You can also specify the namespace at the assembly level.
+In your project's Properties > Assembly.cs:
+<code>
+//add line
+[assembly:ContractNamespace("old", ClrNamespace="new")]
+</code>

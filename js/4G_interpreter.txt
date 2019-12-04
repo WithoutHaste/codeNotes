@@ -1,0 +1,66 @@
+##Interpreter
+
+Errata and oddities about the JavaScript interpreter.
+
+#Strict
+
+<code>
+'use strict';
+</code>
+
+This is a literal directive that indicates code should be interpreted in strict mode.
+It can be specified at the beginning of a file or a function to give scope over the whole file or function.
+- if it is specified anywhere else, it will be ignored
+
+Strict mode means:
+- cannot use undeclared variables (so you don't accidentally make a new global variable by misspelling a variable name)
+- cannot assign values to a non-writable property, a getter-only property, a non-existing property, a non-existing variable, a non-existing object
+- cannot delete variables or objects or functions
+- cannot duplicate parameter names
+- cannot use octal numeric literals (ex: var x = 010;)
+- cannot use octal escape characters (ex: var x = "\010";)
+- cannot use keyword "eval" as a variable name, nor "arguments", nor any of these keywords
+	implements, interface, let, package, private, protected, public, static, yield
+- cannot use "with" statement
+- "eval" cannot create variables in its scope (ex: eval("var x = 2");)
+
+#Hoisting
+
+The JavaScript interpreter will hoist these statements to the top of their scope before running the code:
+- variable declarations (but not variable initializations)
+- function declarations with their definitions (but not function expressions or arrow functions or constructed functions)
+
+See the sections for Functions and Variables for more details.
+
+Ex
+<code>
+x = 5;
+console.log(x);
+
+var x;
+</code>
+is valid because it becomes
+<code>
+var x;
+x = 5;
+console.log(x);
+</code>
+
+Only declarations will be hoisted, because the interpreter knows it is not changing logic.
+Initializes will not be hoisted.
+<code>
+x = 5;
+console.log(x + y);
+
+var x;
+var y = 7;
+</code>
+becomes
+<code>
+var x;
+x = 5;
+console.log(x + y); //y is undefined here
+
+var y = 7;
+</code>
+

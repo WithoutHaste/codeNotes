@@ -1,0 +1,25 @@
+##Getting Started
+
+#Schema-First
+
+Schema-First approach means opening a graphical designer in Visual Studio, pointing it at an existing database schema, and having it auto-import that schema information.
+
+If you reverse-engineer to an EDMX, the file can be automatically updated when the database changes.
+
+If you reverse-engineer to Domain classes, they cannot be automatically updated.
+
+#Model-First
+
+Model-First approach means opening a graphical designer in Visual Studio, and drawing a diagram of the object model you'll be using.
+
+If you generate the database schema from this model, the database cannot be automatically updated with changes later.
+
+#Code-First
+
+Code-First approach means writing your C# classes, and having those auto-imported into the object model.
+
+Can auto-generate database schema from Domain classes.
+Can auto-update database schema when the Domain classes change (Migration).
+
+EF starts with a set of conventions to infer what the database schema should be.
+EF also supports may ways to specify non-conventional mappings.

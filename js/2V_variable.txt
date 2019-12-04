@@ -1,0 +1,135 @@
+##Variables
+
+#Hoisting
+
+Variable declarations are hoisted to the top of the current scope, which means either (A) the top of the enclosing function or (B) the global scope.
+Therefore you can use a variable before (earlier in the file) it is declared.
+
+Variables declared with "let" or "const" keywords are NOT hoisted.
+<code>
+console.log(x); //outputs ReferenceError: can't access lexical declaration 'x' before initialization
+let x = 1;
+</code>
+<code>
+console.log(y); //outputs ReferenceError: can't access lexical declaration 'y' before initialization
+const y = 2;
+</code>
+
+Variable initializations are NOT hoisted.
+<code>
+console.log(x); //outputs undefined
+var x = 5;
+</code>
+
+Standard practice is to declare all variables at the top of their scope, regardless of hoisting.
+
+#Scope
+
+Global scope is available to every part of the script.
+Variables declared outside any function or object have global scope.
+
+Function scope is available to all statements within the function.
+Variables declared within a function have function scope, also called local scope.
+
+Block scope is available to all statements occurring later within the same block.
+A code block is anything enclosed in { }.
+Only variables declared as "let" or "const" have block scope.
+<code>
+{
+	let x = 5;
+}
+console.log(x); //outputs ReferenceError: x is not defined
+</code>
+<code>
+{
+	const y = 6;
+}
+console.log(y); //outputs ReferenceError: y is not defined
+</code>
+
+Variables declared as "var" cannot have block scope, even when declared inside a block:
+<code>
+{
+	var x = 5;
+}
+console.log(x); //outputs 5
+</code>
+
+It is called "redeclaring" if you declare a "var" variable both inside and outside a block. Within just { } it does not make a difference.
+<code>
+var x = 5;
+{
+	var x;
+	console.log(x); //outputs 5
+}
+console.log(x); //outputs 5
+</code>
+
+Unless you reinitialize the variable, then it will change the global value.
+<code>
+var x = 5;
+{
+	console.log(x); //outputs 5
+	var x = 6;
+	console.log(x); //outputs 6
+}
+console.log(x); //outputs 6
+</code>
+
+I don't know the difference between the previous examples and this one, but the behavior is different when you using the grouping operator ( ).
+If you don't declare the variable in the inner scope, the global is used.
+If you do declare the variable in the inner scope, it is like a whole different variable and the outer variable's value is maintained even if the inner one changes.
+<code>
+var x = 5;
+
+(function() {
+	console.log(x); //outputs 5
+	x = 2;
+	console.log(x); //outputs 2
+})();
+
+console.log(x); //outputs 2
+
+(function() {
+	console.log(x); //outputs undefined because the variable declaration was hoisted
+	var x = 8;
+	console.log(x); //outputs 8
+})();
+
+console.log(x); //outputs 2
+</code>
+
+Declaring a "let" or "const" variable will not affect a global "var" variable of the same name.
+<code>
+var x = 5;
+var y = 6;
+{
+	let x = 1;
+	const y = 2;
+}
+console.log(x); //outputs 5
+console.log(y); //outputs 6
+</code>
+
+You can also nest "let" and "const" variables to reuse the variable names.
+<code>
+let x = 5;
+{
+	let x = 6;
+	console.log(x); //outputs 6
+}
+console.log(x); //outputs 5
+</code>
+
+The value of "let" variables can be changed.
+The value of "const" variables cannot be changed.
+
+#Container
+
+A container is a collection of data with no methods/behavior. For example, arrays are containers.
+
+Strictly speaking, containers are supposed to be immutable. By that definition, arrays are not containers because you can add/remove elements and edit elements.
+
+A "functor" is a container that can be mapped onto by an unary function (a function that accepts one parameter). The function will be applied to each element of the functor, and a container of the results of each function call will be returned. For example, array.map(function).
+
+An implementation of "map" is expected to return the same container type as the container it is operating on. Thus, you can chain "map" calls.

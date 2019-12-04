@@ -1,0 +1,40 @@
+##Data Types
+
+CHAR(N)      --fixed length string, exactly N characters
+VARCHAR(N)   --variable length string, up to N characters
+BIT          --boolean, TRUE or FALSE, 0 or 1
+INT          --integer
+DECIMAL(P,S) --precision P = total digit count, scale S = digits after decimal point
+DATE         --year, month, and day
+TIME         --hour, minutes, and seconds
+TIMESTAMP    --date plus time
+MONEY        --variable length decimal with 2 digits after decimal point
+.
+.
+.
+todo
+
+#Cast
+
+<code>
+CAST(@count AS VARCHAR(MAX))
+</code>
+
+#Strings
+
+Print text to client console
+<code>
+PRINT @text;
+</code>
+
+Concat
+<code>
+PRINT @text + 'more text';
+</code>
+
+Trim
+<code>
+PRINT RTRIM(@text);
+PRINT LTRIM(@text);
+PRINT TRIM(@text);
+</code>

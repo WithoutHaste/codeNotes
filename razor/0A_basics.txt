@@ -1,0 +1,75 @@
+## Razor
+
+Razor is the new syntax/view engine that replaces the old Web Forms (ASPX) syntax/view engine. It is simpler and easier to read.
+
+Razor pages have file extension *.cshtml or *.vbhtml, depending on which language you use. These notes are all based on the C# (.cshtml) syntax.
+
+#Template
+
+Razor views are templates that are filled in with data to produce web pages.
+
+Literal strings are plain HTML. C# code starts with an "@".
+
+<code>
+@{ var message = "Good morning"; }
+<p>Message says @message.</p>
+</code>
+
+<code>
+@{ var student = new Student("Bob", 19); }
+<p>Student name is @student.Name and age is @student.Age.</p>
+<p>Student is in @student.CountClasses() classes.</p>
+</code>
+
+The Model and the ViewBag are both available in the view.
+
+#Comments
+
+<code>
+@* comments here *@
+</code>
+
+<code>
+@{
+	//more comments
+	/* multiline comments */
+}
+</code>
+
+#Code Block
+
+These lines are executed. Nothing is automatically added to the output.
+
+<code>
+@{
+	//proper C# code;
+}
+</code>
+
+#Inline Expressions
+
+These results are added directly to the output.
+
+Implicit Code Expressions
+<code>
+Plain text @... Plain text
+</code>
+
+Explicit Code Expressions
+<code>
+Plain text @(...) Plain text
+</code>
+
+Email Address: the Razor Engine assumes text formatted as "a@b.c" is an email address, and will not implicitly interpret it as a code expression.
+
+#Escape
+
+Escape "@" (at sign) with another "@".
+<code>
+@@Plain text
+</code>
+
+Explicitly specify string literals:
+<code>
+@:Plain text
+</code>

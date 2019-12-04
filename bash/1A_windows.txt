@@ -1,0 +1,163 @@
+##Windows
+
+#REM
+
+Remarks or comments:
+<code>
+REM single line comments
+</code>
+
+#ECHO
+
+By default, as a bash file runs each command will be echoed to the command prompt. This command turns that off:
+<code>
+ECHO OFF
+</code>
+
+Repeat plain text to STDOUT:
+<code>
+ECHO plain text
+</code>
+
+Echo a new-line character:
+<code>
+ECHO.
+</code>
+
+#Variables
+
+Set a variable:
+<code>
+SET variableName=value
+</code>
+Do not add whitespace around the equals sign.
+
+Use a variable:
+<code>
+ECHO %variableName%
+</code>
+
+#Files
+
+Copy a file:
+<code>
+COPY fromFile toFile
+</code>
+
+Move a file:
+<code>
+MOVE oldLocation newLocation
+</code>
+By default, the user will be prompted for permission to overwrite "newLocation". You can auto-accept the prompt:
+<code>
+MOVE /Y oldLocation newLocation
+</code>
+
+Append to file:
+<code>
+ECHO plain text >> toFile
+</code>
+
+Echo the contents of a file:
+<code>
+TYPE filename
+</code>
+
+Get path information from a full path:
+<code>
+set "filename=C:\Folder1\Folder2\File.ext"
+FOR %%A IN ("%filename%") DO (
+	ECHO full path: %%~fA
+	ECHO directory: %%~dA
+	ECHO path: %%~pA
+	ECHO file name only: %%~nA
+	ECHO extension only: %%~xA
+	ECHO expanded path with short names: %%~sA
+	ECHO attributes: %%~aA
+	ECHO date and time: %%~tA
+	ECHO size: %%~zA
+	ECHO drive + path: %%~dpA
+	ECHO name.ext: %%~nxA
+	ECHO full path + short name: %%~fsA)
+</code>
+
+#IF
+
+Single line:
+<code>
+IF a==a ECHO line 1A ELSE ECHO line 1B
+</code>
+
+Multiple lines:
+<code>
+IF a==a (
+	ECHO line 1A
+	ECHO line 2A
+)
+ELSE (
+	ECHO line 1B
+	ECHO line 2B
+)
+</code>
+
+Strings:
+<code>
+IF a==b
+
+IF NOT a==b
+
+REM case insensitive
+IF /I a==b
+</code>
+
+Numerics:
+<code>
+REM equals
+IF a EQU b
+
+REM not equals
+IF a NEQ b
+
+REM less than
+IF a LSS b
+
+REM less than or equals
+IF a LEQ b
+
+REM greater than
+IF a GTR b
+
+REM greater than or equals
+IF a GEQ b
+</code>
+
+Is variable defined?
+<code>
+IF DEFINED variableName
+
+IF NOT DEFINED variableName
+</code>
+
+Does file exist?
+<code>
+IF EXIST filename
+
+IF NOT EXIST filename
+</code>
+
+#FOR Loop
+
+Single line:
+Loop through each file in current directory:
+<code>
+FOR /r %%A IN (*) DO ECHO %%A
+</code>
+
+Multiple lines:
+Loop through each file in current directory:
+<code>
+FOR /r %%A IN (*) DO (
+	ECHO line 1
+	ECHO line 2
+)
+</code>

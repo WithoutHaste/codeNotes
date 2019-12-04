@@ -1,0 +1,25 @@
+##Promises
+
+Promises are like event listeners, but they can only be triggered once, and they can be triggered by a state that has already occurred.
+
+<code>
+img1.ready().then(function() {
+  // run if image is already loaded, or becomes loaded
+}, function() {
+  // run if image has failed or does fail to load
+});
+
+Promise.all([img1.ready(), img2.ready()]).then(function() {
+  // run if all are already loaded, or when they all become loaded
+}, function() {
+  // run if one or more failed, or when one fails in the future
+});
+
+//succeed or fail based on the first event to happen
+Promise.race([img.ready(), img2.ready()])...
+</code>
+
+A promise is pending until the action succeeds or fails.
+A promise is settled once the action succeeds or fails.
+A promise is fulfilled if the action succeeds.
+A promise is rejected if the action fails.

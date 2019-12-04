@@ -1,0 +1,36 @@
+##Xml Editor
+
+The Inkscape *.svg file format is an xml format.
+This editor let's you edit that xml directly.
+
+Edit menu > XML Editor
+
+Note that all measurements are in a default and cannot be changed.
+You cannot edit in the XML Editor using pixel units.
+
+#Layers
+
+An empty project always starts with an empty layer.
+
+<code>
+<svg:g id="layer1" inkscape:label="Layer 1">
+</svg:g>
+</code>
+
+#Inspect
+
+Clicking on a line in the editor will select that element in the main pane.
+
+#Attributes
+
+Attributes for the selected element are shown in the right-hand pane.
+
+You can edit the attibute values.
+
+To add an attribute:
+1. Type the attribute name in the upper-right input field
+2. Type the attribute value in the lower-right input field
+3. Click "Set"
+
+To see all the attributes valid for each element, see the official standard:
+!![Scalable Vector Graphics](https://www.w3.org/TR/SVG/)

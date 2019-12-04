@@ -1,0 +1,34 @@
+##Conditions
+
+#If
+
+Example: only display the "You have X unread messages" text if there are unread messages.
+<code>
+return (
+	<div>
+		<h1>Hello!</h1>
+		{unreadMessages.length > 0 &&
+			<h2>
+				You have {unreadMessages.length} unread messages.
+			</h2>
+		}
+	</div>
+);
+</code>
+If the condition is "true", the expression will be evaluated.
+If the condition is "false", the expression will be skipped.
+This is based on core Javascript syntax.
+
+#Ternary
+
+<code>
+return (
+	<div>
+	{isLoggedIn ? (
+		<LogoutButton onClick={this.handleLogoutClick} />
+	) : (
+		<LoginButton onClick={this.handleLoginClick} />
+	)}
+	</div>
+);
+</code>

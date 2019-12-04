@@ -1,0 +1,130 @@
+##Operators
+
+#Assignment
+
+<code>
+var y = 5;
+var x = y;
+
+x += 10; //x = x + 10;
+x -= 5; //x = x - 5;
+x *= 2; //x = x * 2;
+x /= 4; //x = x / 4;
+x %= 10; //x = x % 10;
+</code>
+
+#Arithmetic
+
+<code>
+var x = (5 + 6) * 10 / (2 - 4) % 10;
+</code>
+* and / have higher precedence than + and -
+Use ( parentheses ) to control precedence.
+
+#Increment, Decrement
+
+<code>
+x++;
+++x;
+
+y--;
+--y;
+</code>
+
+#Concatenation
+
+<code>
+var x = "Hello " + name + "."; //Hello John.
+var y = "5" + 2 + 3; //523
+var z = "2 + 3 + "5"; //55
+</code>
+
+#Comparison
+
+<code>
+if(x == y) {} //values are equal
+
+var x = "John";
+var y = new String("John");
+if(x == y) {} //true because they have the same value
+
+var z = new String("John");
+if(y == z) {} //false because objects are compared by reference, and these are different instances
+if(y === z) {} //still false, because the objects are different instances
+</code>
+
+<code>
+if(x === y) {} //values and types are equal
+
+if(x != y) {} //values are not equal
+
+if(x !== y) {} //values or types are not equal
+
+if(x > y) {} //greater than
+
+if(x < y) {} //less than
+
+if(x >= y) {} //greater than or equal to
+
+if(x <= y) {} //less than or equal to
+
+z = (x > y) ? 5 : 10; //ternary operator - shorthand for if/else
+</code>
+
+#Logical
+
+<code>
+if(a && b) {} //a AND b
+
+if(a || b) {} //a OR b
+
+if(!a) {} //NOT a
+</code>
+
+#Type
+
+<code>
+if(typeof(x) == String) {} //the type of the variable
+
+if(x instanceof String) {} //true if x is of type string
+</code>
+
+typeof("") == "string"
+typeof(0) == "number"
+typeof(NaN) == "number"
+typeof(Infinity) == "number"
+typeof(true) == "boolean"
+typeof({}) == "object"
+typeof([]) == "object"
+typeof(null) == "object"
+typeof(undefined) == "undefined"
+typeof(function myFunc() {}) == "function"
+
+#Bitwise
+
+<code>
+flag = (a & b); //AND the bit-values together
+
+flag = (a | b); //OR the bit-values together
+
+flag = (!a); //NOT the bit-values
+
+flag = (a ^ b); //XOR the bit-values together
+
+flag = (a << b); //zero-fill left shift a by b
+
+flag = (a << b); //signed right shift a by b
+
+flag = (a >>> b); //zero-fill right shift a by b
+</code>
+
+#In
+
+<code>
+if("property" in myObject)
+	return myObject.property; //or return object[property];
+if(2 in myArray)
+	return myArray[2];
+if(!("property" in myObjects))
+	return null;
+</code>

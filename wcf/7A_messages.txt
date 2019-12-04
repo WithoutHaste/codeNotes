@@ -1,0 +1,15 @@
+##Message Exchange Patterns (MEPs)
+
+These are the patterns of communication available between client and service.
+
+#Request/Reply
+
+A channel is established between client and service. The client sends one request, the service sends one reply, and the channel is closed.
+
+#One Way
+
+A channel is established between client and service. The client sends one request, and the channel is closed. The client does not expect any reply or faults to be returned.
+
+#Duplex
+
+A channel is established between the client and service. This channel is used for multiple request/reply cycles before it is closed.

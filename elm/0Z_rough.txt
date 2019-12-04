@@ -1,0 +1,96 @@
+##Rough notes
+
+jay (they/them)
+samantha
+nowai (no-why)
+amber
+lia
+sean
+
+a functional language, like Scheme, ML, Prolog
+
+referencial transparency (no side effects) (or at least, isolated and few)
+
+enforced immutability
+
+no runtime errors
+
+separation of data and logic
+
+see "typescript" as something that isn't as good as Elm yet
+	it doesn't have strict enforcement of rules
+
+pure functions:
+functions are not objects, have no fields, no prototypes, no stored state
+functions just accept arguments and return a value
+
+implicit type inferencing
+number (not sure if it is Int or Float yet)
+String (double quotes)
+Char (single quotes)
+Float
+
+<code>
+-- single line comment
+
+{- multiline comment
+	these can be nested
+-}
+</code>
+
+very simple function declaration
+<code>
+addThree x = x + 3
+</code>
+type <function> : number -> number
+
+to call it
+<code>
+addThree 5
+</code>
+
+<code>
+divide x y = x / y
+</code>
+type <function> : Float -> Float -> Float
+
+currying? partially applied function?
+<code>
+halfDone = divide 6
+--<function> : Float -> Float
+halfDone 3
+--returns 2 because 6/3
+</code>
+
+algebraic data types: product and sum types:
+product types:
+	logical AND
+	like how many possible 32-bit ints are there?
+sum types: or Union types:
+	logical OR
+	like type Salsa = Red | Green --only two possible values, enforced
+
+list
+(var name cannot start with capital letter)
+<code>
+mylist = ["a","b","c"]
+--type List String
+List.map String.length mylist
+--returns [1,1,1] List Int because each string in mylist is one char long
+</code>
+
+object
+<code>
+coder = { name="sean", awesomeness=11 }
+{ coder | awesomeness=12 } --edit the value in the object
+--the original object is not edited, a new object is returned
+--remember, immutability is enforced
+</code>
+
+uses a model-view-update design
+cycles view, action, update model, update view sort of loop
+
+Redux is a copy of Elm, with fewer features and protections
+
+see Richard Feldman talks about Elm
+

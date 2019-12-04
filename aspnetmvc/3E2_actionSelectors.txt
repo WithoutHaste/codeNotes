@@ -1,0 +1,80 @@
+##Action Selector Attributes
+
+#Non Action
+
+NonAction means the method is not an action to be selected by the Action Invoker.
+
+<code>
+[NonAction]
+public Object MyMethod() { }
+</code>
+
+#Action Name
+
+ActionName sets the alias-name of the method matched against the route.
+
+<code>
+[ActionName("CustomName")]
+public ActionResult MyMethod() { }
+</code>
+
+#Accept Verbs
+
+Accept Verbs specify which HTTP request methods can call this method.
+
+<code>
+//use shortcut attributes
+[HttpPost] //only POST requests can access this method
+[HttpGet]
+[HttpPut]
+[HttpDelete]
+[HttpOptions]
+[HttpPatch]
+
+//or
+[AcceptVerbs(HttpVerbs.Get|HttpVerbs.Post)]
+</code>
+
+(Accept Verbs used to be called Action Verbs)
+
+#Custom Action Selectors
+
+You can create custom action selectors by inheriting from ActionMethodSelectorAttribute.
+
+<code>
+class MyCustomActionSelector : ActionMethodSelectorAttribute
+{
+	public bool IsValidForRequest(ControllerContext context, MethodInfo info)
+	{
+		//...
+	}
+}
+
+//applied to controller method
+[MyCustomActionSelector]
+public ActionResult MyAction() { }
+</code>
+
+Example custom action selector with parameters in constructor
+<code>
+class MyCustomActionSelector : ActionMethodSelectorAttribute
+{
+	private int a;
+	private string b;
+	
+	public MyCustomActionSelector(int a, string b)
+	{
+		this.a = a;
+		this.b = b;
+	}
+	
+	public bool IsValidForRequest(ControllerContext context, MethodInfo info)
+	{
+		//...
+	}
+}
+
+//applied to controller method
+[MyCustomActionSelector(5, "dog")]
+public ActionResult MyAction() { }
+</code>

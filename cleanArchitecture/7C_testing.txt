@@ -1,0 +1,11 @@
+##Testing
+
+Mathematical theorems can be proven correct.
+
+Scientific theories can be proven wrong, but not correct, so that's a fundamental difference. Scientific theories are falsifiable.
+
+Dijkstra:
+Testing shows the presence, not the absence, of bugs.
+
+A program, like a scientific theory, can be proven incorrect with a test, but can never be proven 100% correct. We show correctness by failing to prove incorrectness, despite our best efforts.
+

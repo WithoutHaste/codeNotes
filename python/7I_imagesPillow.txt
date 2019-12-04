@@ -1,0 +1,57 @@
+##Images - Pillow
+
+Pillow library (fork of PIL Python Image Library). Pillow and PIL cannot be installed at the same time.
+
+!![Installation Instructions](https://pillow.readthedocs.io/en/stable/installation.html)
+
+#Getting Started
+
+From existing image:
+<code>
+from PIL import Image
+ 
+img = Image.open('myImage.png')
+</code>
+
+Create new image:
+<code>
+from PIL import Image
+ 
+img = Image.new(mode = 'RGB', size = (60, 30), color = 'red')
+img.save('../output/test.png')
+</code>
+"size" is tuple (width, height)
+"color" sets the initial background color
+
+#Mode
+
+1 - (1-bit pixels, black and white, stored with one pixel per byte)
+L - (8-bit pixels, black and white)
+P - (8-bit pixels, mapped to any other mode using a color palette)
+RGB - (3x8-bit pixels, true color)
+RGBA - (4x8-bit pixels, true color with transparency mask)
+CMYK - (4x8-bit pixels, color separation)
+YCbCr - (3x8-bit pixels, color video format) Note that this refers to the JPEG, and not the ITU-R BT.2020, standard
+LAB - (3x8-bit pixels, the L*a*b color space)
+HSV - (3x8-bit pixels, Hue, Saturation, Value color space)
+I - (32-bit signed integer pixels)
+F - (32-bit floating point pixels)
+
+#Lines
+
+<code>
+from PIL import Image, ImageDraw
+
+image = Image.new('RGB', (800,600), 'white')
+draw = ImageDraw.Draw(image)
+draw.line([(0,0),(100,400)], fill='gray', width=1)
+image.save('../output/test.png')
+</code>
+The list of point-tuples can be as long as you need.
+
+#Anti-Aliasing
+
+There's not much support for anti-aliasing.
+
+One suggestion: The only way to do it natively is with supersampling. Render your image at a multiple of the size you require, then resize it with filter=Image.ANTIALIAS.
+

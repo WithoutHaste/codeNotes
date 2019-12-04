@@ -1,0 +1,15 @@
+##Lean
+
+"Lean software development is an iterative methodology, owing much of its practices to the Lean Programming movement and companies like Toyota."
+
+"Lean software development focuses the team on delivering value to the customer, and on the efficiency of the value-stream and the mechanisms that deliver that value."
+
+#Principles
+
+- Eliminate waste
+- Amplify learning
+- Decide as late as possible
+- Deliver as fast as possible
+- Empower the team
+- Build-in integrity
+- See the whole

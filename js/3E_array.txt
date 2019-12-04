@@ -1,0 +1,235 @@
+##Arrays
+
+Arrays are a special object type.
+
+#New
+
+<code>
+var x = ["a", "b", "c"];
+console.log(x[1]); //"b"
+</code>
+
+<code>
+var x = new Array("a", "b", "c"); //not recommended
+console.log(x[1]); //"b"
+
+var y = new Array(40, 100); //creates an array of two integers
+var z = new Array(40); //creates an empty array of length 40
+</code>
+
+A single array can hold elements of different types.
+
+#Access
+
+Indexes start at zero.
+
+<code>
+var x = ["a", "b", "c"];
+x[0] = "A";
+console.log(x[0]); //"A"
+</code>
+
+JavaScript does not support associative arrays aka hashes - indexes are always integers, not strings.
+
+#Conversion
+
+If an primitive is expected, arrays are automatically converted to a comma-separated-list.
+<code>
+var x = ["a", "b", "c"];
+console.log(x); //"a,b,c"
+</code>
+You can do the same thing explicitly with array.toString()
+
+#Operations
+
+length = returns length of array
+
+adding/removing
+<code>
+var x = [];
+x.push(element); //add element to end
+x.unshift(element); //add element to beginning
+x[x.length] = element; //add element to end - not recommended
+
+var y = x.pop() //remove element from end and returns it
+var z = x.shift() //remove element from beginning and returns it
+</code>
+
+toString
+<code>
+var x = ["a", "b", "c"];
+var y = x.toString(); //"a,b,c"
+</code>
+
+join
+<code>
+var x = ["a", "b", "c"];
+var y = x.join(" | "); //"a | b | c"
+</code>
+
+remove or delete
+<code>
+var x = ["a", "b", "c"];
+delete x[1]; //changes "b" to undefined
+</code>
+
+merge or concat
+<code>
+var x = ["a", "b", "c"];
+var y = ["d", "e"];
+var z = x.concat(y); //["a", "b", "c", "d", "e"]
+</code>
+concat can accept any number of arguments
+
+reverse - edits current array
+<code>
+var x = ["a", "e", "t", "d", "h"];
+x.reverse(); //["h", "d", "t", "e", "a"]
+</code>
+
+slice - copies part of an array into another array
+array.slice(startIndex) returns array copied from startIndex to end
+<code>
+var x = ["a", "b", "c", "d", "e", "f"];
+var y = x.splice(3); //["d", "e", "f"]
+</code>
+
+array.slice(startIndex, endIndex) returns array copied from startIndex to endIndex, not including endIndex
+<code>
+var x = ["a", "b", "c", "d", "e", "f"];
+var y = x.splice(1, 4); //["b", "c", "d"]
+</code>
+
+splice - remove x elements starting at startIndex.
+<code>
+array.splice(startIndex, x);
+</code>
+
+Remove x elements starting at startIndex, and insert any number of new elements starting at startIndex.
+<code>
+array.splice(startIndex, x, newA, newB, newC);
+</code>
+
+sort
+array.sort() defaults to sorting alphabetically, it edits the current array
+<code>
+var x = ["g", "e", "u", "d", "w"];
+x.sort(); //["d", "e", "g", "u", "w"]
+</code>
+
+array.sort(compareFunction) will sort using the function you provide
+<code>
+var x = [45, 3, 21, 6, 9, 11];
+x.sort(); //[11, 21, 3, 45, 6, 9]
+
+x.sort(numericCompare); //[3, 6, 9, 11, 21, 45]
+
+function numericCompare(a, b) {
+	return a - b;
+}
+</code>
+The compare function must return a numeric value:
+ >0 if a>b
+ 0 if a==b
+ <0 if a<b
+ 
+sorting an array randomly
+<code>
+function randomCompare() {
+	return 0.5 - Math.random();
+}
+</code>
+
+#Is Array
+
+How to verify an object is an array? There are several methods.
+
+This looks the most reliable
+<code>
+if(x instanceof Array) {}
+</code>
+
+#Destructuring
+
+(see also Object Destructuring)
+
+Setting multiple values at once:
+<code>
+var a, b, c;
+[a, b, c] = [1, 2, 3];
+console.log(a + ", " + b + ", " + c); //outputs 1, 2, 3
+</code>
+Or
+<code>
+var [a, b, c] = [1, 2, 3];
+console.log(a + ", " + b + ", " + c); //outputs 1, 2, 3
+</code>
+
+With rest parameter:
+<code>
+var a, b, c;
+[a, b, ...c] = [1, 2, 3, 4, 5, 6];
+console.log(a + ", " + b); //outputs 1, 2
+console.log(c);            //outputs [3, 4, 5, 6]
+</code>
+
+Provide defaults in case the unpacked value is undefined:
+<code>
+var [a=5, b=7] = [1];
+console.log(a + ", " + b); //outputs 1, 7
+</code>
+
+Swap values in one statement:
+<code>
+var a = 1, b = 3;
+console.log(a + ", " + b); //outputs 1, 3
+[a, b] = [b, a];
+console.log(a + ", " + b); //outputs 3, 1
+</code>
+
+Parse a return value:
+<code>
+function f() {
+	return [1, 2, 3, 4];
+}
+var [a, b] = f(); 
+console.log(a + ", " + b); //outputs 1, 2
+
+var [c,,,d] = f(); 
+console.log(c + ", " + d); //outputs 1, 4
+</code>
+
+#Spread Syntax
+
+Spread syntax allows an iterable collection (such as an array or string) to be automatically divided into an argument list.
+
+Function parameters:
+<code>
+function sum(x, y, z) 
+{
+	return x + y + z;
+}
+var numbers = [1, 2, 3];
+console.log(sum(...numbers)); //outputs 6
+</code>
+<code>
+function myFunc(v, w, x, y, z) 
+{
+	console.log(v, w, x, y, z);
+}
+var args = [0, 1];
+myFunc(-1, ...args, 2, ...[3]); //outputs -1 0 1 2 3
+</code>
+
+Array literals:
+<code>
+var numbers = [1, 2, 3];
+var array = [...numbers, 'A', 'B', 'C'];
+console.log(array); //outputs [1, 2, 3, 'A', 'B', 'C']
+</code>
+
+Clone array: (only goes one level deep)
+<code>
+var arrayA = [1, 2, 3];
+var arrayB = [...arrayA];
+</code>

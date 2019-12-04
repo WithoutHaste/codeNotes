@@ -1,0 +1,12 @@
+##Sprite
+
+A single image, or a sequence of images creating an animation.
+
+Sprites are applied to objects to make them visible.
+
+Prefix sprite names with "spr_" for legibility.
+
+Sprites can be loaded from JPG, BMP, PNG, GIF, SWF vector sprites, and Spine JSON skeletal animation sprites.
+It is recommended to use PNG or BMP over JPG due to superior image quality.
+
+Before importing an animation strip, give the suffix "_stripXX", where XX is the number of tiles in the strip.  When imported, this will be automatically broken into XX individual images.

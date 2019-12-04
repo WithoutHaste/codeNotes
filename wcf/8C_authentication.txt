@@ -1,0 +1,31 @@
+##Authentication
+
+Authentication is the act of determining what user is using the system.
+
+#Windows
+
+The client will create a Windows token and pass it to the service.
+The Windows token will be based on the how the current user is logged into Windows.
+- If the client is a desktop application, then the Windows identity will be the user logged into that machine.
+- If the client is an internet web application, then the Windows identity will be whatever IIS is running as on that machine.
+
+You can also send a non-default Windows identity through the proxy.
+
+#Alternate Credentials
+
+You can send non-default credentials/identity to the client proxy.
+<code>
+public void ClientOperation()
+{
+	GeographyClient proxy = new GeographyClient();
+	
+	//this must still be a valid Windows user on the current machine
+	proxy.ClientCredentials.Windows.ClientCredentials.UserName = "otherUser";
+	proxy.ClientCredentials.Windows.ClientCredentials.Domain = "otherDomain"; //optional
+	proxy.ClientCredentials.Windows.ClientCredentials.Password = "password";
+	
+	var result = proxy.MyOperation();
+
+	proxy.Close();
+}
+</code>

@@ -1,0 +1,52 @@
+##Dialog
+
+Open File Dialog:
+<code>
+OpenFileDialog openFileDialog = new OpenFileDialog();
+openFileDialog.Filter = "Image Files|*.BMP;*.PNG;*.JPG;*.JPEG";
+openFileDialog.Title = "Select an Image File";
+
+if(openFileDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+{
+	return;
+}
+</code>
+
+The "Filter" property accepts a string in format:
+"text description of type|semi-colon delimited list of *.TYPE|next text description|next list of *.TYPES"
+
+Full list of DialogResults:
+OK, Cancel, Abort, Retry, Ignore, Yes, No
+
+The "OpenFileDialog.FileName" property is a string of the full path to the file.
+
+Use case: dialog opens > user selects an option > an operation is run and it fails
+How to cancel the "end dialog" event triggered by the user selecting an option with a DialogResult defined?
+
+<code>
+//this will keep your dialog open
+this.DialogResult = DialogResult.None;
+</code>
+
+Center a dialog in the owner form:
+<code>
+//in owner
+using(MyDialog form = new MyDialog())
+{
+	form.ShowDialog(this); //"this" sets the current form as the owner
+}
+//in dialog
+public MyDialog()
+{
+	this.Shown += new EventHandler(Form_OnShown);
+}
+private void Form_OnShown(object sender, EventArgs e)
+{
+	Control owner = this.Owner;
+	if(owner != null)
+	{
+		this.StartPosition = FormStartPosition.Manual;
+		this.Location = new Point(owner.Location.X + (owner.Width - this.Width) / 2, owner.Location.Y + (owner.Height - this.Height) / 2);
+	}
+}
+</code>

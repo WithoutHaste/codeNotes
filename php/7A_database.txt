@@ -1,0 +1,150 @@
+##MySQLi
+
+A php database library which may need to be installed separately.
+
+You can check if the correct library is installed:
+<code>
+if (!function_exists('mysqli_connect')) 
+{
+	throw new Exception("mySQLi not found.");
+}
+</code>
+
+#Open Connection
+
+(servername will be "localhost" if running script and database on the same machine)
+
+<code>
+$connection = mysqli_connect($servername, $database_username, $database_password, $database_name);
+if ($connection->connect_error) 
+{
+	throw new Exception("Connection failed: " . $connection->connect_error);
+}
+//query database
+mysqli_close($connection);
+</code>
+
+#Basic Query
+
+Fast-and-dirty query without error checking.
+
+<code>
+$sql = "SELECT Id, Name FROM Customer";
+$result = $connection->query($sql);
+$id = null;
+$name = null;
+if ($result->num_rows > 0) 
+{
+	while($row = $result->fetch_assoc()) 
+	{
+		$id = $row["Id"];
+		$name = $row["Name"];
+	}
+}
+</code>
+
+"fetch_assoc" is return a row of data as an associative array using the column names from the SELECT statement. 
+
+#Prepare Statement
+
+<code>
+$sql = mysqli_prepare($connection, "SELECT Id, Name FROM Customer"); //note: no ending semi-colon in query
+if(!$sql)
+{
+	throw new Exception("Could not prepare query statement in ".__FUNCTION__."."); //see constants __FUNCTION__ and __METHOD__
+}
+//actually run the query and load any results
+$sql->close();
+</code>
+
+#Bind Results
+
+You can fetch a row of results directly into a set of variables by binding them.
+
+The arguments in "bind_result" must be in the same order as the columns in the SELECT statement.
+
+<code>
+if(!$sql->execute())
+{
+	throw new Exception($sql->error);
+}
+$var1 = null;
+$var2 = null;
+$var3 = null;
+$sql->bind_result($var1, $var2, $var3);
+if(!$sql->fetch())
+{
+	throw new Exception($sql->error . " in " . __FUNCTION__ . ".");
+}
+echo "Got ".$var1." and ".$var2." and ".$var3;
+</code>
+
+Result variables must be bound between "execute" and "fetch".
+
+#Counting Results
+
+"store_result" loads all results from the database into local memory. It is required before you can count the resulting rows.
+
+"num_rows" returns the number of rows in the result set.
+
+<code>
+$sql->bind_result($var1, $var2, $var3);
+$sql->store_result();
+if($sql->num_rows > 0)
+{
+	if(!$sql->fetch())
+	{
+		throw new Exception($sql->error);
+	}
+}
+</code>
+
+#Alternate Format
+
+<code>
+$sql = mysqli_prepare($connection, "SELECT SourceId FROM Source WHERE Name = ?");
+if(!$sql)
+{
+	throw new Exception("Could not prepare query statement in ".__FUNCTION__.".");
+}
+$sql->bind_param("s", $sourceName);
+$sql->execute();
+$sql->store_result();
+if($sql->num_rows === 0)
+{
+	//action: no results
+}
+$sourceId = null;
+$sql->bind_result($sourceId);
+$sql->fetch();
+$sql->close();
+</code>
+
+#Parameterized Query
+
+Always use parameterized queries when including variable data in a query. This will protect you from SQL injection attacks and many formatting errors.
+
+Replace each variable in the query with a "?" (question mark).
+
+<code>
+$sql = mysqli_prepare($connection, "SELECT Id, Name FROM Customer WHERE LocationId=? AND Category=?");
+if(!$sql)
+{
+	throw new Exception("Could not prepare query statement.");
+}
+
+$sql->bind_param("is", $locationId, $category);
+
+if(!$sql->execute())
+{
+	throw new Exception($sql->error);
+}
+</code>
+
+The first argument in "bind_param" is the types of the variables, one character each, in the same order as the query.
+i = integer
+d = double
+s = string
+b = blob
+
+The rest of the arguments in "bind_param" are the variables, in the same order as the query.

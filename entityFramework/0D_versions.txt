@@ -1,0 +1,36 @@
+##Versions
+
+#6 vs 7
+
+EF 6 was the first version of Entity Framework not embedded in a .Net Framework - it is just a NuGet package. It is also open-source.
+!![EF is open-source on CodePlex](entityframework.codeplex.com)
+(CodePlex includes some EF extensions that are not part of the full release of EF.)
+
+EF 6 is backwards compatible to EF 4.
+
+EF 7 is a fresh rewrite of Entity Framework.
+EF 7 is not backward compatible with EF 6.
+EF 7 uses 3rd party visual designers instead of the EF 6 Microsoft designer.
+EF 7 can work on .Net Core, and also works on the full .Net Framework.
+EF 7 is broken in smaller pieces, you can select what you need.
+EF 7 supports non-relational databases.
+
+EF 6 and EF 7 will be supported in parallel for some time.
+
+These notes are focused on EF 6.
+
+#6 Versions
+
+From experience, EF 6.2 works fine with Visual Studio 2015, but EF 6.3 causes reference errors in Visual Studio 2015.
+
+#Pre-6
+
+Entity Framework began embedded in .Net 3.5.
+EF4 (numbered to match the .Net Framework) was embedded in .Net 4.0.
+
+EF 4.1 through 4.3 were NuGet extensions to EF 4.
+It added "Code First" modeling and the "DbContext" object (sitting in front of the ObjectContext).
+
+EF 5 was embedded in .Net 4.5 along with a new NuGet extension for it.
+It had a lot of performance improvements, enum support, among other things.
+

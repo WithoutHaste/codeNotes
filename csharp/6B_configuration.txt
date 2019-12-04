@@ -1,0 +1,45 @@
+##Configuration
+
+#AppSettings
+
+Add an App.Config file to the project.  Add settings like this.
+<code>
+<configuration>
+	<appSettings>
+		<add key="keyA" value="valueA" />
+		<add key="keyB" value="valueB" />
+	</appSettings>
+</configuration>
+</code>
+
+Access it like so.
+<code>
+using System.Configuration;
+
+public class MyClass
+{
+	public string KeyA
+	{
+		get
+		{
+			return ConfigurationManager.AppSettings["KeyA"];
+		}
+	}
+}
+</code>
+
+#Add Reference
+
+If you need to add a library reference in a config, do this:
+<code lang="xml">
+<?xml version="1.0"?>
+<configuration>
+	<system.web> <!--Web.config example-->
+		<compilation debug="true" targetFramework="4.5.2">
+			<assemblies>
+				<add assembly="System.ServiceModel.Activations"/><!--new reference-->
+			</assemblies>
+		</compilation>
+	</system.web>
+</configuration>
+</code>

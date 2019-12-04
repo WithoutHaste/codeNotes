@@ -1,0 +1,93 @@
+##Data Annotations
+
+#Basic
+
+Data annotations can affect the database schema Entity Framework generates, and the form validation that ASP.Net web pages generate.
+
+<code>
+using System.ComponentModel.DataAnnotations;
+...
+public class MyEntity
+{
+	[Range(1,10)] //affects form validation
+	public int Rating { get; set; }
+	
+	[Required]          //affects database schema and form validation
+	[StringLength(100)] //affects database schema and form validation
+	public string Name { get; set; }
+	
+	[Display(Name="First Name")] //affects web page display
+	public string FirstName { get; set; }
+	
+	[DisplayFormat(DataFormatString="YYYY-MM-DD")] //affects web page display
+	[DisplayFormat(NullDisplayText="Pending")] //affects web page display
+	public DataTime? StartDate { get; set; }
+	
+	[Range(1900,2050,ErrorMessage="My custom error message for {0}."] //any annotation can have a custom error message format
+	public int Year { get; set; }
+}
+</code>
+
+TODO: there are many more than this
+
+#Schema
+
+Schema-specific annotations. I'd probably recommend defining these inside DbContext instead of on the Entity, since it is information specific to data storage.
+
+<code>
+[Table("TableName")] //specify table name different from the class name
+class EntityName
+{
+	[Column("ColumnName")] //specify column name different from property name
+	[Column(TypeName="timestamp")] //specify column data type
+	[Timestamp]
+	public byte[] TimeStamp { get; set; }
+}
+</code>
+
+#Custom Annotations
+
+Custom validation can only be run on the server-side. It will not be translated into JavaScript to run on the client-side.
+
+Example:
+<code>
+public class MaxWordsAttribute : ValidationAttribute
+{
+	private readonly int maxWords;
+	
+	public MaxWordsAttribute(int maxWords) : base("{0} has too many words.") //sets the error string format
+	{
+		this.maxWords = maxWords;
+	}
+	
+	protected override ValidationResult IsValid(object value, ValidationContext context)
+	{
+		if(value has too many words)
+		{
+			string message = FormatErrorMessage(context.DisplayName); //FormatErrorMessage is inherited from the base class
+			return new ValidationResult(message);
+		}
+		return ValidationResult.Success;
+	}
+}
+...
+public class MyModel
+{
+	[MaxWords(10)]
+	public string Text { get; set; }
+}
+</code>
+
+#Custom Validation
+
+You may need validation that looks at multiple properties at the same time.
+
+<code>
+public class MyModel : IValidatableObject
+{
+	public IEnumerable<ValidationResult> Validate(ValidatationContext context)
+	{
+		//implement custom, complicated validation
+	}
+}
+</code>

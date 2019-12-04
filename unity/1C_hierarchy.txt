@@ -1,0 +1,5 @@
+##Hierarchy
+
+The hierarchy pane looks like it shows all the assets in the project.
+
+Double-clicking on an asset will center it in your view of the Scene.

@@ -1,0 +1,5 @@
+##Content
+
+The Content folder will hold your css files.
+
+Content/Site.css is the main css file for the application.

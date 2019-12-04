@@ -1,0 +1,74 @@
+##Data Contracts
+
+A data contract specifies what data types (besides primitives) can be passed between a client and service. Both your request types and your return types will need to be specified with data contracts.
+
+The client and service do not have to share data types, just the data contracts. One can serialize their data type, send it to the other, and it can than be deserialized to another data type.
+
+#Naming Convention
+
+The WCF convention is to add a "Data" suffix to all objects decorated with DataContract. This helps differentiate data contracts from entities.
+For example, "CountyData" instead of just "County".
+
+#Attributes
+
+Data classes are decorated with the DataContract attribute. Each property in the class that you want to serialize is decorated with the DataMember attribute.
+
+<code>
+using System.Runtime.Serialization;
+
+[DataContract]
+public class MyObjectData
+{
+	[DataMember]
+	public int MyProperty
+	{
+		get;
+		set;
+	}
+}
+</code>
+
+Enum attributes:
+<code>
+[DataContract]
+public enum ExtensionOption : int
+{
+	[EnumMember]
+	Txt=0,
+	[EnumMember]
+	Csv=1
+}
+</code>
+
+#Opt-In
+
+DataContractSerializer is an opt-in serializer: it will only serialize types decorated with DataContract, and will only serialize properties decorated with DataMember.
+
+As of .Net 4.0, all public properties in a DataContract type are opted-in by default. It is still recommended to be explicit by adding DataMember to each property.
+
+#KnownType
+
+Add the KnownType attribute to a base class DataContract to explicitly include its derived types in consideration for deserialization.
+
+For example, when deserializing a PersonData type, check if it is in fact a StudentData or TeacherData type.
+<code>
+using System.Runtime.Serialization;
+
+[DataContract]
+[KnownType(typeof(StudentData))]
+[KnownType(typeof(TeacherData))]
+public class PersonData
+{
+}
+
+[DataContract]
+public class StudentData : PersonData
+{
+}
+
+[DataContract]
+public class TeacherData : PersonData
+{
+}
+</code>
+

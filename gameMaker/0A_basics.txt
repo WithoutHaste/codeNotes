@@ -1,0 +1,25 @@
+##Basics
+
+GameMaker: Studio is a game creation studio focused on 2D games.
+
+The following is from https://docs.yoyogames.com/
+
+GameMaker uses the GML language, which I assume stands for GameMaker Language.
+
+!![Changes from version 1.4 to 2](https://help.yoyogames.com/hc/en-us/articles/231539867-GameMaker-Studio-2-New-Functions-List)
+
+#Navigation
+
+Game Maker Studio 2
+
+Tabs:
+Each workspace gets its own tab. You can drag tabs out to be their own window, and drag them back in to be tabs.
+
+Navigate workspace chains:
+Ctrl + Alt + ArrowKey: to move left/right along a chain. The selected subwindow is centered in your view.
+
+Bookmarks:
+Ctrl + Shift + NumberKey[1-9]: sets a bookmark on the window or line of code.
+Ctrl + NumberKey[1-9]: Go to the selected bookmark.
+
+Bookmarks only last for the current session; they are not saved on the project.

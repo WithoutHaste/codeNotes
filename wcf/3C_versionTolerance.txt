@@ -1,0 +1,40 @@
+##Version Tolerance
+
+DataContractSerializer provides version tolerance (which the previous serializer did not).
+
+Example: the Client sends an extra property in a data structure that the Service was not expecting.
+The Service will ignore the extra property instead of throwing an exception.
+
+Example: the Service sends two properties in a data structure to the Client, but the Client expects three properties.
+The Client will fill in the missing property with the default value (0 or null, usually).
+
+#IExtensibleDataObject
+
+This is intended for pass-through scenarios, such as Service A passing on the request to Service B.
+
+If you implement interface IExtensibleDataObject on your Data Contracts, then the Service will remember extra data that has been sent in, that it didn't know how to use, and it return that data back to the Client.
+
+So when the Client sends in three properties, and the Service only expects two, that third property will be saved while the request is fulfilled, and will (if appropriate) be returned back the Client in the response.
+
+It's really simple to implement:
+<code>
+using System.Runtime.Serialization;
+
+abstract class ExtensibleData : IExtensibleDataObject
+{
+	//this bucket will store unrecognized properties until they are needed
+	public ExtensionDataObject ExtensionData { get; set; }
+}
+
+[DataContract]
+public class ZipCodeData : ExtensibleData
+{
+	[DataMember]
+	public string ZipCode { get; set; }
+	[DataMember]
+	public string City { get; set; }
+	[DataMember]
+	public string State { get; set; }
+}
+</code>
+

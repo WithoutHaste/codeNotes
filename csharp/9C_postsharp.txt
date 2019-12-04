@@ -1,0 +1,63 @@
+##PostSharp
+
+PostSharp is a tool that post-processes your compiled code. The final product is still compiled code.
+!![How it works](http://doc.postsharp.net/how-it-works)
+
+C# does not currently support anything like the "method as decorator" syntax from Python, which enables you to easily mark a method such that it will run another method before/after itself.
+
+PostSharp, which processes your code after it is compiled, supports this.
+
+To add PostSharp to your solution with NuGet:
+<code>
+install-package PostSharp
+</code>
+
+PostSharp will run automatically as part of building your solution.
+
+#OnMethodBoundaryAspect
+
+Create an aspect class with the custom functionality you want:
+<code>
+[PSerializable]
+public class LoggingAspect : OnMethodBoundaryAspect
+{
+	public override void OnEntry(MethodExecutionArgs args)
+	{
+		Console.WriteLine("The {0} method has been entered.", args.Method.Name);
+	}
+
+	public override void OnSuccess(MethodExecutionArgs args)
+	{
+		Console.WriteLine("The {0} method executed successfully.", args.Method.Name);
+	}
+
+	public override void OnExit(MethodExecutionArgs args)
+	{
+		Console.WriteLine("The {0} method has exited.", args.Method.Name);
+	}     
+
+	public override void OnException(MethodExecutionArgs args)
+	{
+		Console.WriteLine("An exception was thrown in {0}.", args.Method.Name);
+	}
+}
+</code>
+
+Add this class as an attribute to any method.
+<code>
+[LoggingAspect]
+private void MyMethod()
+{
+	Console.WriteLine("Hello, world.");
+}
+</code>
+
+Executing this example will print:
+<code>
+The Main method has been entered.
+Hello, world.
+The Main method executed successfully.
+The Main method has exited.
+</code>
+
+"MethodExecutionArgs.Method" gives you reflection information about the method being decorated.

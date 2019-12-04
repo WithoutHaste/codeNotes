@@ -1,0 +1,41 @@
+##Getting Started
+
+#Setup
+
+Setting up a basic environment to create and run an ASP.Net site with a database backend.
+
+Install:
+1) Visual Studio: for writing and testing code
+2) SQL Server: database
+3) IIS Express: local web server to run application
+
+#Run
+
+Start Coding:
+1) Open Visual Studio (these instructions written for VS Community 2015)
+2) Click New Project > C# > Web > ASP.Net Web Application > MVC Template
+ - Check "Add Unit Tests" (use default name MyAppName.Tests)
+ - Leave "Authentication" on "Individual User Accounts"
+ - Uncheck Azure "Host in the Cloud"
+3) Click "Ok" and wait for template to generate
+4) Click "Play"
+ - IIS Express will be started automatically to run the application
+ - The default landing page will open in the browser
+ 
+The IIS Express icon will be visible on the right-side of the task bar, looking like a stack of blue boxes. Right-click on it to get to a list of all running applications.
+Requests from the browser come to IIS Express, which sends them to the ASP.Net Routing Engine.
+ 
+#HTML Basics
+
+With MVC 4 and later, the rendered web pages will all include basic HTML5 best-practices.
+
+<code lang="xml">
+  <!DOCTYPE html> <!-- HTML 5 -->
+  <html lang="en"> <!-- spoken language -->
+    <head>
+	  <meta charset="utf-8" /> <!-- for cross-browser compatibility -->
+	  <meta name="viewport" content="width=device-width" /> <!-- for mobile device compatibility -->
+      <script src="/Scripts/modernizr-2.6.2.js"></script> <!-- backwards compatibility to pre-HTML5 browsers -->
+	</head>
+  </html>
+</code>

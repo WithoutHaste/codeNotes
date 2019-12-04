@@ -1,0 +1,110 @@
+##Visual Studio
+
+#WCF Project
+
+How get a basic WCF web service running locally,
+As of 8/28/2019,
+In Visual Studio Community 2015:
+
+(1)
+
+Visual Studio > New Project > WCF (under C#) > WCF Service Application > OK
+
+(2)
+
+Rename project to "Demo.Host".
+
+(3)
+
+Add new library project to solution, called "Demo.Contracts".  
+Add references System.ServiceModel and System.Runtime.Serialization to "Demo.Contracts".  
+
+(4)
+
+Move file "IService1" to project "Demo.Contracts".  
+Rename "IService1" to "IDemoService".  
+Move data structures from "IDemoService" to its own file.  
+Update all namespaces in "Demo.Contracts" project to namespace "Demo.Contracts".
+
+(5)
+
+Add project reference "Demo.Contracts" to project "Demo.Host".  
+Update all namespaces in "Demo.Host" project to namespace "Demo.Host".
+
+(6)
+
+You can use a real SVC file:  
+- Rename "Service1.svc" to "DemoService.svc".  
+- Right-click on "DemoService.svc" > View Markup > update "Service" field to "Demo.Host.DemoService.svc".
+- Open "DemoService.svc.cs"
+ -- Add "using Demo.Contracts;"
+ -- Rename class to "DemoService" inheriting from "IDemoService"
+
+Or you can use a virtual SVC file:  
+- Add new class to "Demo.Host" project called "DemoService.cs".
+- Copy "Service1.svc.cs" contents to "DemoServices.cs" and delete "Service1.svc".
+- Open "DemoService.cs"
+ -- Add "using Demo.Contracts;"
+ -- Rename class to "DemoService" inheriting from "IDemoService"
+- Open "Demo.Host/Web.config"
+ -- Add "<serviceHostingEnvironment>" tag inside the "<system.serviceModel>" tag
+<code lang="xml">
+	<serviceHostingEnvironment>
+		<serviceActivations>
+			<add service="Demo.Host.DemoService" relativeAddress="DemoService.svc"/>
+		</serviceActivations>
+	</serviceHostingEnvironment>
+</code>
+
+(7)
+
+Open "Demo.Host/Web.config"
+ - Add "<services>" tag inside the "<system.serviceModel>" tag
+<code lang="xml">
+	<services>
+		<service name="Demo.Host.DemoService">
+			<endpoint contract="Demo.Contracts.IDemoService" binding="basicHttpBinding" address=""/>
+		</service>  
+	</services>
+</code>
+
+(8)
+
+If publishing a WSDL:
+Open "Demo.Host/Web.config"
+ - Add "<behaviors>" tag inside the "<system.serviceModel>" tag
+<code lang="xml">
+	<behaviors>
+		<serviceBehaviors>
+			<behavior>
+				<serviceMetadata httpGetEnabled="true" />
+			</behavior>
+		</serviceBehaviors>
+	</behaviors>
+</code>
+
+(9)
+
+Right-click on project "Demo.Host" > Properties > Web
+ - Set "Servers" section to "IIS Express"
+ - Click "Create Virtual Directory" (might need to open Visual Studio as Admin for this)
+ 
+(10)
+
+Run "Demo.Host" project in browser.
+ - Should see a directory listing for the project.
+ - If you click on DemoService.svc, you should see a well-formated page starting with "DemoService Service". (If you use a virtual SVC, type in the address manually: "localhost:<whatever>/DemoService.svc".)
+ -- If you click the WSDL link, you should see the XML WSDL file.
+
+(11)
+ 
+Open WCF Test Client (at a location like C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\IDE\WcfTestClient.exe).
+ - File > Add Service > "localhost:<whatever>/DemoService.svc" > Ok
+ - Test the service functionality.
+ -- Double-click a service operation in the list. Details will come up in the right-hand panel.
+ -- Fill in all fields for the operation.
+ -- Click "Invoke" and verify the response.
+
+(12)
+
+If you get error "Cannot obtain metadata from <url>", check the address in the endpoint in the "Demo.Host/Web.config".

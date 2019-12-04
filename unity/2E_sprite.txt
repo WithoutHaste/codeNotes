@@ -1,0 +1,59 @@
+##Sprites
+
+Sprites are an Asset type.
+Sprites are 2D textures.
+
+Add sprites to your project by simply copying them into the Asset folder (or a subdirectory of it).
+
+Or right-clicking in the Project Detail pane > Import New Asset.
+If the project is in 2D mode, all images are automatically imported as sprites.
+
+Edit menu > Project Settings > Graphics > Transparency Sort Mode
+This will determine which sprites are rendered on top of each other. For 2D games, this is commonly based on the y-coordinate.
+
+#Graphic Sources
+
+!![https://pixabay.com](Pixabay has some open-source vector graphics)
+The Pixabay license is "Free for commercial use, no attribution required".
+
+#Sprite Atlas
+
+An atlas is one image that contains multiple sprite images, separated by transparent space. The atlas will be unpacked into its individual pieces.
+
+Unity has a utility to automatically pack these images together as efficiently as possible.
+
+Asset menu > Create > Sprite Atlas
+This will create a *.spriteatlas file.
+
+This seems to be intended for (example) a character made up of many different sprites, all with unusual shapes.
+
+#9-Slicing
+
+How to set a background on a button/menu/etc that will resize smartly, without strange distortion.
+
+1. Make your basic button sprite
+2. Import the sprite
+3. Select sprite > Inspector pane
+- set "Mesh Type" to "Full Rectangle"
+4. Click "Sprite Editor" > Resize the border lines that start at the edges of the image
+- drag-n-drop the green border lines, or specify the L/R/T/B values (measurements are inward from each edge)
+- this will divide the image into 9 regions
+- when the image is resized, the corners will not be changed, only the other 5 sections will be stretched
+- you'll only see this in effect on UI objects
+5. Click "Apply" to save changes
+6. Set the sprite as the Image on a button
+- set "Image Type" to "Sliced" OR set "Draw Mode" to "Sliced"
+
+You can also set "Draw Mode" to "Tiled", which will cause the 5 center segments of the sprite to be tiled instead of stretched.
+
+#File Formats
+
+Supported formats: bmp, exr, gif, hdr, iff, jpg, pict, png, psd, tga, tiff
+
+As of version 2018.2, Unity supports *.svg
+
+Window menu > Package Manager > All button > select Vector Graphics > Install button
+
+Now you can drag-n-drop *.svg files into the Project pane, or right-click > Import New Asset.
+
+Update: I can't find anyone saying Vector Graphics is not available to Unity Personal, but I also can't find it to install in Package Manager.

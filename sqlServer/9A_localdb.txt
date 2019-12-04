@@ -1,0 +1,47 @@
+##LocalDb
+
+Microsoft SQL Server 2012 LocalDb
+Microsoft SQL Server 2014 LocalDb
+Microsoft SQL Server 2016 LocalDb
+Microsoft SQL Server Express LocalDb
+
+These are light-weight databases for developers. Instead of running as a Service, they are run on-demand (when a connection is attempted) and turn off when the last connection closes.
+
+The actual data is saved in the user's Application Install folder.
+
+Run the SqlLocalDb Utility to verify installation:
+<code>
+//in command prompt
+SQLLocalDb info
+</code>
+If installed, it will output "MSSQLLocalDb" and (sometimes) the version number.
+
+#Connection
+
+To make a connection from Visual Studio:
+1) Open your Visual Studio ASP.Net project
+2) View menu > Database Explorer (or Server Explorer, in other versions of Visual Studio)
+3) Right-click on Data Connections > Add Connection
+4) Select Microsoft SQL Server > Continue
+5) Set Server Name to connect to SQL Server Local DB 
+ - in Visual Studio 2012, use "(LocalDb)\v11.0"
+ - in Visual Studio 2015/2017, use "(LocalDb)\MSSQLLocalDB"
+6) Select an existing database from the list, or enter a new name
+7) Ok
+
+Now in the Database Explorer, you can see the structure of that database.
+
+You can right-click on a table in the Database Explorer > Show Table Data
+- view data
+- edit data manually
+- insert data manually
+
+You can look at the Properties for the connection to see the connectionstring:
+Ex: "Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=DemoDatabase;Integrated Security=True"
+
+#Delete Database
+
+You can access LocalDb database through Visual Studio:
+View menu > SQL Server Object Explorer
+- open the LocalDb Databases folder
+- you can delete a database from here

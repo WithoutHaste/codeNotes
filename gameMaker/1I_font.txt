@@ -1,0 +1,50 @@
+##Font
+
+GameMaker comes with Arial 12pt font included. For any other font, you'll need to add it.
+
+Prefix your font name with "fnt_" for legibility.
+
+Include in Asset Package: only use this if you have licensed the font for distribution. You usually won't use this.
+
+When you include the font in the package, the actual font file is distributed with the program. If you don't do this, you are actually saving a sprite of each character (in range) in the font.
+Note: as of July 2019, you cannot include a character lower than 32 (space).
+
+#Range
+
+The range specifies which ASCII characters will be included in the font. If you know you only need a small range, specify it.
+
+#Display Text
+
+Usually, all draw commands must be within an object's Draw event. An instance of this object must be in the room, drawing the text. The text must be drawn within the visible area of the instance.
+
+<code>
+draw_set_font(myFont);
+draw_set_colour(c_black); //set font color to black
+draw_set_alpha(1); //0 = fully transparent, 1 = fully opaque
+draw_text(x, y, "text");
+</code>
+
+Special character '#' will cause a line break in the text.
+Special character '\#' will display as a hash sign.
+
+Multiline text
+<code>
+draw_text_ext(x, y, "text", pixelsBetweenLines, maxPixelWidthBeforeLineBreak);
+</code>
+
+Text alignment
+<code>
+draw_set_halign(fa_left); //constants: fa_left, fa_center, fa_right
+draw_set_valign(fa_top); //constants: fa_top, fa_middle, fa_bottom
+</code>
+
+String height
+<code>
+var height = string_height(text); //returns pixel height of string based on current font
+</code>
+
+String width
+<code>
+var width = string_width(text); //returns pixel width of string based on current font
+</code>
+

@@ -1,0 +1,190 @@
+##Passing Parameters
+
+This section describes different ways programming languages handle passing arguments/parameters into functions/methods.
+
+#Categories
+
+There are two common ways to divide programming languages.
+
+(1) Pass-by-value vs Pass-by-reference
+In this case, the pass-by-reference umbrella includes both pass-by-reference and pass-by-object-reference.
+
+(2) Pass-by-value vs Pass-by-reference vs Pass-by-object-reference
+
+#Pass By Value
+
+Pass-by-value means pass a copy into the method.  Any change to the parameter in the method will not affect the argument that was passed in.
+
+Primitives in Java and C# are passed by value.  That includes data types like int, string, and bool.
+
+<code>
+//C#
+using System;
+class Program
+{
+	static void Main(string[] args)
+	{
+		int x = 5;
+		Console.WriteLine(x); //outputs 5
+
+		IncrementInt(x);
+		Console.WriteLine(x); //outputs 5 still
+
+		Console.ReadLine();
+	}
+
+	public static void IncrementInt(int y) //x is the argument being passed in to y, the parameter
+	{
+		y += 1; //only the local copy of x (called y) is edited
+	}
+}
+</code>
+
+The data types called "primitives" in Java and C# are all "immutable objects" in Python.  They are technically passed-by-object-reference, but the behavior is de-facto pass-by-value, because all edit operations cause the object to be re-instantiated.
+
+<code>
+ #Python
+x = 5
+print(x) #outputs 5
+
+incrementInt(x)
+print(x) #outputs 5 still
+
+def incrementInt(y): #x is the argument being passed in to y, the parameter
+	y += 1 #only the local copy of x (called y) is edited
+</code>
+
+What are called "primitives" in C#, are all immutable objects in Python. Technically, Python does not use pass-by-value, but the behavior is the same for types like int, string, and bool.
+
+#Pass By Object Reference
+
+Pass-by-object-reference means to pass copy of the pointer (aka reference) to the object. Most operations on the parameter will affect the original argument.
+
+Objects in Java and C# are passed by object reference (although this is commonly called simply pass-by-reference).
+
+<code>
+//C#
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+	static void Main(string[] args)
+	{
+		List<int> x = new List<int>() { 1, 2, 3 };
+		Console.WriteLine(x.Count); //outputs 3
+
+		AppendToList(x);
+		Console.WriteLine(x.Count); //outputs 4
+
+		ClearList(x);
+		Console.WriteLine(x.Count); //outputs 0
+
+		InitializeList(x);
+		Console.WriteLine(x.Count); //outputs 0 still
+
+		Console.ReadLine();
+	}
+
+	public static void AppendToList(List<int> y)
+	{
+		y.Add(4); //operations on the object affect the original argument
+	}
+
+	public static void ClearList(List<int> y)
+	{
+		y.Clear(); //operations on the object affect the original argument
+	}
+
+	public static void InitializeList(List<int> y)
+	{
+		y = new List<int>() { 1, 2, 3, 4, 5, 6, 7 }; //instantiation edits the pointer y, and does not affect the original argument
+		//now x and y are pointing to difference objects, so any operations on y will not affect x
+	}
+}
+</code>
+
+Everything is an object in Python, so everything is passed-by-object-reference.  Immutable objects (integers, string, booleans, etc) are technically passed-by-object-reference, but since all edit operations actually re-instantiate the object, they are de-facto pass-by-value.
+
+In Python, collections like list, set, and dictionary are all mutable objects, so they have the expected pass-by-object-reference behavior.
+<code>
+x = [1, 2, 3]
+print(len(x)) #outputs 3
+
+appendToList(x)
+print(len(x)) #outputs 4
+
+clearList(x)
+print(len(x)) #outputs 0
+
+initializeList(x)
+print(len(x)) #outputs 0 still
+
+def appendToList(y):
+	y.append(4)
+
+def clearList(y):
+	y.clear()
+	
+def initializeList(y):
+	y = [1, 2, 3, 4, 5, 6, 7]
+</code>
+
+#Pass By Reference
+
+This definition will differentiate pass-by-reference from pass-by-object-reference.  The term pass-by-reference is very frequently used loosely to mean either definition.
+
+Pass-by-reference means everything you do to the parameter affects the original argument, even instantiation.
+
+In C#, you can specify pass-by-reference.
+<code>
+//C#
+using System;
+using System.Collections.Generic;
+
+class Program
+{
+	static void Main(string[] args)
+	{
+		List<int> x = new List<int>() { 1, 2, 3 };
+		Console.WriteLine(x.Count); //outputs 3
+
+		AppendToList(x);
+		Console.WriteLine(x.Count); //outputs 4
+
+		ClearList(x);
+		Console.WriteLine(x.Count); //outputs 0
+
+		InitializeList(x);
+		Console.WriteLine(x.Count); //outputs 0 still
+
+		InitializeList(ref x);
+		Console.WriteLine(x.Count); //outputs 7
+
+		Console.ReadLine();
+	}
+
+	public static void AppendToList(List<int> y)
+	{
+		y.Add(4); //operations on the object affect the original argument
+	}
+
+	public static void ClearList(List<int> y)
+	{
+		y.Clear(); //operations on the object affect the original argument
+	}
+
+	public static void InitializeList(List<int> y)
+	{
+		y = new List<int>() { 1, 2, 3, 4, 5, 6, 7 }; //instantiation edits the pointer y, and does not affect the original argument
+		//now x and y are pointing to difference objects, so any operations on y will not affect x
+	}
+
+	public static void InitializeList(ref List<int> y)
+	{
+		y = new List<int>() { 1, 2, 3, 4, 5, 6, 7 }; //instantiation affects the original argument
+	}
+}
+</code>
+
+You cannot specify pass-by-reference in Python, as far as I know.

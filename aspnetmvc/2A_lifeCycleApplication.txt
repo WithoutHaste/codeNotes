@@ -1,0 +1,74 @@
+##Application Life Cycle
+
+The application life cycle goes from when the application starts running on IIS, to when it stops running on IIS.
+
+(Unfortunately, many online articles use this term as a synonym for the page/request life cycle.)
+
+#Pre Application Start Event
+
+(This topic is applicable to any .Net assembly, not just ASP.Net MVC.)
+
+Any .Net assembly can specify a method to run after the assembly has been loaded, and before any other code in the assembly is run.
+
+If multiple assemblies have a pre-start event, there is no guarantee in what order they will be run.
+
+Specify the pre-start method in MyProject/Properties/AssemblyInfo.cs
+<code>
+[assembly: PreApplicationStartMethod(typeof(Fully.Qualified.MyType), "MethodName")]
+</code>
+
+Specify the pre-start logic:
+<code>
+namespace Fully.Qualified
+{
+	internal static class MyType
+	{
+		internal static void MethodName()
+		{
+			//pre-start logic
+		}
+	}
+}
+</code>
+
+#Application Start Event
+
+Occurs when the application receives its first request.
+
+This is the very (almost) first event, so this is where global configuration is run. 
+Ex: registering Areas, Filters, Routes, and Bundles.
+
+MyProject/Global.asax:
+<code>
+public class MvcApplication : System.Web.HttpApplication
+{
+	protected void Application_Start()
+	{
+		AreaRegistration.RegisterAllAreas();
+		FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+		RouteConfig.RegisterRoutes(RouteTable.Routes);
+		BundleConfig.RegisterBundles(BundleTable.Bundles);
+	}
+}
+</code>
+
+#Application End Event
+
+Occurs when the application is stopped in IIS.
+The event may not fire if the application crashes.
+
+MyProject/Global.asax:
+<code>
+namespace MyNamespace
+{
+    public class MvcApplication : System.Web.HttpApplication
+    {
+        protected void Application_End()
+        {
+			//ending logic
+        }
+    }
+}
+</code>
+
+This event will be fired when IIS pool is restarted, and when the application is restarted. It will also be fired when the application domain is reloaded (i.e for example when you change the web.config) or the application is reloaded into a different application domain.

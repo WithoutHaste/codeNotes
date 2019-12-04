@@ -1,0 +1,9 @@
+##ASP.Net
+
+ASP.Net is a web framework for server-side web applications, producing dynamic web pages.
+
+ASP stands for Active Server Pages. 
+
+ASP.Net is a big improvement on the previous ASP. The main difference to the pages is that ASP pages are interpreted (like PHP) while ASP.Net pages are compiled.
+
+The main assembly for ASP.Net MVC is System.Web.Mvc.

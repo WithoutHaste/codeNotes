@@ -1,0 +1,14 @@
+##Command Line
+
+#Arguments
+
+"argv" is an array of command line arguments.
+
+<code>
+//command line
+php myScript.php a b c
+
+//in script
+$x = $argv[0]; //"myScript.php"
+Xy = $argv[1]; //"a"
+</code>

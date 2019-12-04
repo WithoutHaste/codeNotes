@@ -1,0 +1,64 @@
+##Temp Table
+
+A temp table is a real table that is stored for a short period of time. The temp table only lasts as long as the current session.
+
+Temp tables are intended for storing result sets that are accessed multiple times.
+
+Temp tables are stored in system database "tempdb". Temp tables are automatically given a unique suffix so that multiple sessions will not overwrite each other's data.
+
+#Naming Convention
+
+SQL Server knows a table is a temp table when it starts with "#" (hash or pound or sharp).
+
+#Create
+
+<code>
+SELECT
+	columnNameA
+INTO
+	#tempTableName
+FROM
+	tableName
+WHERE
+	clause;
+</code>
+or
+<code>
+CREATE TABLE #tempTableName (
+	columnName dataType
+);
+
+INSERT INTO #tempTableName
+SELECT
+	columnNameA
+FROM
+	tableName
+WHERE
+	clause;
+</code>
+
+#Drop
+
+<code>
+IF OBJECT_ID('tempdb..#tempTableName') IS NOT NULL
+    DROP TABLE #tempTableName;
+</code>
+
+#Global
+
+A global temp table is shared across sessions. This table will be dropped once the creating session ends, and all queries accessing the table end.
+
+Use the "##" (double hash).
+
+<code>
+CREATE TABLE ##globalTempTableName (
+	columnName dataType
+);
+</code>
+
+#Delete
+
+You can manually drop a temp table:
+<code>
+DROP TABLE ##globalTempTableName;
+</code>

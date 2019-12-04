@@ -1,0 +1,15 @@
+##Domain Models
+
+A domain model is made up of many object.
+
+#Anemic Domain Model
+
+An anemic model is focused on the state of its objects. The object don't have much behavior.
+
+For example, objects with many fields/properties and just basic CRUD logic.
+
+#Rich Domain Model
+
+The objects contain the business logic directly.
+
+This is recommended in domain driven design.

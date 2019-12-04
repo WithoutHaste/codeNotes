@@ -1,0 +1,37 @@
+##Elements
+
+React elements are returned by "React.createElement" statements.
+
+React elements are plain Javascript objects.
+
+React DOM handles keeping the HTML DOM up to date with the React elements.
+
+<code>
+const element = (
+	<h1 className="greeting">
+		Hello, world!
+	</h1>
+);
+//becomes
+const element = React.createElement(
+	'h1',
+	{className: 'greeting'},
+	'Hello, world!'
+);
+//becomes something like
+const element = {
+	type: 'h1',
+	props: {
+		className: 'greeting',
+		children: 'Hello, world!'
+	}
+};
+</code>
+
+#Immutable
+
+React elements are immutable.
+
+For each change to the DOM, you'll need to create a new React element and render it.
+
+This update process is greatly simplified by using React components.

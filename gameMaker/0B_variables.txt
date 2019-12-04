@@ -1,0 +1,68 @@
+##Variables
+
+#Global
+
+<code>
+global.myVar = 5;
+</code>
+
+Convention is to declare and set all your global variables in one script during the Room Start Event.
+
+GameMaker provides several global-scope variables that you can use without 'global.': score, health, lives.
+
+Avoid naming instance variables with the same names as global variables.
+
+! Verified that local variables can be the same name as global variables without causing error.
+
+#Init Room
+
+The best advice I've seen for ensuring that your game initialize code (such as setting global variables) is run before anything else, is to use an Init Room.
+
+This is an empty room that just have your initialize code in the Room Create Event.  Then it automatically goes to your actual first room.
+
+Otherwise, you have to keep the initialize code in the first object creation code to be run in the first room, which could change as you develop the game.
+
+#Exists
+
+This is the suggested code, but it DOES NOT WORK for global variables nor to instance variables.
+<code>
+if(variable != undefined)
+{
+}
+</code>
+
+Version 2: instance variables:
+<code>
+if(variable_instance_exists(instance_id, string_variable_name))
+{
+}
+
+var instance_variable = variable_istance_get(instance_id, string_variable_name); //returns undefined if variable does not exist
+
+variable_instance_set(instance_id, string_variable_name);
+</code>
+
+Version 2: global variables:
+<code>
+if(variable_global_exists(string_variable_name))
+{
+}
+
+var global_variable = variable_global_get(string_variable_name); //returns undefined if variable does not exist
+
+variable_global_set(string_variable_name, value);
+</code>
+
+#Local
+
+Had a bug like this:
+<code>
+var myArray;
+myArray[0] = script_execute(scr_MakeCoordinate, -1, -1);
+//for each row, col
+	var coordinate = script_execute(scr_MakeCoordinate, row, col);
+	//if something
+	myArray[array_length_1d(myArray)] = coordinate;
+</code>
+I ended up with an array of length 2, where the second element changed each time I changed the coordinate variable.
+So it was acting more like a pointer than a local variable.

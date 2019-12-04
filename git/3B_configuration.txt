@@ -1,0 +1,94 @@
+##Configuration
+
+Git has three configuration stores.
+
+#System Level
+
+Applies to the entire computer.
+
+<code>
+git config --system
+</code>
+Located at /etc/gitconfig or C:\Program Files (x86)\Git\etc\gitconfig.
+
+#User Level
+
+Applies when this user is logged in.
+
+<code>
+git config --global
+</code>
+Located at ~/.gitconfig or C:\Users\<NAME>\.gitconfig.
+
+#Repository Level
+
+Applies to one repository.
+
+<code>
+git config
+</code>
+Located at .git/config in each repository.
+
+#Command Line
+
+You can edit the config files directly in a text editor, or use the command line.
+
+(Using the global level for the examples)
+
+To list the config options
+<code>
+git config --global --list
+</code>
+
+To remove a setting
+<code>
+git config --global --unset <SETTING>
+</code>
+
+Set the username
+<code>
+git config --global user.name "John Doe"
+</code>
+
+Set the email
+<code>
+git config --global user.email "jdoe@gmail.com"
+</code>
+
+Set your default editor for editing commit messages, viewing diffs, etc
+<code>
+git config --global core.editor vim
+</code>
+Other options are emacs, notepad, and notepad++.
+
+Enable fuzzy-matches of git commands
+<code>
+git config --global help.autocorrect 1
+</code>
+For example, "git statsu" would be interpreted as "git status".
+The digit "1" says wait 1 millisecond before performing the action. Using "0" turns off autocorrect.
+
+Allow git to use color-coding to help display diffs, etc
+<code>
+git config --global color.ui auto
+</code>
+This will not affect the output when Git is running a script (it would mess up your logs).
+
+Set the Carriage-Return-Line-Feed option
+<code>
+git config --global core.autocrlf true
+</code>
+Possible settings: 
+- true: convert CRLF into just LF when checking in, and convert LF to CRLF when checking out on a Windows machine
+- false: make no changes
+- input: convert CRLF into just LF when checking in, keep it that way when checkint out
+CRLF is common in Windows, but can cause problems on Mac or Linux.
+"true" is recommended for Windows machines and "input" for Max or Linux machines.
+This only affects text files, not binary files.
+
+Alias a command
+<code>
+git config --global alias.<NAME> "log --oneline --graph --all --decorate"
+</code>
+Alias "command" to NAME.
+The initial "git" in the command is not required.

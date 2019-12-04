@@ -1,0 +1,37 @@
+##Misconceptions
+
+Agile is ad-hoc, with no process control.
+- Processes like Scrum and Lean follow Agile principles.
+
+Agile is faster or cheaper.
+- Agile produces working software faster, but it may take the same amount of time to complete the entire project.
+
+Agile teams don't make plans or documentation.
+- Agile generates only the plans/documentation that are valuable.
+
+An Agile project never ends.
+- Taking maintenance into account, many projects never end. That's normal.
+
+Agile only works for small organizations.
+- Size shouldn't be a factor.
+
+Without upfront planning, Agile is wasteful.
+- If you actually know all the requirement upfront, upfront planning makes sense. But that is rare.
+
+Agile means "no commitment".
+- Common processes like Scrum and XP both include the commitment to complete tasks each sprint.
+
+Agile development is not predictable.
+- Once a team is good at accurately estimating how long tasks will take, they can be very predictable about when work will be completed.
+
+Agile is a silver bullet.
+- There are no silver bullets.
+
+There's only one way to do Agile.
+- There are many Agile processes, such as Scrum and XP.
+
+Agile doesn't need upfront design.
+- Design is done as late as possible, but it must still be done.
+
+We're doing Scrum, so we don't need to pair program, refactor, or use TDD.
+- These are all useful tools that can be incorporated into Scrum.

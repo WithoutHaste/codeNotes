@@ -1,0 +1,19 @@
+##Cardinality
+
+#1 to 1
+
+A 1 to 1 relationship is usually in a single table.
+
+#1 to Many
+
+A 1 to Many relationship is a simple Foreign Key constraint.
+
+Let TableB have a foreign key constraint to TableA. Now 1 record in TableA can be related to Many records in TableB.
+
+#Many to Many
+
+A Many to Many relationship between two tables requires an intermediate table.
+
+TableC has one column with a foreign key constraint to TableA, and one column with a foreign key constraint to TableB.
+
+Ex: A SalesPeople table can have a Many to Many relationship with a Customers table. Each SalesPerson may work with multiple Customers, and over time each Customer may work with multiple SalesPeople.

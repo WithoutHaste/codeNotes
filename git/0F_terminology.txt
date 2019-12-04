@@ -1,0 +1,9 @@
+##Terminology
+
+Untracked File: a file that Git is not aware of - it is not the in repository or staging area yet.
+
+Staged File: a file that Git is aware of, and is ready to be committed.
+
+Staging Area: a place to put files that will part of the next commit. New and edited files are not automatically staged.
+
+Git SHA (pronounced "git shaw"): the SHA1 hashcode that identifies a commit. Commits can usually be identified with the first 5-8 characters for their hashcode.

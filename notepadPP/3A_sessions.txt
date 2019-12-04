@@ -1,0 +1,6 @@
+##Sessions
+
+A session is the set of files currently open.
+
+Save current session: File menu > Save Session
+Load previous session: File menu > Load Session

@@ -1,0 +1,43 @@
+##Document Class
+
+Document classes set default global layout settings for the document.
+
+Ex: "article", "book"
+
+#Article
+
+The "article" document class will automatically add page numbers to the pdf.
+
+<code>
+\documentclass{article}
+
+\title{My first document}
+\date{2013-09-01}
+\author{John Doe}
+
+\begin{document}
+  \maketitle
+  \newpage
+
+  Hello World!
+\end{document}
+</code>
+
+You can skip numbering a page, and then restart numbering, like this. Note that numbering will restart at 1.
+<code>
+\documentclass{article}
+
+\title{My first document}
+\date{2013-09-01}
+\author{John Doe}
+
+\begin{document}
+  \pagenumbering{gobble}
+  \maketitle
+  \newpage
+  \pagenumbering{arabic}
+
+  Hello World!
+\end{document}
+</code>
+

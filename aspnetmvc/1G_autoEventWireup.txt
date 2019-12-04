@@ -1,0 +1,28 @@
+##AutoEventWireup
+
+Auto event wireup is a process ASP.Net runs that searches for certain method signatures, and automatically sets those methods to be called when certain events run.
+
+If more that one method signature matches an event, only the last method found will be attached to the event.
+
+For instance, in MyProject/Global.asax:
+<code>
+public class MvcApplication : System.Web.HttpApplication
+{
+	protected void Application_Start()
+	{
+		AreaRegistration.RegisterAllAreas();
+		FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+		RouteConfig.RegisterRoutes(RouteTable.Routes);
+		BundleConfig.RegisterBundles(BundleTable.Bundles);
+	}
+
+	protected void Application_OnStart()
+	{
+		AreaRegistration.RegisterAllAreas();
+		FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+		RouteConfig.RegisterRoutes(RouteTable.Routes);
+		BundleConfig.RegisterBundles(BundleTable.Bundles);
+	}
+}
+</code>
+Both of these method signatures maps to the same Application Start event. Whichever order they are defined in, only the last one will be run on the Application Start event.

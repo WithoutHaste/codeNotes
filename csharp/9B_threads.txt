@@ -1,0 +1,175 @@
+##Threads
+
+Requires library System.Threading.dll
+
+Threads will run a specified method. The method must have no parameters and no return type.
+
+Create a new thread:
+<code>
+using System;
+using System.Threading;
+
+Thread thread = new Thread(new ThreadStart(MyMethod));
+thread.Start();
+</code>
+
+Thread.Join() will block the current thread until the joined thread completes. 
+A thread must be started before it can be joined.
+
+To see the id of the current thread:
+<code>
+Console.WriteLine(Thread.CurrentThread.ManagedThreadId);
+</code>
+This can be used to verify that an operation is/isn't running in a different thread.
+
+#BackgroundWorker
+
+BackgroundWorker is suggested as an easy way to use threading with Windows Forms, so the GUI thread does not freeze.
+
+BackgroundWorker will run an operation on a different thread and then call an event when it is complete.
+
+Note: do not access any GUI objects from these other threads. You'll freeze your GUI.
+
+<code>
+using System;
+using System.ComponentModel;
+using System.Threading;
+
+BackgroundWorker worker = new BackgroundWorker();
+worker.DoWork += new DoWorkEventHandler(MyTask); //set that task to run on this new thread
+worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(OnComplete); //trigger event when thread completes
+
+worker.ProgressChanged += new ProgressChangedEventHandler(OnProgressChanged); //optional: report progress to GUI thread
+worker.WorkerReportsProgress = true;
+
+worker.WorkerSupportsCancellation = true; //can stop thread partway
+
+worker.RunWorkerAsync(); //start the new thread asynchronously from this one
+
+void OnComplete(object sender, RunWorkerCompletedEventArgs e)
+{
+	if(e.Error != null)
+	{
+		//handle exception (you cannot access e.Result or worker.ReportProgress if there is an e.Error)
+		return;
+	}
+	if(e.Canceled)
+	{
+		//handle cancellation (you cannot access e.Result or worker.ReportProgress if worker is canceled)
+		return;
+	}
+	//on thread completed
+	//note that the BackgroundWorker object does not exist by this point
+	//you can set a Result object on the DoWorkEventArgs that will flow to here in RunWorkerCompletedEventArgs.Result
+}
+
+void OnProgressChanged(object sender, ProgressChangedEventArgs e)
+{
+	myProgressBar.Value = e.ProgressPercentage;
+}
+
+void MyTask(object sender, DoWorkEventArgs e)
+{
+	BackgroundWorker worker = (sender as BackgroundWorker);
+	for(int i=0; i<100; i++)
+	{
+		Thread.Sleep(100); //current thread sleeps for 100 milliseconds
+		worker.ReportProgress(i); //report progress from 0% to 100% as integer
+		if(worker.CancellationPending)
+		{
+			e.Cancel = true;
+			worker.ReportProgress(0);
+			return;
+		}
+	}
+	worker.ReportProgress(100);
+}
+
+void OnClickCancellationButton(object sender, EventArgs e)
+{
+	if(worker.IsBusy)
+	{
+		worker.CancelAsync();
+	}
+}
+</code>
+
+Canceling the background worker is not instantaneous. The worker must periodically check for the pending cancellation, which may take time. Here's the recommended design.
+<code>
+BackgroundWorker worker;
+
+void StartTask()
+{
+	if(worker != null && worker.IsBusy)
+	{
+		worker.CancelAsync();
+		
+		while(worker.IsBusy)
+		{
+			Application.DoEvents(); //this lets the UI thread continue
+		}
+	}
+	
+	worker = new BackgroundWorker();
+	worker.DoWork += new DoWorkEventHandler(OnDo);
+	worker.RunWorkerCompleted += new RunWorkerCompletedEventHandler(OnCompleted);
+	worker.WorkerSupportsCancellation = true;
+	worker.RunWorkerAsync();	
+}
+
+void OnDo(object sender, DoWorkEventArgs e)
+{
+	while(doAction)
+	{
+		if(worker.CancellationPending)
+		{
+			e.Cancel = true;
+			return;
+		}
+		//work
+	}		
+}
+</code>
+
+To pass data into the DoWork method:
+<code>
+worker.RunAsync(dataObject);
+//...
+private void DoWork(object sender, DoWorkEventArgs e)
+{
+	MyData data = (e.Argument as MyData);
+}
+</code>
+
+When using worker.ReportProgress, do not run it unless you have a new progress value (int 0 to 100). Every time you call it, (if the GUI thread reacts) it blocks the GUI thread.
+
+#Application
+
+To catch all uncaught exceptions that occur in an application:
+<code>
+using System.Threading;
+static class MyProgram
+{
+	[STAThread]
+	static void Main()
+	{
+		Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+		MyForm form = new MyForm();
+		Application.Run(form);
+	}
+}
+//....
+public class MyForm
+{
+	public MyForm()
+	{
+		//this must be set before Application.Run(form)
+		Application.ThreadException += new ThreadExceptionEventHandler(OnSystemException);
+	}
+	private void OnSystemException(object sender, ThreadExceptionEventArgs e)
+	{
+		//handle e.Exception
+	}
+}
+</code>
+Confirmed this works on System.TargetInvocationException.

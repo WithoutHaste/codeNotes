@@ -1,0 +1,5 @@
+##Process
+
+If you have created/edited files for more than one reason, make one commit per reason. That way, the commit message will show the specific reason for each change. It is normal and expected to make many small commits.
+
+Make a new branch for each new feature and each bug fix. This will save you a lot of trouble when you need to switch tasks.

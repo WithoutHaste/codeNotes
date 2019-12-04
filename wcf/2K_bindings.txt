@@ -1,0 +1,61 @@
+##Bindings
+
+Bindings are the transport mechanism for the messages.
+
+The service and the client must use the exact same bindings, otherwise they cannot communicate.
+
+#HTTP
+
+HTTP messages use port 80.
+They can pass through a firewall, so are commonly used when the client is a different company than the service.
+They are secured and encrypted using certificates. By default, the messages travel as plain-text.
+
+"basicHttpBinding"
+- the most simple HTTP option
+- use when communicating across the firewall
+- use when the client is running legacy code (such as .Net 2.0, VB 6, or SOAP Toolkit)
+
+"wsHttpBinding"
+- more feature-rich option
+- use when communicating across the firewall
+- use when the client is using a modern framework
+
+#TCP
+
+Faster than HTTP.
+Usually used within a firewall, so for intra-company communication. (You can use it inter-company, but it would require opening another port in the firewall, which is not suggested for security reasons.)
+Secure by default.
+
+"netTcpBinding"
+
+#IPC
+
+IPC is the fastest communication medium, but it limited to only communicating with the current machine.
+This is useful for "in-application services" where the service and the client are running on the same machine, even as a single application.
+
+aka Named Pipe Binding
+
+<code lang="xml">
+<system.serviceModel>
+	<services>
+		<service name="name">
+			<endpoint 
+				address="net.pipe://localhost/MyService"
+				binding="netNamedPipeBinding"
+				contract="interface"
+				/>
+		</service>
+	</services>
+</system.serviceModel>
+</code>
+
+#UDP
+
+Faster than TCP, because it is unreliable. If a message fails to reach the recipient, it will not be resent.
+Useful for broadcasting.
+Limited to within a subnet.
+
+#MSMQ
+
+Used for queuing.
+Supports disconnected communication, it still works while not connected to the network.

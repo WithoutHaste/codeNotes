@@ -1,0 +1,7 @@
+##Duplicates
+
+EF will not add duplicate objects to the DbContext.
+
+As of EF 5, "Duplicate" was based on Object.Equals and Object.GetHashCode, so if you'd overridden that logic, it could have affect persistence.
+
+As of EF 6, "Duplicate" is only based on internal EF logic.

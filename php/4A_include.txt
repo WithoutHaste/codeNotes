@@ -1,0 +1,15 @@
+##Include
+
+#Include
+
+Include other php or text files in the current script.
+<code>
+include "otherFile.php";
+</code>
+The path to the otherFile can be absolute, based on the "include_path", or relative based on the current script's directory.
+
+The contents of included files can be considered to be copied directly into that line in the current script. That's true even if the "include" is inside a function definition.
+
+#Require
+
+Require is just like Include, except if the file is not found you'll get a fatal error.

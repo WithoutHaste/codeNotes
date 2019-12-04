@@ -1,0 +1,21 @@
+##Literals
+
+#HTML Entity
+
+<code>
+<p>A spade character: &amp;spades;</p>
+<p>A forced whitespace: &amp;nbsp;</p>
+<p>An ampersand: &amp;amp;</p>
+</code>
+
+#Decimal
+
+<code>
+<p>A spade character: &amp;#9824;</p>
+</code>
+
+#Hexadecimal
+
+<code>
+<p>A spade character: &amp;#x2660;</p>
+</code>

@@ -1,0 +1,11 @@
+##Logic
+
+#CASE
+
+<code>
+UPDATE tableName SET columnA = (CASE WHEN columnA=0 THEN 1 ELSE 0 END);
+</code>
+
+TODO: Check algorithm for CASE statement execution. I remember handling an error where the case statement takes the LAST matching WHEN clause, but Microsoft's website says it will take the FIRST matching WHEN clause.
+
+If no WHEN clauses match, the ELSE clause will be used.

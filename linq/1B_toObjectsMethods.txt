@@ -1,0 +1,236 @@
+##LINQ to Object Methods
+
+#First
+
+Returns the first element. Throws an exception if the enumerable if empty. Optional lambda.
+<code>
+Student student = students.First();
+Student student = students.First(x => x.LastName == "Roberts");
+</code>
+
+Returns the first element. Returns the default type value if the enumerable is empty. Optional lambda.
+(For reference types, NULL is default. For value types, 0 is default.)
+<code>
+Student student = students.FirstOrDefault();
+Student student = students.FirstOrDefault(x => x.LastName == "Roberts");
+</code>
+
+#Last
+
+Returns the last element. Throws an exception if the enumerable is empty. Optional lambda.
+<code>
+Student student = students.Last();
+Student student = students.Last(x => x.LastName == "Roberts");
+</code>
+
+Returns the last element. Returns the default type value if the enumerable is empty. Optional lambda.
+(For reference types, NULL is default. For value types, 0 is default.)
+<code>
+Student student = students.LastOrDefault();
+Student student = students.LastOrDefault(x => x.LastName == "Roberts");
+</code>
+
+#Single
+
+Returns the only element in the enumerable. Throws an exception if the enumerable length is not exactly 1. Optional lambda.
+<code>
+Student student = students.Single();
+Student student = students.Single(x => x.LastName == "Roberts");
+</code>
+
+#Take
+
+Keep the next N elements
+<code>
+IEnumerable<Student> students = students.Take(4);
+</code>
+
+#TakeWhile
+
+Keep all elements until the condition is false:
+<code>
+IEnumerable<Student> students = students.TakeWhile(x => x.Age >= 21);
+</code>
+
+#Skip
+
+Skip the next N elements
+<code>
+IEnumerable<Student> students = students.Skip(4);
+</code>
+
+#SkipWhile
+
+Skip all elements until the condition is false
+<code>
+IEnumerable<Student> students = students.SkipWhile(x => x.Age >= 21);
+</code>
+
+#Select
+
+Sets what type to return from the query.
+<code>
+IEnumerable<int> studentAges = students.Select(x => x.Age);
+
+MyType[] results = students.Select(x => new MyType() {
+		Name = x.Name,
+		Age = x.Age
+	}).ToArray();
+</code>
+
+You can return anonymous types.
+<code>
+var studentSummaries = students.Select(x => 
+	new { LastName = x.LastName, BestGrade = x.Grades.Max() });
+</code>
+
+#SelectMany
+
+Flattened nested data.
+<code>
+Language[] languages = books.SelectMany(b => b.Titles).Select(t => t.Language).ToArray();
+</code>
+
+#Distinct
+
+Return just distinct elements.
+<code>
+IEnumerable<string> surNames = students.Select(x => x.LastName).Distinct();
+</code>
+
+#GroupBy
+
+Groups the elements by the selected property.
+Returns an enumerable of objects. Each has a Key and is also an enumerable you can iterate over to see the elements in the group.
+<code>
+IEnumerable<IGrouping<string, Student>> studentGroups = students.GroupBy(x => x.LastName);
+
+foreach(IGrouping<string, Student> group in studentGroups)
+{
+	Console.WriteLine("Group key = {0}", group.Key); //Key is the LastName
+	foreach(Student student in group)
+	{
+		Console.WriteLine("Group member = {0}", student.FirstName);
+	}
+}
+</code>
+
+You can supply a custom comparer in GroupBy. Each pair of elements will be checked for equality with the custom comparer.
+<code>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+public class CustomComparer : IEqualityComparer<T>
+{
+	public bool Equals(T a, T b)
+	{
+		//return true if a and b should be considered equal
+	}
+
+	public int GetHashCode(T obj)
+	{
+		//return hashcode
+	}
+}
+
+...myList.GroupBy(x => x, new CustomComparer());
+</code>
+
+#OrderBy
+
+Sort the elements by the specified value. Ascending order.
+<code>
+IEnumerable<Student> students = students.OrderBy(x => x.LastName);
+</code>
+
+#OrderByDescending
+
+Sort the elements by the specified value. Descending order.
+<code>
+IEnumerable<Student> students = students.OrderByDescending(x => x.LastName);
+</code>
+
+#ThenBy
+
+This will set the next level of sorting. Use after an OrderBy, OrderByDescending, ThenBy, or ThenByDescending clause. Ascending order.
+<code>
+IEnumerable<Student> students = students.OrderBy(x => x.LastName).ThenBy(x => x.FirstName);
+</code>
+
+#ThenByDescending
+
+This will set the next level of sorting. Use after an OrderBy, OrderByDescending, ThenBy, or ThenByDescending clause. Descending order.
+<code>
+IEnumerable<Student> students = students.OrderBy(x => x.LastName).ThenByDescending(x => x.Age);
+</code>
+
+#Where
+
+Filters elements by a conditional statement
+<code>
+IEnumerable<Student> students = students.Where(x => x.LastName == "Roberts");
+</code>
+
+#Union
+
+Given two enumerables, returns the distinct elements of both enumerables together.
+<code>
+IEnumerable<int> luckyOrPrime = primeNumbers.Union(luckyNumbers);
+</code>
+
+You can also define what comparison function to use.
+<code>
+IEnumerable<int> luckyOrPrime = primeNumbers.Union(luckyNumbers, new IEqualityComparer<T>());
+</code>
+
+#Count
+
+Return the element count
+<code>
+int count = numbers.Count();
+</code>
+
+#Average
+
+Return the average of the values.
+<code>
+decimal averageNumber = numbers.Average();
+
+decimal averageAge = students.Average(x => x.Age);
+</code>
+
+#Sum
+
+Returns the summation of the values.
+<code>
+int sumNumbers = numbers.Sum();
+
+int sumAges = students.Sum(x => x.Age);
+</code>
+
+#Any
+
+Returns true if any element of the enumerable matches the condition:
+<code>
+bool includesAdults = students.Any(s => s.Age >= 18);
+</code>
+
+#Join
+
+Explicitly join objects, like a SQl table join.
+<code>
+var result = dbContext.TableA.Join(
+	dbContext.TableB, 
+	outer => outer.TableB.Column, 
+	inner => inner.TableA.Column, 
+	(outer, inner) => new { A = outer, B = inner}
+);
+</code>
+
+#Dictionary
+
+Build a dictionary:
+<code>
+Dictionary<int, name> dict = list.ToDictionary(x => x.Id, x => x.Name);
+</code>

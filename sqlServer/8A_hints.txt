@@ -1,0 +1,9 @@
+##Hints
+
+#NOLOCK
+
+Tells SQL: don't wait for the table to be unlocked, just read from it.
+
+<code>
+SELECT * FROM BusyTable (NOLOCK);
+</code>

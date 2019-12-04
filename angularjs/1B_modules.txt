@@ -1,0 +1,74 @@
+##Modules
+
+Each feature should declare its own module, and all features should register to it.
+
+"appName" is the module in all of the examples so far, and each component says "angular.module('appName')...".
+
+You want the entire component to be easy to copy to another project without editing them. So now each part of the phone-list component needs to reference a 'phone-list' module instead of the 'appName' module.
+
+##Phone Example 3
+
+#app/index.html
+<code>
+<html ng-app="appName">
+	<head>
+		<script src='../angular.js' />
+		<script src='app.module.js' />
+		<script src='phone-list/phone-list.module.js' />
+		<script src='phone-list/phone-list.component.js' />
+	</head>
+	<body>
+		<phone-list></phone-list>
+	</body>
+</html>
+</code>
+
+#app/app.module.js
+
+The appName module now registers phoneList as a dependency.
+
+<code>
+angular.module('appName', ['phoneList']);
+</code>
+
+#app/phone-list/phone-list.module.js
+<code>
+angular.module('phoneList', []);
+</code>
+
+#app/phone-list/phone-list.component.js
+<code>
+angular.module('phoneList').component('phoneList', {
+	template: 'phone-list.template.html',
+	controller: function PhoneListController() {
+		this.phones = [
+			{ name:'Nexus', snippet:'fast and furious' },
+			{ name:'Galaxy', snippet:'to infinity and beyond' },
+			{ name:'Motorola', snippet:'next next gen' }
+		];
+	}
+});
+</code>
+
+#app/phone-list/phone-list.template.js
+<code>
+<ul>
+	<li ng-repeat="phone in $ctrl.phones">
+		<span>{{ phone.name }}</span>
+		<p>{{ phone.spinnet }}</p>
+	</li>
+</ul>
+</code>
+
+#app/phone-list/phone-list.component.spec.js
+<code>
+describe('phoneList', function() {
+	beforeEach(module('appName'));
+	describe('PhoneListController', function() {
+		it('description of test', inject(function($componentController) {
+			var ctrl = $componentController('phoneList');
+			expect(ctrl.phones.length).toBe(3);
+		}));
+	});
+});
+</code>

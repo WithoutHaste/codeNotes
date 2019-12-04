@@ -1,0 +1,120 @@
+##Stored Procedures
+
+Stored procedures can return zero, one, or multiple result sets.
+Any result of a SELECT statement inside a stored proc will be returned to the client.
+
+Stored procedures are compiled.
+Stored procedures can be encrypted to hide sensitive information/calculations.
+
+Recompile your stored procedures after adding new indexes that they should use. Or restart SQL Server.
+
+#Basic
+
+<code>
+CREATE PROCEDURE dbName.procedureName 
+AS
+BEGIN
+	SELECT * FROM tableName;
+END;
+	
+EXEC dbName.procedureName;
+</code>
+
+#Naming Convention
+
+The reference I'm looking at says "usp_ProcedureName", but I've never seen this convention in use. Just use some standard prefix.
+
+#Parameters
+
+<code>
+CREATE PROCEDURE dbName.procedureName 
+	@paramA AS dataType 
+AS
+BEGIN
+	SELECT 
+		* 
+	FROM tableName 
+	WHERE columnA = @paramA;
+END;
+	
+EXEC dbName.procedureName @paramA = value; --using named parameters
+EXEC dbName.procedureName value; --or just listing the parameters in the same order as the stored proc
+</code>
+
+<code>
+CREATE PROCEDURE dbName.procedureName 
+	@paramA AS dataType, 
+	@paramB As dataType 
+AS
+BEGIN
+	SELECT 
+		* 
+	FROM tableName 
+	WHERE columnA = @paramA OR columnB < @paramB;
+END;
+	
+EXEC dbName.procedureName @paramA = value, @paramB = value;
+</code>
+
+#Optional Parameters
+
+You can provide a default value for parameters, in case the user does not pass one in.
+<code>
+CREATE PROCEDURE dbName.procedureName 
+	@paramA AS dataType = NULL 
+AS
+BEGIN
+	SELECT 
+		* 
+	FROM tableName 
+	WHERE columnA = @paramA;
+END;
+	
+EXEC dbName.procedureName;
+</code>
+
+#Output Parameters
+
+Output parameters are really Input/Output parameters.
+
+<code>
+CREATE PROCEDURE dbName.procedureName 
+	@paramA AS dataType, 
+	@paramB AS INT OUTPUT 
+AS
+BEGIN
+	SELECT 
+		@paramB = COUNT(*) 
+	FROM tableName 
+	WHERE columnA = @paramA;
+END;
+
+DECLARE @tableCount INT;
+EXEC dbName.procedureName @paramA = value, @paramB = @tableCount OUTPUT;
+</code>
+
+#Recursion
+
+Stored procedures can recursively call themselves, but only to a depth of 32.
+
+#Dynamic Queries
+
+If you must generate dynamic queries in a stored proc (and you should avoid this whenever possible) then here is a debug trick.  Include an optional last parameter that will output the generated SQL for you to see.
+
+<code>
+CREATE PROCEDURE dbo.myProc 
+	@paramA AS dataType, 
+	@paramB AS dataType,
+	@debug AS BIT = 0
+AS
+BEGIN
+	--build up variable @dynamicSQL
+	IF @debug = 1 PRINT @dynamicSQL
+	--run @dynamicSQL
+	EXEC sp_executesql @dynamicSQL
+END;
+</code>
+
+#Extended
+
+An extended stored procedure is a compiled function in a DLL, often written in C, which you can call like a normal stored procedure.

@@ -1,0 +1,7 @@
+##Databases
+
+What are some sharding strategies for Postgres or MariaDB/MySQL time series? For geographical databases?
+
+When would you use a NoSQL solution instead of SQL?
+
+What do you know about ORM?

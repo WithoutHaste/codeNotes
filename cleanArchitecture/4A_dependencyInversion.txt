@@ -1,0 +1,69 @@
+##Dependency Inversion
+
+This is the major thesis (or strategy?) of this book.
+
+Since object-oriented languages support polymorphism, any source code dependency can be inverted. This is, architecturally, profound. The architect has absolute control over the source code dependencies in a project.
+
+#Not Like this
+
+Source code dependency: which source code files "import" or "using" which other source code files
+<pinker>
+Layout:
+	[Main]
+	[High Level A]...[High Level B]
+	[Low Level C][Low Level D]...[Low Level E][Low Level F]
+Relate:
+	[Main]->[High Level A],[High Level B]
+	[High Level A]->[Low Level C],[Low Level D]
+	[High Level B]->[Low Level E],[Low Level F]
+</pinker>
+
+Flow of control: which functions/modules call which other functions/modules
+<pinker>
+Layout:
+	[Main]
+	[High Level A]...[High Level B]
+	[Low Level C][Low Level D]...[Low Level E][Low Level F]
+Relate:
+	[Main]=>[High Level A],[High Level B]
+	[High Level A]=>[Low Level C],[Low Level D]
+	[High Level B]=>[Low Level E],[Low Level F]
+</pinker>
+
+The "Main" function calls the high level functions, which call the low level functions.
+
+Source code dependencies always match the flow of control, because "Function A" must know about "Function B" in order to call it.
+
+#Like This
+
+<pinker>
+Layout:
+	[High Level A]
+	[Low Level C][Interface]
+Relate:
+	[High Level A]->[Interface]
+	[High Level A]=>[Low Level C]
+	[Low Level C]-D[Interface]
+</pinker>
+
+High Level A still calls Low Level C (dashed arrow shows flow of control).
+But now High Level A has no source code dependency on Low Level C (solid arrow).
+Instead, both High Level A and Low Level C have a dependency on the Interface that Low Level C inherits from.
+
+If we package the source code like this, we can see the "Inversion" part of "Dependency Inversion". The source code dependency (solid arrow) is now pointing in the opposite direction as the flow of control (dashed arrow). The low level code now depends on the high level code.
+<pinker>
+Layout:
+	[Component A]
+	[Component C]
+[Component A]:
+	Layout:
+		[High Level A][Interface]
+	Relate:
+		[High Level A]->[Interface]
+		[High Level A]=>[Component C.Low Level C]
+[Component C]:
+	Layout:
+		[Low Level C]
+	Relate:
+		[Low Level C]-D[Component A.Interface]
+</pinker>

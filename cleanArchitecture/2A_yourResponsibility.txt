@@ -1,0 +1,7 @@
+##Your Responsibility
+
+Business managers are not equipped to evaluate the importance of software architecture. That is what software developers are hired to do.
+
+Therefore it is the responsibility of the software development team to assert the importance of architecture over the urgency of features. Fulfilling this responsibility means wading into a struggle. The development team has to struggle for what they believe to be best for the company, and so does the management team, and the marketing team, and the sales team, and the operations team. [And this is correct - each team knows things the others do not, each team has valuable insights into the business that the others are not expected to have.]
+
+Effective software development teams tackle that struggle head on. Remember, as a software developer, you are a stackholder - unabashedly squabble with the other stakeholders as equals. That's part of your role and part of your duty. It's a big part of why you were hired.

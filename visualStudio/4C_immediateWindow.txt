@@ -1,0 +1,14 @@
+##Immediate Window
+
+The Immediate Window lets you enter expressions to be evaluated during debugging, in the current scope of the breakpoint.
+
+Debug menu > Windows > Immediate
+or Ctrl-Alt-I
+
+<code>
+Debug.Print variableA
+</code>
+
+<code>
+? variableA //same as Debug.Print
+</code>

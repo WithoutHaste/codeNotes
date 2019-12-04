@@ -1,0 +1,7 @@
+##Terminology
+
+#DTU
+
+DTU stands for Database Throughput Unit.
+
+DTUs are based on a combination of CPU usage, memory, reads, and writes. It's a way to measure performance with a single number.

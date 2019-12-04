@@ -1,0 +1,83 @@
+##Search
+
+#Terminology
+
+Sequential Search
+	Each element is checked in sequence.
+	
+Interval Search
+	Faster searches that require a sorted data set.
+	Very few elements are actually checked.
+
+#Linear Search
+
+Time: O(n)
+
+Algorithm:
+	Check each element in an array, in order.
+	
+#Binary Search
+
+Time: O(log n)
+
+An interval search - requires a sorted array.
+
+Algorithm:
+	Jump to the middle element and check it.
+	If it is higher than the target, run binary search on the first half of the array.
+	If it is lower than the target, run binary search on the last half of the array.
+
+#Jump Search
+
+Time: O(Sqrt(N)) when M is Sqrt(N)
+
+An interval search - requires a sorted array.
+
+Algorithm:
+	Select a block size M.
+	Check array[0], then array[M], then array[2M], etc until you find the block that must contain the target.
+	Run linear search on that block.
+
+The ideal M is SquareRoot(N), since in the worst case you'll have to check ((N/M) + M - 1) elements.
+
+#Interpolation Search
+
+Time: O(log log n)
+Time if data is not uniformly distributed: O(n)
+
+An interval search - requires a sorted array.
+Appropriate when the data set is uniformly distributed.
+
+Interpolation Search is a variation of Binary Search, where the index you jump to is weighted based on knowing that the data is uniformly distributed. Ex: if the target is closer to the last value than the first, we start searching near the end of the array.
+
+Index to search = startingIndex + ( ((targetValue - array[startingIndex])*(endingIndex - startingIndex)) / (array[endingIndex] - array[startingIndex]) )
+
+#Exponential Search
+
+Time: O(log n)
+
+An interval search - requires a sorted array.
+Appropriate when size of array is infinite - it does not search farther than it needs to.
+
+Algorithm:
+	For Length=1 until array[Length-1] > target:
+		Length*=2
+	Binary Search in range [Length/2, Length-1].
+	
+#Fibonacci Search
+
+Time: O(log n)
+
+An interval search - requires a sorted array.
+Appropriate when plus/minus operations are cheaper than division operations. (as compared to Binary Search)
+Appropriate when the entire data set does not fit into memory at once.
+
+Fibonacci Numbers: 1, 1, 2, 3, 5, 8, 13, 21, 34...
+
+Algorithm:
+	M = the lowest Fibonacci number that is <= length of array
+	m = the Fibonacci index of M
+	i = (m-2)th Fibonacci number
+	Check array[i], return if target is found.
+	If target > array[i], recurse over later subarray.
+	If target < array[i], recurse over earlier subarray.

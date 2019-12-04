@@ -1,0 +1,85 @@
+##Regular Expressions
+
+#Compile
+
+Compile - compile an expression for reuse
+<code>
+import re
+myRegEx = re.compile('ab*')
+</code>
+
+Compile has some optional flags
+<code>
+import re
+myRegEx = re.compile('ab*', re.IGNORECASE)
+</code>
+
+#Match
+
+Match - check if regular expression matches text
+Match will only find matches at the start of the string
+<code>
+import re
+myRegEx = re.compile('ab*')
+myMatch = myRegEx.match("ggttrr")
+print(myMatch) #None
+
+myMatch = myRegEx.match("abbbcab")
+print(myMatch.group()) #'abbb' #the string that matched
+print(myMatch.start()) #0 #index of start of match
+print(myMatch.end()) #4 #index of first char NOT in match
+print(myMatch.span()) #(0, 4) #tuple of start and end indexes
+</code>
+
+#Search
+
+Search - check if regular expression matches text
+Search will find the first match anywhere in the string
+<code>
+import re
+myRegEx = re.compile('ab*')
+myMatch = myRegEx.search("ffabbbcab")
+print(myMatch.group()) #'abbb' #the string that matched
+print(myMatch.start()) #2 #index of start of match
+print(myMatch.end()) #6 #index of first char NOT in match
+print(myMatch.span()) #(2, 6) #tuple of start and end indexes
+</code>
+
+#FindAll
+
+FindAll - check if regular expression matches text
+FindAll will return of list of all matches anywhere in the string
+<code>
+import re
+myRegEx = re.compile('ab*')
+myMatches = myRegEx.findall("ffabbbcab")
+print(myMatches) #['abbb', 'ab'] #list of matched strings
+</code>
+
+#FindIter
+
+FindIter - like FindAll but you can iterate through the details of each match
+<code>
+import re
+myRegEx = re.compile('ab*')
+myMatches = myRegEx.finditer("ffabbbcab")
+for myMatch in myMatches:
+	print(myMatch.group())
+	print(myMatch.start())
+	print(myMatch.end())
+	print(myMatch.span())
+</code>
+
+#Back Reference
+
+This example finds matches for "56xx3" where each x is the same digit.
+
+<code>
+import re
+myRegEx = re.compile('56(?P<a>\d)(?=Pa)3')
+print(myRegEx.match("56003")) #matches 56003
+</code>
+
+The phrase "(?P<a>\d)" matches a digit (\d) and names it "a" (?P<a>).
+
+The phrase "(?=Pa)" matches the same substring that "a" matched.

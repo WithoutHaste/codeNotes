@@ -1,0 +1,32 @@
+##Fetch Data
+
+Use angular service $http to fetch remote data. This example gets a text file, but it could just have easily called a MVC web page.
+
+#app/phones/phones.json
+<code>
+[
+	{ name:'Nexus', snippet:'fast and furious' },
+	{ name:'Galaxy', snippet:'to infinity and beyond' },
+	{ name:'Motorola', snippet:'next next gen' }
+]
+</code>
+
+#app/phone-list/phone-list.component.js
+<code>
+angular.module('phoneList').component('phoneList', {
+	templateUrl: 'phone-list/phone-list.template.html',
+	controller: function PhoneListController($http) {
+		var self = this;
+		$http.get('phones/phones.json').then(function(response) {
+			self.phones = response.data;
+		});
+	}
+});
+</code>
+
+##Format Data
+
+#As JSON
+<code>
+<span>property value = {{ $crtl.x | json }}</span>
+</code>

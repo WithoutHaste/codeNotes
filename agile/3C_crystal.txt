@@ -1,0 +1,7 @@
+##Crystal
+
+"The crystal methodology is one of the most adaptable, light-weight approaches to software development."
+
+It's actually a collection of methodologies like Crystal Clear, Crystal Yellow, and Crystal Orange. The choice of methodology is based on team size, how critical the project is, and project priorities.
+
+The aim is to provide tailored processes suitable for each team and project.

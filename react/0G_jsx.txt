@@ -1,0 +1,70 @@
+##JSX
+
+JSX stands for Javascript XML. It is a language extension for Javascript.
+
+JSX is an easy-to-read syntax that is compiled into "React.createElement(component, properties, ...children)" commands.
+
+JSX expressions produce React elements.
+
+The aim is to keep tightly coupled business logic and display logic together, while separating the concerns of different components.
+
+So this:
+<code>
+	<MyButton color="blue" shadowSize={2}>
+		Click Me
+	</MyButton>
+</code>
+Will be compiled into this:
+<code>
+React.createElement(
+	MyButton,
+	{color: 'blue', shadowSize: 2},
+	'Click Me'
+)
+</code>
+You can write the "React.createElement" commands directly, if you prefer them.
+
+!![You can test JSX in this Babel compiler](https://babeljs.io/repl/#?presets=react&code_lz=GYVwdgxgLglg9mABACwKYBt1wBQEpEDeAUIogE6pQhlIA8AJjAG4B8AEhlogO5xnr0AhLQD0jVgG4iAXyJA)
+
+#Elements
+
+JSX does not use quotes (" or ') around HTML elements.
+<code>
+var element = <h1>Hello World!</h1>
+</code>
+
+#Expressions
+
+Expressions inside curly braces { } will be interpreted as Javascript in the current context.
+
+<code>
+<div id="myDiv">Hello Someone</div>
+
+<script type="text/babel">
+	var name = 'John Doe';
+	ReactDOM.render(
+		<h1>Hello {name}</h1>,
+		document.getElementById('myDiv')
+	);
+</script> 
+</code>
+
+Do not use quotes (" or ') around curly braces. If the result of the expression is a string, it will be stored correctly.
+
+#Attributes
+
+JSX uses camel-case attributes names.
+JSX avoids using Javascript reserved words as attribute names.
+
+HTML attribute "class" => JSX "className"
+HTML attributes "tabindex" => JSX "tabIndex"
+
+#Types
+
+Capitalized tag names refer to React components.
+
+Ex: "<Foo />" refers to an in-scope variable named "Foo".
+
+#Injection
+
+It is safe to insert user-data directly into JSX, because React automatically escapes all special characters.

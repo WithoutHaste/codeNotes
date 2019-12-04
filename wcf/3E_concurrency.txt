@@ -1,0 +1,83 @@
+##Concurrency
+
+Concurrency is how the service (across instances) handles locking during multiple, concurrent requests/calls from one proxy.
+
+This is a service behavior.
+
+<code>
+using System.ServiceModel;
+
+[ServiceBehavior(ConcurrencyMode=ConcurrencyMode.Single)]
+public class MyService : IMyService
+{
+}
+</code>
+
+#Single Mode
+
+Single concurrency mode means the service (across instance) will only handle one call at a time from each proxy.
+This is a very safe mode.
+This is the default mode.
+
+Ex:
+The service uses Per Call instancing.
+Proxy A makes three calls, causing the host to start three service instances on three different threads.
+The service will still only handle one call at a time from Proxy A.
+At the same time, Proxy B is making a call.
+The service can handle a call from Proxy A concurrently with a call from Proxy B.
+
+Ex:
+The service uses Per Session instancing.
+So all calls from Proxy A will be handled by one service instance (one thread service-side).
+Proxy A uses multiple threads (client-side) to make three concurrent requests/calls to the service.
+The service will still only handle one call at a time from Proxy A.
+
+#Multiple Mode
+
+Multiple concurrency mode means the service provides no locking.
+This is a dangerous mode, you'll need to provide your own locking.
+
+Ex:
+The service uses Per Session instancing.
+So all calls from Proxy A will be handled by one service instance (one thread service-side).
+Proxy A uses multiple threads (client-side) to make three concurrent requests/calls to the service.
+If those requests access the same objects, they can step on each other and cause errors.
+
+#Reentrant Mode
+
+Reentrant concurrency mode means the service will act like Single concurrency mode, unless the call is coming from the same proxy that caused the lock.
+
+This is required for callbacks between service and client.
+
+Also required for circular service calls (Service A calls B, B calls C, C calls A).
+
+#Locking
+
+This is a brief summary.
+
+You can only lock reference-types, not value-types.
+
+Example usage:
+<code>
+lock(this)
+{
+	valueField++;
+}
+</code>
+Now this code block can only be run by one thread at a time.
+
+To lock a static resource:
+<code>
+public static class MyStaticResource
+{
+	private static object _Lock = new object();
+
+	public static void DoOperation()
+	{
+		lock(_Lock)
+		{
+			//stuff
+		}
+	}
+}
+</code>

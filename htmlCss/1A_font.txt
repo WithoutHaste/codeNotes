@@ -1,0 +1,8 @@
+##Fonts
+
+#Size Units
+
+em = equal to the current font size (if font size is 12px then 1em = 12px), scales linearly
+px = pixels are fixed-size units based on the physical computer screen
+pt = points come from print media (1 pt = 1/72 inch), fixed size units
+% = percent is in relation to the current font size (100% = current font size)

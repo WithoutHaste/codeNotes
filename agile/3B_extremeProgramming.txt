@@ -1,0 +1,118 @@
+##Extreme Programming
+
+Also called XP.
+
+"A disciplined approach to delivering high quality software quickly and continuously. It provides high customer involvement, rapid feedback loops, continuous testing, continuous planning, and close teamwork to deliver working software at very frequent intervals (about 1 to 3 weeks)."
+
+The name comes from the principle that useful coding processes are more useful when taken to the extreme. For example, code review is useful, therefore continuous code review in the form of pair programming will be more useful.
+
+XP is more controversial than Scrum.
+
+#History
+
+XP was invented in a few weeks by Kent Beck when he needed to save a failing software project with drastic methods. He discarded anything that did not directly contribute to business value, and pumped up the rest.
+
+#Aims
+
+XP attempts to reduce the cost of changing a piece of software by using short development cycles.
+
+XP plans for changing requirements, rather than expecting all requirements to stable.
+
+#Activities
+
+- Coding
+- Testing
+- Listening (to the customer, and I assume to management and the team)
+- Designing (reduce coupling)
+
+#Values
+
+Simplicity:
+- Solve today's problems today.
+- Build the minimum set of features.
+
+Communication: 
+- This is how you can adjust to change, and set customer expectations.
+- If you have questions about requirements, ask the customer directly. This is the most efficient way to move forward.
+
+Feedback:
+- Ask questions and learn from the answers.
+- This includes talking to the customer, and testing the code.
+
+Courage:
+- Making the hard decisions: fixing broken features, bringing code up to standard, be upfront about changes to the schedule.
+- The only to recover from a mistake is to admit it and fix it openly.
+
+Respect:
+- Everyone must care about the project.
+- Internal rewards, like pride, beat physical rewards like employee of the month.
+- Everyone should feel the respect of being a valued team member.
+
+#Principles
+
+- Feedback
+- Assume simplicity
+- Embracing change
+
+#Supporting Practices
+
+Fine-scale feedback:
+- The planning game
+- Pair programming
+- Test driven development
+- Whole team (the team should include members will all the necessary technical and business domain knowledge)
+
+Continuous process:
+- Continuous integration (frequently push local code to main repository, automated unit and integration tests)
+- Design improvement
+- Small releases
+
+Shared understanding:
+- Coding standards
+- Collective code ownership (anyone can edit any part of the code)
+- Simple design
+- System metaphor (sounds similar to Domain Driven Design - naming standards shared between customers and developers, used in the code)
+
+Programmer welfare:
+- Sustainable pace (should only work 40 hour weeks, should not do overtime 2 weeks in a row, should not end up in crunch time)
+
+#Rules
+
+Planning:
+- User stories are written (by the customer, approx. 3 lines of text in their own words)
+- Release planning creates the release schedule (technical people make technical decisions, business people make business decisions, a plan is made together)
+- Make frequent small releases
+- The project is divided into iterations
+- Iteration planning starts each iteration (1-2 week iterations, do not assign tasks to any future iterations)
+
+Managing:
+- Give the team a dedicated open work space
+- Set a sustainable pace
+- A stand up meeting starts each day (what was accomplished yesterday, what will be attempted today, what problems are blocking progress)
+- The Project Velocity is measured
+- Move people around
+- Fix XP when it breaks
+
+Designing:
+- Simplicity (use the simplest design/method possible)
+- Choose a system metaphor (naming conventions communicate business meaning)
+- Use CRC cards for design sessions (CRC: class responsibility and collaboration)
+- Create spike solutions to reduce risk (spike solution: simple program to explore possible solutions)
+- No functionality is added early (you probably won't need it)
+- Refactor whenever and wherever possible
+
+Coding:
+- The customer is always available (the customer is part of the team, preferably on-site)
+- Code must be written to agreed standards (use something like Resharper to enforce standards)
+- Code the unit test first (TDD)
+- All production code is pair programmed (increases quality without taking more time)
+- Only one pair integrates code at a time
+- Integrate often
+- Set up a dedicated integration computer
+- Use collective ownership
+
+Testing:
+- All code must have unit tests
+- All code must pass all unit tests before it can be released
+- When a bug is found, tests are created
+- Acceptance tests are run often and the score is published (acceptance tests are scenarios created from user stories)

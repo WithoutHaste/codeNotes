@@ -1,0 +1,45 @@
+##Services
+
+Services are classes that implement one or more service contract interfaces. This is where the business logic goes.
+
+Services exist only on the service-side of the wire.
+
+<code>
+using System.ServiceModel;
+
+public class MyManager : IMyService
+{
+}
+</code>
+
+#Naming Convention
+
+One convention I've seen is to use a "Manager" suffix instead of a "Service" suffix for service implementations.
+
+Using some distinct suffix is useful:
+- It differentiates the service implementation from the service contract.
+- It reduces confusion when one class implements more than one service contract.
+
+#Instance Context
+
+Manages the association between the channel and the user-defined service object.
+
+#Instance Context Mode
+
+A service behavior attribute.
+
+Per Call: a new Instance Context object is created/recycled per web service call.
+
+Per Session: a new Instance Context object is created/recycled per session. Multiple calls can be made in one session.
+
+Single: only one Instance Context object is created for the lifetime of the service, and is used for all calls.
+
+#Thread Pool
+
+WCF defaults to allow one thread per CPU.
+
+If the service is slow, but individual calls are fast and CPU usage is low, you may need more threads in your thread pool.
+
+New threads are created when needed, but only as many as 1 per 0.5 seconds, so the pool can be slow to grow.
+
+You can set a minimum pool size with SetMinThreads on the ThreadPool object.

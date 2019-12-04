@@ -1,0 +1,11 @@
+##Objects
+
+#PDF
+
+Display PDF viewer within a web page
+<code>
+<object data='myFile.pdf#toolbar=1' 
+type='application/pdf' 
+width='700px' 
+height='900px'></object>
+</code>

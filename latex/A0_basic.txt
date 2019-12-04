@@ -1,0 +1,8 @@
+##About
+
+LaTeX is pronounced "lah-tek".
+LaTeX stands for Lamport TeX or Lamport Typesetting System.
+
+Beautiful typesetting made simple
+
+Free online LaTeX editor: https://latexbase.com/

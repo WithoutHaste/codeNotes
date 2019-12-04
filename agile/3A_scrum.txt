@@ -1,0 +1,81 @@
+##Scrum
+
+"Scrum is a light-weight management framework for iterative and incremental projects."
+
+Scrum finds software development runs more smoothly when teams are feed with objectives instead of tasks.
+"Teams required autonomy to achieve excellence."
+
+Scrum is widely popular.
+
+The Scrum process is a series of "sprints", 2-4 weeks each.
+
+#Roles
+
+Product Owner:
+- Project's key stakeholder
+- Represents the customers
+- Have a vision of the final product, and convey that vision to the team
+- Must be totally available to the team
+- Must understand the business very well
+- Must be a good communicator
+- Maintains the Product Backlog
+
+Scrum Master / Process Owner:
+- Responsible for making sure the team is as productive as possible
+- Team coach / Personal trainer
+- Helps the team follow the process, removes impediments, protects team from outsiders
+- Facilitator
+- Does not manage the team, cannot give orders
+
+Scrum Team:
+- 5 to 9 people, usually (to scale, make a team of teams)
+- No divisions into programmers, designers, architects, etc
+- Everyone works together on everything they can
+- A successful team develops a strong camaraderie
+
+#Ceremonies
+
+Sprint Planning
+- Happens at the start of each sprint
+- All team members attend
+- Product owner presents their top priorities from the Product Backlog (about 2-sprints worth)
+- Scrum Team asks the Product Owner enough questions to translate the Product Backlog item into technical Sprint Backlog tasks
+- Scrum Team selects the work they can complete in this sprint
+- The selected work is moved from the Product Backlog to the Sprint Backlog
+- Once a sprint has started, the requirements of that sprint should not change
+
+Daily Scrum Meeting:
+- Happens each morning
+- All team members are required to attend
+- Briefly state what was accomplished yesterday, what will be done today, and any blocking problems
+- If anything is blocking you, you can work with the Scrum Master after the meeting to resolve the issue
+- It's called a "Stand-Up" because everyone stands to keep the meeting short
+
+Sprint Review
+- Happens at the end of each sprint
+- A short meeting
+- Can include customers, management, and members of other teams
+- The Scrum Team presents all completed work (informal demo, not long)
+- The product should be well-tested and functional at the end of each sprint
+
+Sprint Retrospective
+- Happens at the very end of each sprint
+- May be up to an hour long (longer if a crisis arises)
+- The whole team discusses how well, or not well, Scrum is working for them
+- Discusses possible changes to the process
+
+#Artifacts
+
+Product Backlog:
+- A prioritized list of every feature or change pending in the project
+- Short descriptions in the Product Owner's words
+- Features (usually as user stories), bugs, technical work, knowledge acquisition
+
+Sprint Backlog
+- A list of tasks to be completed in the current sprint
+- Maintained by the Scrum Master
+- Each item (user story, bug, etc) is broken into smaller technically-worded tasks
+- Includes time estimates
+
+Burn-down Charts
+- Tracks progress of sprint, with completed work vs. committed work

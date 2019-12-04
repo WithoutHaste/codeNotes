@@ -1,0 +1,17 @@
+##Continuous
+
+#Continuous Integration
+
+Developers continuously merge they commits into the main branch, so that merge conflicts appear quickly and at smaller sizes than if you wait a while to do this.
+
+Ideally, every developer does a fresh merge from main to their branch, resolves conflicts, then merges up to main.
+
+#Continuous Delivery
+
+Continuous Integration PLUS automated testing that runs when the main branch is updated PLUS an one-button push to production process.
+
+Your product is always ready to push to production, whenever you need it.
+
+#Continuous Deployment
+
+Continuous Delivery BUT if all automated test pass THEN every update to main is automatically pushed to production.

@@ -1,0 +1,328 @@
+##Operations
+
+#Request/Response
+
+The client sends a request and waits until the service returns a response.
+This includes operations that return void. They still return a SOAP message.
+
+The standard operation type.
+
+The client is blocked until the service returns a message.
+
+Includes full support for fault handling, because the fault message is in the response SOAP message.
+
+#One-Way
+
+One-way operations are also called "fire and forget operations".
+These operations do not make a response SOAP message. Therefore, the client is not blocked.
+
+Must return void.
+Must have OperationContract attribute with IsOneWay=true property.
+
+Has no support for fault handling, because a fault message cannot be returned to the client.
+
+If using a transport session, note that the client WILL block when it closes its proxy until the last operation on the service completes, even if the operation is one-way.
+Therefore, it can make sense to expose one-way operations under a basicHttpBinding, which does not support transport sessions, so that the client cannot accidentally block on those calls.
+
+<code>
+using System.ServiceModel;
+
+[ServiceContract]
+public interface IMyService
+{
+	[OperationContract(IsOneWay=true)]
+	void DoSomething();
+}
+</code>
+
+#Callbacks
+
+Callback operations are also called "duplex calls".
+Callbacks allow the service to call the client.
+This can get useful for reporting progress updates to the client.
+
+This is a feature Web API doesn't have.
+
+Be careful of threading issues.
+If the client calls the service from the GUI thread, and the client also handles the callback on the GUI thread, you'll deadlock your GUI.
+
+Requires a transport session, because there needs to be an open pipe between service and client.
+Requires a callback service contract linked to the normal service contract by the CallbackContract property of the ServiceContract attribute.
+
+Callbacks are frequently one-way calls, just reporting updates to the client.
+An example of a response/request callback is reporting an update to the client, and accepting back whether the client wants to cancel the in-progress operation or not.
+
+Service contract:
+<code>
+using System.ServiceModel;
+
+[ServiceContract(CallbackContract=typeof(IMyCallbackService)]
+public interface IMyService
+{
+	[OperationContract]
+	void DoSomething();
+}
+
+[ServiceContract] //technically, this attribute is not required, but I recommend it for consistency
+public interface IMyCallbackService
+{
+	[OperationContract]
+	//operation arguments will be sent to the client, the return data will come back to the service
+	void SendUpdate(string message);
+}
+</code>
+
+Service implementation:
+<code>
+using System.ServiceModel;
+
+public class MyService : IMyService
+{
+	public void DoSomething()
+	{
+		//stuff
+		
+		IMyCallbackService callback = OperationContext.Current.GetCallbackChannel<IMyCallbackService>();
+		//callback will be null if the client is down, or did not implement DuplexClientBase
+		//if you do this in a loop, get a new channel and check for null each time, because the client state may have changed
+		if(callback != null) 
+		{
+			callback.SendUpdate("done");
+		}
+	}
+}
+</code>
+
+Client proxy:
+Note that "ClientBase" has changed to "DuplexClientBase". This affects all the constructors.
+<code>
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using GeographyLibrary.Contracts;
+
+public class GeographyClient : DuplexClientBase<IGeographyService>, IGeographyService
+{
+	public GeographyClient(InstanceContext instanceContext) : base(instanceContext)
+	{
+	}
+	
+	public GeographyClient(InstanceContext instanceContext, string endpointName) : base(instanceContext, endpointName)
+	{
+	}
+	
+	public GeographyClient(InstanceContext instanceContext, Binding binding, EndpointAddress address) : base(instanceContext, binding, address)
+	{
+	}
+
+	public void DoSomething()
+	{
+		Channel.DoSomething();
+	}
+}
+</code>
+InstanceContext is a wrapper for the callback service implementation.
+
+Client using proxy:
+<code>
+using System.ServiceModel;
+using System.ServiceModel.Channels;
+using GeographyLibrary.Contracts;
+
+public class MyClass : IMyCallbackService
+{
+	public void UseProxy()
+	{
+		GeographyClient proxy = new GeographyClient(new InstanceContext(this)); //the InstanceContext should wrap whatever actually implemented IMyCallbackService
+		proxy.DoSomething();
+		proxy.Close();
+	}
+	
+	//implementing the IMyCallbackService operations
+	//this does not have to be in the same class/etc as the method that uses the proxy
+	public void SendUpdate(string message)
+	{
+		Console.WriteLine(message);
+	}
+}
+</code>
+Note how many changes are required in the client to support service callbacks.
+You may want to group operations that have callbacks into their own service contract, to minimize the effect on the client.
+
+To avoid deadlock on the client (avoid thread waiting on service response being same thread that handles the callback):
+<code>
+[CallbackBehavior(UseSynchronizationContext=false)] //causes callback to enter on a new background thread
+public class MyClass : IMyCallbackService
+{
+}
+</code>
+Remember to marshal up if the callback handler needs access to the main thread.
+
+If you are using a request/response callback (your service is waiting for a response from the client), make sure your concurrency mode is set such that deadlock will not occur. The problem that can happen is Operation-A is waiting for a client response, the response comes back but it gets queued until Operation-A is complete, causing deadlock.
+- Set service implementation concurrency mode to Multiple (opens up concurrency a lot) or Reentrant (just for this use case).
+<code>
+using System.ServiceModel;
+
+[ServiceBehavior(ConcurrencyMode=ConcurrencyMode.Reentrant, ReleaseServiceInstanceOnTransactionComplete=false)]
+public class MyService : IMyService
+{
+}
+</code>
+
+You can use callbacks with netTcpBinding easily.
+You cannot use callbacks with basicHttpBinding because it has no transport session.
+To use callbacks with HTTP:
+<code lang="xml">
+	<system.serviceModel>
+		<services>
+			<service name="MyServiceImplementation">
+				<endpoint 
+					address="http://localhost:8009"
+					binding="wsDualHttpBinding"
+					contract="IMyService"
+					/>
+			</service>
+		</services>
+	</system.serviceModel>
+</code>
+
+A transaction that flows from client to service (or starts in the service) can flow back to the client (for a callback) and then back to the service again (for a callback response).
+<code>
+using System.ServiceModel;
+
+[ServiceContract]
+public interface IMyCallbackService
+{
+	[OperationContract]
+	[TransactionFlow(TransactionFlowOption.Allowed)]
+	void MyCallback(object data);
+}
+</code>
+And the client operation that handles the callback can even require a transaction:
+<code>
+[OperationBehavior(TransactionScopeRequired=true)]
+public void MyCallback(object data)
+{
+	//stuff
+}
+</code>
+
+#Async
+
+Async calls are a client-side pattern, to execute WCF calls asynchronously. The service knows nothing about it.
+
+This will work even if the service is making callbacks.
+
+The client calls the service asynchronously, which means the client's main thread (probably the GUI thread) immediately regains control and can continue running.
+
+The client will be notified when the async service call finishes.
+
+Make a new client-side service contract for the async operations:
+<code>
+[ServiceContract]
+public interface IGeographyService
+{
+	[OperationContract]
+	ZipCodeData GetZipInfo(string zip);
+}
+
+[ServiceContract]
+public interface IGeographyAsyncService
+{
+	[OperationContract]
+	ZipCodeData GetZipInfo(string zip);
+	
+	//create an async version of any operations you want to call asynchronously
+	//naming convention is to add "Async" suffix to operation name
+	[OperationContract]
+	Task<ZipCodeData> GetZipInfoAsync(string zip);
+}
+
+//now the proxy is based on the async interface
+public class GeographyClient : ClientBase<IGeographyAsyncService>, IGeographyAsyncService
+{
+	public ZipCodeData GetZipInfo(string zip)
+	{
+		return Channel.GetZipInfo(zip);
+	}
+	
+	public Task<ZipCodeData> GetZipInfo(string zip)
+	{
+		return Channel.GetZipInfoAsync(zip);
+	}
+}
+</code>
+Note that any operation attributes (other than OperationContract) on the non-async operation will automatically also apply to the async operation.
+Provided you follow Microsoft's naming convention of adding the "Async" suffix to the operation name.
+For example, "[TransactionFlow(TransactionFlowOption.Allowed)]" on the non-async operation will also apply to the async operation.
+
+If you are letting Visual Studio automatically generate your client proxy, there is a checkbox on the that dialog to also generate the async operations.
+
+Calling the async operation in the client:
+<code>
+public async void buttonClicked(object sender, EventArgs e)
+{
+	GeographyClient proxy = new GeographyClient();
+	Task<ZipCodeData> task = proxy.GetZipInfoAsync("12345");
+	task.ContinueWith(result =>
+	{
+		//display result.Result of type ZipCodeData
+		//display message "Task Complete"
+	});
+	//display message "Task Initiated"
+}
+</code>
+You don't need to manually create a new thread or task when you use this method. It happens behind the scenes.
+Note that we don't use "await" here because we want to let the current thread continue while the task runs in the background.
+
+The "ContinueWith" is also known as a "done callback".
+
+Fault handling in async operations:
+<code>
+public async void buttonClicked(object sender, EventArgs e)
+{
+	GeographyClient proxy = new GeographyClient();
+	Task<ZipCodeData> task = proxy.GetZipInfoAsync("12345");
+	task.ContinueWith(result =>
+	{
+		if(result.Exception == null)
+		{
+			//display result.Result of type ZipCodeData
+			//display message "Task Complete"
+		}
+		else
+		{
+			//display result.Exception.Message will say "One or more errors occurred."
+			//display result.Exception.InnerException.Message to see the actual error message
+		}
+	});
+	//display message "Task Initiated"
+}
+</code>
+If you want to use try/catch statements instead (maybe you want to respond to different types of exceptions):
+<code>
+public async void buttonClicked(object sender, EventArgs e)
+{
+	GeographyClient proxy = new GeographyClient();
+	Task<ZipCodeData> task = proxy.GetZipInfoAsync("12345");
+	task.ContinueWith(result =>
+	{
+		if(result.Exception == null)
+		{
+			//display result.Result of type ZipCodeData
+			//display message "Task Complete"
+		}
+		else
+		{
+			try
+			{
+				throw result.Exception.InnerException;
+			}
+			catch(Exception ex)
+			{
+				//display ex.Message to see the actual error message
+			}
+		}
+	});
+	//display message "Task Initiated"
+}
+</code>

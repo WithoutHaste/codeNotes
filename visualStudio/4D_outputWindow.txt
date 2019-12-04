@@ -1,0 +1,6 @@
+##Output Window
+
+View menu > Output
+or Ctrl-Alt-O
+
+Right-click in the window to see the message categories you can turn on and off.

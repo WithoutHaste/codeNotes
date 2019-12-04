@@ -1,0 +1,29 @@
+##Ignore
+
+The ".gitignore" file specifies patterns of filenames that Git will totally ignore. It will not list these files are new or edited, and will not add them to the staging area.
+
+It is a text file, with one line per pattern.
+
+Place this file in your repository root directory.
+
+#Relative Path
+
+Select all files in a directory called "logs" anywhere in the repository.
+<code>
+logs/
+</code>
+
+#Absolute Path
+
+Select files based on absolute path rooted in repository's directory.
+<code>
+/logs/
+</code>
+
+#Patterns
+
+Asterisk (*) matches any string of any length.
+<code>
+/logs/*.txt
+</code>
+This selects all files ending in ".txt" in the "logs" directory.

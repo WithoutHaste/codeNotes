@@ -1,0 +1,42 @@
+##Analysis Patterns
+
+From Martin Fowler's "Analysis Patterns" on the conceptual structure of business processes that are applicable to many domains because they share the similarities of being businesses.
+
+These notes are a first sketch of the concepts.
+
+#Accountability
+
+When one party or organization is responsible to another.  Applicable to organizational structure, contracts, employment, etc.
+
+Party: an individual or an organization. A group of any size that acts as a whole.
+	E.g. a Party can have a phone number, address, email, bank accounts, taxes, etc
+	
+Organization Hierarchy
+<code>
+//Business model
+Sales Offices report to Divisions report to Regions report to Operating Unit
+
+//Object model
+public abstract class Organization //or interface Organization
+{
+	Organization parent;
+	List<Organization> subsidiaries;
+}
+
+class OperatingUnit : Organization { ... } //parent must remain null
+classs Region : Organization { ... } //parent must be an OperatingUnit
+class Division : Organization { ... } //parent must be a Region
+class SalesOffice : Organization { ... } //parent must be a Division
+</code>
+
+Often there are two more overlapping hiearchies within one organization. You can track both hiearchies in one object, or break them into entirely different objects.
+<code>
+public abstract class Organization
+{
+	Organization salesParent;
+	List<Organization> salesSubsidiaries;
+	
+	Organization productParent;
+	List<Organization> productSubsidiaries;
+}
+</code>

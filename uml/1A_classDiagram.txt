@@ -1,0 +1,143 @@
+##Class Diagram
+
+#Class
+
+The top part has the class name, and extra information like "Abstract" or "Interface".
+
+The middle part has attributes (fields and properties, for C#).
+
+The bottom part has operations (methods/functions, for C#).
+
+Visibility
+ - means private
+ # means protected
+ + means public
+ ~ means package (internal, for C#)
+
+<pinker>
+Layout:
+	[MyClass]
+[MyClass]:
+	Define:
+		- attributeA:int
+		# attributeB:string
+		+ attributeC:bool
+		|
+		- operationA(): ReturnType
+		# operationB(paramA:string)
+		+ operationC(paramA:int, paramB:DateTime)
+</pinker>
+
+#Association
+
+Some association exists between two classes. You can add a label to an association if needed.
+
+<pinker>
+Layout:
+	[Class A][Class B]
+	...[Class C]
+Relate:
+	[Class A]-[Class B]
+	[Class B]->[Class C]
+</pinker>
+
+#Inheritance
+
+An "is a" relationship.
+
+<pinker>
+Layout:
+	[SuperClass][SubClassA]
+	...[SubClassB]
+	...[SubClassC]
+Relate:
+	[SubClassA]-D[SuperClass]
+	[SubClassB]-D[SuperClass]
+	[SubClassC]-D[SuperClass]
+</pinker>
+
+#Aggregation
+
+Class B is a part of class A. For example, one of the class A attributes has data type B.
+
+Class B can exist without a related class A.
+
+<pinker>
+Layout:
+	[Class A][Class B]
+Relate:
+	[Class B]-o[Class A]
+[Class A]:
+	Define:
+		+ attribute:B
+</pinker>
+
+#Composition
+
+Class B is a part of class A, like an aggregation, but class B will only exist when it is attached to a class A.
+
+<pinker>
+Layout:
+	[Class A][Class B]
+Relate:
+	[Class B]-+[Class A]
+[Class A]:
+	Define:
+		+ attribute:B
+</pinker>
+
+#Dependency
+
+Class A depends on class B in some way, meaning that a change to class B may necessitate a change to class A.
+
+<pinker>
+Layout:
+	[Class A][Class B]
+Relate:
+	[Class A]=>[Class B]
+</pinker>
+
+#Multiplicity
+
+All relationships can be marked with the number of class instances that can take part in the relationship.
+
+Each class A is related to 1 class B, and each class B is related to 1 class A.
+1 to 1
+<pinker>
+Layout:
+	[ClassA1][ClassB1]
+	[ClassA2][ClassB2]
+Relate:
+	[ClassA1]1-1[ClassB1]
+	[ClassA2]->[ClassB2] "1":"1"
+</pinker>
+
+1 to 0 or 1
+<pinker>
+Layout:
+	[ClassA1][ClassB1]
+	[ClassA2][ClassB2]
+Relate:
+	[ClassA1]1-01[ClassB1]
+	[ClassA2]->[ClassB2] "1":"0..1"
+</pinker>
+
+1 to Many
+<pinker>
+Layout:
+	[ClassA1][ClassB1]
+	[ClassA2][ClassB2]
+Relate:
+	[ClassA1]1-N[ClassB1]
+	[ClassA2]->[ClassB2] "1":"N"
+</pinker>
+
+1 to 0 or More
+<pinker>
+Layout:
+	[ClassA1][ClassB1]
+	[ClassA2][ClassB2]
+Relate:
+	[ClassA1]1-0N[ClassB1]
+	[ClassA2]->[ClassB2] "1":"0..N"
+</pinker>

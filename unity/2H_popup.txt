@@ -1,0 +1,240 @@
+##Popup
+
+#EditorWindow
+
+Note that EditorWindows cannot be modal - the user can still interact with the rest of the window.
+
+There also is not a built in way to return values from EditorWindows.
+
+I think these aren't supposed to be used for anything except editing, like, settings.
+
+Example of custom popup:
+<code>
+using UnityEngine;
+using UnityEditor;
+
+public class EditTextPopup : EditorWindow
+{
+	private static readonly int popupWidth = 200;
+	private static readonly int popupHeight = 150;
+
+	protected string defaultText = "";
+
+	public static void Init(string defaultText = "")
+	{
+		EditTextPopup window = ScriptableObject.CreateInstance<EditTextPopup>();
+		window.defaultText = defaultText;
+		window.position = new Rect((Screen.width + popupWidth) / 2, (Screen.height + popupHeight) / 2, popupWidth, popupHeight);
+		window.ShowPopup();
+	}
+
+	public void OnGUI()
+	{
+		EditorGUILayout.LabelField("Edit slot name:", EditorStyles.wordWrappedLabel);
+		EditorGUILayout.TextField(defaultText);
+
+		GUILayout.Space(30);
+
+		GUILayout.BeginHorizontal();
+		if(GUILayout.Button("Save"))
+			this.Close();
+		if(GUILayout.Button("Cancel"))
+			this.Close();
+		GUILayout.EndHorizontal();
+	}
+}
+</code>
+
+Calling the popup from an event:
+<code>
+EditTextPopup.Init("default text");
+</code>
+Nothing is else is required here. The popup auto-closes when the button is clicked.
+
+#Modal Dialog
+
+!![Video: Making a Generic Modal Window with Adam Buckner, Part 1 of 3](https://unity3d.com/learn/tutorials/modules/intermediate/live-training-archive/modal-window)
+
+1. Add Panel UI object to scene. It should auto-fill the scene.
+- let's call it "PanelModal"
+- give it a grey color and about 50% alpha
+- this panel will block interaction with the rest of the window
+- once design is complete, we'll default this to "Inactive" so it is not visible when the game starts
+
+2. Add, nested in "PanelModal", another panel that will hold text and buttons.
+- let's call it "PanelDialog"
+- make it smaller and centered in the "PanelModal"
+- give it a background image
+
+3. Add, nested in "PanelDialog", another panel that will hold text.
+- let's call it "PanelText"
+- make it fill the top half of "PanelDialog" and anchor it to the top-center of "PanelDialog"
+- make sure it has no background image and give it 0% alpha
+- "Add Component" > "Layout" > "Horizontal Layout Group"
+- give the layout some space between elements and align them to upper-left and turn off force-expand-children
+
+4. Add, nested in "PanelText", an Image UI object (this will hold an icon)
+- make sure it has 100% alpha
+- "Add Component" > "Layout" > "Layout Element"
+- set min-width and preferred-width to 64, same for height settings
+
+5. Add, nested in "PanelText", a Text UI object (this will hold the question)
+- "Add Component" > "Layout" > "Layout Element"
+- set min-width and min-height to 0
+- "Add Component" > search for "Shadow" > "Shadow"
+- position shadow at (1, -1) to improve legibility
+- color shadow white with 50% alpha
+
+6. Add, nested in "PanelDialog", another panel that will hold buttons
+- let's call it "PanelButtons"
+- make it fill the bottom half of "PanelDialog" and anchor it to the bottom-center of "PanelDialog"
+- make sure it has no background image and give it 0% alpha
+- "Add Component" > "Layout" > "Horizontal Layout Group"
+- give the layout some space between elements and align them to middle and leave on force-expand-children
+
+7. Add, nested in "PanelButtons", a Button UI object
+- let's call it "ButtonYes" and set button text to "Yes"
+- (once you get the button looking as you like, you can drag-n-drop it from Hierarchy Pane to a "Prefabs" folder in the Project Pane, so it can be reused as a template)
+
+8. Add, nested in "PanelButtons", a duplicate of "ButtonYes"
+- let's call it "ButtonNo" and set button text to "No"
+
+9. Add, nested in "PanelButtons", a duplicate of "ButtonYes"
+- let's call it "ButtonCancel" and set button text to "Cancel"
+
+10. Create a C# script
+- let's call it "BringToFront"
+<code>
+using UnityEngine;
+using System.Collections;
+
+public class BringToFront : MonoBehaviour
+{
+	void OnEnable()
+	{
+		transform.SetAsLastSibling();
+	}
+}
+</code>
+- this will make the current object the last child in the Hierarchy, meaning it will be on top of everything else
+
+11. Drag-n-drop "BringToFront" from the Project Pane onto "PanelModal" in the Hierarchy Pane
+- now, every time "PanelModal" is activated/enabled, it will appear on top of everything else
+
+12. Create a C# script
+- let's call it "ControllerModal"
+<code>
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Events;
+using System.Collections;
+
+//This script will be updated in Part 2 of this series.
+public class ControllerModal : MonoBehaviour
+{
+	public Text question;
+	public Image iconImage;
+	public Button yesButton;
+	public Button noButton;
+	public Button cancelButton;
+	public GameObject modalPanelObject;
+
+	private static ControllerModal modalPanel;
+
+	//Singleton pattern
+	public static ControllerModal Instance()
+	{
+		if (!modalPanel)
+		{
+			modalPanel = FindObjectOfType(typeof(ControllerModal)) as ControllerModal;
+			if (!modalPanel)
+				Debug.LogError("There needs to be one active ControllerModal script on a GameObject in your scene.");
+		}
+
+		return modalPanel;
+	}
+
+	//configure dialog
+	public void Choice(string question, UnityAction yesEvent, UnityAction noEvent, UnityAction cancelEvent)
+	{
+		modalPanelObject.SetActive(true);
+
+		yesButton.onClick.RemoveAllListeners();
+		yesButton.onClick.AddListener(yesEvent);
+		yesButton.onClick.AddListener(ClosePanel);
+
+		noButton.onClick.RemoveAllListeners();
+		noButton.onClick.AddListener(noEvent);
+		noButton.onClick.AddListener(ClosePanel);
+
+		cancelButton.onClick.RemoveAllListeners();
+		cancelButton.onClick.AddListener(cancelEvent);
+		cancelButton.onClick.AddListener(ClosePanel);
+
+		this.question.text = question;
+
+		//because we set up horizontal layouts, making some images/buttons inactive will cause the layout to auto-adjust
+		this.iconImage.gameObject.SetActive(false); //haven't enabled setting an icon yet, so hide it
+		yesButton.gameObject.SetActive(true);
+		noButton.gameObject.SetActive(true);
+		cancelButton.gameObject.SetActive(true);
+	}
+
+	void ClosePanel()
+	{
+		modalPanelObject.SetActive(false);
+	}
+}
+</code>
+- example of calling this modal
+<code>
+ControllerModal modalPanel = ControllerModal.Instance();
+UnityAction yesAction = new UnityAction(OnYes);
+//and so on...
+modalPanel.Choice("My question", yesAction, noAction, cancelAction);
+//...
+void OnYes()
+{
+	Debug.Log("Yes was clicked");
+}
+</code>
+
+13. Connect the scripts to the scene
+- add "ControllerModal" to the scene's controller GameObject (I'm calling it "SceneController")
+- set all the public UI objects that "ControllerModal" expects to the matching objects within "PanelModal"
+
+14. Inactivate "PanelModal"
+- when you're done with design, select "PanelModal" and uncheck the box to the left of the object name in the Inspector Pane
+- this will default the "PanelModal" to inactive so it is not visible when the game starts
+
+!![Video: Making a Generic Modal Window with Adam Buckner, Part 2 of 3](https://unity3d.com/learn/tutorials/modules/intermediate/live-training-archive/modal-window-pt2?playlist=17111)
+
+1. Making panel invisible
+- so far, we've just turned the panel's image alpha to 0%
+- you could also remove the "Canvas Renderer" and "Image" components from the panel
+- you could also use an empty GameObject, provided it has the "RectTransform" component and a layout component
+
+2. UnityAction argument
+- you can just send a function name instead of making an explicit UnityAction variable first
+<code>
+modalPanel.Choice("My question", OnYes, OnNo, OnCancel);
+</code>
+
+3. Create C# script called "DeactivateMe"
+<code>
+using UnityEngine;
+using System.Collections;
+
+public class DeactivateMe : MonoBehaviour 
+{
+	void Awake()
+	{
+		gameObject.SetActive(false);
+	}
+}
+</code>
+- add this script to "PanelModal" to ensure it starts off inactive
+
+Todo: continue from minute 28, he's talking about lambdas and transforms
+
+

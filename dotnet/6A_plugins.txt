@@ -1,0 +1,19 @@
+##Plugin Architecture
+
+Visual Studio and Minecraft are both examples of plugin architectures.  The core functionality remains the same, but they both allow massive additions of functionality through plugins without recompiling the core code.
+
+Closed to alteration, open to extension.
+
+The key is that all dependencies point from plugin to core program, never the reverse.
+
+Use case example: basic website product with myriad optional features that can be added a la carte. The features can be deployed in separate locations for each client, or as a multi-tenant application where features are loaded based on the user.
+
+#MEF
+
+MEF stands for Managed Extensibility Framework. It was integrated into .Net in 4.0.
+
+MEF allows an application to be extended through a set of components that may be imported or exported.
+1) Create an ASP.Net MVC 4 application
+2) install Nuget package MEF.MVC4
+(instructions continued at https://visualstudiomagazine.com/articles/2014/03/14/asp-dotnet-extensibility-with-mef.aspx)
+

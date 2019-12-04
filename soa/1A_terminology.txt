@@ -1,0 +1,30 @@
+##Rough Definitions
+
+#Loosely Coupled Services
+
+Services that communicate with the client or with each other using a set of industry-accepted standards and protocols.
+
+#Service
+
+A service is a collection of operations (units of responsibility).
+The service is the point of entry for the client.
+Services are secure. (They handle any required internal security. They also inherently limit client access to their system.)
+Service operations always leave the system in a consistent (valid) state.
+Services handle faults/exceptions gracefully.
+The client is not exposed to any details of how an operation is fulfilled.
+The client is protected from code volatility (likelihood of change).
+Service calls are (almost always) stateless.
+
+A service is a logical representation of a repeatable business activity with a specific outcome. It is self-contained. It is a black box to programs that consume it.
+
+A service can be composed of several other services.
+
+#Service Oriented Application
+
+An application whose volatile areas are abstracted, or wrapped, in a simple service call that is exposed to the client.
+
+Each service call is called an "operation".
+
+#Transaction
+
+A set of actions that must all succeed together or all fail together.

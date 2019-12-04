@@ -1,0 +1,21 @@
+##Error Handling
+
+#HTTP Result
+
+When an exception occurs while processing an HTTP Request, the programmer will see the "yellow error page" returned. It has a lot of detailed information about the error. This should not be shown to normal users, both for security reasons and ease-of-use reasons.
+
+ASP.Net helps by only showing the "yellow error page" when the HTTP request originated from the same machine that the application is running on (the developer's computer). Otherwise, a more generic error page will be shown.
+
+For a developer to see the generic error page:
+- Open Web.config
+- Add the "customErrors" section as shown:
+<code>
+  <system.web>
+    <customErrors mode="On"/> <!-- default is "RemoteOnly" -->
+  </system.web>
+</code>
+- save changes (changes to this file will cause the application to restart if it is already running)
+- refresh the web page to see the error page that users will see
+
+The default error page is at Project/Views/Shared/Error.cshtml.
+Redirecting to this view is setup in Project/App_Start/FilterConfig.cs > RegisterGlobalFilters.

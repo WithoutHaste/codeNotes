@@ -1,0 +1,34 @@
+##Variables
+
+Variables are not declared. They are created when they are first assigned.
+
+#Naming Conventions
+
+Begin with a letter or underscore
+Continue with letters, numbers, or underscores
+Names are case-sensitive
+Only start with an underscore for special variables
+
+#Assignment
+
+<code>
+x = 1
+y = "a"
+z = 1 * 5 + 7 / 4
+
+x = y = z = 1 #all equal 1 now
+
+x,y,z = 1,"a",4+5 #x=1, y="a", z=9
+</code>
+
+You can swap variables in a single line.
+<code>
+x,y = 1,2 #x=1 and y=2
+x,y = y,x #now x=2 and y=1
+</code>
+
+#Naming Collisions
+
+Python will let you name variables the same as modules, as objects, as functions. If you do so, the variable overwrites the previous "value".
+
+For example, if you name a variable "sum" and then try to use the built-in sum function, you'll get an error.

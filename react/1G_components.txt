@@ -1,0 +1,176 @@
+##Components
+
+React components are independent, reusable, auto-updating pieces of a web application.
+
+React components are structured as Javascript functions that accept properties and return React elements.
+
+#Naming
+
+Always start component names with a capital letter.
+
+JSX will interpret capitalized tag names as references to components.
+
+#Function Components
+
+Function components are the simplest examples.
+
+<code>
+function Welcome(props) 
+{
+	return <h1>Hello, {props.name}</h1>;
+}
+</code>
+
+Usage:
+<code>
+//component
+function Welcome(props) 
+{
+	return <h1>Hello, {props.name}</h1>;
+}
+//element references component
+//all attributes are passed to "Welcome()" as "props"
+const element = <Welcome name="Sara" />;
+//render
+ReactDOM.render(
+	element,
+	document.getElementById('root')
+);
+</code>
+
+If your component returns "null" instead of a React element, nothing will be rendered for it. This can be used to hide components.
+
+#ES6 Class Components
+
+<code>
+class Welcome extends React.Component 
+{
+	render() 
+	{
+		return <h1>Hello, {this.props.name}</h1>;
+	}
+}
+</code>
+
+Class components have local state.
+
+<code>
+class Clock extends React.Component 
+{
+	constructor(props)
+	{
+		super(props);
+		this.state = {date: new Date()};
+	}
+	
+	//a Life-Cycle Method
+	//claim memory once, when the React element is first rendered to the DOM
+	componentDidMount()
+	{
+		this.timerID = setInterval(() => this.tick(), 1000);
+	}
+	
+	//a Life-Cycle Method
+	//like Dispose - free up memory when the React element is fully removed from the DOM
+	componentDidUnmount()
+	{
+		clearInterval(this.timerID);
+	}
+	
+	tick() 
+	{
+		this.setState({ date: new Date() });
+	}
+
+	render() 
+	{
+		return (
+			<div>
+			<h1>Hello, world!</h1>
+			<h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+			</div>
+		);
+	}
+}
+</code>
+
+#Props
+
+<code>
+this.props
+</code>
+
+"props" are read-only, no matter how to define your component.
+
+Consider "pure" functions, which do not change their inputs and always return the same output when given the same input.
+
+All React components must be pure in respect to their "props".
+
+#State
+
+<code>
+this.state
+</code>
+
+Reserve this object for state information about your component.
+
+You can only assign directly to "this.state" in the constructor.
+
+Changing "this.state" directly will not cause the element to be re-rendered.
+Use "this.SetState(object)" instead.
+
+Reset the entire state of the component:
+<code>
+this.setState(object);
+</code>
+"setState" will merge the provided object into the current state, so you can update single variables at a time without losing the others.
+
+Updates to "this.props" and "this.state" are managed by React asynchronously, and may be paused or batched.
+If the "next" state values are calculated based on the "current" values, you must use this:
+<code>
+this.setState((state, props) => ({
+	counter: state.counter + props.increment
+}));
+</code>
+
+#Decomposition
+
+Components can refer to other components.
+
+It is common to start an entire web application from one "App" component.
+
+<code>
+function Welcome(props) 
+{
+	return <h1>Hello, {props.name}</h1>;
+}
+
+function App() 
+{
+	return (
+		<div>
+		  <Welcome name="Sara" />
+		  <Welcome name="Cahal" />
+		  <Welcome name="Edite" />
+		</div>
+	);
+}
+
+ReactDOM.render(
+	<App />,
+	document.getElementById('root')
+);
+</code>
+
+Design components the way you would an object oriented model. Each component should be reusable and do just its own job.
+
+#Design
+
+No component should care if another component is stateful or stateless.
+
+No component should care if another component is a function or class component.
+
+A component can pass its state "down" as props to a child component.
+Data is never passed "up" from child to parent component.
+aka Top down data flow
+aka Unidirectional data flow

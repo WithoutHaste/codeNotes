@@ -1,0 +1,53 @@
+##Syntax
+
+#Statements
+
+Python commands usually terminate on an end-line.  
+Ending statements with a semi-colon (;) does not cause an error, but is against convention.
+Blank lines (white-space characters, comments) are ignored.
+
+You can stretch a command across multiple lines by escaping the end-line character
+<code>
+if x==1 and y==0 \
+	and z==6 \
+	and t==8 :
+	print("xyz")
+</code>
+
+You can place multiple statements on a single line by ending each statement with a ;
+<code>
+x=1; y=4; u=7;
+</code>
+
+#Blocks
+
+Python uses indents to define coding blocks, instead of braces.
+<code>
+x = 0;
+if x == 1 :
+	print("a");
+	print("b");
+print("c"); #only this is run
+</code>
+
+The indentation amount is not fixed, but must be consistent for all lines in a block. Indentation can be made up of tabs and/or spaces.
+
+There are competing conventions for one-tab-per-indent and for x-spaces-per-indent.
+
+#Comments
+
+Single line comments
+<code>
+	#comments
+	
+	x = 7 #comments
+</code>
+
+There are no multiline comments in python, but here is the commonly accepted work-around.  Wrap the section in triple quotes to turn it into a multiline string literal.  The line is still interpreted, but does nothing.
+<code>
+'''
+comments
+comments
+comments
+'''
+</code>

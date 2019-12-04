@@ -1,0 +1,13 @@
+##Background
+
+Backgrounds are images that you can set as room backgrounds.
+
+Backgrounds can be a single large image, or smaller tiled images.  Tiles are preferred by the engine.  You can use irregular tile sets.
+
+Image formats accepted are PNG, GIF, BMP, and JPG.
+
+Prefix your background names with "bck_" for legibility.
+
+#Transparency
+
+You can set the bottom-left pixel of the image as the transparent color.

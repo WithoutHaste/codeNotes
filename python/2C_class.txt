@@ -1,0 +1,601 @@
+##Class
+
+<code>
+class MyClass:
+	def __init__(self, inputA):
+		self.varA = inputA
+		print("object initialization")
+	
+	def funcA(self):
+		print("hey")
+
+x = MyClass(5) #"object initialization"
+print(x.varA) #5
+x.funcA() #"hey"
+</code>
+
+#Variables
+
+Instance variables
+	no privacy option
+	naming convention is __var__ to indicate the variable should be treated as private
+<code>
+class MyClass:
+	def __init__(self):
+		self.instance_variable = 3;
+
+	def print(self):
+		print(self.instance_variable)
+
+x = MyClass()
+x.print() #"3"
+print(x.instance_variable) #"3"
+</code>
+
+Class variables (aka Static variables)
+	no privacy option
+	value can change
+	editing a class variable affects all instances of the class
+	class_var and self.class_var are different variables
+<code>
+class MyClass:
+	class_variable = 4;
+
+	def __init__(self):
+		self.class_variable = 3;
+		
+	def print(self):
+		print(MyClass.class_variable, self.class_variable)
+
+x = MyClass()
+x.print() #"4 3"
+MyClass.class_variable = 5
+x.print() #"5 3"
+</code>
+
+#Method Types
+
+(In Python 3)
+
+Instance methods can modify the current instance, through "self".
+Instance methods can modify the current class, through "self.__class__".
+
+Class methods can modify class state, affecting all instances of the class, through "cls".
+
+Static methods cannot modify the class nor instance state. They are primarily used to namespace a method.
+
+<code>
+class MyClass:
+	#this is an instance method
+	def methodA(self):
+		return ("instance method called", self)
+	
+	@classmethod
+	def methodB(cls):
+		return ("class method called", cls)
+		
+	@staticmethod
+	def methodC():
+		return "static method called"
+		
+ #calling the methods
+x = MyClass()
+x.methodA()
+ #or
+MyClass.methodA(x) #x.methodA() really means this
+
+x.methodB()
+MyClass.methodB()
+
+x.methodC()
+MyClass.methodC()
+</code>
+
+Note that calling the default parameters "self" and "cls" is a convention, you an call them anything.
+
+Example of using classmethod for the factory pattern
+<code>
+import datetime
+import date
+class Person:
+	def __init__(self, name, age):
+		self.name = name
+		self.age = age
+	
+	@classmethod
+	def fromBirthYear(cls, name, birthYear):
+		return cls(name, date.today().year - birthYear)
+		
+x = Person("Bob", 49)
+y = Person.fromBirthYear("Jane", 1978)
+</code>
+
+#Overloading Operators
+
+This topic is called operator overloading in general.  Python specifically calls it magic methods.
+
+These methods are not invoke explicitly, they are invoked during object instantiation or through a mathematical or logical operation.
+
+<code>
+class MyClass:
+	def __init__(self, x):
+		self.x = x
+		
+	#overload + operator
+	def __add__(self, other):
+		return MyClass(self.x + other.x)
+</code>
+
++ __add__
+* __mul__
+- __sub__
+% __mod__
+/ __truediv__
+// __floordiv__
+** __pow__(self, power)
+abs(x) __abs__
+-x __neg__
++x __pos__
+< __lt__
+<= __le__
+== __eq__
+!= __ne__
+> __gt__
+>= __ge__
+<< __lshift__
+>> __rshift__
+and __and__
+or __or__
+xor __xor__
+not __invert__
+[index] __getitem__(self, index)
+in __contains__(self, value)
+len __len__
+str __str__
+__iter__
+__getitem__
+__getslice__
+__setitem__
+__setslice__
+__setitem__
+__delitem__
+__delslice__
+__delitem__
+int(x) __int__
+long(x) __long__
+float(x) __float__
+complex(x) __complex__
+divmod(x, y) __divmod__
+
+#Property
+
+By convention, you are not supposed to manually access a variable that starts with an underscore, but that is not enforced by Python. The closest thing to a private variable in Python is to create a closure.
+
+This is the recommended way to make class properties in Python.
+
+<code>
+class MyClass(object):
+	def __init__(self):
+		print("init")
+		self._x = None
+
+	def getx(self):
+		print("get")
+		return self._x
+	def setx(self, value):
+		print("set")
+		self._x = value
+	def delx(self):
+		print("delete")
+		del self._x
+	x = property(getx, setx, delx, "I'm the 'x' property.")
+
+a = MyClass()
+a.x = 5
+print(a.x)
+print(a._x) #does not trigger the getx method
+a._x = 6 #does not trigger the setx method
+print(a.x)
+print(a._x) #does not trigger the getx method
+</code>
+
+This is the same thing, using decorators.
+
+<code>
+class C(object):
+	def __init__(self):
+		self._x = None
+
+	@property
+	def x(self):
+		return self._x
+
+	@x.setter
+	def x(self, value):
+		self._x = value
+
+	@x.deleter
+	def x(self):
+		del self._x
+</code>
+
+#Attributes
+
+You can assign class attributes within the class, and outside the class.
+You can access all attributes of a class instance.
+<code>
+class A(object):
+	pass
+
+a = A()
+a.x = 10
+a.y = "string"
+print(a.__dict__) #outputs {'x': 10, 'y':'string'}
+</code>
+
+Listing all the public attributes of a class (not an instance of a class):
+<code>
+import random
+cls = "random" # name of the class as a string
+all_attributes = [x for x in dir(eval(cls)) if not x.startswith("__") and callable(eval(cls + "." + x))]
+print(all_attributes)
+</code>
+
+#Slots
+
+To stop users from assigning whatever attributes they want to a class, you must define slots.
+<code>
+class A(object):
+	__slots__ = ['x'] #this line here
+
+	def __init__(self, x):
+		self.x = x
+		
+a = A(10)
+a.x = 20
+a.y = "string" #AttributeError: 'A' object has no attribute 'y'
+</code>
+
+With slots, you define the full list of attributes for the object once, and no new attributes can be added by anyone.
+
+Attribute __dict__ is not available when you use slots.
+If you define __dict__ manually, it will not be automatically filled.
+
+#Inheritance
+
+Classes can inherit from multiple classes.
+
+Method overriding: subclass methods override superclass methods of the same name.
+
+Basic inheritance:
+<code>
+class Person:
+	def __init__(self, firstName, lastName):
+		self.firstName = firstName
+		self.lastName = lastName
+	def GetName(self):
+		return self.firstName + " " + self.lastName
+	
+class Employee(Person):
+	def __init__(self, firstName, lastName, id):
+		Person.__init__(self, firstName, lastName) #call base constructor
+		self.id = id
+</code>
+
+Diamond inheritance: the first class inherited from takes priority over later classes in the inheritance list.
+<code>
+class A:
+    def id(self):
+        print("A")
+
+class B(A):
+    def id(self):
+        print("B")
+    
+class C(A):
+    def id(self):
+        print("C")
+
+class D(B,C):
+    pass
+
+class E(C,B):
+    pass
+
+d = D();
+d.id(); #outputs B
+
+e = E();
+e.id(); # outputs C
+</code>
+
+Diamond inheritance in Python 3: 
+- a subclass that overrides a superclass method takes priority over a subclass listed earlier in the inheritance list that does not override the superclass method.
+- The "Method Resolution Order" (MRO) is depth-first (later generation classes first) then left-to-right as the classes are ordered in the inheritance list. (MRO is also called C3 superclass linearisation.)
+<code>
+ #C.id takes priority even when B is earlier in the inheritance list 
+ #because it is closer to D and E in the inheritance tree than A is.
+class A:
+    def id(self):
+        print("A")
+
+class B(A):
+	pass
+    
+class C(A):
+    def id(self):
+        print("C")
+
+class D(B,C):
+    pass
+
+class E(C,B):
+    pass
+
+d = D();
+d.id(); #outputs C
+
+e = E();
+e.id(); #outputs C
+</code>
+
+This demonstrates that depth is determined as which superclass is closest to the calling class, rather than which superclass is furthest from the top-level/origin class.
+<code>
+class A:
+    def id(self):
+        print("A")
+
+class B(A):
+    def id(self):
+        print("B")
+    
+class C(A):
+    def id(self):
+        print("C")
+
+class D(C):
+    def id(self):
+        print("D")
+
+class E(B,D):
+    pass
+	
+class F(D,B):
+    pass
+	
+ #inheritance tree:
+ # A <= B <= E,F
+ # A <= C <= D <= E,F
+
+e = E();
+e.id(); #outputs B
+
+f = F();
+f.id(); #outputs D
+</code>
+
+When calling base methods, there are two ways to do it in Python 3:
+<code>
+Person.__init__(self, firstName, lastName)
+ #or
+super().__init__(firstName, lastName) #super() refers the the MRO superclass
+</code>
+<code>
+class A:
+    def id(self):
+        print("A")
+
+class B(A):
+    pass
+    
+class C(A):
+    def id(self):
+        print("C")
+
+class D(B,C):
+    def id(self):
+        print("D")
+        C.id(self)
+        B.id(self)
+        A.id(self)
+
+d = D();
+d.id(); # outputs D C A A
+</code>
+
+#Metaclass
+
+An instance of a metaclass is a class.
+All metaclasses must inherit from "type" instead of "object".
+<code>
+required = True
+
+class MyMetaClass(type):
+	def __init__(cls, clsname, superclasses, attributedict):
+		if required:
+			cls.myAttribute = "Required"
+		else:
+			cls.myAttribute = "Optional"
+
+class A(metaclass=MyMetaClass):
+	pass
+	
+required = False
+
+class B(metaclass=MyMetaClass):
+	pass
+	
+a = A()
+print(a.myAttribute) #outputs Required
+
+b = B()
+print(b.myAttribute) #outputs Optional
+</code>
+In this example, A and B inherit from different instances of MyMetaClass. The behavior of the instances they inherit from was changed by the state of the program.
+
+You can use a metaclass to create a Singleton object:
+<code>
+class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+    
+class SingletonClass(metaclass=Singleton):
+    pass
+
+class RegularClass():
+    pass
+
+x = SingletonClass()
+y = SingletonClass()
+print(x == y) #outputs True
+
+x = RegularClass()
+y = RegularClass()
+print(x == y) #outputs False
+</code>
+But since you can do the same thing with normal classes, why use metaclasses?
+<code>
+class Singleton(object):
+    _instance = None
+    def __new__(cls, *args, **kwargs):
+        if not cls._instance:
+            cls._instance = object.__new__(cls, *args, **kwargs)
+        return cls._instance
+    
+class SingletonClass(Singleton):
+    pass
+
+class RegularClass():
+    pass
+
+x = SingletonClass()
+y = SingletonClass()
+print(x == y) #outputs True
+
+x = RegularClass()
+y = RegularClass()
+print(x == y) #outputs False
+</code>
+
+Using metaclass to automatically apply a decorator to every method in each subclass:
+<code>
+class FuncCallCounter(type):
+    #this metaclass will decorate all the methods of the subclass with "call_counter"
+    
+    @staticmethod
+    def call_counter(func):
+        # decorator for counting the number of function/method calls
+        def helper(*args, **kwargs):
+            helper.calls += 1
+            return func(*args, **kwargs)
+        helper.calls = 0
+        helper.__name__= func.__name__
+        return helper
+    
+    
+    def __new__(cls, clsname, superclasses, attributedict):
+        for attr in attributedict:
+            if callable(attributedict[attr]) and not attr.startswith("__"):
+                attributedict[attr] = cls.call_counter(attributedict[attr]) #applying decorator to subclass method
+        return type.__new__(cls, clsname, superclasses, attributedict)
+    
+class A(metaclass=FuncCallCounter):
+    
+    def B(self):
+        pass
+    
+    def C(self):
+        pass
+
+x = A()
+print(x.B.calls, x.C.calls) #outputs 0 0
+
+x.B()
+print(x.B.calls, x.C.calls) #outputs 1 0
+
+x.B()
+x.C()
+print(x.B.calls, x.C.calls) #outputs 2 1
+</code>
+
+#Abstract Class
+
+Python does not automatically support abstract class, but it does provide a module that supports it.
+Module "abc" stands for "abstract base class"
+<code>
+from abc import ABC, abstractmethod
+ 
+class MyAbstractClass(ABC): #must inherit from ABC
+ 
+    def __init__(self, value):
+        self.value = value
+        super().__init__() #not required
+    
+    @abstractmethod #must contain at least one abstractmethod
+    def do_something(self):
+        pass
+		
+class A(MyAbstractClass):
+
+	def do_something(self):
+		print("do something")
+		
+a = A(10)
+a.do_something() #outputs do something
+
+b = MyAbstractClass(10) #TypeError: Can't instantiate abstract class MyAbstractClass with abstract methods do_something
+</code>
+
+A class that inherits from ABC but does not contain any abstractmethods is not treated as abstract.
+
+Abstract classes are allowed to contain non-abstractmethods. Inheritance of these methods works like normal inheritance.
+
+A class that inherits from an abstract class must override all abstractmethods of that class. Or it must inherit all those methods from elsewhere before inheriting from the abstract class.
+<code>
+from abc import ABC, abstractmethod
+ 
+class MyAbstractClass(ABC):
+ 
+    def __init__(self, value):
+        self.value = value
+    
+    @abstractmethod
+    def do_something(self):
+        pass
+		
+class A():
+	
+	def do_something(self):
+		print("do something")
+		
+class B(A, MyAbstractClass):
+	pass
+		
+b = B(10)
+b.do_something() #outputs do something
+</code>
+
+Abstract methods may contain default behavior. The inheriting subclass must still override the abstract method, but can call the default behavior:
+<code>
+from abc import ABC, abstractmethod
+ 
+class MyAbstractClass(ABC):
+ 
+    def __init__(self, value):
+        self.value = value
+    
+    @abstractmethod
+    def do_something(self):
+        print("abstract do something")
+		
+class A(MyAbstractClass):
+	
+	def do_something(self):
+		super().do_something()
+		
+a = A(10)
+a.do_something() #outputs abstract do something
+</code>

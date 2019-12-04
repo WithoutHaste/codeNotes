@@ -1,0 +1,45 @@
+##PyODBC
+
+Microsoft's recommended python library for accessing SQL Server.
+
+#Install
+
+<code lang="bash">
+pip install pyodbc
+</code>
+(Might need to run this at C:\Users\<YOUR NAME>\AppData\Local\Programs\Python\Python<VERSION>\Scripts)
+
+#Connect to Database
+
+Using current user's Windows login:
+<code>
+import pyodbc 
+
+connStr = (
+    r"DRIVER={SQL Server Native Client 11.0};"
+    r"SERVER=(localdb)\MSSQLLocalDB;"
+	r"Database=MyDatabase;"
+	r"Trusted_Connection=yes;")
+print(connStr)
+conn = pyodbc.connect(connStr, autocommit=True)
+
+cursor = conn.cursor()
+cursor.execute('SELECT ColumnA, ColumnB FROM dbo.myTable')
+
+for row in cursor: #row is a Tuple
+    print(row)
+</code>
+
+Errors:
+- I got a login error when actually I had a typo in the database name.
+
+#ODBC Drivers
+
+{SQL Server} - released with SQL Server 2000
+{SQL Native Client} - released with SQL Server 2005 (also known as version 9.0)
+{SQL Server Native Client 10.0} - released with SQL Server 2008
+{SQL Server Native Client 11.0} - released with SQL Server 2012
+{ODBC Driver 11 for SQL Server} - supports SQL Server 2005 through 2014
+{ODBC Driver 13 for SQL Server} - supports SQL Server 2005 through 2016
+{ODBC Driver 13.1 for SQL Server} - supports SQL Server 2008 through 2016
+{ODBC Driver 17 for SQL Server} - supports SQL Server 2008 through 2017

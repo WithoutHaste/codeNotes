@@ -1,0 +1,22 @@
+##Provided Data
+
+There are many global objects available in controllers and views.
+
+#RouteData
+
+Holds information from the route handler.
+
+<code>
+string controllerName = RouteData.Values["Controller"];
+string actionName = RouteData.Values["Action"];
+string parameterValue = RouteData.Values["id"];
+</code>
+
+#Server
+
+Holds utilities.
+
+Prevent cross-site scripting attacks:
+<code>
+string htmlEncodedText = Server.HtmlEncode(text);
+</code>

@@ -1,0 +1,22 @@
+##Fonts
+
+Setting a Label and a TextBox to the same font can result in different looking fonts.
+1) Label seems to round floating point font sizes up to a whole number, while TextBox seems to round them down.
+2) Even with whole-number font sizes, I'm struggling with obvious differences in the rendered text. Labels are displaying at 4 points larger than expected.
+
+Measuring expected text size with Graphics vs TextRenderer can give drastically different results.
+<code>
+using(Graphics graphics = this.CreateGraphics())
+{
+	SizeF size = graphics.MeasureString(text, font);
+}
+//versus
+Size size = TextRenderer.MeasureText(text, font);
+</code>
+TextRenderer uses GDI, but Graphics uses GDI+. So if the text will be drawn with Graphics.DrawString, use the Graphics measurement. If it will be drawn with TextRenderer.DrawText then use the TextRenderer measure.
+
+Now, Label control property UseCompatibleTextRendering defaults to False.
+If True, the Label will use Graphics to draw text.
+If False, the Label will use TextRenderer to draw text.
+TextArea is definitely using Graphics to render text (tested), so setting the Label property to True should make the Label and TextArea render the same Font the same way.
+However, neither property value fixes the problem with Labels displaying Font larger than TextArea does.

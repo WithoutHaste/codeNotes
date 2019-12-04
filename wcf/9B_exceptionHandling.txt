@@ -1,0 +1,95 @@
+##Exception Handling
+
+#SOAP Faults
+
+CLR exceptions will not pass directly from service to client.
+Passing the exception is simulated with SOAP faults.
+
+The service converts an uncaught exception into a SOAP fault and sends it to the client.
+The client converts the SOAP fault into a CLR exception and throws it.
+
+#Unhandled Exceptions
+
+If IncludeExceptionDetailInFaults=False, then the client will receive only the most generic information about an unhandled exception.
+The client will only receive a FaultException (with a detail like "The server was unable to process the request due to an internal error").
+This leaves the proxy in a faulted state. You cannot use this proxy again.
+
+If IncludeExceptionDetailInFaults=True, then the client will receive details about an unhandled exception.
+The client will receive a FaultException<ExceptionDetail>.
+But the proxy will still be in a faulted state, and cannot be used again.
+
+Note that IncludeExceptionDetailInFaults might be set through config, so it might be easy for someone to change it without warning.
+
+Solid rule: handle ALL exceptions on the service.
+
+#Handled Exceptions
+
+This is the minimum recommendation for handling exceptions on the service.
+
+Catch all exceptions on the service.
+Re-throw them as FaultExceptions.
+In this case, the exception details will be included and the proxy will no be left in a faulted state.
+
+?How do the service and client see this different from an automatic FaultException?
+
+This is the better recommendation:
+Catch all exceptions on the service.
+Re-throw then as FaultException<T>.
+In this case, the exception details will be included and the proxy will no be left in a faulted state.
+In addition, the client can be specific about what type of exceptions to catch.
+- T can be an Exception class or a custom fault contract.
+- T must be known ahead of time, and the operation contract must have the FaultContract attribute.
+
+<code>
+using System.ServiceModel;
+
+public class MyService : IMyService
+{
+	public void DoOperation()
+	{
+		throw new FaultException<ApplicationException>(new ApplicationException(message), reason);
+	}
+}
+
+[ServiceContract]
+public interface IMyService
+{
+	[OperationContract]
+	[FaultContract(typeof(ApplicationException))]
+	void DoOperation();
+}
+</code>
+
+#Custom Fault Contract
+
+A custom fault contract is just a data contract that is used within a FaultException<T>.
+
+<code>
+public class MyService : IMyService
+{
+	public void DoOperation()
+	{
+		throw new FaultException<MyCustomFault>(new MyCustomFault(message), reason);
+	}
+}
+
+[ServiceContract]
+public interface IMyService
+{
+	[OperationContract]
+	[FaultContract(typeof(MyCustomFault))]
+	void DoOperation();
+}
+
+[DataContract]
+public class MyCustomFault
+{
+	[DataMember]
+	public string Message { get; set; }
+	
+	public MyCustomFault(string message)
+	{
+		Message = message;
+	}
+}
+</code>

@@ -1,0 +1,63 @@
+##Service Contracts
+
+The service contract defines what operations are available from your API.
+
+The service contract specifies what can be communicated between a client and service. A single service contract usually contains multiple operations (methods).
+
+A service contract is an interface (with method members only, no properties).
+
+#Naming Convention
+
+As with all C# interfaces, a service contract should start with the "I" prefix.
+In addition, service contracts should end with the "Service" suffix.
+
+#Attributes
+
+The interface must be decorated with the ServiceContract attribute. 
+Each method signature must be decorated with the OperationContract attribute.
+
+<code>
+using System.ServiceModel;
+
+[ServiceContract]
+public interface IService
+{
+	[OperationContract]
+	public void AddRecord(Record record);
+}
+</code>
+
+#Overloading
+
+To be interoperable with other systems, service contracts do not support method overloading, so each operation must have a unique name. You can still use method overloading locally as long as you specify a unique outward-facing name.
+
+<code>
+using System.ServiceModel;
+
+[ServiceContract]
+public interface IService
+{
+	[OperationContract(Name="GetZipcodesByState")]
+	public List<Zipcode> GetZipcodes(string state);
+
+	[OperationContract]
+	public List<Zipcode> GetZipcodes();
+}
+</code>
+
+#Arguments
+
+Because service operations are defined with a .Net method signature, they can accept any number of arguments.
+Each argument can be a primitive type (int, string, etc) or a DataContract type.
+
+Arguments and return types can also use generic collections as if they were primitive types. 
+Ex: IEnumerable<string> or List<string> or string[].
+All collection types will be serialized as arrays.
+
+Should I use multiple primitive type arguments, or bundle them into one DataContract type that exists just for this operation request?
+The main use case I've run into is this:
+- Changing the order of arguments, or adding new required arguments, to an existing operation will require all clients to update their code to match. 
+- Adding a new optional property to a DataContract type does not require the client to update. And the order of properties in the DataContract type does not matter.
+
+Therefore, it is easier to make non-breaking updates to your service if you use DataContract types instead of lists of arguments.
+I recommend using either a single primitive type argument, or a single DataContract type argument.

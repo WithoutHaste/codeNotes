@@ -1,0 +1,18 @@
+##Regular Expressions
+
+<code>
+$matches = ""
+preg_match_all('/(foo)(bar)(baz)/', 'foobarbaz', $matches);
+print_r($matches);
+</code>
+
+#Modifiers
+
+"//i" case-insensitive
+"//m" the ^ and $ characters can match based on new-lines instead of just the entire string
+"//s" dots (.) can match new-line characters
+"//x" white-space (or anything between # symbols) in the pattern is ignored unless it is escaped or within a character class
+"//A" will only match starting at the beginning of the string
+"//U" quantifiers will not be greedy, unless they are immediately followed by a ?
+
+"//sU" can match across new-lines, but will take the shortest matches possible - what you think of as "multi-line" behavior

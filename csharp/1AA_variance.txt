@@ -1,0 +1,84 @@
+##Variance
+
+#Assignment Compatibility
+
+Two types are assignment compatible if the right-hand-side belongs to a type that is the same as or is derived from the left-hand-side.
+<code>
+string s = "text";
+object o = s;
+</code>
+<code>
+public class Dog { }
+public class Labrador : Dog { }
+
+Labrador l = new Labrador();
+Dog d = l;
+</code>
+
+No data is lost from the right-hand-side object. It maintains its original type.
+
+#Covariance
+
+Covariance is a subset of assignment compatibility where the right-hand-side type defines a generic argument that is the same as or is derived from the left-hand-side's generic argument.
+<code>
+List<string> s = new List<string>() { "a", "b", "c" };
+List<object> o = s;
+</code>
+<code>
+object[] o = new string[] { "a", "b", "c" };
+</code>
+
+Example: the delegate specifies an object return type. You may assign a method to it that returns a string.
+<code>
+static string GetString() {...}
+...
+Func<object> myDelegate = GetString;
+</code>
+
+Declaring an interface generic type covariant:
+(not valid for parameter types)
+(cannot be used to define generic-type constraints)
+<code>
+interface ICovariant<out T>
+{
+	T GetThing();
+	void DoThing(Action<T> callback);
+}
+</code>
+This allows the interface method to have more-derived return types that the specified generic type.
+
+Covariance operations may not be type-safe. (You may cause run-time errors)
+
+#Contravariance
+
+Contravariance is a reversal of assignment compatibility.
+The left-hand-side type defines a generic argument that is the same as or is derived from the right-hand-side's generic argument.
+<code>
+List<object> o = new List<object>() { "a", "b", "c" };
+List<string> s = o;
+</code>
+<code>
+//given method "static void SetObject(object o)"
+Action<object> o = SetObject;
+Action<string> s = o;
+</code>
+
+Example: the delegate specifies a string parameter type. You may assign a method to it that accepts an object.
+<code>
+static void SetObject(object o) {...}
+...
+Action<string> myDelegate = SetObject;
+</code>
+
+Declaring an interface generic type contravariant:
+(not valid for return types)
+<code>
+interface IContravariant<in T>
+{
+	void SetThing(T t);
+	void DoThing<T>() where T : U;
+}
+</code>
+This allows the interface method to have more-derived argument types that the specified generic type.
+
+Covariance operations may not be type-safe. (You may cause run-time errors)

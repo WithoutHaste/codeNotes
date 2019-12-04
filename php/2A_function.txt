@@ -1,0 +1,23 @@
+##Function
+
+<code>
+$result = myFunction($a, $b);
+
+function myFunction($a, $b)
+{
+	return $a * $b;
+}
+</code>
+
+#Global Variables
+
+To access outer variable within a function, either pass them in as arguments, or declare their use within the function.
+<code>
+$x = 5;
+
+function myFunction()
+{
+	global $x;
+	$x = 6;
+}
+</code>

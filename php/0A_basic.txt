@@ -1,0 +1,72 @@
+##Basic
+
+#Brackets
+
+Enclosing brackets. Anything not inside the brackets will be rendered as plain text.
+<code>
+<?php
+	//php here
+?>
+plain text here
+</code>
+You can have as many php sections in a file as you want.
+
+You cannot nest php sections.
+<code>
+<?php
+	<?php
+		//invalid
+	?>
+?>
+</code>
+
+All php sections in a file are interpreted as a single program. For instance, this is a valid if/else.
+<code>
+<?php if(x > 0) { ?>
+	text if x is positive
+<?php } else { ?>
+	text otherwise
+<?php } ?>
+</code>
+
+#Comments
+
+Single line
+<code>
+//comments
+</code>
+
+Multi-line
+<code>
+/*
+	comments
+*/
+</code>
+
+#Echo
+
+Echo will output text to standard-out.
+<code>
+echo "Hey";
+</code>
+
+Use . (period) for string concatenation.
+<code>
+echo "Hey, " . $username;
+</code>
+
+#Variables
+
+All variable names must start with a "$" (dollar sign).
+<code>
+$x = 5;
+</code>
+
+That's it for declaring a variable, you don't need a "var" keyword or a type or anything.
+
+Check if a variable has a value:
+<code>
+if(isset($x))
+{
+}
+</code>

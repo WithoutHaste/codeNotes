@@ -1,0 +1,56 @@
+##Resources
+
+#General
+
+Resources are things like text files that you want installed with the game.
+
+Create a "Resources" folder under the project's "Assets" folder. This is a special folder name recognized by Unity.
+
+Everything in a "Resources" folder will be included in the build, whether or not it is used in the game.
+
+To load the resource:
+<code>
+//loading xml example
+TextAsset xml = Resources.Load<TextAsset>(filename);
+XmlDocument doc = new XmlDocument();
+doc.LoadXml(xml.text);
+</code>
+
+"Resources.Load" searches the "Resources" folder.
+
+You may have more than one folder named "Resources" somewhere under the "Assets" folder, such as "Assets/Resources" and "Assets/Level4/Resources".
+If you use multiple folders, every file name across all those folders must be unique because they are all searched automatically. You cannot specify which Resources folder to search.
+
+You can create folder structures under the "Resources" folder. Files can then be loaded just be filename or by the path within the "Resources" folder.
+
+Extensions are omitted when searching for resource files.
+
+Paths cannot use backslash characters.
+
+#TextAsset
+
+<code>
+TextAsset asset = Resources.Load<TextAsset>(filename);
+</code>
+
+Valid extensions are .txt, .html, .htm, .xml, .bytes, .json, .csv, .yaml, .fnt
+
+Resources.Load will not recognize .ini files at all.
+
+#Texture
+
+<code>
+Texture2D asset = Resources.Load<Texture2D>(filename);
+</code>
+
+#Sprite
+
+<code>
+Sprite asset = Resources.Load<Sprite>(filename);
+</code>
+
+#AudioClip
+
+<code>
+AudioClip asset = Resources.Load<AudioClip>(filename);
+</code>

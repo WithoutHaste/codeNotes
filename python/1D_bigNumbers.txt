@@ -1,0 +1,18 @@
+##Big Numbers
+
+#Integer
+
+Python implicitly supports very large integers.
+
+#Float or Decimal
+
+To use very precise floating point numbers:
+<code>
+import decimal
+
+#set precision
+decimal.getcontext().prec = 100
+
+#calculate
+x = decimal.Decimal(y - z)
+</code>

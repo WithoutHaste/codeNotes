@@ -1,0 +1,128 @@
+##Complex Types
+
+#Constraints
+
+A complex type is an in-code concept for a set of database columns that is repeated across multiple tables. In your object model, you can normalize those properties into a single complex type.
+
+Complex types can contain properties that are complex types.
+
+Complex types cannot contain any keys - no primary keys, no foreign keys.
+
+#Example
+
+Database schema: Several tables have columns CreatedDateTime and DeletedDateTime.
+
+Object model:
+<code>
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema; //only needed for ComplexTypeAttribute
+
+[ComplexType] //optional - Entity Framework will assume any object without an id is a complex type
+public class Audit
+{
+	public DateTime CreatedDateTime { get; set; }
+	public DateTime DeletedDateTime { get; set; }
+}
+
+public class CustomerRecord
+{
+	public long Id { get; set; }
+	[Required]
+	[MaxLength(256)]
+	public string FullName { get; set; }
+	public Audit Audit { get; set; }
+}
+</code>
+
+Configuration:
+<code>
+using System;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity.ModelConfiguration;
+
+internal class AuditConfiguration : ComplexTypeConfiguration<Audit>
+{
+	public AuditConfiguration()
+	{
+	}
+}
+
+internal class CustomerConfiguration : EntityTypeConfiguration<CustomerRecord>
+{
+	public AuthorConfiguration()
+	{
+		ToTable("tblCustomer", "dbo");
+
+		HasKey(x => x.Id);
+
+		Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+	}
+}
+</code>
+
+ModelBuilder:
+<code>
+using System;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
+using System.Data.Entity.ModelConfiguration.Conventions;
+using System.Data.SqlClient;
+
+internal class MyContext : BaseContext<MyContext>
+{
+	public DbSet<CustomerRecord> Customers { get; set; }
+
+	public MyContext() : base()
+	{
+	}
+
+	protected override void OnModelCreating(DbModelBuilder modelBuilder)
+	{
+		modelBuilder.Configurations
+			.Add(new AuditConfiguration())
+			.Add(new CustomerConfiguration())
+			;
+		base.OnModelCreating(modelBuilder);
+	}
+}
+
+internal abstract class BaseContext<T> : DbContext where T : DbContext
+{
+	static BaseContext()
+	{
+		Database.SetInitializer<T>(null);
+	}
+
+	protected BaseContext(string connectionStringToName) : base(connectionStringToName)
+	{
+	}
+
+	public override int SaveChanges()
+	{
+		try
+		{
+			return base.SaveChanges();
+		}
+		catch(Exception e)
+		{
+			throw e;
+		}
+	}
+}
+</code>
+
+If you do not mark the complex type with the ComplexTypeAttribute, and entity framework does not automatically detect that the type is a complex type:
+<code>
+//explicitly specify a complex type
+modelBuilder.ComplexType<Audit>();
+</code>
+
+#Inherit instead of Complex Type
+
+If you want to use a complex type with foreign keys, use an abstract base class instead.
+
+Everything can be setup as if the entity contained the keys directly.
+Except: the virtual navigation properties must be declared in each inheriting entity, not in the abstract base class.
+Otherwise you'll get an error like this when you run your app: "User: FromRole: NavigationProperty 'User' is not valid. Type 'SoteAccount' of FromRole 'User_SoteAccounts_Target' in AssociationType 'User_SoteAccounts' must exactly match with the type 'AllegroAccount' on which this NavigationProperty is declared on."

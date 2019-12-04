@@ -1,0 +1,224 @@
+##Column Constraints
+
+#NOT NULL
+
+Column cannot contain a NULL value.
+
+#UNIQUE
+
+OFFICIALLY: Every non-null value in the column must be unique.
+SQL SERVER: Every value in the column must be unique. So you can only have 1 null.
+
+Can be defined across several columns at once, meaning that the combination of the column values must be unique.
+
+Naming convention: "UQ_TableName_ColumnName".
+
+To specify that only non-null values must be unique:
+<code>
+CREATE UNIQUE NONCLUSTERED INDEX idx_tblName_columnName 
+ON tblName(columnName) 
+WHERE columnName IS NOT NULL;
+</code>
+
+#CHECK
+
+Set a condition, if FALSE then an error will be thrown when the row is inserted or edited.
+
+If the constraint is added on its own, it can reference any value in the current row.
+If the constraint is added in-line with its column, it can only reference that column.
+
+Naming convention: "CHK_TableName_ColumnName".
+
+#DEFAULT
+
+Set a default value to be used if the value is NULL when the row is added.
+
+Default constraints can be set in-line during CREATE TABLE, or added individually with ALTER TABLE. Defaults cannot be added in the listed constraints at the end of a CREATE TABLE statement.
+
+Naming convention: "DF_TableName_ColumnName".
+
+<code>
+CREATE TABLE Customer (
+	...
+	CreatedDate DATETIME CONSTRAINT DF_Customer_CreatedDate DEFAULT (GETDATE()),
+	...
+);
+
+ALTER TABLE Customer ALTER CreatedDate SET DEFAULT (GETDATE());
+
+ALTER TABLE Customer ADD CONSTRAINT DF_Customer_CanLogin DEFAULT ((0)) FOR CanLogin;
+</code>
+
+You cannot set a DEFAULT on an IDENTITY column.
+
+#IDENTITY(S,I)
+
+Set a default value that starts at seed S and auto-increments by I for each new row.
+
+Truncating a table does not reset the Identity back to S.
+A failed insert will also cause the Identity to increase, thereby skipping a number.
+
+View identity value:
+<code>
+DBCC CHECKIDENT("TableName");
+</code>
+
+Reset identity:
+<code>
+DBCC CHECKIDENT("TableName", RESEED, 1);
+</code>
+You are telling the table that 1 is the current highest identity value used in the table, so the next insert will have Identity 2.
+
+Returns the most recent Identity value inserted in the current scope (current stored procedure, trigger, function, or batch).
+<code>
+SCOPE_IDENTITY()
+</code>
+
+Returns the most recent Identity value inserted into the selected table, across all scopes and sessions.
+<code>
+IDENT_CURRENT('tableName')
+</code>
+
+Returns the most recent Identity value inserted in the current session.
+<code>
+@@IDENTITY
+</code>
+
+You cannot manually set the value of an identity column unless you turn on IDENTITY_INSERT:
+<code>
+SET IDENTITY_INSERT tableName ON;
+--insert data manually
+SET IDENTITY_INSERT tableName OFF;
+</code>
+Within one session, only one table at a time can have IDENTITY_INSERT set to on.
+
+#PRIMARY KEY
+
+A unique identifier of an entire data row. Can contain multiple columns, called a Composite Key.
+Does not allow NULL values.
+Only one allowed per table.
+This is usually also the Clustered Index on the table, but it doesn't have to be.
+
+Naming convention: "PK_TableName".
+
+Candidate Key: one possible set of columns that can uniquely identify all rows.
+Alternate Key: a Candidate Key that was not selected as the Primary Key.
+
+<code>
+CREATE TABLE myTable (
+	Id INT IDENTITY(1,1) PRIMARY KEY
+);
+</code>
+
+<code>
+CREATE TABLE myTable (
+	Id INT IDENTITY(1,1),
+	CONSTRAINT PK_myTable PRIMARY KEY CLUSTERED (Id ASC)
+);
+</code>
+
+#FOREIGN KEY
+
+Defines a relationship between two tables.
+Defines that the value in this column must also exist in a particular column of another table.
+
+Values do not have to be unique.
+
+If the relationship is clear, and there is only one relation between these two tables, the naming convention is "FK_ThisTableName_ForeignTableName".
+
+If the relationship needs more explanation, or there are multiple relations between these two tables, the naming convention is "FK_ThisTableName_ForeignTableName_Descriptor".
+
+The naming convention for the column that has this constraint is "fkColumnName". Frequently, it is named after the column in the foreign table that it is referencing.
+
+<code>
+CREATE TABLE secondTable (
+	fkId INT CONSTRAINT FK_secondTable_firstTable REFERENCES firstTable (Id)
+);
+</code>
+
+<code>
+CREATE TABLE secondTable (
+	fkId INT,
+	CONSTRAINT FK_secondTable_firstTable FOREIGN KEY (fkId) REFERENCES firstTable (Id)
+);
+</code>
+
+#SPARSE
+
+Specify this on a column with many NULL values. It reduces the amount of physical space used to store a NULL value and a 0 value.
+
+Non-null values will require greater overhead to read.
+Creating a filtered index on a sparse column, for just the non-null values, may maximize storage and performance at the same time.
+
+Cannot be used with data types: text, ntext, image, timestamp, geometry, geography, or user-defined types.
+
+#Examples
+
+There are two ways to define constraints:
+- in-line in the column definition
+- as a separate line (using this method you can name the constraint for future reference)
+	
+<code>
+CREATE TABLE Customer
+{
+	CustomerId INT NOT NULL UNIQUE
+}
+</code>
+or
+<code>
+CREATE TABLE Customer
+{
+	CustomerId INT NOT NULL,
+	CONSTRAINT unqCustomerId UNIQUE(CustomerId)
+}
+</code>
+
+<code>
+CREATE TABLE tableName
+{
+	columnA dataType,
+	columnB dataType,
+	columnC dataType,
+	CONSTRAINT constraintName1 UNIQUE(columnA, columnB),
+	CONSTRAINT constraintName2 PRIMARY KEY(columnA),
+	CONSTRAINT constraintName3 FOREIGN KEY (columnB) REFERENCES otherTableName(columnOther),
+	CONSTRAINT constraintName4 CHECK(columnC > 0),
+	CONSTRAINT constraintName5 CHECK(columnA = 'abc' OR (columnB < 100 AND columnC <> GetDate()))
+}
+</code>
+
+<code>
+CREATE TABLE tableName
+{
+	Id BIGINT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	OrderDate DATE DEFAULT GetDate(),
+	City VARCHAR(100) DEFAULT 'Tuscon',
+	fxStateId INT FOREIGN KEY REFERENCES State(StateId),
+	AreaCode INT CHECK(AreaCode > 0)
+}
+</code>
+
+#Alter Constraint
+
+<code>
+ALTER TABLE tableName ADD UNIQUE(columnA);
+ALTER TABLE tableName ADD CHECK(columnB > 0);
+
+ALTER TABLE tableName ADD CONSTRAINT constraintName CHECK(columnB > 0);
+
+ALTER TABLE tableName ALTER COLUMN columnName SET DEFAULT 'value';
+</code>
+
+#Drop Constraint
+
+<code>
+ALTER TABLE tableName DROP CONSTRAINT constraintName;
+</code>
+
+If you did not explicitly name the constraint, you'll have to look up the default name assigned by the database.
+
+Some constraint types are limited to one per column. These can be removed by type.
+
+<code>
+ALTER TABLE tableName ALTER COLUMN columnName DROP DEFAULT;
+</code>

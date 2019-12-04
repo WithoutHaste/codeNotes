@@ -1,0 +1,45 @@
+##Certificates
+
+#Trust Level
+
+The client endpoint behavior needs to define the certificate trust level. However this is done, the client MUST have the public key.
+
+Peer Trust: the client has a copy of the public-key-certificate installed locally.
+
+Chain Trust: the client has the public key (encoded in base 64) in the config file.
+
+#Create x509 Certificate
+
+Command line to create certificate:
+<code lang="bash">
+makecert.exe -sr LocalMachine -ss Root -pe -sky exchange -n "CN=MyTitle" MyTitle.cer
+</code>
+(makecert.exe is included in Windows.)
+(You may need to run as Admin.)
+
+"LocalMachine": A certificate can be applied to a User or a Machine. This example is applied to the entire machine.
+
+"Root": this is where the certificate will be stored so the whole machine can use it. (This would be "My" for a single user.)
+
+"CN=MyTitle": this names the certificate.
+
+"MyTitle.cer": this names the file that stores the certificate.
+
+If you have Certs.msc (certification management console):
+- Certificates (Local Computer) > Trusted Root Certification Authorities > Certificates > should see your new certificate here
+- The little Key on the file icon indicates that this file includes the private key.
+
+#Public Key File
+
+Create a file from the certificate that contains just the public key:
+- Certs.msc > right-click certificate > All Tasks > Export > Do not export the private key > Base 64 Encoded X.509 (.CER) > enter a file name.
+
+#Create x509 Certificate (Personal)
+
+<code lang="bash">
+makecert.exe -sr LocalMachine -ss My -pe -sky exchange -n "CN=MyTitle" MyTitle.cer
+</code>
+
+If you have Certs.msc (certification management console):
+- Certificates (Local Computer) > Personal > Certificates > should see your new certificate here
+- The little Key on the file icon indicates that this file includes the private key.

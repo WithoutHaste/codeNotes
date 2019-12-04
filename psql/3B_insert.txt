@@ -1,0 +1,9 @@
+##Insert
+
+Insert entire result set:
+<code>
+INSERT INTO myTable (id) 
+SELECT customerId 
+FROM customerTable
+WHERE Age > 65;
+</code>

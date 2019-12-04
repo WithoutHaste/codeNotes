@@ -1,0 +1,128 @@
+##Objects
+
+Instances of objects are placed in rooms. Ex: player character, a wall, an enemy, a cloud...
+
+Objects require a sprite to make them visible.
+
+Objects can be given actions that occur on certain events.  You can define the behavior of the objects such that they interact with each other automatically.
+
+Prefix object names with "obj_" for legibility.
+
+#Settings
+
+<code>
+//two ways to refer to object settings
+var x = objectId.setting;
+
+with(objectId)
+{
+	var y = setting;
+}
+</code>
+
+Visible: instances start visible or invisible.
+
+Solid: can other objects collide with this one? Only use this for immobile objects.
+
+Depth: higher depth means further in the background, lower means upfront.
+
+Persists: false means instances disappear when the room changes. True means instances persist into the next room and must be destroyed explicitly. Game restart also destroys persistent instances. Deactivated persistent instances do not persist between rooms.
+
+Parent: objects inherit code, actions, and events from their parent.
+
+Mask: masks govern collisions. An object can have a different mask than the default from its sprite.
+
+Uses Physics: the instance is goverened by the physics rules you set up.
+
+#Instance Variables
+
+You can create custom instance variables simply by setting a value to an undeclared variable name. Each instance of the object will have its own value.
+<code>
+life = 5;
+name = "John Smith";
+</code>
+
+The rest of these are built-in instance variables.
+
+id: unique object id (number)
+
+self: the current instance - you do not need to say "self" in object actions, just use the self variables directly
+
+x: current x position
+y: current y position
+
+sprite_index: id of sprite assigned to object. -1 means there is no sprite, in which case the dimensions may be reported as zero and/or infinity.
+
+sprite_width: read only; updates to display width when image_xscale is changed
+sprite_height: read only; updates to display height when image_yscale is changed
+
+image_speed: the rate at which the sprite animation is run. Set to zero for freeze frame. Set to 1 to cycle one image per game step.
+image_index: the index of the current sprite animation frame. Index starts at 0.
+image_alpha: control transparency, 0 to 1 with 1 being fully opaque.
+
+speed: velocity in pixels per game step
+direction: direction of motion in degrees. 0 = right, 90 = up, 180 = left, 270 = down
+
+image_xscale: change width of image; 0.5 = half normal width; -1 = normal width but flipped
+image_yscale: change height of image
+
+image_angle: degrees of rotation counter clockwise (if object has a draw event, read more)
+
+object_index: the object index of the object this is an instance of
+<code>
+var objectName = object_get_name(object_index); //returns the string name of the object
+
+var objectName = string(obj_name);
+
+var assetIndex = asset_get_index("object_name"); //returns index of asset, or -1 for not found
+//asset index of an object == object index of its instance
+</code>
+
+#Create
+
+Object instances can be added to a room in the room edit window, if you know the object must be present.
+
+Version 2: Create object instance in script:
+<code>
+var instance_id = instance_create_depth(x, y, depth, object); //create instance at depth
+
+var instance_id = instance_create_layer(x, y, layer_id_or_name, object); //create instance on layer
+</code>
+
+Version 1.4: Create object instance in script:
+<code>
+var instanceId = instance_create(x, y, obj_myObject); //object names are keywords not strings
+with(instanceId) //creates local scope
+{
+	speed = 5;
+}
+</code>
+
+#Destroy
+
+<code>
+with(instanceId)
+{
+	instance_destroy();
+}
+</code>
+
+#Find
+
+If you don't know the object id of the object you want to find, you can search for it like this. Index starts at zero.
+
+<code>
+var index = 0;
+var ithObjectId = 0;
+while(ithObjectId != noone) //keyword
+{
+	ithObjectId = instance_find(obj_nameOfObject, index);
+	index++;
+}
+</code>
+
+#Inheritance
+
+Objects can inherit events, actions, and code from parent objects.
+
+Objects DO NOT inherit the sprite from their parent.

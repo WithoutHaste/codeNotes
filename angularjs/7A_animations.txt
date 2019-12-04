@@ -1,0 +1,111 @@
+##Animations
+
+You'll need to download angular-animate.js, and include ngAnimate as a module dependency.
+
+Angular animates using CSS Transition, CSS Keyframe Animation, and Javascript Callback Animation.
+
+This example demonstrates show/hide.
+
+#index.html
+<code>
+<div ng-init="checked = true">
+	<input type="checkbox" ng-model="checked" /> is visible.
+	<div class="content-area sample-show-hide" ng-show="checked">Content...</div>
+</div>
+</code>
+
+#animations.css
+<code>
+.content-area {
+	border: 1px solid black;
+	margin-top: 10px;
+	padding: 10px;
+}
+.sample-show-hide {
+	transition: all linear 0.5s;
+}
+.sample-show-hide.ng-hide {
+	opacity: 0;
+}
+</code>
+
+##Transitions
+
+To use CSS Transitions, you must specify a class on th element.
+
+#ngRepeat
+
+Adds class ng-enter as it adds elements
+Adds class ng-leave as it removes elements
+Adds class ng-move when it rearranges elements
+
+Example:
+<code>
+//end of add/move actions
+.myClass.ng-enter, .myClass.ng-move {
+	transition: all 0.5s linear;
+	opacity: 0;
+}
+//beginning of add/move actions
+.myClass.ng-enter.ng-enter-active, .myClass.ng-move.ng-move-active {
+	opacity: 1;
+}
+.myClass.ng-leave {
+	animation: 0.5s my-animation;
+}
+@keyframes my-animation {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+</code>
+
+#ngView
+
+Supports ng-enter and ng-leave.
+
+#ngInclude
+
+Supports ng-enter and ng-leave.
+
+#ngSwitch
+
+Supports ng-enter and ng-leave.
+
+#ngIf
+
+Supports ng-enter and ng-leave.
+
+#ngClass
+
+Supports ng-enter and ng-leave.
+
+#ngShow ngHide
+
+Supports ng-enter and ng-leave.
+
+#Trigger Animation
+
+Triggering an animation when an element's class changes.
+
+<code>
+//html
+<input type="button" value="set" ng-click="myCssVar = 'css-class'" />
+<input type="button" value="clear" ng-click="myCssVar = ''" />
+<span ng-class="myCssVar">Text Here</span>
+//css
+.css-class-add, .css-class-remove {
+	transition: all cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s;
+}
+.css-class, .css-class-add.css-class-add-active {
+	color: red;
+	font-size: larger;
+}
+.css-class-remove.css-class-remove-active {
+	color: black;
+	font-size: smaller;
+}
+</code>

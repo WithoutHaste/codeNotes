@@ -1,0 +1,23 @@
+##Layout
+
+#Explicitly Arrange Elements Within Parent
+
+Position: Absolute means in reference to the parent element position, specifying Left, Right, Top, and/or Bottom.
+
+You can nest Absolute elements, each will be relative to its own parent.
+
+<code>
+	#container {
+		position: relative; /* or absolute */
+	}
+	#childA {
+		position: absolute;
+		left: 3em;
+		top: 1em;
+	}
+	#childB {
+		position: absolute;
+		left: 1em;
+		top: 1em;
+	}
+</code>

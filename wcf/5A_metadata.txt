@@ -1,0 +1,158 @@
+##Service Metadata
+
+#Service Metadata
+
+Service metadata communicates the service contracts to the client. They can be published several ways:
+- a WSDL file (Web Service Description Language)
+- an XSD file
+- a WS-policy
+
+Metadata gives info about:
+- service contracts
+- data contracts
+- endpoint bindings
+- etc
+
+The client will need the URL of this information. 
+
+This metadata can be used by the client to automatically generate and configure proxies for connecting to the web service.
+
+In Visual Studio, use "Add Service Reference" to auto-generate all the proxies, contracts, and configurations you need.
+This requires the SvcUtil utility, which also works through the command line.
+
+#Add Service Reference
+
+In Visual Studio:
+
+1) Make sure the service project is running.
+2) In the client project, right-click on References > Add Service Reference > enter the url for the SVC file or base address > Go
+3) Enter the namespace you want all the generated code under.
+4) Ok
+
+This will auto-generate all the contracts, proxies, and configuration you need to connect to that service.
+The auto-generated code can be verbose.
+This is all optional, you can write everything manually if you want, to slim it down.
+
+Note that you should not manually edit this code and configuration - refreshing the reference will overwrite any manual changes you have made.
+
+#Exposing Metadata
+
+For a self-hosted service (not through IIS).
+I think this is only needed if you have no SVC file defined.
+I think this is also only needed to allow clients to use "Add Service Reference" instead of manual setup.
+
+Why do this?
+This way, only internal computers can find the metadata. Computers outside your firewall will not be able to see it.
+
+Option 1: you can expose the metadata through HTTP only.
+- Requires the <serviceMetadata httpGetEnabled="true"> service behavior
+- Requires at least one HTTP base address
+
+Declarative:
+<code lang="xml">
+	<system.serviceModel>
+		<services>
+			<service name="DemoService">
+				<host>
+					<baseAddresses>
+						<add baseAddress="http://localhost:8080" />
+					</baseAddresses>
+				</host>
+			</service>
+		</services>
+		<behaviors>
+			<serviceBehaviors>
+				<behavior>
+					<serviceMetadata httpGetEnabled="true" />
+				</behavior>
+			</serviceBehaviors>
+		</behaviors>
+	</system.serviceModel>
+</code>
+
+Procedural:
+<code>
+using System.ServiceModel;
+
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		ServiceHost hostGeographyManager = new ServiceHost(typeof(GeographyManager), new Uri("http://localhost:8080"));
+		hostGeographyManager.Open();
+		hostGeographyManager.Close();
+	}
+}
+</code>
+
+Option 2: you can expose the metadata through a MEX endpoint on HTTP, TCP, or ICP.
+- Requires the <serviceMetadata> service behavior.
+- MEX stands for Metadata Exchange.
+
+Declarative:
+<code lang="xml">
+	<system.serviceModel>
+		<services>
+			<service name="DemoService">
+				<host>
+					<baseAddresses>
+						<add baseAddress="net.tcp://localhost:8080/" /> <!-- so the metadata will be exposed at "net.tcp://localhost:8080/MEX" -->
+					</baseAddresses>
+				</host>
+				<endpoint
+					address="MEX" <!-- since this is not a protocol, WCF will look for a matching base address (tcp in this case) -->
+					binding="mexTcpBinding" <!-- for tco -->
+					contract="IMetadataExchange"
+					/>
+				<endpoint
+					address="GeographyService" <!-- because a net.tcp base address exists, this will located at "net.tcp://localhost:8080/GeographyService" -->
+					binding="netTcpBinding"
+					contract="GeographyLibrary.Contracts.IGeographyService"
+					/>
+			</service>
+		</services>
+		<behaviors>
+			<serviceBehaviors>
+				<behavior>
+					<serviceMetadata />
+				</behavior>
+			</serviceBehaviors>
+		</behaviors>
+	</system.serviceModel>
+</code>
+
+Procedural:
+<code>
+using System.ServiceModel;
+
+public class Program
+{
+	public static void Main(string[] args)
+	{
+		ServiceHost host = new ServiceHost(typeof(GeographyManager), new Uri("net.tcp://localhost:8080"));
+		
+		//if you forget this part, you'll get an InvalidOperationException when adding the MEX endpoint
+		ServiceMetadataBehavior metadataBehavior = host.Description.Behaviors.Find<ServiceMetadataBehavior>();
+		if(metadataBehavior == null)
+		{
+			metadataBehavior = new ServiceMetadataBehavior();
+			metadataBehavior.HttpGetEnabled = true;
+			host.Description.Behaviors.Add(metadataBehavior);
+		}
+		
+		host.AddServiceEndpoint(typeof(IMetadataExchange), MetadataExhangeBindings.CreateMexTcpBinding(), "MEX");
+		
+		host.Open();
+		host.Close();
+	}
+}
+</code>
+
+Note that Option 1 and 2 can be used at the same time.
+
+Example of using the auto-generated proxies:
+<code>
+SelectedNamespace.GeographyServiceClient proxy = new SelectedNamespace.GeographyServiceClient();
+SelectedNamespace.ZipCodeData data = proxy.GetZipInfo(zipcode);
+proxy.Close();
+</code>

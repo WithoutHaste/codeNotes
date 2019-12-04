@@ -1,0 +1,23 @@
+##Design
+
+Thoughts on keeping code organized within GameMaker:
+
+(1)
+Do not put event code into objects. Have all objects call scripts even for simple tasks. That way you don't have to remember what is in the object and what is in a script.
+- Exception: event_inherited() stays in the object
+Ditto for room creation code.
+
+(2)
+Organize scripts into logical groups under parent scripts. If there is no logical script to make the parent, create a well-named dummy script to provide a name for the group.
+
+(3)
+Create a sprite folder per category, such as Buttons, Labels, Animations.
+Create corresponding object folders.
+
+Edit: maybe not. GameMaker does not allow drag-n-drop to move sprites into or out of a folder. You'd have to recreate the whole sprite to "move" it in the organization structure.
+
+(4)
+Start with an empty Initialization Room and make sure it is the first in the list so it is run first. Put all initialization code in this room's creation event to guarantee it is run before anything else. Then move to the real first room.
+
+(5: Warning)
+If you name a sound file "music" and you also have an included file called "music.ogg", the sound file will be set to "undefined" and will not run.

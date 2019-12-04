@@ -1,0 +1,66 @@
+##Debugging
+
+#Debugger Display
+
+The DebuggerDisplay specifies what string to display when the object is inspected in the Debugger Display. The default is object.ToString().
+
+You can place this attribute on a class, property, field, or assembly.
+
+<code>
+[DebuggerDisplay("Order {Id}")]
+class Order
+{
+	private int Id;
+}
+</code>
+
+The text is shown verbatim, and anything in {} is compiled and run in the scope of the object.
+
+These are valid, but not recommended:
+<code>
+[DebuggerDisplay("{count - 2}")]
+[DebuggerDisplay("{count++}")] //this actually edits the object
+</code>
+
+It is recommended that you call one method that handles the string building:
+<code>
+[DebuggerDisplay("GetHtmlString()")]
+</code>
+
+Two reasons for this:
+1. Complex operations can really slow down your debugger.
+2. Contents of the DebuggerDisplay attribute are not compiled until debugger time, and then they are compiled in the current language of the program, which may not be the language your class was written in. This can cause strange errors and behavior.
+	
+"nq" means no quote, wrapping quotes are removed from the string:
+<code>
+[DebuggerDisplay("Order {Id,nq}")]
+</code>
+
+#Compiler Services
+
+What if you are debugging, and you want to know which method called the method you are looking at. Maybe you are only interested in one caller.
+
+You can add an optional parameter to the method you are looking at:
+<code>
+void MyMethod(int x, int y, ..., string caller = null)
+</code>
+And just update the one caller you are interested in to provide that parameter.
+
+Or, even better, you can use compiler services to automatically provide this data (as of .Net 4.5):
+<code>
+using System.Runtime.CompilerServices;
+...
+void MyMethod(int x, int y, ..., [CallerMemberName] string caller = null)
+</code>
+
+CompilerServices includes CallerMemberName, CallerLineNumber, and CallerFilePath.
+
+#Event Viewer
+
+Windows:
+When an installed program is having problems, open Event Viewer > Windows Logs > Applications and see what errors have been logged.
+
+#TDD
+
+Test Driven Development says:
+When you are assigned a bug to fix, instead of setting breakpoints and stepping through the code, you can write unit tests to isolate the error. Then you fix it. Then you already have the unit tests.

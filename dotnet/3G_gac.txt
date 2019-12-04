@@ -1,0 +1,11 @@
+## GAC
+
+GAC: Global Assembly Cache
+
+View list of cached assemblies:
+1) Open 'Developer Command Prompt'
+2) run 'gacutil -l'
+
+View filtered list of cached assemblies:
+1) Open 'Developer Command Prompt'
+2) run 'gacutil -l | findstr "search string"'

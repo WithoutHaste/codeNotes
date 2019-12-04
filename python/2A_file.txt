@@ -1,0 +1,79 @@
+##Files
+
+#Write
+
+The write command does not automatically add an end-line character.
+
+Create or overwrite file
+<code>
+f = open("filename.txt", "w") #w for write
+f.write("text")
+f.close()
+</code>
+
+Append to file
+<code>
+f = open("filename.txt", "a") #a for append
+f.write("more text")
+f.close()
+</code>
+
+#Read
+
+Read - read the entire file as one string
+<code>
+f = open("filename.txt", "r") #r for read
+text = f.read() #read will read in the entire file at once as a string
+f.close()
+</code>
+
+Read(charCount) - read a few characters at a time
+<code>
+f = open("filename.txt", "r") #r for read
+charCount = 1
+next = f.read(charCount) #read a few chars at a time
+while next != "":
+	next = f.read(charCount)
+f.close()
+</code>
+
+Readline - read one line at a time
+The line still has the end-line character
+<code>
+f = open("filename.txt", "r") #r for read
+next = f.readline() #reads one line (to \n char)
+while next != "":
+	next = f.readline()
+f.close()
+</code>
+
+Readlines - read in all lines at once, as a list of strings
+Each line still has the end-line character
+<code>
+f = open("filename.txt", "r") #r for read
+text = f.readlines()
+f.close()
+</code>
+
+#Byte Position
+
+Tell - returns the current byte position of the cursor in the file
+<code>
+currentBytePosition = file.tell()
+</code>
+
+Seek(position) - move to an absolute byte position in the file
+<code>
+file.seek(absoluteBytePosition)
+file.seek(absoluteBytePosition, 0)
+</code>
+
+Seek(position, 1) - move forward the specified number of bytes
+<code>
+file.seek(relativeBytePosition, 1)
+</code>
+
+Seek(position, 2) - move to the specified byte position, counting backward from the end of the file
+<code>
+file.seek(fromEndOfFile, 2)
+</code>

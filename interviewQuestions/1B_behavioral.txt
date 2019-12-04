@@ -1,0 +1,202 @@
+##Behavioral Questions
+
+#For Anyone
+
+<code>
+What is your greatest weakness?
+</code>
+Follow up: Why do you still consider this your greatest weakness? (if you've been working on it)
+
+<code>
+What is your greatest strength?
+</code>
+Follow up: Isn't that a weakness <in this way>?
+
+<code>
+What is a mistake you've made professionally?
+</code>
+
+<code>
+What kind of atmosphere do you like to work in?
+</code>
+Note: This is designed to ascertain whether you’re the right cultural match at a company or project.
+
+<code>
+Tell me when you should communicate via e-mail vs. in-person communication. (vs. instant messenger)
+</code>
+
+<code>
+Why should I hire you?
+
+Is there any strong or unique skill in you that makes me hire you?
+</code>
+Note: This is an opening to give a brief description of all your best abilities.
+
+<code>
+Where do you see yourself 5 years from now?
+</code>
+
+<code>
+How much do you want to make?
+</code>
+Note: It's recommended to defer all money-talk to the end of the interview. It's best for negotiation if they make you an offer without you having given any solid figures.
+
+<code>
+Are you comfortable with group discussions/meetings or one on one?
+</code>
+
+<code>
+Tell me about a recent work situation that required you to make a difficult decision. What was the situation? What was your approach? What was the end result?
+</code>
+
+<code>
+Think about a team you worked on in which one or more people were not making contributions. How did you handle the situation?
+</code>
+
+<code>
+Describe a time when you were faced with having to deliver solutions to a frustrated client/customer (internal or external). What steps did you take to maintain and/or improve the relationship? What was the end result? 
+</code>
+
+<code>
+Describe a time when you had to work extremely hard on a specific goal until you achieved it. What was the situation? What was the end result? 
+</code>
+
+<code>
+Imagine that you are on the job and find you are lacking a required skill. What would you do? What was your approach? Who would you involve? What if your plan failed?
+</code>
+
+<code>
+Imagine that you are responsible for an important project and suddenly realize it has significant flaws. You have limited resources and time. Describe the steps you would take to handle this challenge. Who would you involve? How would you prioritize resources? 
+</code>
+
+<code>
+Describe a time when you accepted responsibility for a failure and took steps to correct it. What was the initial situation? What went wrong? What were your actions? What was the outcome? 
+</code>
+
+<code>
+Describe a time when you transitioned knowledge to another person.
+</code>
+
+#For Programmers
+
+<code>
+Explain a project you worked on previously.
+</code>
+Note: This is the blanket interview question intended to gauge experience and communication skills. You should explain in depth previous work including the planning, problems, team building with engineers, time spent and obstacles you faced.  
+Follow up: Did the project work the way you originally designed or intended it to? Why?
+
+<code>
+Talk about one of your successful projects and why it was successful.
+
+Describe a successful project you’ve recently worked on. Who was on the team, and what was your contribution?
+
+Discuss one of your previous projects and explain how you completed it successfully.
+</code>
+Note: This question is used to find out what you value in the software development process and to help the interviewer see if you’ll fit the needs of a particular organization. 
+Follow up: Did you run into any obstacles with your project and how did you handle the issue?
+
+How do you help identify who is responsible for changes in a software project?
+- or: How do you manage conflicts on a project when different people are managing and working on it?
+Notes: You’ll need to explain how you manage a team, including how the team documents a project in order to avoid design conflicts. You should give examples of how you’ve used effective communication for successful results in a team environment. 
+
+Which tools have you used for testing code?
+- or: What are your thoughts on unit testing?
+
+What is your process for finding a bug in an application? How much time do you typically spend on debugging?
+
+How can you debug a program while it’s being used?
+
+What’s your favorite programming language and why? What features (if any) would you like to add to this language?
+
+In the past, what did you do to ensure you meet deadlines for challenging projects?
+- or: What is your approach when you are not clear about achieving your goals on time?
+
+How do you keep current with technology trends? Are you currently working on any side projects?
+
+Your manager wants you to select between two technologies, how would you do this?
+- what are the requirements of the project the tech will be used for? and how does the tech match up to those requirements?
+- what support/training exists for the tech?
+- how expensive is it? one-time or recurring? based on usage?
+- how easy is it to hire people who have experience with this tech?
+- how many people on the team / at the company already have experience with this tech?
+
+What was the last team project you worked on? What did you work on? In hindsight, how would you prioritize the tasks for better collaboration?
+
+Do you follow the Agile software development process?
+
+Describe a time your were given an architecture to implement, realized it had problems, and had to fix them.
+
+#For Architects
+
+Give an example of when you were innovative with software architecture. 
+
+Have you implemented significant improvements to an IT infrastructure? What were they?
+
+What do you think is the best way for software to be architected? 
+
+What research methods do you use to design a new software system? What steps do you follow before deployment?
+
+How would you design this system for scale?
+
+What kind of graphs and instrumentation would you need to ensure high performance of the given architecture?
+Note: Senior software engineers need to know how their code will perform, and need to know which graphs to monitor for the overall health of the system. Good candidates will acknowledge that graphs will need to be created, or performance and/or debugging instrumentation will need to be added to the code. Not-so-good candidates will leave that for later, or neglect it completely. Strong candidates will immediately ask what current system monitoring and instrumentation tools are being used.
+Note: More specifically, you can ask which graphs would be useful to see if background jobs are running out of control, and the system is responding slowly. Great senior software engineer candidates will ask for graphs showing how many background job servers are running, and what the health of them is (in terms of disk space usage, CPU load, and RAM/memory usage).
+Note: By asking this question, you can see how a candidate investigates problems and how they would be proactive to be able to monitor and detect problems before they occur.
+
+What data tables are needed for an inventory management system?
+Note: questions this general are often begging for you to ask follow-up questions that will give you more details about the requirements of the system.
+
+#For Team Leads
+
+Differentiate team leader and team manager?
+
+Define a difficult and important task of a Leader?
+
+Explain your strength and weakness as a leader?
+
+What are some ways to successfully roll out changes to multiple applications/services in an ecosystem where high volume is expected and minimize or eliminate errors.
+
+How do you determine if a task or project is at risk?
+
+What do you do if there's a disagreement within your team?
+
+What metrics do you use to evaluate team performance? 
+
+How do you interview prospective team members? 
+
+What advice would you give to a new team member to make sure they on-board well?
+
+If you felt one developer on your team would be a better fit on another team, who would you discuss a potential transfer with first?
+
+The deadline on a big project was just moved up. How would you motivate your team to be more productive under the earlier deadline?
+
+Your team members suggest that new hardware would help them increase their performance. How do you respond, and how would assess their request? If necessary, how would you negotiate for new software/hardware with the IT Manager?
+
+What are the first things you do when reviewing someone else’s code? What tools do you use to test code quality?
+
+Are you familiar with IT help desk software? How are these types of software used to monitor and improve remote systems?
+
+How do you manage conflicts on a team?
+
+How will you guide your team to improve or develop their individual skills?
+
+What is the motivation for your leadership? As a leader how will you measure your success?
+
+When you come across any bad news then how will you put it in front of your team?
+
+How will you encourage your team by sharing the other team member’s success?
+
+What are the four different leadership styles and brief them?
+Note: see coaching, delegating, directing, and supporting
+
+#For Managers
+
+How do you approach situations where multiple influential employees have different (and possibly hidden) agendas.
+Note: consider advice from Crucial Conversations to answer
+
+What is over-supervision in your view as a leader? How will it affect an employee?
+
+What will be the situation when an employee is under supervised?
+
+How will you assist your subordinates based on their competency and commitment levels?
+

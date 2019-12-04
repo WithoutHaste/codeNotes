@@ -1,0 +1,3 @@
+##Shared Kernel
+
+Usually shared utilities, like user authentication. Any "cross cutting concerns".

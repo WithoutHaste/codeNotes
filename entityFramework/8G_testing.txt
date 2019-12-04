@@ -1,0 +1,38 @@
+##Testing
+
+Starting in EF 6, there is better support for Mocking DbSets. In EF 5, Mock was not allowed to override the DbSet constructor.
+
+Note: any DbSet property in your DbContext that you want to Mock must be marked Virtual.
+
+Recommendation: any time you find yourself needing to Mock EF objects in a test, consider if the method you are tested can be refactored so you can test what you need to, without Mocking any EF objects.
+
+#Mocking Linq Queries
+
+<code>
+public List<Country> GetSomeCountries()
+{
+	return dbContext.Countries.Where(someFilter).ToList();
+}
+...
+public void Test_GetSomeCountries()
+{
+	//arrange
+	IQueryable<Country> countries = (new List<Country>() { new Country("Argentina") }).AsQueryable();
+	
+	var mockContext = new Mock<GeographyContext>();
+	Mock<DbSet<Country>> queryableMockSet = SetupQueryableMockSet(countries);
+	mockContext.Setup(context => context.Countries).Returns(queryableMockSet.Object);
+	
+	//act
+	//assert
+}
+private static Mock<DbSet<Country>> SetupQueryableMockSet(IQueryable<Country> countries)
+{
+	var mockSet = new Mock<DbSet<Country>>();
+	mockSet.As<IQueryable<Country>>().Setup(x => x.Provider).Returns(countries.Provider);
+	mockSet.As<IQueryable<Country>>().Setup(x => x.Expression).Returns(countries.Expression);
+	mockSet.As<IQueryable<Country>>().Setup(x => x.ElementType).Returns(countries.ElementType);
+	mockSet.As<IQueryable<Country>>().Setup(x => x.GetEnumerator()).Returns(countries.GetEnumerator());
+	return mockSet;
+}
+</code>

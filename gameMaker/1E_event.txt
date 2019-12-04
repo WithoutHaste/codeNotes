@@ -1,0 +1,129 @@
+##Event
+
+When events occur, they can trigger actions in objects.
+
+As long as the game is open, the game loop is iterating. A step is the smallest unit of time in the game loop.  A series of events can be triggered every step. The exact order of events each step is not reliable.
+
+#Inheritance
+
+Objects inherit all events from their (optional) parent object. If an event defined in the parent is also defined in the child (ex: Create Event) then the child event will override the parent event and the parent event will not be run.
+
+You can explicitly run the parent event code inside the child event code, so that both will be run.
+<code>
+//inside child event
+event_inherited(); //runs the parent event of the same type
+</code>
+
+#User Events
+
+Each object can have up to 16 user events defined on it. User interactions are not linked to user events, they can only be triggered programmatically.
+
+Trigger user event:
+<code>
+event_user(index); //index 0 through 15
+</code>
+Note: don't say "self.event_user", just "event_user".
+
+User events (like all events) do not accept arguments and do not return values.
+
+User events use inheritance the same as other object events.
+
+#Enter Room
+
+These events always happen in the same order.
+1) Create - for each instance
+2) Instance Creation - for each instance
+3) Game Start (only in very first room)
+4) Room Creation
+5) Room Start - for each instance
+
+In a room, you can set the order of instances being created.
+
+#Step
+
+These events always happen in the same order.
+1) Begin Step
+2) Step - just before instances are put in their new positions
+3) End Step
+
+#Action
+
+GameMaker has a large list of standard actions that can occur on an event.  You can also code your own.
+
+Self: refers to the current instance.
+Other: refers to the other instance in a collision event.
+Object: referes to all current instances of this object.
+
+Relative: delta values are relative to current values, instead of absolute.
+
+#Mouse
+
+Current mouse position
+<code>
+var mouseX = mouse_x;
+var mouseY = mouse_y;
+</code>
+
+#Propagation
+
+Given a stack of overlapping objects, many of them having a mouse event triggered by the same mouse-button-event, how do you stop the event from propagating through the whole stack?
+
+So we want the mouse event to start at the top of the stack and stop at the first object that takes an action on it. There are conditions when a higher object does and does not take the action.
+
+Example is for event on right-button-released.
+<code>
+//in first action
+if(condition)
+{
+	var x = mouse_check_button_released(mb_right); //true
+	mouse_clear(mb_right); //clears mouse event
+	//normal action code
+}
+
+//in second action - which does still trigger despite clearing the mouse event
+var y = mouse_check_button_released(mb_right); //false
+if(y)
+{
+	//action that only occurs if first event did not trigger
+}
+</code>
+
+The problem is that GameMaker makes no guarantee about what order the objects will be handled in. It isn't necessarily ordered by depth, although it often seems to be.
+
+So, instead, you can set a global mouse event handler that checks the whole room for what was clicked on, and enforces the correct order. Note that this will not work reliably if it is possible for more than one instance of a particular object to be clicked on at the same time, because instance_position returns at most one id.
+
+To make a global event handler, add a normal object to the room and set it's Global Mouse Events. They will be triggered if the mouse clicks anywhere in the room.
+
+<code>
+var objectClicked = instance_position(mouse_x, mouse_y, obj_set); //was an instance of this object clicked?
+if(objectClicked == noone)
+{
+    return false; //no, it was not
+}
+//yes it was, run event code here
+return true;
+</code>
+
+#Keyboard
+
+Key down: triggers repeatedly as long as you hold the key down.
+Key press: triggers once when the key is pressed down.
+Key up: triggers once when the key is released.
+
+<code>
+var charCode = keyboard_key; //get the last pressed key
+var char = chr(keyboard_key); //convert ascii code to character
+</code>
+Note that all letters come in as upper-case, regardless of the state of caps lock or shift keys.
+
+<code>
+var aDown = keyboard_check(ord('A'));
+</code>
+
+There does not seem to be any way to check if caps lock is on or off (just if the button is currently pressed down or not). So just looking at shift keys for now.
+<code>
+var isUpperCase = (keyboard_check_direct(vk_lshift) || keyboard_check_direct(vk_rshift));
+</code>
+
+Keyboard constants: vk_nokey, vk_anykey, vk_left, vk_right, vk_up, vk_down, vk_enter, vk_escape, vk_space, vk_shift, vk_control, vk_alt, vk_backspace, vk_tab, vk_home, vk_end, vk_delete, vk_insert, vk_pageup, vk_pagedown, vk_pause, vk_printscreen, vk_f1 ... vk_f12, vk_numpad0 ... vk_numpad9, vk_multiply, vk_divide, vk_add, vk_subtract, vk_decimal, vk_lshift, vk_lcontrol, vk_lalt, vk_rshift, vk_rcontrol, vk_ralt
+

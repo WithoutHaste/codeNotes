@@ -1,0 +1,19 @@
+##Command Line
+
+#Arguments
+
+To access command line arguments:
+<code>
+	import sys
+	
+	print(sys.argv) #an array of command line arguments
+	print(sys.argv[0]) #the name of this script
+</code>
+
+#Exit Script
+
+<code>
+	import sys
+	
+	sys.exit()
+</code>

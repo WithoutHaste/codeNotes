@@ -1,0 +1,37 @@
+##Labels
+
+Label a block of code:
+<code>
+ <<myLabel>>
+ BEGIN
+	//statements
+ END;
+</code>
+
+An exit command can be labeled to tell which block to exit. Exit command must be nested within that block.
+<code>
+ <<myLabel>>
+ BEGIN
+	LOOP
+		IF x > 10 THEN
+			EXIT myLabel; //execution of loop ends here
+		END IF;
+	END LOOP;
+ END;
+ //execution picks up outside "myLabel" block
+</code>
+
+A continue command can be labeled to tell which loop to continue the next iteration of. Continue command must be nested within that loop.
+<code>
+ <<labelA>>
+ LOOP
+	//execution picks up on next iteration of "labelA" loop 
+	<<labelB>>
+	LOOP
+		IF x > 10 THEN
+			CONTINUE labelA; //execution of loop ends here
+		END IF;
+	END LOOP;
+ END LOOP;
+</code>
+

@@ -1,0 +1,199 @@
+##Unit Testing
+
+#Add a Unit Test Project
+
+To add a unit test project to your solution in Visual Studio:
+File menu > New Project > Installed > Visual C# > Test > Unit Test Project
+
+This project will have a reference to assembly Microsoft.VisualStudio.QualityTools.UnitTestFramework.
+
+Your unit test project will also need to reference the project(s) you are testing.
+
+#Unit Test File
+
+Each unit test file needs to include:
+
+<code>
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+</code>
+
+#Unit Test Class
+
+Each test class must be public, and have attribute TestClass.  Each test method must be public, return void, have no parameters, and have attribute TestMethod.
+
+<code>
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+namespace MyTests
+{
+	[TestClass]
+	public StudentTests
+	{
+		[TestMethod]
+		public void Student_AddClass_Success()
+		{
+			//test code
+		}
+	}
+}
+</code>
+
+#Running Unit Tests
+
+In Visual Studio, build the unit test project. Test menu > Windows > Test Explorer. You can run tests from here.
+
+To run tests with breakpoints, place your breakpoints. Test menu > Debug > Selected Tests or All Tests.
+
+#Command Prompt
+
+To run tests by TestCategory:
+	- open Visual Studio > Developer Command Prompt
+	- cd to location of unit test container (the unit test's dll)
+<code>
+Vstest.Console.exe myTests.dll /TestCaseFilter:TestCategory=Nightly
+</code>
+or
+<code>
+mstest /testcontainer:myTests.dll /category:"Nightly" /resultsfile:locationToSaveTo.txt
+</code>
+
+You can use AND or OR to specify multiple categories, but you cannot mix them or nest them.
+
+##Unit Test standards
+
+#Formal Language
+
+Test Doubles: pretend objects used during testing. Informally called "Mocks".
+
+	Dummy: 
+		A required parameter. 
+		You don't care how it is used, or (ideally) it won't be used at all.
+	
+	Stub: 
+		Intended to be used, and always returns the same value. 
+		The intention is to decouple a whole subsystem from the current tests.
+	
+	Spy: 
+		A stub that also tracks how it used, how many times it is called, etc. 
+		This more tightly couples your test to a particular implementation of the system.
+	
+	Mock (aka True Mock): 
+		A spy that also contains verification code to check that the object is used in the expected way. 
+		This becomes part of your test case. 
+		Mocking frameworks create these types of Test Doubles.
+	
+Fake (its own category): 
+	Implements real business logic. 
+	Behaves differently with different data. 
+	May become so complicated, it requires tests of its own. 
+	Ex: an in-memory database - it has behavior but takes shortcuts that are not viable in production.
+
+#Styles
+
+State Verification: checking object and system state after the test. Uses Stubs and Spies.
+
+Behavior Verification: checking that the correct methods were called. Uses Mocks.
+	
+#Method Names
+
+There are several standards for naming methods. This is my preference.
+
+NameOfMethodTested_SetupDescription_ExpectedResult()
+
+#Method Body
+
+Use the arrange, act, assert sections and labels.
+
+<code>
+public void NameOfMethodTested_SetupDescription_ExpectedResult()
+{
+	//arrange
+	//put all the setup, like object instantiation, here
+	
+	//act
+	//call the method you are testing
+	
+	//assert
+	//validate the results
+}
+</code>
+
+##Unit Test Assertions
+
+#Assert
+
+Some standard asserts:
+
+<code>
+Assert.AreEqual(x, y);
+Assert.IsTrue(x);
+Assert.IsFalse(y);
+Assert.IsNull(x);
+Assert.IsNotNull(y);
+</code>
+
+#Expected Exception
+
+To verify that an expected exception was thrown, add the ExpectedException attribute to the test method instead of asserting anything.
+
+You can use any exception type here. It is recommended that methods throw specific exceptions, so test for the most specific applicable exception.
+
+You cannot test for more than one exception type at a time.
+
+<code>
+[ExpectedException(typeof(ArgumentNullException))]
+public void Student_AddNullGrade_ArgumentNullException()
+{
+	//arrange
+	Student student = new Student();
+	
+	//act
+	student.AddGrade("English", null);
+	
+	//assert exception
+}
+</code>
+
+##Unit Test Annotations
+
+Required annotations
+<code>
+[TestClass]
+public class MyTests
+{
+	[TestMethod]
+	public void TestA()
+	{
+	}
+}
+</code>
+
+Optional annotations:
+	[AssemblyInitialize] runs once before the TestMethods in this assembly
+	[AssemblyCleanup] runs once after the TestMethods in this assembly
+	[ClassInitialize] runs once before the TestMethods in this class
+	[ClassCleanup] runs once after the TestMethods in this class
+	[TestInitialize] runs before each TestMethod
+	[TestCleanup] runs after each TestMethod
+
+Execution Order:
+	AssemblyInitialize
+	ClassInitialize
+	TestInitialize
+	TestMethod
+	TestCleanup
+	ClassCleanup
+	AssemblyCleanup
+
+Annotations used in Test Explorer window to select groups of tests
+	- right-click in window > Group By > Traits
+<code>
+[TestCategory("Nightly")]
+[TestCategory("ShoppingCart"), TestCategory("Weekly")]
+</code>
+
+Annotations for use by team, not used by framework
+<code>
+[Owner("JSmith")] //dev responsible for maintenance of test
+[Priority(2)]
+</code>

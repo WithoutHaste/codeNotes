@@ -1,0 +1,1231 @@
+##EDMX Structure
+
+Editing the database-first definition through the XML file directly.
+
+My team started editing the XML directly when our design got ahead of what the visual designer could handle. (Were we still in EF 4 or 5 at that point? This may not be relevant anymore.)
+
+#Basic Structure
+
+<code lang="markup">
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+	<!-- Entity Framework runtime content -->
+	<edmx:Runtime>
+		<!-- SSDL -->
+		<!-- how the database is setup -->
+		<edmx:StorageModels>
+		</edmx:StorageModels>
+		<!-- CSDL -->
+		<!-- how the programmed objects are setup -->
+		<edmx:ConceptualModels>
+		</edmx:ConceptualModels>
+		<!-- C-S Mapping -->
+		<!-- converting between database and programmed objects -->
+		<edmx:Mappings>
+		</edmx:Mappings>
+	</edmx:Runtime>
+	<!-- Entity Framework designer content -->
+	<!-- how the model is visually displayed -->
+	<edmx:Designer>
+	</edmx:Designer>
+</edmx:Edmx>
+</code>
+
+#Emtpy EDMX
+
+<code lang="markup">
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+	<edmx:Runtime>
+		<edmx:StorageModels>
+		</edmx:StorageModels>
+		<edmx:ConceptualModels>
+		</edmx:ConceptualModels>
+		<edmx:Mappings>
+		</edmx:Mappings>
+	</edmx:Runtime>
+</edmx:Edmx>
+</code>
+
+##EDMX Examples
+
+#One Table
+
+A stand-alone table with columns of various types
+
+<code lang="sql">
+CREATE TABLE [player].[Warrior] (
+    [WarriorId]			BIGINT		NOT NULL	IDENTITY (1, 1)
+    ,[Name]				VARCHAR(50)	NOT NULL
+    ,[IsMale]			BIT			NOT NULL
+	,[Level]			INT			NOT NULL	DEFAULT(1)
+	,[Weapon] 			VARCHAR(20)	NULL
+	,[Armor] 			VARCHAR(20)	NULL
+	,[LastLoginDate]	DATETIME 	NULL
+	,CONSTRAINT PK_Warrior PRIMARY KEY CLUSTERED (WarriorId) WITH (IGNORE_DUP_KEY = OFF)
+);
+</code>
+
+<code lang="markup">
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+	<edmx:Runtime>
+		<edmx:StorageModels>
+			<Schema Namespace="EnvironmentModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+				<EntityContainer Name="EnvironmentModelStoreContainer">
+					<EntitySet Name="Warrior" EntityType="EnvironmentModel.Store.Warrior" store:Type="Tables" Schema="player" />
+				</EntityContainer>
+				<EntityType Name="Warrior">
+					<Key>
+						<PropertyRef Name="WarriorId" />
+					</Key>
+					<Property Name="WarriorId" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+					<Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+					<Property Name="IsMale" Type="bit" Nullable="false" />
+					<Property Name="Level" Type="int" Nullable="false" />
+					<Property Name="Weapon" Type="varchar" Nullable="true" MaxLength="20" />
+					<Property Name="Armor" Type="varchar" Nullable="true" MaxLength="20" />
+					<Property Name="LastLoginDate" Type="datetime" Nullable="true" />
+					<!-- note that data types in SSDL are SQL data types -->
+				</EntityType>
+			</Schema>
+		</edmx:StorageModels>
+		<edmx:ConceptualModels>
+			<Schema Namespace="EnvironmentModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+				<EntityContainer Name="EnvironmentEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+					<EntitySet Name="Warriors" EntityType="EnvironmentModel.Warrior" />
+				</EntityContainer>
+				<EntityType Name="Warrior">
+					<Key>
+						<PropertyRef Name="WarriorId" />
+					</Key>
+					<Property Name="WarriorId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+					<Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+					<Property Name="IsMale" Type="Boolean" Nullable="false" />
+					<Property Name="Level" Type="Int32" Nullable="false" />
+					<Property Name="Weapon" Type="String" Nullable="true" MaxLength="20" Unicode="false" FixedLength="false" />
+					<Property Name="Armor" Type="String" Nullable="true" MaxLength="20" Unicode="false" FixedLength="false" />
+					<Property Name="LastLoginDate" Type="DateTime" Nullable="true" />
+					<!-- note that data types in CSDL are C# data types -->
+				</EntityType>
+			</Schema>
+		</edmx:ConceptualModels>
+		<edmx:Mappings>
+			<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+				<EntityContainerMapping StorageEntityContainer="EnvironmentModelStoreContainer" CdmEntityContainer="EnvironmentEntities">
+					<EntitySetMapping Name="Warriors">
+						<EntityTypeMapping TypeName="EnvironmentModel.Warrior">
+							<MappingFragment StoreEntitySet="Warrior">
+								<ScalarProperty Name="WarriorId" ColumnName="WarriorId" />
+								<ScalarProperty Name="Name" ColumnName="Name" />
+								<ScalarProperty Name="IsMale" ColumnName="IsMale" />
+								<ScalarProperty Name="Level" ColumnName="Level" />
+								<ScalarProperty Name="Weapon" ColumnName="Weapon" />
+								<ScalarProperty Name="Armor" ColumnName="Armor" />
+								<ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
+								<!-- Name is the CSDL property name, ColumnName is the SSDL database column name -->
+								<!-- your property names do not have to be the same as the database column names -->
+							</MappingFragment>
+						</EntityTypeMapping>
+					</EntitySetMapping>
+				</EntityContainerMapping>
+			</Mapping>
+		</edmx:Mappings>
+	</edmx:Runtime>
+</edmx:Edmx>
+</code>
+
+#One-to-Many Relationship
+
+<code lang="sql">
+CREATE TABLE [player].[Warrior] (
+    [WarriorId]			BIGINT		NOT NULL	IDENTITY (1, 1)
+    ,[Name]				VARCHAR(50)	NOT NULL
+    ,[IsMale]			BIT			NOT NULL
+	,[Level]			INT			NOT NULL	DEFAULT(1)
+	,[Weapon] 			VARCHAR(20)	NULL
+	,[Armor] 			VARCHAR(20)	NULL
+	,[LastLoginDate]	DATETIME 	NULL
+	,CONSTRAINT PK_Warrior PRIMARY KEY CLUSTERED (WarriorId) WITH (IGNORE_DUP_KEY = OFF)
+);
+CREATE TABLE [player].[Loot] (
+    [LootId]			BIGINT		NOT NULL	IDENTITY (1, 1)
+	,[fxWarriorId]		BIGINT		NOT NULL
+    ,[Description]		VARCHAR(50)	NOT NULL
+    ,[Quantity]			INT			NOT NULL
+	,CONSTRAINT PK_Loot PRIMARY KEY CLUSTERED (LootId) WITH (IGNORE_DUP_KEY = OFF)
+	,CONSTRAINT [FK_Loot_Warrior] FOREIGN KEY ([fxWarriorId]) REFERENCES [player].[Warrior] ([WarriorId]) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+</code>
+
+<code lang="markup">
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+	<edmx:Runtime>
+		<edmx:StorageModels>
+			<Schema Namespace="EnvironmentModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+				<EntityContainer Name="EnvironmentModelStoreContainer">
+					<EntitySet Name="Warrior" EntityType="EnvironmentModel.Store.Warrior" store:Type="Tables" Schema="player" />
+					<EntitySet Name="Loot" EntityType="EnvironmentModel.Store.Loot" store:Type="Tables" Schema="player" />
+				</EntityContainer>
+				<EntityType Name="Warrior">
+					<Key>
+						<PropertyRef Name="WarriorId" />
+					</Key>
+					<Property Name="WarriorId" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+					<Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+					<Property Name="IsMale" Type="bit" Nullable="false" />
+					<Property Name="Level" Type="int" Nullable="false" />
+					<Property Name="Weapon" Type="varchar" Nullable="true" MaxLength="20" />
+					<Property Name="Armor" Type="varchar" Nullable="true" MaxLength="20" />
+					<Property Name="LastLoginDate" Type="datetime" Nullable="true" />
+				</EntityType>
+				<EntityType Name="Loot">
+					<Key>
+						<PropertyRef Name="LootId" />
+					</Key>
+					<Property Name="LootId" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+					<Property Name="fxWarriorId" Type="bigint" Nullable="false" />
+					<Property Name="Description" Type="varchar" Nullable="false" MaxLength="50" />
+					<Property Name="Quantity" Type="int" Nullable="false" />
+				</EntityType>
+				<AssociationSet Name="FK_Loot_Warrior" Association="EnvironmentModel.Store.FK_Loot_Warrior">
+					<End Role="Loot" EntitySet="Loot" />
+					<End Role="Warrior" EntitySet="Warrior" />
+				</AssociationSet>
+				<Association Name="FK_Loot_Warrior">
+					<End Role="Warrior" Type="EnvironmentModel.Store.Warrior" Multiplicity="1" />
+					<End Role="Loot" Type="EnvironmentModel.Store.Loot" Multiplicity="*" />
+					<ReferentialConstraint>
+						<Principal Role="Warrior">
+							<PropertyRef Name="WarriorId" />
+						</Principal>
+						<Dependent Role="Loot">
+							<PropertyRef Name="fxWarriorId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+			</Schema>
+		</edmx:StorageModels>
+		<edmx:ConceptualModels>
+			<Schema Namespace="EnvironmentModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+				<EntityContainer Name="EnvironmentEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+					<EntitySet Name="Warriors" EntityType="EnvironmentModel.Warrior" />
+					<EntitySet Name="Loots" EntityType="EnvironmentModel.Loot" />
+				</EntityContainer>
+				<EntityType Name="Warrior">
+					<Key>
+						<PropertyRef Name="WarriorId" />
+					</Key>
+					<Property Name="WarriorId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+					<Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+					<Property Name="IsMale" Type="Boolean" Nullable="false" />
+					<Property Name="Level" Type="Int32" Nullable="false" />
+					<Property Name="Weapon" Type="String" Nullable="true" MaxLength="20" Unicode="false" FixedLength="false" />
+					<Property Name="Armor" Type="String" Nullable="true" MaxLength="20" Unicode="false" FixedLength="false" />
+					<Property Name="LastLoginDate" Type="DateTime" Nullable="true" />
+					<NavigationProperty Name="Inventory" Relationship="EnvironmentModel.FK_Loot_Warrior" FromRole="Warrior" ToRole="Loot" />
+				</EntityType>
+				<EntityType Name="Loot">
+					<Key>
+						<PropertyRef Name="LootId" />
+					</Key>
+					<Property Name="LootId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+					<Property Name="fxWarriorId" Type="Int64" Nullable="false" />
+					<Property Name="Description" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+					<Property Name="Quantity" Type="Int32" Nullable="false" />
+					<NavigationProperty Name="Warrior" Relationship="EnvironmentModel.FK_Loot_Warrior" FromRole="Loot" ToRole="Warrior" />
+					<!-- note that Navigation Properies are optional; only create this one if you need to traverse loot.Warrior in the code -->
+					<!-- each Navigation Property will slow down your queries a little, it adds up -->
+				</EntityType>
+				<AssociationSet Name="FK_Loot_Warrior" Association="EnvironmentModel.FK_Loot_Warrior">
+					<End Role="Warrior" EntitySet="Warriors" />
+					<End Role="Loot" EntitySet="Loots" />
+				</AssociationSet>
+				<Association Name="FK_Loot_Warrior">
+					<End Role="Warrior" Type="EnvironmentModel.Warrior" Multiplicity="1" />
+					<End Role="Loot" Type="EnvironmentModel.Loot" Multiplicity="*" />
+					<ReferentialConstraint>
+						<Principal Role="Warrior">
+							<PropertyRef Name="WarriorId" />
+						</Principal>
+						<Dependent Role="Loot">
+							<PropertyRef Name="fxWarriorId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+			</Schema>
+		</edmx:ConceptualModels>
+		<edmx:Mappings>
+			<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+				<EntityContainerMapping StorageEntityContainer="EnvironmentModelStoreContainer" CdmEntityContainer="EnvironmentEntities">
+					<EntitySetMapping Name="Warriors">
+						<EntityTypeMapping TypeName="EnvironmentModel.Warrior">
+							<MappingFragment StoreEntitySet="Warrior">
+								<ScalarProperty Name="WarriorId" ColumnName="WarriorId" />
+								<ScalarProperty Name="Name" ColumnName="Name" />
+								<ScalarProperty Name="IsMale" ColumnName="IsMale" />
+								<ScalarProperty Name="Level" ColumnName="Level" />
+								<ScalarProperty Name="Weapon" ColumnName="Weapon" />
+								<ScalarProperty Name="Armor" ColumnName="Armor" />
+								<ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
+							</MappingFragment>
+						</EntityTypeMapping>
+					</EntitySetMapping>
+					<EntitySetMapping Name="Loots">
+						<EntityTypeMapping TypeName="EnvironmentModel.Loot">
+							<MappingFragment StoreEntitySet="Loot">
+								<ScalarProperty Name="LootId" ColumnName="LootId" />
+								<ScalarProperty Name="fxWarriorId" ColumnName="fxWarriorId" />
+								<ScalarProperty Name="Description" ColumnName="Description" />
+								<ScalarProperty Name="Quantity" ColumnName="Quantity" />
+							</MappingFragment>
+						</EntityTypeMapping>
+					</EntitySetMapping>
+				</EntityContainerMapping>
+			</Mapping>
+		</edmx:Mappings>
+	</edmx:Runtime>
+</edmx:Edmx>
+</code>
+
+#Sub Tables, Loading from Views
+
+This example shows how to implement a table-subtable relationship, and how to load from a view instead of a table.
+
+A warning (at least for Entity Framework 5 and below): if you have a lot of subclasses to one class, then querying at the base class level will generate a very large SQL query because Entity Framework will join on every single subtable, even if those columns are not required.
+
+Slow:
+<code>
+Player[] recentPlayers = entities.Players.Where(p=>p.LastLoginDate > lastMonth).ToArray()
+</code>
+
+I think it was around the 19th subtable that our query became so large the database rejected it.
+
+A specific query will be much faster.
+
+Fast:
+<code>
+Warrior[] warriors = entities.Players.OfType<Warrior>().ToArray()
+</code>
+
+<code lang="sql">
+CREATE TABLE [player].[Player] (
+    [PlayerId]			BIGINT		NOT NULL	IDENTITY (1, 1)
+    ,[Name]				VARCHAR(50)	NOT NULL
+    ,[IsMale]			BIT			NOT NULL
+	,[Level]			INT			NOT NULL	DEFAULT(1)
+	,[LastLoginDate]	DATETIME 	NULL
+	,[AccountIsActive]	BIT			NOT NULL
+	,CONSTRAINT PK_Player PRIMARY KEY CLUSTERED (PlayerId) WITH (IGNORE_DUP_KEY = OFF)
+);
+CREATE TABLE [player].[Warrior] (
+    [WarriorId]			BIGINT		NOT NULL
+	,[Weapon] 			VARCHAR(20)	NULL
+	,[Armor] 			VARCHAR(20)	NULL
+	,CONSTRAINT PK_Warrior PRIMARY KEY CLUSTERED (WarriorId) WITH (IGNORE_DUP_KEY = OFF)
+	,CONSTRAINT FK_Warrior_Player FOREIGN KEY ([WarriorId]) REFERENCES [player].[Player] ([PlayerId]) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+CREATE TABLE [player].[Mage] (
+    [MageId]			BIGINT		NOT NULL
+	,[Mana] 			INT			NOT NULL
+	,[ManaRegenRate]	DECIMAL		NOT NULL
+	,CONSTRAINT PK_Warrior PRIMARY KEY CLUSTERED (WarriorId) WITH (IGNORE_DUP_KEY = OFF)
+	,CONSTRAINT FK_Warrior_Player FOREIGN KEY ([WarriorId]) REFERENCES [player].[Player] ([PlayerId]) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+CREATE TABLE [player].[Loot] (
+    [LootId]			BIGINT		NOT NULL	IDENTITY (1, 1)
+	,[fxPlayerId]		BIGINT		NOT NULL
+    ,[Description]		VARCHAR(50)	NOT NULL
+    ,[Quantity]			INT			NOT NULL
+	,CONSTRAINT PK_Loot PRIMARY KEY CLUSTERED (LootId) WITH (IGNORE_DUP_KEY = OFF)
+	,CONSTRAINT [FK_Loot_Player] FOREIGN KEY ([fxPlayerId]) REFERENCES [player].[Player] ([PlayerId]) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+CREATE VIEW [player].[activePlayer] AS
+	SELECT
+		PlayerId
+		,IsMale
+		,Level
+		,LastLoginDate
+		,AccountIsActive
+	FROM player.Player
+	WHERE Player.AccountIsActive = 1;
+</code>
+
+<code lang="markup">
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+	<edmx:Runtime>
+		<edmx:StorageModels>
+			<Schema Namespace="EnvironmentModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+				<EntityContainer Name="EnvironmentModelStoreContainer">
+					<EntitySet Name="Player" EntityType="EnvironmentModel.Store.Player" Table="activePlayer" Schema="player" />
+					<EntitySet Name="Warrior" EntityType="EnvironmentModel.Store.Warrior" store:Type="Tables" Schema="player" />
+					<EntitySet Name="Mage" EntityType="EnvironmentModel.Store.Mage" store:Type="Tables" Schema="player" />
+					<EntitySet Name="Loot" EntityType="EnvironmentModel.Store.Loot" store:Type="Tables" Schema="player" />
+				</EntityContainer>
+				<EntityType Name="Player">
+					<Key>
+						<PropertyRef Name="PlayerId" />
+					</Key>
+					<Property Name="PlayerId" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+					<Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+					<Property Name="IsMale" Type="bit" Nullable="false" />
+					<Property Name="Level" Type="int" Nullable="false" />
+					<Property Name="LastLoginDate" Type="datetime" Nullable="true" />
+					<Property Name="AccountIsActive" Type="bit" Nullable="false" />
+				</EntityType>
+				<EntityType Name="Warrior">
+					<Key>
+						<PropertyRef Name="WarriorId" />
+					</Key>
+					<Property Name="WarriorId" Type="bigint" Nullable="false" />
+					<Property Name="Weapon" Type="varchar" Nullable="true" MaxLength="20" />
+					<Property Name="Armor" Type="varchar" Nullable="true" MaxLength="20" />
+				</EntityType>
+				<EntityType Name="Mage">
+					<Key>
+						<PropertyRef Name="MageId" />
+					</Key>
+					<Property Name="MageId" Type="bigint" Nullable="false" />
+					<Property Name="Mana" Type="int" Nullable="false" />
+					<Property Name="ManaRegenRate" Type="decimal" Nullable="false" Scale="3" />
+				</EntityType>
+				<EntityType Name="Loot">
+					<Key>
+						<PropertyRef Name="LootId" />
+					</Key>
+					<Property Name="LootId" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+					<Property Name="fxPlayerId" Type="bigint" Nullable="false" />
+					<Property Name="Description" Type="varchar" Nullable="false" MaxLength="50" />
+					<Property Name="Quantity" Type="int" Nullable="false" />
+				</EntityType>
+				<AssociationSet Name="FK_Warrior_Player" Association="EnvironmentModel.Store.FK_Warrior_Player">
+					<End Role="Player" EntitySet="Player" />
+					<End Role="Warrior" EntitySet="Warrior" />
+				</AssociationSet>
+				<AssociationSet Name="FK_Mage_Player" Association="EnvironmentModel.Store.FK_Mage_Player">
+					<End Role="Player" EntitySet="Player" />
+					<End Role="Mage" EntitySet="Mage" />
+				</AssociationSet>
+				<AssociationSet Name="FK_Loot_Player" Association="EnvironmentModel.Store.FK_Loot_Player">
+					<End Role="Loot" EntitySet="Loot" />
+					<End Role="Player" EntitySet="Player" />
+				</AssociationSet>
+				<Association Name="FK_Warrior_Player">
+					<End Role="Player" Type="EnvironmentModel.Store.Player" Multiplicity="1" />
+					<End Role="Warrior" Type="EnvironmentModel.Store.Warrior" Multiplicity="0..1" />
+					<ReferentialConstraint>
+						<Principal Role="Player">
+							<PropertyRef Name="PlayerId" />
+						</Principal>
+						<Dependent Role="Warrior">
+							<PropertyRef Name="WarriorId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+				<Association Name="FK_Mage_Player">
+					<End Role="Player" Type="EnvironmentModel.Store.Player" Multiplicity="1" />
+					<End Role="Mage" Type="EnvironmentModel.Store.Mage" Multiplicity="0..1" />
+					<ReferentialConstraint>
+						<Principal Role="Player">
+							<PropertyRef Name="PlayerId" />
+						</Principal>
+						<Dependent Role="Mage">
+							<PropertyRef Name="MageId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+				<Association Name="FK_Loot_Player">
+					<End Role="Player" Type="EnvironmentModel.Store.Player" Multiplicity="1" />
+					<End Role="Loot" Type="EnvironmentModel.Store.Loot" Multiplicity="*" />
+					<ReferentialConstraint>
+						<Principal Role="Player">
+							<PropertyRef Name="PlayerId" />
+						</Principal>
+						<Dependent Role="Loot">
+							<PropertyRef Name="fxPlayerId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+			</Schema>
+		</edmx:StorageModels>
+		<edmx:ConceptualModels>
+			<Schema Namespace="EnvironmentModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+				<EntityContainer Name="EnvironmentEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+					<EntitySet Name="Players" EntityType="EnvironmentModel.Player" />
+					<EntitySet Name="Loots" EntityType="EnvironmentModel.Loot" />
+				</EntityContainer>
+				<EntityType Name="Player" Abstract="false" >
+					<Key>
+						<PropertyRef Name="PlayerId" />
+					</Key>
+					<Property Name="PlayerId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+					<Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+					<Property Name="IsMale" Type="Boolean" Nullable="false" />
+					<Property Name="Level" Type="Int32" Nullable="false" />
+					<Property Name="LastLoginDate" Type="DateTime" Nullable="true" />
+					<Property Name="AccountIsActive" Type="Boolean" Nullable="false" />
+					<NavigationProperty Name="Inventory" Relationship="EnvironmentModel.FK_Loot_Player" FromRole="Player" ToRole="Loot" />
+				</EntityType>
+				<EntityType Name="Warrior" BaseType="EnvironmentModel.Player">
+					<Property Name="Weapon" Type="String" Nullable="true" MaxLength="20" Unicode="false" FixedLength="false" />
+					<Property Name="Armor" Type="String" Nullable="true" MaxLength="20" Unicode="false" FixedLength="false" />
+				</EntityType>
+				<EntityType Name="Mage" BaseType="EnvironmentModel.Player">
+					<Property Name="Mana" Type="Int32" Nullable="false" />
+					<Property Name="ManaRegenRate" Type="Decimal" Nullable="false" Precision="8" Scale="3" />
+				</EntityType>
+				<EntityType Name="Loot">
+					<Key>
+						<PropertyRef Name="LootId" />
+					</Key>
+					<Property Name="LootId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+					<Property Name="fxPlayerId" Type="Int64" Nullable="false" />
+					<Property Name="Description" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+					<Property Name="Quantity" Type="Int32" Nullable="false" />
+				</EntityType>
+				<AssociationSet Name="FK_Loot_Player" Association="EnvironmentModel.FK_Loot_Player">
+					<End Role="Player" EntitySet="Players" />
+					<End Role="Loot" EntitySet="Loots" />
+				</AssociationSet>
+				<Association Name="FK_Loot_Player">
+					<End Role="Player" Type="EnvironmentModel.Player" Multiplicity="1" />
+					<End Role="Loot" Type="EnvironmentModel.Loot" Multiplicity="*" />
+					<ReferentialConstraint>
+						<Principal Role="Player">
+							<PropertyRef Name="PlayerId" />
+						</Principal>
+						<Dependent Role="Loot">
+							<PropertyRef Name="fxPlayerId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+			</Schema>
+		</edmx:ConceptualModels>
+		<edmx:Mappings>
+			<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+				<EntityContainerMapping StorageEntityContainer="EnvironmentModelStoreContainer" CdmEntityContainer="EnvironmentEntities">
+					<EntitySetMapping Name="Players">
+						<EntityTypeMapping TypeName="IsTypeOf(EnvironmentModel.Player)">
+							<MappingFragment StoreEntitySet="Player">
+								<ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+								<ScalarProperty Name="Name" ColumnName="Name" />
+								<ScalarProperty Name="IsMale" ColumnName="IsMale" />
+								<ScalarProperty Name="Level" ColumnName="Level" />
+								<ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
+								<ScalarProperty Name="AccountIsActive" ColumnName="AccountIsActive" />
+							</MappingFragment>
+						</EntityTypeMapping>
+						<EntityTypeMapping TypeName="IsTypeOf(EnvironmentModel.Warrior)">
+							<MappingFragment StoreEntitySet="Warrior">
+								<ScalarProperty Name="PlayerId" ColumnName="WarriorId" />
+								<ScalarProperty Name="Weapon" ColumnName="Weapon" />
+								<ScalarProperty Name="Armor" ColumnName="Armor" />
+							</MappingFragment>
+						</EntityTypeMapping>
+						<EntityTypeMapping TypeName="IsTypeOf(EnvironmentModel.Mage)">
+							<MappingFragment StoreEntitySet="Mage">
+								<ScalarProperty Name="PlayerId" ColumnName="MageId" />
+								<ScalarProperty Name="Mana" ColumnName="Mana" />
+								<ScalarProperty Name="ManaRegenRate" ColumnName="ManaRegenRate" />
+							</MappingFragment>
+						</EntityTypeMapping>
+					</EntitySetMapping>
+					<EntitySetMapping Name="Loots">
+						<EntityTypeMapping TypeName="EnvironmentModel.Loot">
+							<MappingFragment StoreEntitySet="Loot">
+								<ScalarProperty Name="LootId" ColumnName="LootId" />
+								<ScalarProperty Name="fxWarriorId" ColumnName="fxWarriorId" />
+								<ScalarProperty Name="Description" ColumnName="Description" />
+								<ScalarProperty Name="Quantity" ColumnName="Quantity" />
+							</MappingFragment>
+						</EntityTypeMapping>
+					</EntitySetMapping>
+				</EntityContainerMapping>
+			</Mapping>
+		</edmx:Mappings>
+	</edmx:Runtime>
+</edmx:Edmx>
+</code>
+
+#Sub Tables
+
+Starts with a copy of the previous example, without the view. Also shows a cascading delete.
+
+<code lang="sql">
+CREATE TABLE [player].[Player] (
+    [PlayerId]			BIGINT		NOT NULL	IDENTITY (1, 1)
+    ,[Name]				VARCHAR(50)	NOT NULL
+    ,[IsMale]			BIT			NOT NULL
+	,[Level]			INT			NOT NULL	DEFAULT(1)
+	,[LastLoginDate]	DATETIME 	NULL
+	,[AccountIsActive]	BIT			NOT NULL
+	,CONSTRAINT PK_Player PRIMARY KEY CLUSTERED (PlayerId) WITH (IGNORE_DUP_KEY = OFF)
+);
+CREATE TABLE [player].[Warrior] (
+    [WarriorId]			BIGINT		NOT NULL
+	,[Weapon] 			VARCHAR(20)	NULL
+	,[Armor] 			VARCHAR(20)	NULL
+	,CONSTRAINT PK_Warrior PRIMARY KEY CLUSTERED (WarriorId) WITH (IGNORE_DUP_KEY = OFF)
+	,CONSTRAINT FK_Warrior_Player FOREIGN KEY ([WarriorId]) REFERENCES [player].[Player] ([PlayerId]) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+CREATE TABLE [player].[Mage] (
+    [MageId]			BIGINT		NOT NULL
+	,[Mana] 			INT			NOT NULL
+	,[ManaRegenRate]	DECIMAL		NOT NULL
+	,CONSTRAINT PK_Warrior PRIMARY KEY CLUSTERED (WarriorId) WITH (IGNORE_DUP_KEY = OFF)
+	,CONSTRAINT FK_Warrior_Player FOREIGN KEY ([WarriorId]) REFERENCES [player].[Player] ([PlayerId]) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+CREATE TABLE [player].[Loot] (
+    [LootId]			BIGINT		NOT NULL	IDENTITY (1, 1)
+	,[fxPlayerId]		BIGINT		NOT NULL
+    ,[Description]		VARCHAR(50)	NOT NULL
+    ,[Quantity]			INT			NOT NULL
+	,CONSTRAINT PK_Loot PRIMARY KEY CLUSTERED (LootId) WITH (IGNORE_DUP_KEY = OFF)
+	,CONSTRAINT FK_Loot_Player FOREIGN KEY ([fxPlayerId]) REFERENCES [player].[Player] ([PlayerId]) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+CREATE TABLE [player].[Sidekick] (
+    [SideKickId]			BIGINT		NOT NULL	IDENTITY (1,1)
+	,[fxWarriorId] 			BIGINT 		NOT NULL
+	,[Name]					VARCHAR(50)	NOT NULL
+	,[Level]				INT			NOT NULL
+	,CONSTRAINT PK_Sidekick PRIMARY KEY CLUSTERED (SidekickId) WITH (IGNORE_DUP_KEY = OFF)
+	,CONSTRAINT FK_Sidekick_Warrior FOREIGN KEY ([fxWarriorId]) REFERENCES [player].[Warrior] ([WarriorId]) ON DELETE CASCADE ON UPDATE NO ACTION
+);
+</code>
+
+<code lang="markup">
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+	<edmx:Runtime>
+		<edmx:StorageModels>
+			<Schema Namespace="EnvironmentModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+				<EntityContainer Name="EnvironmentModelStoreContainer">
+					<EntitySet Name="Player" EntityType="EnvironmentModel.Store.Player" store:Type="Tables" Schema="player" />
+					<EntitySet Name="Warrior" EntityType="EnvironmentModel.Store.Warrior" store:Type="Tables" Schema="player" />
+					<EntitySet Name="Mage" EntityType="EnvironmentModel.Store.Mage" store:Type="Tables" Schema="player" />
+					<EntitySet Name="Loot" EntityType="EnvironmentModel.Store.Loot" store:Type="Tables" Schema="player" />
+					<EntitySet Name="Sidekick" EntityType="EnvironmentModel.Store.Sidekick" store:Type="Tables" Schema="player" />
+				</EntityContainer>
+				<EntityType Name="Player">
+					<Key>
+						<PropertyRef Name="PlayerId" />
+					</Key>
+					<Property Name="PlayerId" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+					<Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+					<Property Name="IsMale" Type="bit" Nullable="false" />
+					<Property Name="Level" Type="int" Nullable="false" />
+					<Property Name="LastLoginDate" Type="datetime" Nullable="true" />
+					<Property Name="AccountIsActive" Type="bit" Nullable="false" />
+				</EntityType>
+				<EntityType Name="Warrior">
+					<Key>
+						<PropertyRef Name="WarriorId" />
+					</Key>
+					<Property Name="WarriorId" Type="bigint" Nullable="false" />
+					<Property Name="Weapon" Type="varchar" Nullable="true" MaxLength="20" />
+					<Property Name="Armor" Type="varchar" Nullable="true" MaxLength="20" />
+				</EntityType>
+				<EntityType Name="Mage">
+					<Key>
+						<PropertyRef Name="MageId" />
+					</Key>
+					<Property Name="MageId" Type="bigint" Nullable="false" />
+					<Property Name="Mana" Type="int" Nullable="false" />
+					<Property Name="ManaRegenRate" Type="decimal" Nullable="false" Scale="3" />
+				</EntityType>
+				<EntityType Name="Loot">
+					<Key>
+						<PropertyRef Name="LootId" />
+					</Key>
+					<Property Name="LootId" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+					<Property Name="fxPlayerId" Type="bigint" Nullable="false" />
+					<Property Name="Description" Type="varchar" Nullable="false" MaxLength="50" />
+					<Property Name="Quantity" Type="int" Nullable="false" />
+				</EntityType>
+				<EntityType Name="Sidekick">
+					<Key>
+						<PropertyRef Name="SidekickId" />
+					</Key>
+					<Property Name="SidekickId" Type="bigint" Nullable="false" StoreGeneratedPattern="Identity" />
+					<Property Name="fxWarriorId" Type="bigint" Nullable="false" />
+					<Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+					<Property Name="Level" Type="int" Nullable="false" />
+				</EntityType>
+				<AssociationSet Name="FK_Warrior_Player" Association="EnvironmentModel.Store.FK_Warrior_Player">
+					<End Role="Player" EntitySet="Player" />
+					<End Role="Warrior" EntitySet="Warrior" />
+				</AssociationSet>
+				<AssociationSet Name="FK_Mage_Player" Association="EnvironmentModel.Store.FK_Mage_Player">
+					<End Role="Player" EntitySet="Player" />
+					<End Role="Mage" EntitySet="Mage" />
+				</AssociationSet>
+				<AssociationSet Name="FK_Loot_Player" Association="EnvironmentModel.Store.FK_Loot_Player">
+					<End Role="Loot" EntitySet="Loot" />
+					<End Role="Player" EntitySet="Player" />
+				</AssociationSet>
+				<AssociationSet Name="FK_Sidekick_Warrior" Association="EnvironmentModel.Store.FK_Sidekick_Warrior">
+					<End Role="Warrior" EntitySet="Warrior" />
+					<End Role="Sidekick" EntitySet="Sidekick" />
+				</AssociationSet>
+				<Association Name="FK_Warrior_Player">
+					<End Role="Player" Type="EnvironmentModel.Store.Player" Multiplicity="1" />
+					<End Role="Warrior" Type="EnvironmentModel.Store.Warrior" Multiplicity="0..1" />
+					<ReferentialConstraint>
+						<Principal Role="Player">
+							<PropertyRef Name="PlayerId" />
+						</Principal>
+						<Dependent Role="Warrior">
+							<PropertyRef Name="WarriorId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+				<Association Name="FK_Mage_Player">
+					<End Role="Player" Type="EnvironmentModel.Store.Player" Multiplicity="1" />
+					<End Role="Mage" Type="EnvironmentModel.Store.Mage" Multiplicity="0..1" />
+					<ReferentialConstraint>
+						<Principal Role="Player">
+							<PropertyRef Name="PlayerId" />
+						</Principal>
+						<Dependent Role="Mage">
+							<PropertyRef Name="MageId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+				<Association Name="FK_Loot_Player">
+					<End Role="Player" Type="EnvironmentModel.Store.Player" Multiplicity="1" />
+					<End Role="Loot" Type="EnvironmentModel.Store.Loot" Multiplicity="*" />
+					<ReferentialConstraint>
+						<Principal Role="Player">
+							<PropertyRef Name="PlayerId" />
+						</Principal>
+						<Dependent Role="Loot">
+							<PropertyRef Name="fxPlayerId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+				<Association Name="FK_Sidekick_Warrior">
+					<End Role="Warrior" Type="EnvironmentModel.Store.Warrior" Multiplicity="1">
+						<OnDelete Action="Cascade" />
+					</End>
+					<End Role="Sidekick" Type="EnvironmentModel.Store.Sidekick" Multiplicity="*" />
+					<ReferentialConstraint>
+						<Principal Role="Warrior">
+							<PropertyRef Name="WarriorId" />
+						</Principal>
+						<Dependent Role="Sidekick">
+							<PropertyRef Name="fxWarriorId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+			</Schema>
+		</edmx:StorageModels>
+		<edmx:ConceptualModels>
+			<Schema Namespace="EnvironmentModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+				<EntityContainer Name="EnvironmentEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+					<EntitySet Name="Players" EntityType="EnvironmentModel.Player" />
+					<EntitySet Name="Loots" EntityType="EnvironmentModel.Loot" />
+					<EntitySet Name="Sidekicks" EntityType="EnvironmentModel.Sidekick" />
+				</EntityContainer>
+				<EntityType Name="Player" Abstract="false" >
+					<Key>
+						<PropertyRef Name="PlayerId" />
+					</Key>
+					<Property Name="PlayerId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+					<Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+					<Property Name="IsMale" Type="Boolean" Nullable="false" />
+					<Property Name="Level" Type="Int32" Nullable="false" />
+					<Property Name="LastLoginDate" Type="DateTime" Nullable="true" />
+					<Property Name="AccountIsActive" Type="Boolean" Nullable="false" />
+					<NavigationProperty Name="Inventory" Relationship="EnvironmentModel.FK_Loot_Player" FromRole="Player" ToRole="Loot" />
+				</EntityType>
+				<EntityType Name="Warrior" BaseType="EnvironmentModel.Player">
+					<Property Name="Weapon" Type="String" Nullable="true" MaxLength="20" Unicode="false" FixedLength="false" />
+					<Property Name="Armor" Type="String" Nullable="true" MaxLength="20" Unicode="false" FixedLength="false" />
+					<NavigationProperty Name="Team" Relationship="EnvironmentModel.FK_Warrior_Sidekick" FromRole="Warrior" ToRole="Sidekick" />
+				</EntityType>
+				<EntityType Name="Mage" BaseType="EnvironmentModel.Player">
+					<Property Name="Mana" Type="Int32" Nullable="false" />
+					<Property Name="ManaRegenRate" Type="Decimal" Nullable="false" Precision="8" Scale="3" />
+				</EntityType>
+				<EntityType Name="Loot">
+					<Key>
+						<PropertyRef Name="LootId" />
+					</Key>
+					<Property Name="LootId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+					<Property Name="fxPlayerId" Type="Int64" Nullable="false" />
+					<Property Name="Description" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+					<Property Name="Quantity" Type="Int32" Nullable="false" />
+				</EntityType>
+				<EntityType Name="Sidekick">
+					<Key>
+						<PropertyRef Name="SidekickId" />
+					</Key>
+					<Property Name="SidekickId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+					<Property Name="fxWarriorId" Type="Int64" Nullable="false" />
+					<Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+					<Property Name="Level" Type="Int32" Nullable="false" />
+				</EntityType>
+				<AssociationSet Name="FK_Loot_Player" Association="EnvironmentModel.FK_Loot_Player">
+					<End Role="Player" EntitySet="Players" />
+					<End Role="Loot" EntitySet="Loots" />
+				</AssociationSet>
+				<AssociationSet Name="FK_Sidekick_Warrior" Association="EnvironmentModel.FK_Sidekick_Warrior">
+					<End Role="Warrior" EntitySet="Players" />
+					<End Role="Sidekick" EntitySet="Sidekicks" />
+				</AssociationSet>
+				<Association Name="FK_Loot_Player">
+					<End Role="Player" Type="EnvironmentModel.Player" Multiplicity="1" />
+					<End Role="Loot" Type="EnvironmentModel.Loot" Multiplicity="*" />
+					<ReferentialConstraint>
+						<Principal Role="Player">
+							<PropertyRef Name="PlayerId" />
+						</Principal>
+						<Dependent Role="Loot">
+							<PropertyRef Name="fxPlayerId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+				<Association Name="FK_Sidekick_Warrior">
+					<End Role="Warrior" Type="EnvironmentModel.Warrior" Multiplicity="1">
+						<OnDelete Action="Cascade" />
+					</End>
+					<End Role="Sidekick" Type="EnvironmentModel.Sidekick" Multiplicity="*" />
+					<ReferentialConstraint>
+						<Principal Role="Warrior">
+							<PropertyRef Name="PlayerId" />
+						</Principal>
+						<Dependent Role="Sidekick">
+							<PropertyRef Name="fxWarriorId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+			</Schema>
+		</edmx:ConceptualModels>
+		<edmx:Mappings>
+			<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+				<EntityContainerMapping StorageEntityContainer="EnvironmentModelStoreContainer" CdmEntityContainer="EnvironmentEntities">
+					<EntitySetMapping Name="Players">
+						<EntityTypeMapping TypeName="IsTypeOf(EnvironmentModel.Player)">
+							<MappingFragment StoreEntitySet="Player">
+								<ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+								<ScalarProperty Name="Name" ColumnName="Name" />
+								<ScalarProperty Name="IsMale" ColumnName="IsMale" />
+								<ScalarProperty Name="Level" ColumnName="Level" />
+								<ScalarProperty Name="LastLoginDate" ColumnName="LastLoginDate" />
+								<ScalarProperty Name="AccountIsActive" ColumnName="AccountIsActive" />
+							</MappingFragment>
+						</EntityTypeMapping>
+						<EntityTypeMapping TypeName="IsTypeOf(EnvironmentModel.Warrior)">
+							<MappingFragment StoreEntitySet="Warrior">
+								<ScalarProperty Name="PlayerId" ColumnName="WarriorId" />
+								<ScalarProperty Name="Weapon" ColumnName="Weapon" />
+								<ScalarProperty Name="Armor" ColumnName="Armor" />
+							</MappingFragment>
+						</EntityTypeMapping>
+						<EntityTypeMapping TypeName="IsTypeOf(EnvironmentModel.Mage)">
+							<MappingFragment StoreEntitySet="Mage">
+								<ScalarProperty Name="PlayerId" ColumnName="MageId" />
+								<ScalarProperty Name="Mana" ColumnName="Mana" />
+								<ScalarProperty Name="ManaRegenRate" ColumnName="ManaRegenRate" />
+							</MappingFragment>
+						</EntityTypeMapping>
+					</EntitySetMapping>
+					<EntitySetMapping Name="Loots">
+						<EntityTypeMapping TypeName="EnvironmentModel.Loot">
+							<MappingFragment StoreEntitySet="Loot">
+								<ScalarProperty Name="LootId" ColumnName="LootId" />
+								<ScalarProperty Name="fxWarriorId" ColumnName="fxWarriorId" />
+								<ScalarProperty Name="Description" ColumnName="Description" />
+								<ScalarProperty Name="Quantity" ColumnName="Quantity" />
+							</MappingFragment>
+						</EntityTypeMapping>
+					</EntitySetMapping>
+					<EntitySetMapping Name="Sidekicks">
+						<EntityTypeMapping TypeName="EnvironmentModel.Sidekick">
+							<MappingFragment StoreEntitySet="Sidekick">
+								<ScalarProperty Name="SidekickId" ColumnName="SidekickId" />
+								<ScalarProperty Name="fxWarriorId" ColumnName="fxWarriorId" />
+								<ScalarProperty Name="Name" ColumnName="Name" />
+								<ScalarProperty Name="Level" ColumnName="Level" />
+							</MappingFragment>
+						</EntityTypeMapping>
+					</EntitySetMapping>
+				</EntityContainerMapping>
+			</Mapping>
+		</edmx:Mappings>
+	</edmx:Runtime>
+</edmx:Edmx>
+</code>
+
+#Many-to-Many Relationship
+
+<code lang="sql">
+CREATE TABLE [map].[Country] (
+    [CountryId]			INT			NOT NULL	IDENTITY (1, 1)
+    ,[Name]				VARCHAR(50)	NOT NULL
+    ,[SquareMiles]		DECIMAL		NOT NULL
+	,[Capital]			VARCHAR(50)	NOT NULL
+	,CONSTRAINT PK_Country PRIMARY KEY CLUSTERED (CountryId) WITH (IGNORE_DUP_KEY = OFF)
+);
+CREATE TABLE [commerce].[TradeGood] (
+    [TradeGoodId]		INT			NOT NULL	IDENTITY (1, 1)
+    ,[Name]				VARCHAR(50)	NOT NULL
+	,CONSTRAINT PK_TradeGood PRIMARY KEY CLUSTERED (TradeGoodId) WITH (IGNORE_DUP_KEY = OFF)
+);
+CREATE TABLE [commerce].[CountryProducesTradeGood] (
+    [fxCountryId]		INT		NOT NULL
+    ,[fxTradeGoodId]	INT		NOT NULL
+	,CONSTRAINT PK_CountryProducesTradeGood PRIMARY KEY CLUSTERED (fxCountryId, fxTradeGoodId) WITH (IGNORE_DUP_KEY = OFF)
+	,CONSTRAINT FK_CountryProducesTradeGood_Country FOREIGN KEY ([fxCountryId]) REFERENCES [map].[Country] ([CountryId]) ON DELETE NO ACTION ON UPDATE NO ACTION
+	,CONSTRAINT FK_CountryProducesTradeGood_TradeGood FOREIGN KEY ([fxTradeGoodId]) REFERENCES [commerce].[TradeGood] ([TradeGoodId]) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+</code>
+
+<code lang="markup">
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+	<edmx:Runtime>
+		<edmx:StorageModels>
+			<Schema Namespace="EnvironmentModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+				<EntityContainer Name="EnvironmentModelStoreContainer">
+					<EntitySet Name="Country" EntityType="EnvironmentModel.Store.Country" store:Type="Tables" Schema="map" />
+					<EntitySet Name="TradeGood" EntityType="EnvironmentModel.Store.TradeGood" store:Type="Tables" Schema="commerce" />
+					<EntitySet Name="CountryProducesTradeGood" EntityType="EnvironmentModel.Store.CountryProducesTradeGood" store:Type="Tables" Schema="commerce" />
+				</EntityContainer>
+				<EntityType Name="Country">
+					<Key>
+						<PropertyRef Name="CountryId" />
+					</Key>
+					<Property Name="CountryId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+					<Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+					<Property Name="SquareMiles" Type="decimal" Nullable="false" />
+					<Property Name="Capital" Type="varchar" Nullable="false" MaxLength="50" />
+				</EntityType>
+				<EntityType Name="TradeGood">
+					<Key>
+						<PropertyRef Name="TradeGoodId" />
+					</Key>
+					<Property Name="TradeGoodId" Type="int" Nullable="false" />
+					<Property Name="Name" Type="varchar" Nullable="true" MaxLength="50" />
+				</EntityType>
+				<EntityType Name="CountryProducesTradeGood">
+					<Key>
+						<PropertyRef Name="fxCountryId" />
+						<PropertyRef Name="fxTradeGoodId" />
+					</Key>
+					<Property Name="fxCountryId" Type="int" Nullable="false" />
+					<Property Name="fxTradeGoodId" Type="int" Nullable="false" />
+				</EntityType>
+				<AssociationSet Name="FK_CountryProducesTradeGood_Country" Association="EnvironmentModel.Store.FK_CountryProducesTradeGood_Country">
+					<End Role="Country" EntitySet="Country" />
+					<End Role="CountryProducesTradeGood" EntitySet="CountryProducesTradeGood" />
+				</AssociationSet>
+				<AssociationSet Name="FK_CountryProducesTradeGood_TradeGood" Association="EnvironmentModel.Store.FK_CountryProducesTradeGood_TradeGood">
+					<End Role="TradeGood" EntitySet="TradeGood" />
+					<End Role="CountryProducesTradeGood" EntitySet="CountryProducesTradeGood" />
+				</AssociationSet>
+				<Association Name="FK_CountryProducesTradeGood_Country">
+					<End Role="Country" Type="EnvironmentModel.Store.Country" Multiplicity="1" />
+					<End Role="CountryProducesTradeGood" Type="EnvironmentModel.Store.CountryProducesTradeGood" Multiplicity="*" />
+					<ReferentialConstraint>
+						<Principal Role="Country">
+							<PropertyRef Name="CountryId" />
+						</Principal>
+						<Dependent Role="CountryProducesTradeGood">
+							<PropertyRef Name="fxCountryId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+				<Association Name="FK_CountryProducesTradeGood_TradeGood">
+					<End Role="TradeGood" Type="EnvironmentModel.Store.TradeGood" Multiplicity="1" />
+					<End Role="CountryProducesTradeGood" Type="EnvironmentModel.Store.CountryProducesTradeGood" Multiplicity="*" />
+					<ReferentialConstraint>
+						<Principal Role="TradeGood">
+							<PropertyRef Name="TradeGoodId" />
+						</Principal>
+						<Dependent Role="CountryProducesTradeGood">
+							<PropertyRef Name="fxTradeGoodId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+			</Schema>
+		</edmx:StorageModels>
+		<edmx:ConceptualModels>
+			<Schema Namespace="EnvironmentModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+				<EntityContainer Name="EnvironmentEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+					<EntitySet Name="Countries" EntityType="EnvironmentModel.Country" />
+					<EntitySet Name="TradeGoods" EntityType="EnvironmentModel.TradeGood" />
+				</EntityContainer>
+				<EntityType Name="Country">
+					<Key>
+						<PropertyRef Name="CountryId" />
+					</Key>
+					<Property Name="CountryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+					<Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+					<Property Name="SquareMiles" Type="Decimal" Nullable="false" />
+					<Property Name="Capital" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+					<NavigationProperty Name="ProducesTradeGoods" Relationship="EnvironmentModel.Country_to_TradeGood" FromRole="Country" ToRole="TradeGood" />
+				</EntityType>
+				<EntityType Name="TradeGood">
+					<Key>
+						<PropertyRef Name="TradeGoodId" />
+					</Key>
+					<Property Name="TradeGoodId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+					<Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+					<NavigationProperty Name="ProducedBy" Relationship="EnvironmentModel.Country_to_TradeGood" FromRole="TradeGood" ToRole="Country" />
+				</EntityType>
+				<AssociationSet Name="Country_to_TradeGood" Association="EnvironmentModel.Country_to_TradeGood">
+					<End Role="Country" EntitySet="Countries" />
+					<End Role="TradeGood" EntitySet="TradeGood" />
+				</AssociationSet>
+				<Association Name="Country_to_TradeGood">
+					<End Role="Country" Type="EnvironmentModel.Country" Multiplicity="*" />
+					<End Role="TradeGood" Type="EnvironmentModel.TradeGood" Multiplicity="*" />
+				</Association>
+			</Schema>
+		</edmx:ConceptualModels>
+		<edmx:Mappings>
+			<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+				<EntityContainerMapping StorageEntityContainer="EnvironmentModelStoreContainer" CdmEntityContainer="EnvironmentEntities">
+					<EntitySetMapping Name="Countries">
+						<EntityTypeMapping TypeName="EnvironmentModel.Country">
+							<MappingFragment StoreEntitySet="Country">
+								<ScalarProperty Name="CountryId" ColumnName="CountryId" />
+								<ScalarProperty Name="Name" ColumnName="Name" />
+								<ScalarProperty Name="SquareMiles" ColumnName="SquareMiles" />
+								<ScalarProperty Name="Capital" ColumnName="Capital" />
+							</MappingFragment>
+						</EntityTypeMapping>
+					</EntitySetMapping>
+					<EntitySetMapping Name="TradeGoods">
+						<EntityTypeMapping TypeName="EnvironmentModel.TradeGood">
+							<MappingFragment StoreEntitySet="TradeGood">
+								<ScalarProperty Name="TradeGoodId" ColumnName="TradeGoodId" />
+								<ScalarProperty Name="Name" ColumnName="Name" />
+							</MappingFragment>
+						</EntityTypeMapping>
+					</EntitySetMapping>
+					<AssociationSetMapping Name="Country_to_TradeGood" TypeName="EnvironmentModel.Country_to_TradeGood" StoreEntitySet="Country_to_TradeGood">
+						<EndProperty Name="Country">
+							<ScalarProperty Name="fxCountryId" ColumnName="fxCountryId" />
+						</EndProperty>
+						<EndProperty Name="TradeGood">
+							<ScalarProperty Name="fxTradeGoodId" ColumnName="fxTradeGoodId" />
+						</EndProperty>
+					</AssociationSetMapping>
+				</EntityContainerMapping>
+			</Mapping>
+		</edmx:Mappings>
+		</edmx:Runtime>
+</edmx:Edmx>
+</code>
+
+#Many-to-Many with Extra Columns
+
+<code lang="sql">
+CREATE TABLE [map].[Country] (
+    [CountryId]			INT			NOT NULL	IDENTITY (1, 1)
+    ,[Name]				VARCHAR(50)	NOT NULL
+    ,[SquareMiles]		DECIMAL		NOT NULL
+	,[Capital]			VARCHAR(50)	NOT NULL
+	,CONSTRAINT PK_Country PRIMARY KEY CLUSTERED (CountryId) WITH (IGNORE_DUP_KEY = OFF)
+);
+CREATE TABLE [commerce].[TradeGood] (
+    [TradeGoodId]		INT			NOT NULL	IDENTITY (1, 1)
+    ,[Name]				VARCHAR(50)	NOT NULL
+	,CONSTRAINT PK_TradeGood PRIMARY KEY CLUSTERED (TradeGoodId) WITH (IGNORE_DUP_KEY = OFF)
+);
+CREATE TABLE [commerce].[Production] (
+    [ProductionId]			INT		NOT NULL	IDENTITY (1, 1)
+	,[fxCountryId]			INT		NOT NULL
+    ,[fxTradeGoodId]		INT		NOT NULL
+	,[QuantityPerQuarter]	INT		NOT NULL
+	,[AvgPrice]				DECIMAL	NOT NULL
+	,CONSTRAINT PK_Production PRIMARY KEY CLUSTERED (ProductionId) WITH (IGNORE_DUP_KEY = OFF)
+	,CONSTRAINT FK_Production_Country FOREIGN KEY ([fxCountryId]) REFERENCES [map].[Country] ([CountryId]) ON DELETE NO ACTION ON UPDATE NO ACTION
+	,CONSTRAINT FK_Production_TradeGood FOREIGN KEY ([fxTradeGoodId]) REFERENCES [commerce].[TradeGood] ([TradeGoodId]) ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+</code>
+
+<code lang="markup">
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+	<edmx:Runtime>
+		<edmx:StorageModels>
+			<Schema Namespace="EnvironmentModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+				<EntityContainer Name="EnvironmentModelStoreContainer">
+					<EntitySet Name="Country" EntityType="EnvironmentModel.Store.Country" store:Type="Tables" Schema="map" />
+					<EntitySet Name="TradeGood" EntityType="EnvironmentModel.Store.TradeGood" store:Type="Tables" Schema="commerce" />
+					<EntitySet Name="Production" EntityType="EnvironmentModel.Store.Production" store:Type="Tables" Schema="commerce" />
+				</EntityContainer>
+				<EntityType Name="Country">
+					<Key>
+						<PropertyRef Name="CountryId" />
+					</Key>
+					<Property Name="CountryId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+					<Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+					<Property Name="SquareMiles" Type="decimal" Nullable="false" />
+					<Property Name="Capital" Type="varchar" Nullable="false" MaxLength="50" />
+				</EntityType>
+				<EntityType Name="TradeGood">
+					<Key>
+						<PropertyRef Name="TradeGoodId" />
+					</Key>
+					<Property Name="TradeGoodId" Type="int" Nullable="false" />
+					<Property Name="Name" Type="varchar" Nullable="true" MaxLength="50" />
+				</EntityType>
+				<EntityType Name="Production">
+					<Key>
+						<PropertyRef Name="ProductionId" />
+					</Key>
+					<Property Name="Production" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+					<Property Name="fxCountryId" Type="int" Nullable="false" />
+					<Property Name="fxTradeGoodId" Type="int" Nullable="false" />
+					<Property Name="QuantityPerQuarter" Type="int" Nullable="false" />
+					<Property Name="AvgPrice" Type="decimal" Nullable="false" />
+				</EntityType>
+				<AssociationSet Name="FK_Production_Country" Association="EnvironmentModel.Store.FK_Production_Country">
+					<End Role="Country" EntitySet="Country" />
+					<End Role="Production" EntitySet="Production" />
+				</AssociationSet>
+				<AssociationSet Name="FK_Production_TradeGood" Association="EnvironmentModel.Store.FK_Production_TradeGood">
+					<End Role="TradeGood" EntitySet="TradeGood" />
+					<End Role="Production" EntitySet="Production" />
+				</AssociationSet>
+				<Association Name="FK_Production_Country">
+					<End Role="Country" Type="EnvironmentModel.Store.Country" Multiplicity="1" />
+					<End Role="Production" Type="EnvironmentModel.Store.Production" Multiplicity="*" />
+					<ReferentialConstraint>
+						<Principal Role="Country">
+							<PropertyRef Name="CountryId" />
+						</Principal>
+						<Dependent Role="Production">
+							<PropertyRef Name="fxCountryId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+				<Association Name="FK_Production_TradeGood">
+					<End Role="TradeGood" Type="EnvironmentModel.Store.TradeGood" Multiplicity="1" />
+					<End Role="Production" Type="EnvironmentModel.Store.Production" Multiplicity="*" />
+					<ReferentialConstraint>
+						<Principal Role="TradeGood">
+							<PropertyRef Name="TradeGoodId" />
+						</Principal>
+						<Dependent Role="Production">
+							<PropertyRef Name="fxTradeGoodId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+			</Schema>
+		</edmx:StorageModels>
+		<edmx:ConceptualModels>
+			<Schema Namespace="EnvironmentModel" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+				<EntityContainer Name="EnvironmentEntities" annotation:LazyLoadingEnabled="true" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+					<EntitySet Name="Countries" EntityType="EnvironmentModel.Country" />
+					<EntitySet Name="TradeGoods" EntityType="EnvironmentModel.TradeGood" />
+					<EntitySet Name="Productions" EntityType="EnvironmentModel.Production" />
+				</EntityContainer>
+				<EntityType Name="Country">
+					<Key>
+						<PropertyRef Name="CountryId" />
+					</Key>
+					<Property Name="CountryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+					<Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+					<Property Name="SquareMiles" Type="Decimal" Nullable="false" />
+					<Property Name="Capital" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+					<NavigationProperty Name="Productions" Relationship="EnvironmentModel.FK_Production_Country" FromRole="Country" ToRole="Production" />
+				</EntityType>
+				<EntityType Name="TradeGood">
+					<Key>
+						<PropertyRef Name="TradeGoodId" />
+					</Key>
+					<Property Name="TradeGoodId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+					<Property Name="Name" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+					<NavigationProperty Name="Productions" Relationship="EnvironmentModel.FK_Production_TradeGood" FromRole="TradeGood" ToRole="Production" />
+				</EntityType>
+				<EntityType Name="Production">
+					<Key>
+						<PropertyRef Name="ProductionId" />
+					</Key>
+					<Property Name="ProductionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+					<Property Name="fxCountryId" Type="Int32" Nullable="false" />
+					<Property Name="fxTradeGoodId" Type="Int32" Nullable="false" />
+					<Property Name="QuantityPerQuarter" Type="Int32" Nullable="false" />
+					<Property Name="AvgPrice" Type="Decimal" Nullable="false" />
+					<NavigationProperty Name="Countries" Relationship="EnvironmentModel.FK_Production_Country" FromRole="Production" ToRole="Country" />
+					<NavigationProperty Name="TradeGoods" Relationship="EnvironmentModel.FK_Production_TradeGood" FromRole="Production" ToRole="TradeGood" />
+				</EntityType>
+				<AssociationSet Name="FK_Production_Country" Association="EnvironmentModel.FK_Production_Country">
+					<End Role="Country" EntitySet="Countries" />
+					<End Role="Production" EntitySet="Productions" />
+				</AssociationSet>
+				<AssociationSet Name="FK_Production_TradeGood" Association="EnvironmentModel.FK_Production_TradeGood">
+					<End Role="TradeGood" EntitySet="TradeGoods" />
+					<End Role="Production" EntitySet="Productions" />
+				</AssociationSet>
+				<Association Name="FK_Production_Country">
+					<End Role="Country" Type="EnvironmentModel.Country" Multiplicity="1" />
+					<End Role="Production" Type="EnvironmentModel.Production" Multiplicity="*" />
+					<ReferentialConstraint>
+						<Principal Role="Country">
+							<PropertyRef Name="CountryId" />
+						</Principal>
+						<Dependent Role="Production">
+							<PropertyRef Name="fxCountryId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+				<Association Name="FK_Production_TradeGood">
+					<End Role="TradeGood" Type="EnvironmentModel.TradeGood" Multiplicity="1" />
+					<End Role="Production" Type="EnvironmentModel.Production" Multiplicity="*" />
+					<ReferentialConstraint>
+						<Principal Role="TradeGood">
+							<PropertyRef Name="TradeGoodId" />
+						</Principal>
+						<Dependent Role="Production">
+							<PropertyRef Name="fxTradeGoodId" />
+						</Dependent>
+					</ReferentialConstraint>
+				</Association>
+				</Schema>
+		</edmx:ConceptualModels>
+		<edmx:Mappings>
+			<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+				<EntityContainerMapping StorageEntityContainer="EnvironmentModelStoreContainer" CdmEntityContainer="EnvironmentEntities">
+					<EntitySetMapping Name="Countries">
+						<EntityTypeMapping TypeName="EnvironmentModel.Country">
+							<MappingFragment StoreEntitySet="Country">
+								<ScalarProperty Name="CountryId" ColumnName="CountryId" />
+								<ScalarProperty Name="Name" ColumnName="Name" />
+								<ScalarProperty Name="SquareMiles" ColumnName="SquareMiles" />
+								<ScalarProperty Name="Capital" ColumnName="Capital" />
+							</MappingFragment>
+						</EntityTypeMapping>
+					</EntitySetMapping>
+					<EntitySetMapping Name="TradeGoods">
+						<EntityTypeMapping TypeName="EnvironmentModel.TradeGood">
+							<MappingFragment StoreEntitySet="TradeGood">
+								<ScalarProperty Name="TradeGoodId" ColumnName="TradeGoodId" />
+								<ScalarProperty Name="Name" ColumnName="Name" />
+							</MappingFragment>
+						</EntityTypeMapping>
+					</EntitySetMapping>
+					<EntitySetMapping Name="Productions">
+						<EntityTypeMapping TypeName="EnvironmentModel.Production">
+							<MappingFragment StoreEntitySet="Production">
+								<ScalarProperty Name="ProductionId" ColumnName="ProductionId" />
+								<ScalarProperty Name="fxCountryId" ColumnName="fxCountryId" />
+								<ScalarProperty Name="fxTradeGoodId" ColumnName="fxTradeGoodId" />
+								<ScalarProperty Name="QuantityPerQuarter" ColumnName="QuantityPerQuarter" />
+								<ScalarProperty Name="AvgPrice" ColumnName="AvgPrice" />
+							</MappingFragment>
+						</EntityTypeMapping>
+					</EntitySetMapping>
+				</EntityContainerMapping>
+			</Mapping>
+		</edmx:Mappings>
+		</edmx:Runtime>
+</edmx:Edmx>
+</code>

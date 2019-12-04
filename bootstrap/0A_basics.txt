@@ -1,0 +1,57 @@
+##Bootstrap
+
+A front-end framework for web development. Makes GUI creation easy. Includes HTML/CSS based design templates for typography, forms, buttons, tables, navigation, modals, image carousels, etc.
+
+Provides responsive designs that automatically adjust themselves to different screen/browser sizes.  Designs are compatible with all major browsers.
+
+Built on jQuery.
+
+##Getting Started
+
+#Minimal
+
+Minimal HTML:
+<code>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	</head>
+</html>
+</code>
+
+For mobile rendering and touch zooming:
+<code>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+</code>
+
+#Container
+
+Bootstrap requires a containing element to wrap site contents.  Containers cannot be nested, but you can have more than one per page.
+
+Full width option: .container
+Viewport width option: .container-fluid
+
+<code>
+<body>
+	<div class="container">
+		<!-- site contents -->
+	</div>
+</body>
+</code>
+
+#Grid System
+
+Horizontal space is split into 12 units. "1" is 1/12 of the parent element width.
+
+The class names are formatted as "col-<size>-<units>".  Size options are xs (phones), sm (tablets), md (desktops), and lg (larger desktops).  Units can be any integer from 1 to 12.
+
+<code>
+<div class="col-md-4"></div> <!-- 4/12 = 1/3 of parent width -->
+<div class="col-md-1"></div> <!-- 1/12 of parent width -->
+</code>

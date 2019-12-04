@@ -1,0 +1,36 @@
+##Window
+
+#Window
+
+The window is the application window.
+
+<code>
+window_set_fullscreen(bool);
+</code>
+"true" will expand window to full screen.
+"false" will shrink window to its previous non-full-screen size.
+
+<code>
+window_set_size(width, height);
+</code>
+Window contents will be automatically scaled to fit a 1:1 ratio to the background image.  It works better to change the window size programmatically than to let the user manually change it.
+
+<code>
+var width = window_get_width();
+var height = window_get_height();
+</code>
+
+#Display
+
+The display seems to be the entire screen.
+
+<code>
+var width = display_get_width();
+var height = display_get_height();
+</code>
+
+#Settings
+
+In Global Game Settings > Windows > Graphics, you can set the options "Allow the player to resize the game window" and "Allow switching to fullscreen".
+
+To allow full screen size in Mac, the default Game Setting must be "start in full screen mode".

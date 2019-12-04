@@ -1,0 +1,36 @@
+##Normalization
+
+Normalization is the act of designing a database to conform to one of the "normal forms".
+The aim is to reduce data redundancy and improve data integrity.
+Normalized databases should also be extensible without editing the existing design.
+
+This involves organizing tables and columns so that data constraints can be enforced by the database.
+
+Synthesis: creating a new database design.
+Decomposition: improving an existing database design.
+
+#Forms
+
+UNF: Unnormalized Form
+1NF: First Normal Form
+2NF: Second Normal Form
+3NF: Third Normal Form
+EKNF: Elementary Key Normal Form
+BCNF: Boyce-Codd Normal Form
+4NF: Fourth Normal Form
+ETNF: Essential Tuple Normal Form
+5NF: Fifth Normal Form
+DKNF: Domain-Key Normal Form
+6NF: Sixth Normal Form
+
+![Comparison of normal forms](images/normal_forms_compare.png = 800px)
+
+Some general aims:
+- reduce the number of NULL values being stored
+- enable efficient indexing
+- each column should hold one data type
+- columns should not hold lists/etc of data, just atomic data
+
+#Denormalize
+
+A denormalized database, such as one single giant table with many columns, can be used to increase query speed since all the joins are already done.

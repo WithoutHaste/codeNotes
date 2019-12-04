@@ -1,0 +1,46 @@
+##Nested Types
+
+Example without nesting:
+<code>
+public class Country
+{
+	public int Id { get; set; }
+	public string Name { get; set; }
+	public Person Ruler { get; set; }
+}
+
+//Person is a value-type
+public class Person : ValueObject<Person>
+{
+	public string Name { get; private set; }
+	
+	public Person(string name)
+	{
+		Name = name;
+	}
+}
+</code>
+Country.Ruler will be persisted as a Complex-Type in the database.
+
+Example with nesting:
+<code>
+public class Country
+{
+	public int Id { get; set; }
+	public string Name { get; set; }
+	public Person Ruler { get; set; }
+
+	//Person is a value-type
+	public class Person : ValueObject<Person>
+	{
+		public string Name { get; private set; }
+		
+		public Person(string name)
+		{
+			Name = name;
+		}
+	}
+}
+</code>
+EF 5 would ignore Country.Ruler entirely.
+EF 6 persists Country.Ruler as a Complex-Type.

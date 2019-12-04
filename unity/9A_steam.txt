@@ -1,0 +1,57 @@
+##Steam
+
+How to publish Unity games to Steam.
+
+#Enable Steamworks.Net
+
+!![How-to video](https://www.youtube.com/watch?v=o5-Y-5Dtg_c)
+
+!![Steamworks.Net](https://steamworks.github.io/)
+Download Steamworks.Net, which is a C# wrapper for Valve Steamworks API. Free to use.
+
+Follow the installation instructions, or this:
+1. Open your project in Unity
+2. Double-click on the downloaded *.unitypackage from the latest release on Github
+- you should see a "Steamworks.Net" popup in Unity now
+3. Click "Import" on the popup
+- adds Assets/Editor/Steamworks.NET
+- adds Assets/Plugins/Steamworks.NET, steam_api.bundle, x86, x86_64
+- adds Assets/Scripts/Steamworks.NET
+
+4. Look at file <project root>/steam_appid.txt
+- it will come with default value "480"
+5. Replace the default steam_appid.txt value with the id for your game
+
+6. Create an empty GameObject in your default Scene, call it "SteamManager"
+7. Drag-n-drop the script "Assets/Scripts/Steamworks.NET/SteamManager" into the Inspector for "SteamManager"
+8. Open the "SteamManager" script in Visual Studio
+9. Search for default value "480" to find this line:
+<code>
+if (SteamAPI.RestartAppIfNecessary(AppId_t.Invalid)) {
+</code>
+10. Replace "AppId_t.Invalid" with your Steam app id, the same value as in "steam_appid.txt"
+<code>
+if (SteamAPI.RestartAppIfNecessary((AppId_t)myActualAppId)) {
+</code>
+11. Save changes
+
+(There's another edit in the tutorial. I'll add it if it turns out to be necessary.)
+
+#Achievements
+
+!![How-to video](https://www.youtube.com/watch?v=PzMjsSJ0o6E)
+
+1. Setup your achievements in the Steamworks website
+- each achievement will have a unique id set by you AND a unique id set by Steam
+
+2. Open your project in Unity
+3. Create an empty GameObject in your default Scene, call it "SteamAchievements"
+4. Add your custom achievements script to this GameObject
+
+todo: finish tutorial
+
+#Build
+
+!![How-to video](https://www.youtube.com/watch?v=rK5Fr5hhslM)
+
+todo: watch tutorial

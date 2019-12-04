@@ -1,0 +1,24 @@
+##Scope
+
+to do
+
+#Multiple Scopes
+
+You can create multiple private scopes within one method. One possible use is to ensure that a variable is not used after its purpose is complete.
+
+<code>
+public void MyMethod()
+{
+	{
+		int a = 5;
+	}
+	//variable a is not valid here
+	
+	{
+		//variable a is not valid here either
+		int b = 7;
+	}
+}
+</code>
+
+It is generally recommended to decompose a large method into several smaller methods instead.

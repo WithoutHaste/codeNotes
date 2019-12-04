@@ -1,0 +1,20 @@
+##Session Variables
+
+#TempData
+
+A dictionary maintaining data between controllers and actions, even over redirect requests.
+
+Once you view a piece of data in TempData, it is automatically set to NULL.
+
+<code>
+TempData.Keep[key] //TempData will keep the value of the key even though you viewed it
+TempData.Peek[key] //Lets you view the value of key without deleting it
+</code>
+
+#ViewData 
+
+A dictionary maintaining data between controllers and views, ie. the data can be set in the controller and used in the view.
+
+#ViewBag
+
+A dynamic wrapper around ViewData. You can add dynamic properties to ViewBag.

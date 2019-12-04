@@ -1,0 +1,10 @@
+##Resource Group
+
+A resource group is a logical collection of assets. For instance, you'd have at least one resource group per application.
+
+To create a resource group:
+(as of Sept. 2019)
+1) Open Azure console
+2) In the left-hand menu > click Resource Groups > Create Resource Group
+3) Fill in the form
+4) Click Review + Create

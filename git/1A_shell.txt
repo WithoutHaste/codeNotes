@@ -1,0 +1,345 @@
+##Shell
+
+For all commands, make sure you are in the directory of the repository.
+
+#Admin
+
+Setup email and password, etc
+<code>
+git config
+</code>
+
+#Repository Level
+
+Create a new repository out of the current directory
+<code>
+git init
+</code>
+
+Copy a repository to local drive
+<code>
+git clone <url>
+</code>
+URL example: https://github.com/jquery/jquery.git
+The repository will be cloned into a new directory named after the repository.
+The upstreams will be set automatically.
+
+View log of commits on repository
+<code>
+git log
+</code>
+Commits are listed newest to oldest.
+<code>
+git log --oneline
+</code>
+Displays a succinct version of the log, with just one line per commit showing the message.
+<code>
+git log --oneline | wc -l
+</code>
+Count how many commits have been made, using Word Count.
+<code>
+git log --oneline --graph
+</code>
+Shows the branching and merging.
+<code>
+git log --oneline --graph --all --decorate
+</code>
+Shows the branch graph for all branches (not just the current one), with labels decorating each line.
+
+List the commits grouped by author, in author-alphabetical order.
+<code>
+git shortlog
+</code>
+Aka "git log --format=short"
+<code>
+git shortlog -sne
+</code>
+"-s" means "summary", so the commit messages will not be shown.
+"-n" means "numerically", so the authors will be sorted by most-to-least commits.
+"-e" means "email", so each author's email address will be shown.
+
+View the changes between two commits
+<code>
+git diff dd6819..a15ec6
+</code>
+This example shows specifying a commit by just the beginning of its hashcode. This will show the differences between commit "dd6819..." and "a15ec6...".
+<code>
+git diff HEAD~1..HEAD
+</code>
+This looks that the commits "1 back from most recent" to "most recent".
+<code>
+git diff HEAD~1..
+</code>
+An unspecified commit will default to HEAD.
+<code>
+git diff --cached
+</code>
+Compares the repository to the staging area.
+
+View all changes included in one commit
+<code>
+git show HEAD
+</code>
+
+View the fetch and push URLs.
+<code>
+git remote -v
+</code>
+"-v" means "verbose".
+A local repository will not have any remotes.
+<code>
+git remote add <NAME OF REMOTE> <URL>
+</code>
+Add an origin URL to a local repository. The common name for this remote is "origin".
+Or add the remote of a forked version of your project, for review. In this case, it is common to have many remotes.
+<code>
+git remote rm origin
+</code>
+Remove a named remote (in this case "origin").
+
+View tags associated with stable points in development
+<code>
+git tag
+</code>
+A tag is a label associated with one commit.
+Most often used to tag completed, stable versions of the project.
+Tags are not pushed be default. Use "git push --tags".
+<code>
+git tag <TAG>
+</code>
+Adds a tag to the HEAD.
+<code>
+git tag -a <TAG>
+</code>
+Opens an editor to write in the message to annotate the tag with. Tag is added to the HEAD.
+<code>
+git tag -s <TAG>
+</code>
+Add a signed tag to the HEAD. (always includes an annotation)
+This tag will be signed by you, the user.
+
+#Workflow
+
+Download remote changes (merge will be second step, if you want these changes in your branch)
+<code>
+git fetch
+</code>
+<code>
+git fetch <NAME OF REMOTE>
+</code>
+If you have multiple remotes, you can specify which to fetch from.
+
+Update from remote repository - fetch and merge together
+<code>
+git pull
+</code>
+<code>
+git pull <REMOTE NAME> <REMOTE BRANCH>
+</code>
+Example: "git pull origin master"
+Specify where to pull from, if the current branch has no upstream set.
+
+View list of edited local files
+<code>
+git status
+</code>
+Red is an unstaged edit or new file.
+Green is a staged edit or new file.
+
+Add all changes to staging area for next commit
+<code>
+git add -A
+</code>
+Add one file to the staging area
+<code>
+git add FILENAME
+</code>
+Add all edited (updated or deleted) files to the staging area (does not include new files)
+<code>
+git add -u
+</code>
+
+Commit all staged files locally
+<code>
+git commit -m "commit message"
+</code>
+Open default editor to write a longer commit message
+<code>
+git commit
+</code>
+
+Push all local commits to repository
+<code>
+git push
+</code>
+<code>
+git push origin <branch>
+</code>
+Pushes a local branch to the shared repository.
+<code>
+git push origin <branch>:<remote branch>
+</code>
+Pushes a local branch to the shared repository, with a different name remotely.
+<code>
+git push origin :<remote branch>
+</code>
+Deletes a remote branch.
+Be careful doing this - someone else may be using that branch.
+
+Push just one commit to repository (must be the first non-pushed commit)
+<code>
+git push origin <commit-hash>:master
+</code>
+
+#Revert Changes
+
+Replace uncommited changes with HEAD version of file
+<code>
+git checkout FILENAME
+</code>
+
+Replace all uncommited changes with HEAD version
+<code>
+git reset --hard
+</code>
+
+Rollback to a previous commit, while preserving changes made since that commit
+<code>
+git reset --soft HEAD~1
+</code>
+This example rolls back to commit "1 back from HEAD".
+The changes that were staged for the next commit will be back in the staging area.
+This effects the log - it will be like that commit never happened (I think provided you have not pushed it to the repository).
+
+Rollback to a previous commit, while discarding changes made since that commit
+<code>
+git reset --hard HEAD~1
+</code>
+
+#Branching
+
+View list of local branches
+<code>
+git branch
+</code>
+"master" is the default branch.
+<code>
+git branch -r
+</code>
+"-r" means "remote". Lists all branches shared remotely.
+<code>
+git branch --set-upstream <LOCAL BRANCH> <REMOTE BRANCH>
+</code>
+Example: "git branch --set-upstream master origin/master"
+Set the remote branch that your local branch mirrors. This must be set to use "pull".
+
+Create a branch, but don't check it out yet
+<code>
+git branch <branch>
+</code>
+Branch from the HEAD.
+<code>
+git branch <branch> <commit hash>
+</code>
+Branch from a specific commit.
+<code>
+git branch -m <current branch name> <new name>
+</code>
+"-m" means "move". Renames a branch.
+<code>
+git branch -d <branch>
+</code>
+Delete a branch.
+If the branch has not been merged into master yet, you'll get an error. Run "git branch -D <branch>" to force the delete.
+
+Create a branch and check it out
+<code>
+git checkout -b <branch>
+</code>
+
+Switch branches
+<code>
+git checkout <branch>
+</code>
+
+Merge selected branch into current branch
+<code>
+git merge <branch-to-merge-in>
+</code>
+Example: "git merge origin/master"
+If a merge is performed, it'll automatically make a new commit just for the merge edits.
+If a fast-forward is all that you need (meaning you just caught up to current commits, no merging needed), there will be no extra commit made.
+If there are merge conflicts, you'll get a message that you must fix the conflicts and then commit the result. You'll also need to delete any left-over *.orig files.
+
+To fix merging conflicts, you'll need to edit each file individually, and look for the "<<<<<<<" or ">>>>>>>" lines. They delineate the conflict. Edit the file the way you want it and remove those delineation lines.
+Or use mergetool:
+<code>
+git mergetool
+</code>
+This will open an easier-to-use tool to resolve the conflicts.
+Some merge tools are kdiff3 and Beyond Compare.
+
+View a log of all references HEAD has pointed at
+<code>
+git reflog
+</code>
+This can be used to find the hashcode for a committed branch that has been deleted, that you want back. Such dangling commits are only kept for 30 days.
+
+#Other
+
+Temporarily move uncommitted edits out of the way
+<code>
+git stash
+</code>
+These changes will be stored in the stash, and local files will be rolled back to last commit.
+I think you'd only need this if you are not branching for each work item.
+<code>
+git stash list
+</code>
+View a list of each stash you have.
+<code>
+git stash apply
+</code>
+Bring back the most recent stash. This stash will still appear in the list.
+<code>
+git stash pop
+</code>
+Brings back the most recent stash. This stash has been popped off the list.
+<code>
+git stash drop
+</code>
+Deletes the top stash on the list.
+<code>
+git stash branch <branch>
+</code>
+Move the top stash on the list to its own branch. The stash has been popped off the list.
+
+Delete files
+<code>
+git clean -n
+</code>
+Displays a list of files that would be selected. Default to all untracked files.
+<code>
+git clean -f
+</code>
+Actually deletes those files.
+
+Rebase the current HEAD onto another branch
+<code>
+git rebase master
+</code>
+Rebase prunes and moves a commit. It can make it appear that a commit was made on a different branch that it was. This can be used to avoid complex branching and merging trees in the log.
+This example rebases the current branch onto "master".
+
+Watch out for conflicting changes during a rebase. In case of merge conflicts, go through the same steps as normal to resolve the issues.
+Instead of committing at the end, use:
+<code>
+git rebase --continue
+</code>
+
+Merge a single commit into current - JUST the changes in that one commit
+<code>
+git cherry-pick <hashcode>
+</code>
+This is not a rebase - it does not move or change that <hashcode> commit.
+Git is smart enough that it will not, later, try to apply this commit a second time, even during a merge.

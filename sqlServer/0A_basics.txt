@@ -1,0 +1,39 @@
+##Comments
+
+Inline comments like so --dash dash to end of line
+Multiline comments like so /* slash star to star slash */
+
+##Naming Convention
+
+By default, names of tables/columns/etc can only include underscore (_) and letters.
+
+To use spaces, put [square brackets] around the name.
+
+##Recommendations
+
+#Specify Schema
+
+In stored procedures, views, etc, always specify the schema of each table. Say "dbo.customer" instead of just "customer".
+!![Reference](www.sommarskog.se/dynamic_sql.html)
+
+Why? Users can have different default schemas set.  The database will look in the user's default schema first.
+
+1) It will take longer to find the table
+
+2) defaultSchema.tableName might also exist, so the wrong table would be used
+
+3) the query plan will be cached as defaultSchema.tableName, so each user could end up caching a separate query plan - very inefficient
+
+#Caching
+
+General considerations:
+
+Query plan caching is whitespace-sensitive and case-sensitive.
+
+Custom queries (dynamic SQL) are cached using the hash of the query text.  Using a lot of these can really degrade performance.
+
+#Parameterize
+
+To improve query plan caching, always parameterize you queries.  That way, the specific values of the parameters don't affect how the query plan is cached.
+
+The speed difference between parameterized and non-parameterized queries can be dramatic.

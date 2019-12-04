@@ -1,0 +1,20 @@
+##Layout
+
+#_ViewStart
+
+File ~/Views/ViewStart.cshtml will run before each view, by default.
+This is where the environment variable "Layout" is set to its default value of "~/Views/Shared/_Layout.cshtml".
+
+#Layout
+
+The environment variable "Layout" is a string filepath to the layout that should be used with the current view.
+
+Use no layout:
+<code>
+@model MyModel
+@{
+	Layout = null;
+	//or
+	Layout = "";
+}
+</code>

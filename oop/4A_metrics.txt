@@ -1,0 +1,13 @@
+##Cyclomatic Complexity
+
+A software metric related to the complexity of the program.  A measure of the linearly independent paths through a program's source code.
+
+Ex: A to B to C to D
+	Cyclomatic Complexity equals 1 because there is only 1 path
+
+Ex: A to B to D
+	A to C to D
+	Cyclomatic complexity equals 2 because there are 2 paths
+	
+Generally, in a control flow graph, complexity = edges - nodes + 2*loops
+(loops are called Connected Components)

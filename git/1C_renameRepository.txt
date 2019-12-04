@@ -1,0 +1,17 @@
+##Rename Repository
+
+On the web:
+1) Go to repository main page on Github website
+2) Click Settings
+3) Update Repository Name
+4) Click Rename
+
+On local computer:
+1) Open GitShell
+2) Navigate to the repository folder
+3) "git remote set-url origin <new url>"
+- example new url: "https://github.com/WithoutHaste/MyRepo.git"
+4) Rename the repository folder to the new name
+5) Open Git Desktop
+6) Remove out of date folder from repository list
+7) File > Add Local Repository > select the renamed folder

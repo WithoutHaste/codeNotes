@@ -1,0 +1,641 @@
+##UI Tkinter
+
+The standard python UI library.
+A wrapper around Tcl/Tk
+
+You can check that tkinter is properly installed on your system by running "python -m tkinter" from the command line; this should open a window demonstrating a simple Tk interface.
+
+#Basic
+
+Open an empty window:
+<code>
+import tkinter
+
+class Window(tkinter.Frame):
+	def __init__(self, master=None):
+		tkinter.Frame.__init__(self, master)
+		self.master = master
+		self.master.title("Example") #title displayed on window
+		self.pack(fill=tkinter.BOTH, expand=1) #layout of window
+		
+root = tkinter.Tk()
+root.geometry("400x300") #size of window
+app = Window(root)
+root.mainloop()
+</code>
+
+Add a button, quit the app:
+<code>
+import tkinter
+
+class Window(tkinter.Frame):
+	def __init__(self, master=None):
+		tkinter.Frame.__init__(self, master)
+		self.master = master
+		self.master.title("Example")
+		self.pack(fill=tkinter.BOTH, expand=1)
+		self.init_layout()
+
+	def init_layout(self):
+		quitButton = tkinter.Button(self, text="Quit", command=self.client_quit)
+		quitButton.place(x=10, y=20)
+		
+	def client_quit(self):
+		exit()
+
+root = tkinter.Tk()
+root.geometry("400x300")
+app = Window(root)
+root.mainloop()
+</code>
+
+Add a main menu bar:
+<code>
+import tkinter
+
+class Window(tkinter.Frame):
+	def __init__(self, master=None):
+		tkinter.Frame.__init__(self, master)
+		self.master = master
+		self.master.title("Example")
+		self.pack(fill=tkinter.BOTH, expand=1)
+		self.init_layout()
+
+	def init_layout(self):
+		menu = tkinter.Menu(self.master)
+		self.master.config(menu=menu)
+		file = tkinter.Menu(menu)
+		file.add_command(label="Quit", command=self.client_quit)
+		menu.add_cascade(label="File", menu=file)
+		
+	def client_quit(self):
+		exit()
+
+root = tkinter.Tk()
+root.geometry("400x300")
+app = Window(root)
+root.mainloop()
+</code>
+
+#Geometry Manager: Place
+
+Place: arrange widgets by relative or absolute values
+
+<code>
+import tkinter
+
+class Window(tkinter.Frame):
+	
+	def __init__(self, master=None):
+		tkinter.Frame.__init__(self, master)
+		self.master = master
+		self.master.geometry("800x600")
+		self.pack(fill=tkinter.BOTH, expand=1)
+		self.initLayout()
+		
+	def initLayout(self):
+		self.inputControl = tkinter.Text(self, height=20, width=30)
+		self.inputControl.place(relx=0.5, rely=0.5, anchor=tkinter.CENTER) #center widget in parent
+		
+root = tkinter.Tk()
+app = Window(root)
+root.mainloop()
+</code>
+
+<code>
+import tkinter
+
+class Window(tkinter.Frame):
+	
+	def __init__(self, master=None):
+		tkinter.Frame.__init__(self, master)
+		self.master = master
+		self.master.geometry("800x600")
+		self.master.title("Calculator")
+		self.pack(fill=tkinter.BOTH, expand=1)
+		self.initLayout()
+		
+	def initLayout(self):
+		self.inputControl = tkinter.Text(self, height=20, width=30)
+		self.inputControl.place(x=10, y=10) #place absolute
+		self.outputControl = tkinter.Text(self, height=20, width=30)
+		self.outputControl.place(x=200, y=200) #place absolute
+		
+root = tkinter.Tk()
+app = Window(root)
+root.mainloop()
+</code>
+
+#Geometry Manager: Grid
+
+Grid: arrange widgets in a 2d table
+
+<code>
+import tkinter
+
+class Window(tkinter.Frame):
+	
+	def __init__(self, master=None):
+		tkinter.Frame.__init__(self, master)
+		self.master = master
+		self.master.geometry("800x600")
+		self.master.title("Calculator")
+		self.pack(fill=tkinter.BOTH, expand=1)
+		self.initLayout()
+		
+	def initLayout(self):
+		self.inputControl = tkinter.Text(self, height=10, width=20)
+		self.inputControl.grid(row=0, column=0)
+		self.outputControl = tkinter.Text(self, height=20, width=30)
+		self.outputControl.grid(row=1, column=1)
+		
+root = tkinter.Tk()
+app = Window(root)
+root.mainloop()
+</code>
+
+Empty rows and columns are ignored.
+
+Widgets default to centered in their cells.
+To change that, add "sticky" option with one of these cardinal directions: N,S,E,W,NE,NW,SE,SW,NS,EW,NSEW etc.
+<code>
+self.inputControl = tkinter.Text(self, height=10, width=20).grid(row=0, column=0, sticky=tkinter.W)
+</code>
+
+Additional options:
+columnspan=number of column cells to span
+rowspan=number of row cells to span
+
+If you call grid() with no row or column specified, then the column defaults to 0 and the row to the first currently empty row.
+
+Methods:
+	widget.grid_forget() #removes widget from grid layout
+	
+Stretch widgets to fill space:
+- the important points here are 
+	(A) give a positive integer weight to any column or row you want to stretch
+	(B) make the widget inside the cell sticky to the opposing walls
+<code>
+import parser
+import tkinter
+from tkinter import ttk
+
+class Window(tkinter.Frame):
+	
+	def __init__(self, master=None):
+		tkinter.Frame.__init__(self, master)
+		self.master = master
+		self.master.geometry("800x600")
+		self.pack(fill=tkinter.BOTH, expand=1, padx=5, pady=5)
+		self.init_layout()
+	
+	def init_layout(self):
+		self.frame_history = tkinter.Frame(self)
+		self.frame_history.grid(row=0, column=0, stick=tkinter.EW)
+		self.columnconfigure(0, weight=1)
+
+		tkinter.Label(self.frame_history, text="Input").grid(row=0, column=0, sticky=tkinter.EW)
+		ttk.Separator(self.frame_history, orient=tkinter.VERTICAL).grid(row=0, column=1, stick=tkinter.NS)
+		tkinter.Label(self.frame_history, text="Output").grid(row=0, column=2, sticky=tkinter.EW)
+		self.frame_history.columnconfigure(0, weight=1)
+		self.frame_history.columnconfigure(2, weight=1)
+
+		self.input_equation = tkinter.Text(self, height=20, width=30)
+		self.input_equation.grid(row=1, column=0, sticky=tkinter.EW)
+		
+		self.append_output("Test Input", "Test Output")
+		
+	def append_output(self, equation, result):
+		row = 1
+		output_equation = tkinter.Text(self.frame_history, height=1, width=30)
+		output_equation.insert(tkinter.END, equation)
+		output_equation.grid(row=row, column=0, sticky=tkinter.EW)
+		ttk.Separator(self.frame_history, orient=tkinter.VERTICAL).grid(row=row, column=1, stick=tkinter.NS)
+		output_result = tkinter.Text(self.frame_history, height=1, width=30)
+		output_result.insert(tkinter.END, result)
+		output_result.grid(row=row, column=2, sticky=tkinter.EW)
+
+root = tkinter.Tk()
+app = Window(root)
+root.mainloop()
+</code>
+
+#Geometry Manager: Pack
+
+Pack
+(do not use Grid and Pack in the same window)
+
+Methods:
+	widget.pack_forget() #removes widget from pack layout
+
+todo
+
+#Events
+
+widget.bind(event, handler)
+
+You can call a global event handler (see examples below), or call self.handler to use a handler in your current class (in that case, the handler must have parameters for self and event).
+
+Mouse left-click:
+<code>
+import tkinter
+
+def callback(event):
+    print("clicked at", event.x, event.y)
+
+root = tkinter.Tk()
+frame = tkinter.Frame(root, width=100, height=100)
+frame.bind("<Button-1>", callback)
+frame.pack()
+root.mainloop()
+</code>
+
+Keyboard press:
+<code>
+import tkinter
+
+def key(event):
+    print("pressed", repr(event.char))
+
+root = tkinter.Tk()
+frame = tkinter.Frame(root, width=100, height=100)
+frame.bind("<Key>", key)
+frame.pack()
+frame.focus_set()
+root.mainloop()
+</code>
+
+Event names are formatted as "<modifier-type-detail>"
+	<Button-1> = left mouse click
+	<Button-2> = middle mouse click
+	<Button-3> = right mouse click
+(Motion and Release events will be delivered to the widget where the mouse button was depressed, even if you move the mouse outside of it)
+	<B1-Motion> = mouse is moved with left button held down
+	<ButtonRelease-1> = left mouse button released
+	<Double-Button-1> = left mouse button double clicked (<Button-1> will still be called)
+	<Triple-Button-1> = left mouse button triple clicked
+	<MouseWheel> = mouse wheel moved
+	<Enter> = cursor entered widget
+	<Leave> = cursor exited widget
+	<Motion> = cursor is moving and staying in the widget
+	<FocusOut> = widget lost keyboard focus
+	<Key> = a keyboard key was pressed
+	x = the "x" keyboard key was pressed (pattern works with other keys)
+	<KeyRelease> = a keyboard key was released after being pressed
+	<Shift-Up> = shift key is held down while the up arrow key is pressed (pattern works with other keys)
+	<Alt-Up> = alt key is held down while the up arrow key is pressed (pattern works with other keys)
+	<Control-Up> = control key is held down while the up arrow key is pressed (pattern works with other keys)
+	<Return> = the "Enter" key was pressed
+Special keyboard key names: Return, space, less (for less than), Cancel (for break), BackSpace, Tab, Shift_L (for either shift), Control_L (for either control), Alt_L (for either alt), Pause, Caps_Lock, Escape, Prior (for page up), Next (for page down), End, Home, Left, Right, Up, Down, Print, Insert, Delete, F1 (and so on), Num_Lock, Scroll_Lock
+	<Configure> = widget changed sized
+	<Activate> = widget state became active
+	<Deactivate> = widget state became deactive
+	<Destroy> = widget is being destroyed
+	<Expose> = widget is now visually visible after being covered by something else
+	<Map> = widget is being made visible in the application (like when you call .grid())
+	<Unmap> = widget is being made not visible in the application
+	<Visibility> = some part of the application window has become visible on the screen
+
+Event object attributes:
+	widget = the actual widget object that generated the event
+	x and y = current mouse position in pixels
+	x_root and y_root = current mouse position relative to the whole screen
+	char = (for keyboard events) the key pressed, as a string
+	keysym = (for keyboard events) the key symbol pressed
+	keycode = (for keyboard events) the key code pressed
+	num = (for mouse events) the mouse button pressed
+	width and height = (for configure events) the new dimensions of the widget
+	type = the event type
+	
+Binding levels:
+	1. widget instance (use bind)
+	2. widget's root window (use bind)
+	3. widget's class (use bind_class)
+	4. the application (use bind_all)
+If your bindings overlap (such as <Key> and <Enter>), the most specific one is chosen.
+If you have the same bindings at multiple levels (such as instance and all), both will be called. The lower level will be called first.
+
+How to disable a standard event, such as typing a newline in a text field? That default event is at the widget class level.
+<code>
+def ignore(event):
+	return "break" #use this specific return value to cancel the propagation of the event
+myText.bind("<Return>", ignore)
+
+ #or
+
+myText.bind("<Return>", lambda event: "break")
+
+ #or, to actually block all <Return> events on all Text widgets
+ #this is not suggested
+top.bind_class("Text", "<Return>", lambda event: None)
+</code>
+
+#Widgets
+
+Methods and options general to all ui widgets.
+
+Set focus on widget/control:
+<code>
+x = tkinter.Text(self)
+x.focus_set()
+</code>
+
+Get real time widget dimensions:
+<code>
+print(widget.winfo_width(), widget.winfo_height())
+</code>
+
+For containers: a list of child widgets is in attribute "childen.values()"
+
+#Text
+
+The Text control/widget: Text(parent, options...)
+
+Remember that width and height are in character units. There is NO easy way to specify pixel units - everyone suggests setting the parent container size and packing the text into it.
+
+Options:
+bg=background color
+bd=border width (default 2px)
+cursor=hover cursor
+exportselection=1 or 0 (default 1 allows user to copy text from control)
+font=font object
+fg=foreground (text) color (can be changed for sections of text)
+height=number of rows of text
+highlightbackground=color of highlights when widget is out of focus
+highlightthickness=thickness of the highlight, default 1, set to 0 to hide highlight
+insertbackground=color of "insert" cursor, default black
+insertborderwidth=size of "insert" cursor border, default 0
+insertofftime=milliseconds "insert" cursor blinks off per cycle, default 300
+insertontime=milliseconds "insert" cursor blinks on per cycle, default 600
+insertwidth=pixel width of "insert" cursor, deafult 2px (height is set to tallest char in line)
+padx=internal padding on left and right in pixels, default 1px
+pady=internal padding on top and bottom in pixels, default 1px
+relief=3D appearance of widget, default SUNKEN, can be SUNKEN, RAISED, GROOVE, RIDGE, FLAT
+selectbackground=background color of selected text
+selectborderwidth=pixel width of border around selected text
+spacing1=extra vertical space above lines, default 0, does not affect a wrapped line
+spacing2=extra vertical space above wrapped lines, default 0
+spacing3=extra vertical space below lines, default 0, does not affect a wrapped line
+spacing4=extra vertical space below wrapped lines, default 0
+state=NORMAL(responds to keyboard and mouse events) DISABLED(does not, also cannot edit programmaticly)
+tabs=?something about tab characters?
+width=width measured in characters
+wrap=WORD(wrap line on word break) CHAR(wrap line on any character)
+xscrollcommand=?used to add a horizonal scroll?
+yscrollcommand=?used to add a vertical scroll?
+
+Methods:
+delete(startIndex [,endIndex]) #deletes a range of text
+get(startIndex [,endIndex]) #gets a range of text
+index(index) ???
+insert(index, string) #insert text at index
+see(index) #returns true if the text at this index is visible
+mark_set("insert", index) #move cursor to an index in the text
+
+Indexes: there are many ways to index a Text widget
+	Line index starts at 1
+	Character index within a line starts at 0
+<code>
+print(text.get("1.0")) #prints the character from line 1 at array-index 0
+
+ #or
+index = "%d.%d" % (line, column)
+print(text.get(index))
+
+print(text.get(tkinter.CURRENT)) #character just before the cursor
+
+print(text.get("1.0", tkinter.END)) #first line of text
+</code>
+
+todo: see more indexing at http://effbot.org/tkinterbook/text.htm
+
+#Label
+
+<code>
+import tkinter
+
+class Window(tkinter.Frame):
+	
+	def __init__(self, master=None):
+		tkinter.Frame.__init__(self, master)
+		self.master = master
+		self.master.geometry("800x600")
+		self.pack(fill=tkinter.BOTH, expand=1)
+		self.initLayout()
+		
+	def initLayout(self):
+		tkinter.Label(self, text="Input").grid(row=0, column=0)
+		tkinter.Label(self, text="Output").grid(row=0, column=1)
+		
+root = tkinter.Tk()
+app = Window(root)
+root.mainloop()
+</code>
+
+options:
+	anchor = the cardinal direction to justify the text to: N,S,W,E
+	justify = ? not sure how this works with anchor: LEFT, RIGHT
+
+#Separator
+
+A vertical or horizontal 2px wide separator.
+Make sure to set the "sticky" option, otherwise the separator will be 1px long.
+
+<code>
+import tkinter
+from tkinter import ttk
+
+class Window(tkinter.Frame):
+	
+	def __init__(self, master=None):
+		tkinter.Frame.__init__(self, master)
+		self.master = master
+		self.master.geometry("800x600")
+		self.pack(fill=tkinter.BOTH, expand=1, padx=5, pady=5)
+		self.init_layout()
+	
+	def init_layout(self):
+		tkinter.Label(self, text="Input").grid(row=0, column=0, sticky=tkinter.W)
+		ttk.Separator(self, orient=tkinter.VERTICAL).grid(row=0, column=1, stick=tkinter.NS)
+		tkinter.Label(self, text="Output").grid(row=0, column=2, sticky=tkinter.W)
+
+root = tkinter.Tk()
+app = Window(root)
+root.mainloop()
+</code>
+
+#Scrollbar
+
+Scrollbars can only be associated with a few widget types: List, Textbox, Canvas, and Entry
+
+To use scrollbars with other widgets, or layouts of widgets, the usually solution seems to be to create a scrolling canvas, embed one frame in the canvas, and embed your other widgets in the frame. Make sure the dimensions of the frame are fed into the canvas "scrollregion" option.
+
+<code>
+from tkinter import *
+
+root=Tk()
+
+frame=Frame(root,width=300,height=300)
+frame.grid(row=0,column=0)
+
+canvas=Canvas(frame,bg='#FFFFFF',width=300,height=300,scrollregion=(0,0,500,500))
+
+hbar=Scrollbar(frame,orient=HORIZONTAL)
+hbar.pack(side=BOTTOM,fill=X)
+hbar.config(command=canvas.xview)
+
+vbar=Scrollbar(frame,orient=VERTICAL)
+vbar.pack(side=RIGHT,fill=Y)
+vbar.config(command=canvas.yview)
+
+canvas.config(width=300,height=300)
+canvas.config(xscrollcommand=hbar.set, yscrollcommand=vbar.set)
+canvas.pack(side=LEFT,expand=True,fill=BOTH)
+
+root.mainloop()
+</code>
+
+General use scrolling canvas - put anything inside the "inner_frame":
+<code>
+import tkinter
+from tkinter import ttk
+
+class ScrollFrame(tkinter.Frame):
+
+	def __init__(self, master):
+		tkinter.Frame.__init__(self, master)
+		self.master = master
+
+		self.canvas = tkinter.Canvas(self)
+		self.canvas.grid(row=0, column=0, sticky=tkinter.NS)
+		#self.canvas.grid_propagate(False) #don't let the inner canvas resize ?
+		
+		self.scrollbar = tkinter.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+		self.scrollbar.grid(row=0, column=1, sticky=tkinter.NS)
+		self.canvas.configure(yscrollcommand=self.scrollbar.set)
+
+		self.inner_frame = tkinter.Frame(self.canvas)
+		self.inner_frame.grid(row=0, column=0, sticky=tkinter.NS)
+
+		self.canvas.columnconfigure(0, weight=1)
+		self.canvas.rowconfigure(0, weight=1)
+
+		self.canvas.create_window(0, 0, window=self.inner_frame, anchor='nw')
+		self.update_scroll_region()
+		
+	def update_scroll_region(self):
+		self.master.update() #make sure the layout is completely calculated
+		self.canvas.configure(scrollregion=self.canvas.bbox("all")) #get a bounding box around all child widgets
+</code>
+full example:
+<code>
+import parser
+import tkinter
+from tkinter import ttk
+
+class ScrollFrame(tkinter.Frame):
+
+	def __init__(self, master):
+		tkinter.Frame.__init__(self, master)
+		self.master = master
+
+		self.canvas = tkinter.Canvas(self)
+		self.canvas.grid(row=0, column=0, sticky=tkinter.NS)
+		#self.canvas.grid_propagate(False) #don't let the inner canvas resize ?
+		
+		self.scrollbar = tkinter.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+		self.scrollbar.grid(row=0, column=1, sticky=tkinter.NS)
+		self.canvas.configure(yscrollcommand=self.scrollbar.set)
+
+		self.inner_frame = tkinter.Frame(self.canvas)
+		self.inner_frame.grid(row=0, column=0, sticky=tkinter.NS)
+
+		self.canvas.columnconfigure(0, weight=1)
+		self.canvas.rowconfigure(0, weight=1)
+
+		self.canvas.create_window(0, 0, window=self.inner_frame, anchor='nw')
+		self.update_scroll_region()
+		
+	def update_scroll_region(self):
+		self.master.update() #make sure the layout is completely calculated
+		self.canvas.configure(scrollregion=self.canvas.bbox("all")) #get a bounding box around all child widgets
+
+class Window(tkinter.Frame):
+	
+	def __init__(self, master=None):
+		tkinter.Frame.__init__(self, master)
+		self.master = master
+		self.master.geometry("800x600")
+		self.master.title("Python Calculator")
+		self.pack(fill=tkinter.BOTH, expand=1, padx=5, pady=5)
+		self.init_data()
+		self.init_layout()
+	
+	def init_data(self):
+		self.list_equations = []
+		self.list_results = []
+		self.index_history = None
+		
+	def init_layout(self):
+		self.scroll_frame = ScrollFrame(self)
+		self.scroll_frame.grid(row=0, column=0, sticky=tkinter.NS)
+		self.columnconfigure(0, weight=1)
+		self.rowconfigure(0, weight=1)
+	
+		self.frame_history = tkinter.Frame(self.scroll_frame.inner_frame)
+		self.frame_history.grid(row=0, column=0, sticky=tkinter.EW)
+		tkinter.Label(self.frame_history, text="Input", anchor=tkinter.W).grid(row=0, column=0, sticky=tkinter.EW)
+		ttk.Separator(self.frame_history, orient=tkinter.VERTICAL).grid(row=0, column=1, stick=tkinter.NS)
+		tkinter.Label(self.frame_history, text="Output", anchor=tkinter.W).grid(row=0, column=2, sticky=tkinter.EW)
+		self.frame_history.columnconfigure(0, weight=1)
+		self.frame_history.columnconfigure(2, weight=1)
+		self.input_equation = tkinter.Text(self.scroll_frame.inner_frame, height=3, width=30, relief=tkinter.FLAT)
+		self.input_equation.grid(row=1, column=0, sticky=tkinter.EW)
+		self.input_equation.focus_set()
+		
+		for i in range(0, 25):
+			self.append_output("aaaaaaa", "bbbbbbb")
+		
+	def append_output(self, equation, result):
+		self.list_equations.append(equation)
+		self.list_results.append(result)
+		row = len(self.list_equations) + 1
+		output_equation = tkinter.Text(self.frame_history, height=1, width=30, relief=tkinter.FLAT)
+		output_equation.insert(tkinter.END, equation)
+		output_equation.config(state=tkinter.DISABLED)
+		output_equation.grid(row=row, column=0, sticky=tkinter.EW)
+		ttk.Separator(self.frame_history, orient=tkinter.VERTICAL).grid(row=row, column=1, stick=tkinter.NS)
+		output_result = tkinter.Text(self.frame_history, height=1, width=30, relief=tkinter.FLAT)
+		output_result.insert(tkinter.END, result)
+		output_result.config(state=tkinter.DISABLED)
+		output_result.grid(row=row, column=2, sticky=tkinter.EW)
+		self.scroll_frame.update_scroll_region()
+
+root = tkinter.Tk()
+app = Window(root)
+root.mainloop()
+</code>
+
+Scroll to top of area:
+<code>
+scollable_widget.yview_moveto(0)
+</code>
+
+Scroll to bottom of area:
+<code>
+scollable_widget.yview_moveto(1)
+</code>
+
+#Font
+
+Python 3 uses the tkinter.font library.
+You must create your root window (tkinter.Tk()) before you create your font.
+
+<code>
+import tkinter
+from tkinter import font
+
+root = tkinter.Tk()
+default_font = font.Font(family="Helvetica", size=10, weight="normal")
+</code>
+

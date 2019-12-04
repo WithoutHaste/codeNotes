@@ -1,0 +1,25 @@
+##Entity Framework Errors
+
+#Cannot find provider
+
+Error: "No Entity Framework provider found for the ADO.NET provider with invariant name 'System.Data.SqlClient'"
+
+Project-A uses Entity Framework directly. It has the full Entity Framework package installed.
+Project-B references Project-A and uses it to access the data store.
+
+Project-B needs a reference to Project-A's EntityFramework.SqlServer.dll.
+I don't know why, but that fixes the error.
+
+#datetime2
+
+Error: "The conversion of a datetime2 data type to a datetime data type resulted in an out-of-range value."
+
+SQL DateTime minimum value is January 1, 1753.
+C# DateTime minimum value is January 1, 0001.
+
+Either change your database column from "datetime" to "datetime2", which has a larger range.
+Or ensure that you don't send out-of-range values to the database.
+
+A common cause of this error is that a DateTime property should be nullable, but isn't, so it's defaulting to DateTime.MinValue.
+
+Note that if you have a non-nullable DateTime property, and the database column has a DEFAULT constraint, you still have to set the value in your code because a non-nullable DateTime will default to DateTime.MinValue and will not trigger the database DEFAULT constraint.

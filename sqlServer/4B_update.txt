@@ -1,0 +1,12 @@
+##Update
+
+Update records in a table:
+<code>
+UPDATE tableName SET columnA='Value', columnC=123 WHERE columnB >= 10;
+</code>
+
+#CASE
+
+<code>
+UPDATE tableName SET columnA = (CASE WHEN columnA=0 THEN 1 ELSE 0 END);
+</code>

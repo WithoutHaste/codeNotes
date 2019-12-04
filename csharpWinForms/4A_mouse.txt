@@ -1,0 +1,18 @@
+#Mouse
+
+Getting click point on screen:
+<code>
+public void OnClick(object sender, EventArgs e)
+{
+	Point screenPoint = new Point(MousePosition.X, MousePosition.Y);
+}
+</code>
+
+Getting click point in control:
+<code>
+public void OnClick(object sender, EventArgs e)
+{
+	Point screenPoint = new Point(MousePosition.X, MousePosition.Y);
+	Point controlPoint = control.PointToClient(screenPoint);
+}
+</code>

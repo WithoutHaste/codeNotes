@@ -1,0 +1,29 @@
+##Common Language Runtime (CLR)
+
+The .Net framework supports C#, Visual Basic, and Visual C++.
+
+All supported languages are compiled to the IL (Intermediate Language) used by .Net.  When an application is run, the IL (Intermediate Language) will be compiled to local machine code as needed.
+
+Because the IL (Intermediate Language) is not compiled to machine-specific code until the application is run, .Net executables and libraries can be shared between computers without concern for what OS they are running.  This also allows you to use several different supported languages within one application.
+
+Even Linux is supported, through the Mono libraries.
+
+#Managed vs Un-Managed Code
+
+Managed code is compiled to the IL (Intermediate Language) and is run by the CLR (Common Language Runtime). It is interoperable on different systems.
+
+Un-Managed code is compiled straight to the local machine code, so it will only run on machines with the same OS version.  This code will not be run by the CLR (Common Language Runtime) so it will not have the benefits of the CLR services.
+
+The execution process for managed code is:
+	Choose a language compiler
+	Compile to the IL (Intermediate Language)
+	Compile from IL to machine code (this occurs when the code is executed)
+	Execute the machine code
+
+##CLR Services
+
+The Common Language Runtime provides: garbage collection, type checking, exception handling, etc.
+
+#Garbage Collection
+
+Garbage collection is the automatic process of checking heap memory for objects that are not longer being referenced by any process.  This memory is freed up for future use.

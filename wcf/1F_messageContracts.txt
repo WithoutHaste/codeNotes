@@ -1,0 +1,4 @@
+##Message Contracts
+
+Defines the elements of the message (header, body, security...). This gives you complete control over the contents of the SOAP message.
+

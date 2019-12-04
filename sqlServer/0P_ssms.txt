@@ -1,0 +1,64 @@
+##SSMS
+
+SSMS stands for SQL Server Management Studio.
+You can download this for free.
+It's a good tool for building, browsing, edit, etc SQL Server databases.
+
+#LocalDb
+
+SSMS can connect to LocalDb.
+
+Add a connection for "Database Engine" to "(local)\MSSQLLocalDb".
+
+#SQL Express
+
+SQL Express has a database size limit of ~10GB. Once you hit that limit, autogrowth will no longer be allowed.
+- Might see an error like "Could not allocate a new page for database 'MyDatabase' because of insufficient disk space in filegroup 'PRIMARY'. Create the necessary space by dropping objects in the filegroup, adding additional files to the filegroup, or setting autogrowth on for existing files in the filegroup."
+
+You can see the current size of your database at:
+SSMS > Right-click on Database in Object Explorer > Properties > Files tab > see the Size of Primary.
+
+#SQL Developer Edition
+
+SSMS can connect to SQL Developer Edition.
+
+Add a connection for "Database Engine" to "localhost".
+
+#CSV Import
+
+How to import *.csv table data into a SQL Server database.
+
+1) Create the table in the database.
+2) Open SSMS
+3) Right-click on the database > Tasks > Import Data
+4) Data Source is "Flat File Source" > Browse to the file > enter configuration info
+-- If your column data is enclosed in quotation marks (ex: "Smith" or "1"), set Text Qualifier to a ".
+5) Select Destination "SQL Server Native Client 11.0" > Enter the server name > select the database
+6) On the source to destination mapping:
+-- You can click on the "Destination" to select an existing table or "ignore" the column.
+-- If you want to swap two "Destinations", you'll need to set one to "ignore" first so it shows up as an option for the other.
+-- To preserve identity columns, click "Edit Mappings" > select "Enable Identity Insert".
+7) Data conversions will probably work fine with the default settings.
+8) Check "Run Immediately" > Finish
+
+I got this error when trying to import special characters into a text field with MaxLength=1. The problem is that some characters that display as one letter are stored as more than one character, so I needed to increase the MaxLength on this column (ex: "A" with a tilde on top).
+Error 0xc02020c5: Data Flow Task 1: Data conversion failed while converting column "Column 2" (18) to column "Column 2" (63).  The conversion returned status value 2 and status text "The value could not be converted because of a potential loss of data.". (SQL Server Import and Export Wizard)
+
+#Backup
+
+Backup database (schema and data):
+1) Right-click on database > Tasks > Backup
+2) fill in the form and save the backup
+
+Backup schema:
+1) Right-click on database > Tasks > Generate Scripts
+2) fill in the forms and save the backup
+
+#Bugs
+
+SSMS 18 has a bug that really messes up the display. The application doesn't refresh it's drawing properly, leaving junk across the screen.
+
+To fix:
+Tools menu > Options > Environment tab > General tab
+- uncheck Automatically Adjust Visual Experience Based on Client Performance
+- uncheck (under that) Use Hardware Graphics Acceleration if Available

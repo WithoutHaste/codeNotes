@@ -1,0 +1,152 @@
+##Stored Procedures and Table Valued Functions
+
+Topic is for Code-First only.
+
+#Insert, Update, Delete
+
+You can map stored procedures to an entity's insert, update, and delete actions.
+
+The stored procedures must accept the same parameters that those commands normally would.
+Delete must accepts an Id parameter.
+Insert and update must accept every field in the entity.
+Insert must return the new primary key.
+
+All parameters mapped to a stored procedure must come from entity properties. No literals, or formulas.
+
+Configuration:
+<code>
+public class GeographyContext : DbContext
+{
+	protected override void OnModelCreating(DbModelBuilder modelBuilder)
+	{
+		modelBuilder.Entity<Country>().MapToStoredProcedures();
+		//the default is to expect stored procedures with names Country_Insert, Country_Update, and Country_Delete
+	}
+}
+</code>
+If you use Code Migrations, it will fill in default stored procedures that complete the basic operations.
+
+Specifying non-conventional stored procedure names:
+<code>
+public class GeographyContext : DbContext
+{
+	protected override void OnModelCreating(DbModelBuilder modelBuilder)
+	{
+		//fluent syntax
+		modelBuilder.Entity<Country>().MapToStoredProcedures(p =>
+			p.Insert(x => x.HasName("InsertCountry")).Update(x => x.HasName("UpdateCountry")).Delete(x => x.HasName("DeleteCountry"))
+		);
+		//OR
+		//block syntax
+		modelBuilder.Entity<Country>().MapToStoredProcedures(p =>
+			{
+				p.Insert(x => x.HasName("InsertCountry"));
+				p.Update(x => x.HasName("UpdateCountry"));
+				p.Delete(x => x.HasName("DeleteCountry"));
+			}
+		);
+	}
+}
+</code>
+
+Specifying non-conventional parameter names:
+<code>
+public class GeographyContext : DbContext
+{
+	protected override void OnModelCreating(DbModelBuilder modelBuilder)
+	{
+		modelBuilder.Entity<Country>().MapToStoredProcedures(p =>
+			p.Insert(i => i.HasName("InsertCountry").Parameter(x => x.CountryName, "CName"))
+			//property Country.CountryName will map to stored procedure parameter CName
+		);
+		
+		//if the City to Country link is an Independent Association (we have no City.CountryId foreign key on the entity)
+		//this is how we specify the non-conventional parameter name for the stored procedure
+		modelBuilder.Entity<City>().MapToStoredProcedures(p =>
+			p.Insert(i => i.Navigation<Country>(country => country.Cities, x => x.Parameter(country => country.Id, "CountryId")))
+		);
+	}
+}
+</code>
+
+Specifying non-conventional return-value names:
+<code>
+public class GeographyContext : DbContext
+{
+	protected override void OnModelCreating(DbModelBuilder modelBuilder)
+	{
+		modelBuilder.Entity<Country>().MapToStoredProcedures(p =>
+			p.Insert(i => i.Result(r => r.Id, "NewId"))
+		);
+	}
+}
+</code>
+
+#Misc Mapping
+
+You can also map the results of any Stored Procedure or Table Valued Function to an Entity type. The built-in way to do this is still very tricky, so the recommendation is to use this 3rd-party assembly.
+
+<code>
+Install-Package EntityFramework.CodeFirstStoreFunctions -Pre
+</code>
+
+#Function Import
+
+You can use the model editor to "Add Function Import" so you can use custom stored prodecures in your code. It'll make changes like these to your project:
+
+EDMX:
+<code lang="xml">
+	<Function Name="MyStoredProcedure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+		<Parameter Name="Id" Type="int" Mode="In" />
+	</Function>
+	...
+	<FunctionImport Name="MyStoredProcedure" EntitySet="MyOutput" ReturnType="Collection(MyOutput)">
+		<Parameter Name="Id" Mode="In" Type="Int32" />
+	</FunctionImport>
+	...
+	<FunctionImportMapping FunctionImportName="MyStoredProcedure" FunctionName="DBModel.Store.MyStoredProcedure">
+	</FunctionImportMapping>
+</code>
+
+Add a stored procedure operation to the DbContext:
+<code>
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
+using System.Data.Entity.Infrastructure;
+
+public class MyContext : DbContext
+{
+	public List<MyOutput> MyMethod(int? id)
+	{
+		ObjectParameter idParameter = (id == null) ? new ObjectParameter("Id", typeof(int)) : new ObjectParameter("Id", id);
+		
+		return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MyOutput>("MyStoredProcedure", idParameter).ToList();
+		
+	}
+}
+</code>
+
+Call the stored procedure from code:
+<code>
+return myContext.MyMethod(1);
+</code>
+
+#SQLQuery
+
+You can execute stored procedure without function import with SQLQuery.
+
+<code>
+using System.Data.SqlClient;
+
+public class MyContext : DbContext
+{
+	public List<MyOutput> MyMethod(int? id)
+	{
+		SqlParameter idParameter = new SqlParameter("Id", (object)id ?? DBNull.Value);
+
+		return Database.SqlQuery<MyOutput>("exec MyStoredProcedure @id", idParameter).ToList<MyOutput>();
+	}
+}
+
+Something to watch out for: mapping these results to an existing Entity type will work, but that entity's navigation properties will default to null.
+</code>

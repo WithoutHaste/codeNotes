@@ -1,0 +1,51 @@
+##Table
+
+#Naming Convention
+
+SQL tables are usually named plurally. For instance, "Customers" instead of "Customer".
+But that's not required.
+
+There are various naming conventions, like "tblCustomers" or "CustomersTbl". The benefit of using a prefix or suffix is that you avoid naming collisions.
+- Common table names like "Users" can collide with system tables or keywords.
+- A table that contains a column with the same name can cause problems when converting to an object model. For instance, C# does not allow a class to contain a property of the same name.
+
+#Create
+
+<code>
+CREATE TABLE tableName
+(
+	columnName dataType,
+	columnName dataType
+);
+
+CREATE TABLE Customer
+(
+	CustomerId INT IDENTITY(1,1) PRIMARY KEY,
+	Name VARCHAR(50) NOT NULL,
+	CreatedDate DATE DEFAULT GetDate(),
+);
+</code>
+
+#Alter
+
+<code>
+ALTER TABLE tableName ADD columnName dataType;
+
+ALTER TABLE tableName ALTER COLUMN columnName newDataType;
+
+ALTER TABLE tableName DROP columnName;
+</code>
+
+#Empty
+
+Removes all rows of data from the table.
+
+<code>
+TRUNCATE TABLE tableName;
+</code>
+
+#Delete
+
+<code>
+DROP TABLE tableName;
+</code>

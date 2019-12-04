@@ -1,0 +1,49 @@
+##Database
+
+#SQL Server
+
+<code>
+using System.Data.SqlClient; //in System.Data.dll
+</code>
+
+Open a connection:
+<code>
+string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;Initial Catalog=NameDatabase;Integrated Security=True";
+SqlConnection connection = new SqlConnection(connectionString);
+connection.Open();
+</code>
+
+Read-only query:
+<code>
+string commandString = "select count(*) from dbo.Name";
+using(SqlCommand command = new SqlCommand(commandString, connection))
+{
+	SqlDataReader reader = command.ExecuteReader();
+	while(reader.Read()) //get next record
+	{
+		Console.WriteLine("Found {0} names.", reader.GetValue(0)); //get 0th column from record
+	}
+}
+</code>
+
+Update query:
+<code>
+string commandString = "update dbo.NameDetail set IsBoy = @IsBoy, IsGirl = @IsGirl where Id = @Id";
+using(SqlCommand command = new SqlCommand(commandString, connection))
+{
+	SqlParameter isBoyParameter = new SqlParameter("IsBoy", isBoy);
+	SqlParameter isGirlParameter = new SqlParameter("IsGirl", isGirl);
+	SqlParameter idParameter = new SqlParameter("Id", id);
+
+	command.Parameters.Add(isBoyParameter);
+	command.Parameters.Add(isGirlParameter);
+	command.Parameters.Add(idParameter);
+
+	command.ExecuteNonQuery();
+}
+</code>
+
+Always close your connection when you're finished with it:
+<code>
+connection.Close();
+</code>

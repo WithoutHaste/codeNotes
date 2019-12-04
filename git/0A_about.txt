@@ -1,0 +1,28 @@
+##About
+
+Git is a version control system.
+
+#History
+
+First came single-file systems, which keep track of versions of individual files, but do not relate those files together. So this system wouldn't know that v1.0.2 of file A should be used with v2.3.0 of file B.
+
+Some of these systems: SCCS RCS
+
+Next came multi-file systems, which do relate different versions of files together so you can checkout one cohesive set of files.
+
+Some of these systems: CVS, VSS, SVN, TFS, Perforce
+
+Now we have distributed multi-file systems, which use changesets (groups of related edits) and can run simultaneously on many machines. Both clients and servers have the entire repository (full history) present at all times. 
+
+Some of these systems: Git, Hg, Bazaar, BitKeeper
+
+Git was created by Linus Torvalds (the creator of Linux) after Linux and BitKeeper split up.
+Git is written in Perl and C, and runs on many operating systems.
+
+#Topologies
+
+Centralized: developers push all changes to one central repository. Often used in Enterprise environments.
+
+Hierarchical: developers push their changes to a subsystem-based repository. The sub-repositories are periodically merged into the main repository. This is done for the Linux kernal because it is so large.
+
+Distributed: developers push their changes to their own repository. Project maintainers will pull selected changes into the main repository, if they are deemed valuable. This is common in open-source projects on Github.

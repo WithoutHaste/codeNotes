@@ -1,0 +1,34 @@
+##Security
+
+Authentication: identify clients that call the service.
+
+Authorization: determine what operations authenticated clients can access.
+
+Clients can identify themselves with:
+	- Windows account
+	- username and password
+	- certificate
+	- other?
+	
+Services can identify themselves to clients with a certificate.
+
+#Security Token Service
+
+A service providing tokens for token-based security.  This is the service component that builds, signs, and issues security tokens according to the WS-Trust and WS-Federation protocols.
+
+Ex: Active Directory Federation Services (ADFS)
+
+Most STSs today issue tokens formatted with Security Assertion Markup Language (SAML), which is an XML vocabulary.
+
+WCF STS is deprecated as of .Net 4.5, when Windows Identification Foundation was integrated into the .Net Framework.
+
+#Claims Aware Application
+
+In a claims aware application, user identity is represented in code as a set of claims.  An external identity system is configured to give your application that data it needs about the user.
+
+Aka Relying-Party Application (RP) which relies on claims.
+
+#Security Token
+
+A security token is a serialized set of claims, digitally signed by the issuing authority.
+

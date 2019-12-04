@@ -1,0 +1,62 @@
+##Events
+
+React events are named in camelCase instead of lowercase.
+
+Comparison:
+<code>
+	//HTML passes a string
+	<button onclick="activateLasers()">
+		Activate Lasers
+	</button>
+	//JSX passes a function
+	<button onClick={activateLasers}>
+		Activate Lasers
+	</button>
+</code>
+
+You can add all event listeners to elements when they initialized, instead of calling "addEventListener" after the element is created.
+
+#Default Behavior
+
+In Javascript, you can return "false" from an event handler to cancel default behavior.
+
+In React, you must call "event.preventDefault()" to do this.
+<code>
+function ActionLink() 
+{
+	function constructor(props)
+	{
+		super(props);
+
+		// This binding is necessary to make "this" work in the callback
+		this.handleClick = this.handleClick.bind(this);	
+	}
+
+	//your event handlers will usually be methods in the component class
+	function handleClick(e) 
+	{
+		e.preventDefault();
+		console.log('The link was clicked.');
+	}
+
+	return (
+		<a href="#" onClick={this.handleClick}>
+			Click me
+		</a>
+	);
+}
+</code>
+
+#Synthetic Event
+
+React passes synthetic events to your event handlers. They are cross-browser compatible.
+
+#Arguments
+
+To pass additional arguments to an event handler:
+<code>
+	<button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
+	//OR
+	<button onClick={this.deleteRow.bind(this, id)}>Delete Row</button>
+</code>
+In both examples, the event handler will expect arguments (id, event).

@@ -1,0 +1,11 @@
+##Basics
+
+HTML stands for Hyper-Text Markup Language. HTML describes the contents of a web page.
+
+CSS stands for Cascading Style Sheet.  CSS defines the appearance and layout of a web page.
+
+CSS can be included in the HTML file, or in a separate CSS file.
+
+#XML
+
+HTML is a subset of XML. XML stands for Extensible Markup Language.  HTML is an extension of this language.  It's rules are more specific, but the basic structure is the same.

@@ -1,0 +1,40 @@
+##Views
+
+A view is a virtual table based on the results of a SQL statement.
+The data is updated every time the view is queried.
+
+When are views useful?
+- They abstract away complex computations.
+- You can give users access to a View without them access to the underlying tables.
+
+#Naming Convention
+
+Views are named "vw_ViewName", or something similar.
+
+#Create
+
+<code>
+CREATE VIEW viewName AS
+	SELECT 
+		columnA, 
+		columnB 
+	FROM tableName 
+	WHERE columnC <> value;
+</code>
+
+#Update
+
+<code>
+CREATE OR REPLACE viewName AS
+	SELECT 
+		columnA, 
+		columnB 
+	FROM tableName 
+	WHERE columnC <> value;
+</code>
+
+#Delete
+
+<code>
+DROP VIEW viewName;
+</code>

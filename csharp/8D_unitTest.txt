@@ -1,0 +1,141 @@
+##Unit Testing
+
+General setup
+<code>
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+[TestClass]
+public class TestClass
+{
+	[TestMethod]
+	public void TestMethod()
+	{
+		//assign
+		//act
+		//assert
+	}
+}
+</code>
+
+#Assert
+
+There are many built-in Assert statements.
+
+Any Assert can be given a last string parameter. This string message will be appended to the default error message if the Assert fails.
+
+#Setup
+
+It appears that test cases can be run in any order, regardless of how they are grouped in classes, 
+so don't rely on all methods in one class being run before the next class.
+
+This initialize method is called once before all the selected test cases in this class are run.
+Note: It does not seem to be guaranteed that all tests in one class will be run before tests from other classes - I've gotten other tests running before the cleanup of the previous class ran.
+<code>
+[ClassInitialize]
+public static void Initialize(TestContext context)
+{
+}
+</code>
+
+This initialize method is called once before each test case in this class is run.
+<code>
+[TestInitialize]
+public void Initialize()
+{
+}
+</code>
+
+#Cleanup
+
+Cleanup does not run if Initialize threw an exception.
+
+This cleanup method is called once after all the selected test cases in this class are run.
+<code>
+[ClassCleanup]
+public static void Cleanup()
+{
+}
+</code>
+
+This cleanup method is called once after each test case in this class is run.
+<code>
+[TestCleanup]
+public void Cleanup()
+{
+}
+</code>
+
+#Exceptions
+
+<code>
+[TestMethod]
+[ExpectedException(typeof(ArgumentException))]
+public void TestMethod()
+{
+	//assign
+	//act
+	//exception expected instead of assert
+}
+
+[TestMethod]
+[ExpectedException(typeof(ArgumentException), "Custom description of error.")]
+public void TestMethod()
+{
+	//assign
+	//act
+	//exception expected instead of assert
+}
+</code>
+
+#Private
+
+You can unit test private methods using the PrivateObject.
+<code>
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+public class Apple
+{
+	public Apple()
+	{
+	}
+	
+	private int Count()
+	{
+		return 5;
+	}
+}
+
+[TestClass]
+public class TestClass
+{
+	[TestMethod]
+	public void TestMethod()
+	{
+		Apple apple = new Apple();
+		PrivateObject privateApple = new PrivateObject(apple);
+		
+		int result = privateApple.Invoke("Count");
+		
+		Assert.AreEqual(5, result);
+	}
+}
+</code>
+
+#Internal
+
+You can unit test internal classes by marking the original assembly as friendly to the test assembly.
+
+Add this to either the Properties/AssemblyInfo.cs file or to a code file in the assembly.
+<code>
+using System.Runtime.CompilerServices;
+[assembly:InternalsVisibleTo("NameOfFriendAssembly")]
+</code>
+
+Marking multiple assemblies as friendly:
+<code>
+using System.Runtime.CompilerServices;
+[assembly:InternalsVisibleTo("NameOfFriendAssemblyA")]
+[assembly:InternalsVisibleTo("NameOfFriendAssemblyB")]
+//or
+[assembly:InternalsVisibleTo("NameOfFriendAssemblyA"), InternalsVisibleTo("NameOfFriendAssemblyB")]
+</code>

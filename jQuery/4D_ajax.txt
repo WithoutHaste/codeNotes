@@ -1,0 +1,13 @@
+##Ajax
+
+#Data
+
+Prep forms data for ajax request:
+<code>
+let data = $("#authorForm").serialize();
+</code>
+
+Merge the data from two forms together:
+<code>
+let data = $("#authorForm, #editForm").serialize();
+</code>

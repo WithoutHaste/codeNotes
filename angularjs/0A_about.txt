@@ -1,0 +1,15 @@
+(This is largely pulled from https://docs/angularjs.org/tutorial/)
+
+##About
+
+AngularJS is a MVW framework, meaning Model-View-Whatever. They don't takes a stance on whether to use a controller, a service, or whatever.
+
+AngularJS helps create dynamic webpages.
+
+##Requirements
+
+You'll need to download angular.js.
+
+#Minification
+
+AngularJS relies on matching strings and variable names to html attributes, so minification can totally break it. There are ways around this that I haven't learned yet.

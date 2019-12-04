@@ -1,0 +1,29 @@
+##About
+
+LINQ stands for Language Integrated Query.
+
+It is a .Net query language used against strongly-typed objects.
+
+To use LINQ in C#:
+<code>
+using System.Linq;
+</code>
+
+LINQ queries are strongly-typed.
+
+LINQ to Objects let you run queries against IEnumerables. It is a declarative language that is easier to read/write than the nested foreach loops it replaces.
+
+#Deferred Execution
+
+LINQ builds up a query, and does not actually execute it until you run an operation that requires it.
+
+<code>
+using System.Linq;
+
+var list = from x in fullList where x.Property < 5 select x; 
+//query has not been run yet
+
+int count = list.Count(); 
+//query was run so that count could be performed
+</code>
+

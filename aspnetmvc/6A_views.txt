@@ -1,0 +1,63 @@
+##Views
+
+#ViewStart
+
+~/Views/_ViewStart.cshtml is run before every full view. It sets the default Layout.
+
+_ViewStart files are run in a hierarchy.
+If you add ~/Views/Contact/_ViewStart.cshtml, then all the "Contact" views will run this _ViewStart instead of the global one.
+
+The Layout file can also be specified within a specific view.
+<code>
+@{
+	Layout = "~/Views/Shared/OtherLayout.cshtml";
+	//or use no Layout at all
+	Layout = null;
+}
+</code>
+
+#Full Views
+
+Strongly-typed views declare their model type at the top of the file. An error will occur if you pass the wrong object type into these views.
+
+<code>
+@model MyNamespace.MyObject
+</code>
+
+#Partial Views
+
+A partial view is a view that is rendered as part of another view. A single *.cshtml file can be used as both a full view and a partial view. When used as a partial view, it will not run _ViewStart.cshtml.
+
+<code>
+//returns a result to the current view
+@Html.Partial("MyPartial")
+
+//renders straight to the Response object
+@{ Html.RenderPartial("MyPartial"); }
+</code>
+
+Partial views automatically get a copy of the full view's ViewData dictionary - so changes made in the partial view will not affect the full view.
+
+<code>
+//passing a model to the partial view
+@Html.Partial("AuthorPartial", book.Author)
+</code>
+
+#Global Namespaces
+
+You can set "using" statements that are global to all your views, so that they don't each individually need "using" statements.
+
+1) Open file Project/Views/Web.config
+2) Update this section
+<code>
+	<system.web.webPages.razor>
+		<pages pageBaseType="System.Web.Mvc.WebViewPage">
+			<namespaces>
+				<add namespace="System.Web.Mvc" />
+				<!-- add more namespaces here -->
+			</namespaces>
+		</pages>
+	</system.web.webPages.razor>
+</code>
+
+To make sure these changes are picked up, you have to restart Visual Studio.

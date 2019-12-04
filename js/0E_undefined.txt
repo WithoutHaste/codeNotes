@@ -1,0 +1,24 @@
+##Undefined
+
+#Undefined
+
+'undefined' is a reserved word.  The type of 'undefined' is 'undefined'.
+
+Variables that have been declared but not defined have value 'undefined'.
+
+<code>
+if(x == undefined) {}
+
+y = undefined;
+</code>
+
+#Null
+
+'null' is a reserved word. It is considered an object. 'null' is not the same as 'undefined'.
+
+<code>
+var y = null;
+</code>
+
+null !== undefined
+null == undefined

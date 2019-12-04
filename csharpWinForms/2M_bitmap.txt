@@ -1,0 +1,49 @@
+##Bitmap
+
+<code>
+using System.Drawing;
+...
+Bitmap bitmap = new Bitmap(width, height);
+</code>
+
+#Pixelated
+
+To display a Bitmap in pixelated form instead of anti-aliased:
+<code>
+protected override void OnPaint(PaintEventArgs paintEventArgs)
+{
+	paintEventArgs.Graphics.SmoothingMode = SmoothingMode.None; //allow pixelation
+	paintEventArgs.Graphics.InterpolationMode = InterpolationMode.NearestNeighbor; //stop color smoothing
+	paintEventArgs.Graphics.PixelOffsetMode = PixelOffsetMode.Half; //stops image from being shifted up-left by a half-pixel
+	base.OnPaint(paintEventArgs);
+}
+</code>
+
+#Region Locked
+
+I've had trouble getting "region is already locked" errors from multi-threaded bitmaps when I rely on Clone to make an independent copy of a bitmap.
+<code>
+Bitmap copy = (Bitmap)original.Clone();
+</code>
+I don't have that trouble when I use new Bitmap to make the copy.
+<code>
+Bitmap copy = new Bitmap(original);
+</code>
+I can't find documentation about this, but recommend the second method for copying bitmaps.
+
+Exception: A generic error occurred in GDI+
+When: saving an image that was opened from file
+The problem is that GDI+ expects the original MemoryStream to remain open for the full life of the Image. Here's how to load an image file without this requirement.
+<code>
+private Bitmap SafeLoadImage(string fullFilename)
+{
+	byte[] imageBytes = File.ReadAllBytes(fullFilename);
+	using(MemoryStream stream = new MemoryStream(imageBytes))
+	{
+		using(Image image = Image.FromStream(stream, false, true))
+		{
+			return new Bitmap(image);
+		}
+	}
+}
+</code>

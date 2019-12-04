@@ -1,0 +1,452 @@
+##Design Patterns
+
+The original 23 design patterns were described by the Gang of Four: Erich Gamma, Richard Helm, Ralph Johnson, and John Vlissides.
+
+Creational Patterns
+	Abstract Factory
+	Builder
+	Factory Method
+	Prototype
+	Singleton
+	
+Structural Patterns
+	Adapter
+	Bridge
+	Composite
+	Decorator
+	Facade
+	Flyweight
+	Proxy
+	
+Behavioral Patterns
+	Chain of Responsibility
+	Command
+	Interpreter
+	Iterator
+	Mediator
+	Memento
+	Observer
+	State
+	Strategy
+	Template Method
+	Visitor
+
+#Strategy
+
+(similar to State)
+Make algorithms interchangeable by creating an Inteface for them
+Let your class reference the Interface type, so any implementation of the algorithm can be set
+Allows you to easily change class behavior
+
+#State
+
+(similar to Strategy)
+Allow an object to change its behavior as its internal state changes, by changing what instance of an interface or derivation of a base class is used for an action
+
+#Observer
+
+This is how events work
+A publisher class allows any subscriber class to subscribe to its events
+When an event occurs, the publisher alerts all of its subscribers
+
+#Decorator
+
+When you have many possible versions of a class that can occur in any combination, like toppings on a pizza
+Make a base class, with none of the options, and derive from it for each option
+Let each derived option contain an object of the base class
+
+Now you can wrap the base with layers of derived options, to any depth
+Methods can recursively drill into the layers
+
+#Factory
+
+Create a static factory class that will return a variety of derived types of the same base type
+The factory class can handle the details of instantiating the derived classes
+
+#Abstract Factory
+
+An extension of the Factory pattern.
+
+When you have a family of related objects, and there is more than one level of categorization for the objects, you can create a factory for each level and let the client use any of them.
+
+<code>
+//products
+public abstract class DisplayLanguage {...}
+public abstract class English : DisplayLanguage {...}
+public abstract class Japanese : DisplayLanguage {...}
+public class Roman : English {...} //normal english
+public class Brail : English {...} //brail encoded english
+public class Kanji : Japanese {...} //logographic chinese characters
+public class Hiragana : Japanese {...} //phonetic characters
+
+//factories
+public abstract class DisplayLanguageFactory 
+{ 
+	public DisplayLanguage Create(); 
+}
+
+public class EnglishFactory : DisplayLanguageFactory
+{
+	public English Create()
+	{
+		//can return Roman or Brail object
+	}
+}
+
+public class JapaneseFactory : DisplayLanguageFactory
+{
+	public Japanese Create()
+	{
+		//can return Kanji or Hiragana object
+	}
+}
+</code>
+
+#Singleton
+
+Ensures that there will only ever be one instance of a class used throughout an entire application
+
+C# implementation:
+<code>
+public class Singleton
+{
+	private static Singleton _instance;
+
+	//Singleton.Instance is the only way to retrieve an instance of a Singleton
+	public static Singleton Instance {
+		get {
+			if(_instance == null)
+			{
+				_instance = new Singleton();
+			}
+			return _instance;
+		}
+	}
+
+	//private constructor
+	private Singleton()
+	{
+	}
+}
+</code>
+
+#Command
+
+Encapsulates a request as an object, so that you can pass, queue, log, undo, or redo it
+Decouples the requestor of an action from the object that performs the action
+
+#Adapter
+
+(similar to Facade)
+A layer between a client API and your own code
+So your code all references the adapter, and only the adapter references 3rd party code
+This protects most of your code from changes in the 3rd party code
+
+#Facade
+
+(similar to Adapter)
+Create a single interface between your code and all 3rd party code
+Your code will see a single object in the place of a myriad of client interfaces
+
+#Proxy
+
+An adapter whose purpose is to either limit access to some operations of the original class, or to control when expensive operations are run
+
+#Template Method
+
+Defines an order of operations, while letting the details of each step by variable
+
+<code>
+public abstract class TemplateExample
+{
+	public void TemplateMethod()
+	{
+		Step1();
+		Step2();
+		Step3();
+	}
+	
+	public virtual void Step1() {}
+	public virtual void Step2() {}
+	public virtual void Step3() {}
+}
+</code>
+
+#Iterator
+
+Access the elements of an aggregate object sequentially, without exposing its underlying representation
+
+#Composite
+
+An individual object and a collection of those objects are treated uniformally
+
+For example, modeling a folder and file tree
+
+#Memento
+
+Allows you to save the state of an object, perhaps to restore the state later
+
+#Specification
+
+Allows business rules to be combined by chaining them together with business logic.
+
+<code>
+interface ISpecification
+{
+	bool IsSatisfiedBy(object candidate);
+	ISpecification And(ISpecification other);
+	ISpecification Or(ISpecification other);
+	//other logical operators...
+}
+
+abstract class CompositeSpecification : ISpecification
+{
+	public abstract bool IsSatisfiedBy(object candidate);
+	
+	public ISpecification And(ISpecification other)
+	{
+		return new AndSpecification(this, other);
+	}
+	
+	public ISpecification Or(ISpecification other)
+	{
+		return new OrSpecification(this, other);
+	}
+}
+
+public class AndSpecification : CompositeSpecification
+{
+	private ISpecification leftCondition;
+	private ISpecification rightCondition;
+	
+	public AndSpecification(ISpecification left, ISpecification right)
+	{
+		leftCondition = left;
+		rightCondition = right;
+	}
+	
+	public override bool IsSatisfiedBy(object candidate)
+	{
+		return (leftCondition.IsSatisfiedBy(candidate) && rightCondition.IsSatisfiedBy(candidate));
+	}
+}
+
+//OrSpecification class...
+
+//sample business rule
+public class IsAdminSpecification : CompositeSpecification
+{
+	public bool IsSatisfiedBy(object candidate)
+	{
+		return ((candidate is User) && (candidate as User).Type == "Admin");
+	}
+}
+</code>
+
+#Bridge
+
+You have two or more categories that combine to create an exponential number of possibilities. Each unique combination has a different implementation. A basic inheritance hierarchy gets out of hand fast.
+
+The Bridge pattern divides this into an interface hierarchy and an implementation hierarchy.
+
+Bridge is similar to Adapter pattern. The difference is that Bridge is designed upfront to allow abstraction and implementation to vary independently, while Adapter is retrofitted to let unrelated classes work together.
+
+Ex: 2 types of thread scheduler X 3 software platforms
+
+Basic hierarchy
+<code>
+class ThreadScheduler { ... }
+
+class PreemptiveThreadScheduler : ThreadScheduler { ... }
+class TimeSlicedThreadScheduler : ThreadScheduler { ... }
+
+class UnixPTS : PreemptiveThreadScheduler { ... }
+class WindowsPTS : PreemptiveThreadScheduler { ... }
+class JavaVirtualMachinePTS : PreemptiveThreadScheduler { ... }
+
+class UnixTSTS : TimeSlicedThreadScheduler { ... }
+class WindowsTSTS : TimeSlicedThreadScheduler { ... }
+class JavaVirtualMachineTSTS : TimeSlicedThreadScheduler { ... }
+</code>
+
+Bridge hierarchy:
+<code>
+interface IThreadScheduler
+{
+	IPlatform platform;
+	void CallMethodA();
+	void CallMethodB();
+}
+
+class PreemptiveThreadScheduler : IThreadScheduler
+{
+	public PreemptiveThreadScheduler(IPlatform p)
+	{
+		platform = p;
+	}
+	public void CallMethodA()
+	{
+		platform.MethodA();
+	}
+	public void CallMethodB()
+	{
+		platform.MethodB();
+	}
+}
+
+//class TimeSlicedThreadScheduler ...
+
+interface IPlatform
+{
+	void MethodA();
+	void MethodB();
+}
+
+class UnixPlatform : IPlatform
+{
+	public void MethodA() { ... }
+	public void MethodB() { ... }
+}
+
+//class WindowsPlatform ...
+
+//class JavaVirtualMachinePlatform ...
+</code>
+
+Hardware example:
+	IToggle can be a wall switch, a pull chain, a light sensor, etc
+	IDevice can be a lamp, a radio, a tv, etc
+	
+#Flyweight
+
+You have a very large number of expensive objects. Break the objects into two parts: the expensive shared part, and the cheap variable part.
+
+The flyweight contains the expensive part.
+The lightweight parts are removed entirely; they are handled by the client.
+
+<code>
+public class Factory
+{
+	private List<Flyweight> repository;
+	//returns a shared object
+	public Flyweight GetFlyweight();
+}
+
+public class Flyweight
+{
+	//private expensive stuff
+	
+	//public methods accept the lightweight variable parts as arguments
+}
+</code>
+
+The client calls getFlyweight(). When the client needs something specific, it passes specifics to the flyweight methods. The flyweight combines its shared expensive data with the lightweight variable data from the client to perform operations.
+
+Ex: a webpage loads images, which are memory-intensive
+	when an image is shown multiple times on the same page (such as with a tiled background) then you have one Flyweight for the shared image and a list of locations
+	
+#Builder
+
+Separate the construction of a complex object from its representation.  The same construction process can create different representations.
+
+This can solve at least two types of problems.
+
+1) It's a response to the Telescoping Constructor Anti-pattern - when the increase of combinations of object constructor parameters leads to an exponential number of constructors.  Instead, the Builder receives each parameter linearly and returns one final object.
+
+2) Used to create flat data objects (xml, sql, ...) where the final product is not easily edited.  The builder keeps it in an easy to edit format until you are done, then generates the final format.
+
+Builders are good candidate for fluent interfaces due to the linear input of options.
+
+<code>
+//problem 1
+public class Director
+{
+	private Builder builder;
+	
+	public void Construct()
+	{
+		builder.BuildPart();
+	}
+}
+
+public class Builder
+{
+	public void AddOptionA() { ... }
+	public void AddOptionB() { ... }
+	public void AddOptionC() { ... }
+	public Result GetResult() { ... }
+}
+</code>
+
+<code>
+//problem 2
+public class Director
+{
+	private Builder builder;
+	
+	public void Construct()
+	{
+		builder.BuildPart();
+	}
+}
+
+public abstract class Builder
+{
+	public void BuildPart();
+}
+
+public class XmlBuilder : Builder
+{
+	public void BuildPart() { ... }
+	public Xml GetResult() { ... }
+}
+
+public class JsonBuilder : Builder
+{
+	public void BuildPart() { ... }
+	public Json GetResult() { ... }
+}
+</code>
+
+#Prototype
+
+Initiate an object with default values, clone it repeatedly.  The prototype could be a concrete object or an abstract object.
+
+#Chain of Responsibility
+
+Avoid coupling of the sender of a request to its receiver by giving more than one object a chance to handle the request.  Chain the receiving objects and pass the request along the chain until an object handles it.
+
+#Marker Interface
+
+Aka Tagging Interface
+
+Requires a language with run-time type information available about objects. This is a means to associate metadata with a class in languages without that explicit support.
+
+Create an empty interface.
+The code tests for the presence of the interface on an object at decision points.
+
+<code>
+if(myObject is IEmptyInterface) { ... }
+</code>
+
+This is unnecessary in C# and Java, which both support Annotations (Custom Attributes).
+
+#Pipes and Filters
+
+A pipeline is a chain of processing elements where the output of element N is the input of element N+1.
+
+Connecting elements into a pipeline is analogous to Function Composition (combining simple functions into more complicated operations).
+
+Linux operations like Grep, Sed, and Awk are designed to be used this way.
+
+##Compound Patterns
+
+Larger design patterns made up of several basic patterns
+
+#Model View Controller
+
+Separation of duties
+
+Model: the actual data
+View: a particular way of looking at the data, possibly a summary
+Controller: handles user actions and updates Model and View as needed

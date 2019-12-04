@@ -1,0 +1,114 @@
+##Monad
+
+Monads are a type of functor that simplify mappings from one type to another type. They are used when one type needs to wrapped (lifted) or unwrapped (flattened) before it can be mapped to the other type.
+
+It is easy to line up these functions into a pipeline, because the input/output line up perfectly.
+<code>
+const AtoB = a => b;
+const BtoC = b => c;
+</code>
+
+It is easy to line up these functions into a pipeline, using functions like "map" which operate of functors.
+<code>
+const AtoB = functor(a) => functor(b);
+const BtoC = functor(b) => functor(c);
+</code>
+
+In order to line up these functions into a pipeline, you need to use monads.
+<code>
+const AtoB = a => monad(b);
+const BtoC = b => monad(c);
+</code>
+By using monads, "a => monad(c)" can be composed without adding special code to flatten "monad(b)" into "b". It will be handled automatically by the monad.
+
+#Example
+
+Example: this won't work because it is not using monads.
+<code>
+//setup
+const compose = (...fns) => x => fns.reduceRight((y, f) => f(y), x);
+const trace = label => value => {
+	console.log(`${ label }: ${ value }`);
+	return value;
+};
+const label = 'API call composition';
+
+// a => Promise(b)
+const getUserById = id => id === 3 ?
+	Promise.resolve({ name: 'Kurt', role: 'Author' }) :
+	undefined
+;
+
+// b => Promise(c)
+const hasPermission = ({ role }) => (
+	Promise.resolve(role === 'Author')
+);
+
+// a => Promise(c) - this won't work automatically
+const authUser = compose(hasPermission, getUserById);
+
+authUser(3).then(trace(label)); //outputs API call composition: false
+</code>
+
+Example: fixed with monads.
+<code>
+//setup
+const compose = (...fns) => x => fns.reduceRight((y, f) => f(y), x);
+const trace = label => value => {
+	console.log(`${ label }: ${ value }`);
+	return value;
+};
+const label = 'API call composition';
+
+//monad setup
+const composeM = chainMethod => (...ms) => (
+	ms.reduce((f, g) => x => g(x)[chainMethod](f))
+);
+const composePromises = composeM('then');
+
+// a => Promise(b)
+const getUserById = id => id === 3 ?
+	Promise.resolve({ name: 'Kurt', role: 'Author' }) :
+	undefined
+;
+
+// b => Promise(c)
+const hasPermission = ({ role }) => (
+	Promise.resolve(role === 'Author')
+);
+
+// a => Promise(c)
+const authUser = composePromises(hasPermission, getUserById);
+
+authUser(3).then(trace(label)); //outputs API call composition: true
+</code>
+
+#Terminology
+
+Wrapping aka lifting aka unit aka of: the monad must provide a function to wrap a value in the monad.
+
+Unwrapping aka flattening aka join aka chain: the monad must provide a function to unwrap a value from the monad.
+
+Map: since monads are functors, they must support mapping Monad(a) to Monad(b).
+
+Kleisli Composition aka chain: chain means to flatten then map. Given Monad(Monad(a)), Monad(b) is returned.
+("chain" seems to sometimes mean the same as "join", and sometimes mean "join then map")
+
+#Uses
+
+Possible uses of monads:
+
+You want to insert debugging or logging messages into a pipeline. You don't want to edit any of your existing functions.
+You could create a pipeline function that outputs the messages before or after each function call.
+(actually I'm not sure this counts as a monad, but it a good use of pipe/compose)
+
+The "Maybe" monad is like "Nullable" in C#. It wraps a value or undefined, and lets you operate on either without getting "undefined" errors.
+
+The "List" monad represents a lazy-load list of values.
+One implementation is to accept a starting value in the constructor, and a transform function. The starting value is returned first. Each time you ask for a new value, the transformation is applied to the previous value and the result is returned.
+(this implementation sounds like a generator function could serve the same purpose)
+
+The "promise" object (in ES6) is an implementation of the "Continuation" monad.
+It allows you to line up asynchronous tasks, and the next one will be run when then previous one completes.
+
+The "Proxy" monad wraps a value and includes some special behavior that you want available in addition to the normal behavior of the value. For any function/property that the monad does not recognize, it passes the call to the wrapped value and returns the result.

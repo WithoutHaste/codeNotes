@@ -1,0 +1,25 @@
+##System Variables
+
+#Screen
+
+<code>
+int width = Screen.width; //width of application window
+int height = Screen.height; //height of application window
+Resolution resolution = Screen.currentResolution
+bool isFullScreen = Screen.fullScreen; //is application in full screen mode?
+</code>
+
+#Data Path
+
+<code>
+string path = Application.persistentDataPath;
+</code>
+
+On Windows the path is:
+C:\Users\<username>\AppData\LocalLow\<company name>\<app name>
+
+On OSX the path is:
+Users/<username>/Library/Application Support/<company name>/<app name>
+
+On Linux the path is (from forums, not Microsoft):
+[LinuxHome]/unity3d/<Company>/<ProjectName>

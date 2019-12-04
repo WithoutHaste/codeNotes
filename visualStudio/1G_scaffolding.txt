@@ -1,0 +1,18 @@
+##Scaffolding
+
+Scaffolding will quickly fill in basic code structures.
+
+#Implement Interface
+
+Your class will implement an interface. You don't want to type in all those method signatures yourself.
+
+1) Add the interface to the inheritance of the class
+<code>
+public class MyClass : ISomeInterface
+{
+}
+</code>
+
+2) Right-click on the interface > Quick Actions and Refactorings > Implement Interface
+
+You'll see all the method signatures filled in with NotImplementedException statements.

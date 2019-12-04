@@ -1,0 +1,54 @@
+##XDocument
+
+<code>
+using System.Xml.Linq;
+
+XDocument documentA = XDocument.Load(filename);
+XDocument documentB = XDocument.Parse("<a><b>text</b></a>");
+</code>
+
+Loop through direct children:
+<code>
+foreach(XElement element in document.Root.Elements()) //all
+{
+}
+foreach(XElement element in document.Root.Elements(XName)) //all with matching XName
+{
+}
+foreach(XElement element in document.Root.Elements(string)) //all with matching XName.LocalName
+{
+}
+//Elements() method is inherited from XContainer class
+</code>
+
+Loop through all descendants:
+<code>
+foreach(XElement element in document.Root.Descendants())
+{
+}
+</code>
+
+Properties:
+XElement.Name = xml tag name
+XElement.Value = xml tag inner text
+
+To process XElements that contain plain text mixed with tags:
+<code>
+foreach(XNode node in xElement.Nodes())
+{
+	//node.NodeType is a System.Xml.XmlNodeType enum value
+
+	//node.NodeType == XmlNodeType.Text for plain text
+	//node.ToString() == string value of plain text
+
+	//node.NodeType == XmlNodeType.Element for XElement
+	//(node as XElement) casting will work when NodeType is Element
+}
+</code>
+
+To get an attribute value:
+<code>
+string x = xElement.Attribute("attributeName").Value;
+//or to protect against null when attribute is not found
+string x = xElement.Attribute("attributeName")?.Value;
+</code>

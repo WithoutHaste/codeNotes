@@ -1,0 +1,86 @@
+##Delegates
+
+A delegate type represents references to methods with specific parameter lists and return types.
+
+<code>
+public delegate void MyDelegateA(string a);
+
+MyDelegateA a = new MyDelegateA(methodA);
+a("test");
+
+void methodA(string a)
+{
+	Console.WriteLine(a);
+}
+</code>
+
+Delegates cannot be overloaded; they are differentiated by their name alone.
+
+#Action
+
+An action is a delegate that does not return a value.
+You can define an Action type parameter without explicitly defining a delegate for it.
+
+<code>
+Action<int, string> myAction = new Action<int, string>(Square);
+myAction(4, "A"); //"4A"
+
+static void Square(int i, string s)
+{
+	Console.WriteLine("{0}{1}", i, s);
+}
+</code>
+
+#Func
+
+A func is a delegate that returns a value.
+The last data type in the definition is the return type.
+You can define a Func type parameter without explicitly defining a delegate for it.
+
+<code>
+Func<int, int> myFunc = new Func<int, int>(Square);
+int x = myFunc(4); //16
+
+static int Square(int i)
+{
+	return i * i;
+}
+</code>
+
+#Multicast
+
+You can build up a list of Action delegates, provided they do not use an "out" parameter. When executing the delegate, all methods in the list are executed.
+
+<code>
+using System;
+using System.Text;
+
+delegate void MyFunc(int x);
+
+class Test
+{
+	public static void Main()
+	{
+		MyFunc a = new MyFunc(A);
+		MyFunc b = new MyFunc(B);
+		MyFunc c = a + b; //add to list: a, b
+		MyFunc d = c + a; //add to list: a, b, a
+		MyFunc e = d - b; //remove from list: a, a
+		MyFunc f = d - a; //remove from list: a, b
+		c(1);
+		d(2);
+		e(3);
+		f(4);
+	}
+	
+	public static void A(int a)
+	{
+		Console.WriteLine("A: "+a);
+	}
+	
+	public static void B(int b)
+	{
+		Console.WriteLine("B: "+b);
+	}
+}
+</code>

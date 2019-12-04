@@ -1,0 +1,33 @@
+##Form Validation
+
+Strongly-typed view controls (like Html.TextBoxFor) can validate form data based on Data Annotations (see C# notes).
+
+In your object:
+<code>
+public class Customer
+{
+	[Required(ErrorMessage="Customer code is required")]
+	public string CustomerCode { get; set; }
+}
+</code>
+
+In your view, to handle front-end data validation:
+<code>
+Html.TextBoxFor(m => m.CustomerCode)
+Html.ValidationMessageFor(m => m.CustomerCode)
+</code>
+
+You can list one ValidationMessage per field, or a single ValidationSummary for the form:
+<code>
+Html.TextBoxFor(m => m.CustomerCode)
+Html.TextBoxFor(m => m.Name)
+Html.TextBoxFor(m => m.PhoneNumber)
+Html.ValidationSummary()
+</code>
+
+In your code, to handle back-end data validation:
+<code>
+if(newCustomer.IsValid)
+{
+}
+</code>

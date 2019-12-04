@@ -1,0 +1,15 @@
+##Strings
+
+#Literals
+
+String literals are added to the output as they are.
+<code>
+Some plain text.
+<p>Some HTML tags.</p>
+</code>
+
+Output string literals:
+<code>
+@Response.Write("text")
+@Html.Raw("text")
+</code>

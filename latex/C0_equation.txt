@@ -1,0 +1,286 @@
+##Equation
+
+#Basic
+
+Equation is a built-in environment. Use "equation" to format mathematical equations in "display mode". Display mode means the equation will be shown on its own line.
+
+<code>
+\begin{equation}
+	f{x} = x^2
+\end{equation}
+</code>
+
+Each equation will be automatically numbered for referencing.
+
+You can only write one equation per "equation" environment.
+
+Alternate formats: 
+	\[x^2\]
+	$$x^2$$
+	\begin{displaymath}x^2\end{displaymath}
+
+#Amsmath
+
+Use the amsmath package to make not-numbered equations.
+
+<code>
+\usepackage{amsmath}
+\begin{document}
+\begin{equation*}
+	f{x} = x^2
+\end{equation*}
+\end{document}
+</code>
+
+It will also align multiple statements along the zero-width & (ampersand) character.  The \\ (double backslash) marks a line break.
+<code>
+\usepackage{amsmath}
+\begin{document}
+\begin{align*}
+	1 + 2 &= 3\\
+	1 &= 3 - 2
+\end{align*}
+\end{document}
+</code>
+
+#Inline
+
+Instead of enclosing your equations in an environment, you can use the $ (dollar sign) format to write equations inline with your text.
+
+<code>
+\begin{document}
+	Words $f(x) = x^2$ Words
+\end{document}
+</code>
+
+Or you can use the \( \) format.
+<code>
+\begin{document}
+
+The well known Pythagorean theorem \(x^2 + y^2 = z^2\) was 
+proved to be invalid for other exponents. 
+\end{document}
+</code>
+
+Or use the inline math environment
+<code>
+\begin{document}
+
+The well known Pythagorean theorem \begin{math}x^2 + y^2 = z^2\end{math} was 
+proved to be invalid for other exponents.
+\end{document}
+</code>
+
+#Power
+
+x to the power of 2
+<code>
+$x^2$
+</code>
+
+#Root
+
+square root of x
+<code>
+$\sqrt{x}
+</code>
+
+#Fraction
+
+1 over x
+<code>
+$\frac{1}{x}$
+</code>
+
+#Integral
+
+integral from a to b of one-third times x to the third power
+<code>
+$\int^a_b \frac{1}{3}x^3$
+</code>
+
+The a and b limits can be written in either order, but the one with ^ prefix will go on top and the _ prefix on the bottom.
+
+This one displays the limits at the top and bottom of the integral sign, instead of inset within it.
+<code>
+$\int\limits^a_b \frac{1}{3}x^3$
+</code>
+
+#Choose
+
+n choose k
+<code>
+\usepackage{amsmath}
+$\binom{n}{k}$
+</code>
+
+#Brackets
+
+Brackets, parentheses, and curly braces that will resize to surround the matrix or equation or whatever.
+
+<code>
+\left[
+\begin{matrix}
+1 & 0\\
+0 & 1
+\end{matrix}
+\right]
+</code>
+
+<code>
+\left(
+\frac{1}{\sqrt{x}}
+\right)
+</code>
+
+#Subscript Superscript
+
+^ for superscript
+_ for subscript
+
+<code>
+\[ a_1^2 + a_2^2 = a_3^2 \]
+</code>
+
+Surround long scripts with brackets
+<code>
+\[ a_{ij} + a_{kl} = b \]
+</code>
+
+Complex example
+<code>
+\[ \sum_{i=1}^{\infty} \frac{1}{n^s} 
+= \prod_p \frac{1}{1 - p^{-s}} \]
+</code>
+
+#Greek Letters
+
+Lowercase | Uppercase | Variable
+
+\alpha | A
+\beta | B
+\gamma | \Gamma
+\delta | \Delta
+\epsilon | E | \varepsilon
+\zeta | Z
+\eta | H
+\theta | \Theta | \vartheta
+\iota | I
+\kappa | K
+\lambda | \Lambda
+\mu | M
+\nu | N
+\xi | \Xi
+o | O
+\pi | \Pi
+\rho | P | \varrho
+\sigma | \Sigma
+\tau | T
+\upsilon | \Upsilon
+\phi | \Phi | \varphi
+\chi | X
+\psi | \Psi
+\omega | \Omega
+
+#Binary Operators
+
+\times
+\otimes
+\oplus
+\cup
+\cap
+\div
+\neq
+\leq
+\geq
+\in
+\notin
+\perp
+\simeq
+\approx
+\wedge
+\vee
+\Box
+\boxtimes
+\equiv
+\cong
+
+#Relation Operators
+
+<
+>
+\subset
+\supset
+\subseteq
+\supseteq
+
+#Misc Operators
+
+\int = integral
+\oint = o integral
+\sum = big epsilon
+\prod = big pi
+\coprod = upside down big pi
+
+\infty = infinity
+\exists = backwards E
+\nexists = crossed out backwards E
+\forall = upside down A
+\Re
+\Im
+\nabla = upside down triangle
+\partial
+\emptyset
+\varnothing
+\wp
+\complement
+\neg
+\cdots = three dots in a row
+\square = empty white square
+\blacksquare = filled black square
+\surd = start of root sign
+\triangle = empty white triangle
+
+#Arrows
+
+Single Line | Double Line
+
+\leftarrow | \Leftarrow
+\rightarrow | \Rightarrow
+\leftrightarrow | \Leftrightarrow
+\uparrow | \Uparrow
+\downarrow | \Downarrow
+\Updownarrow
+\mapsto
+\longmapsto
+\nearrow
+\searrow
+\swarrow
+\nwarrow
+\leftharpoonup
+\rightharpoonup
+\leftharpoondown
+\rightharpoondown
+\rightleftharpoons
+
+#Custom Operators
+
+Command "DeclareMathOperator" will define a custom operator that you can use throughout your document. The operator you define will be replaced (compiled to) whatever text or equation you define.
+
+<code>
+\documentclass{article}
+ 
+\usepackage{amssymb}
+\usepackage{amsmath}
+ 
+\DeclareMathOperator{\Mr}{M_{\mathbb{R}}}
+ 
+\begin{document}
+ 
+User-defined operator for matrices with Real entries
+ 
+\[
+x \in \Mr
+\]
+\end{document}
+</code>

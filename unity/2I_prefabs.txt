@@ -1,0 +1,40 @@
+##Prefabs
+
+Prefabs are GameObjects (with attached Components and Scripts) that are saved as templates under the Assets folder.
+
+You can instantiate objects from Prefabs at runtime.
+
+To turn an object on the Canvas into a Prefab, simply drag it to anywhere under "Assets" in the Project pane.
+Objects on the Canvas that are from Prefabs will display in blue in the Hierarchy pane.
+
+You can click "Open Prefab" in the Inspector pane to view and edit the details of the Prefab.
+
+Find prefab from script:
+<code>
+//searching a "Resources/Prefabs" folder
+GameObject prefab = (GameObject)Resources.Load("Prefabs/myPrefab", typeof(GameObject));
+</code>
+(This is slower than using a prefab that was linked to the script through the Inspector.)
+
+Instantiate prefab from script:
+<code>
+using UnityEngine;
+
+public class MyScript : MonoBehaviour
+{
+	public Transform myPrefab; //attach the prefab to this field in the Inspector pane
+
+	public void MyMethod()
+	{
+		//instantiate object at root of Scene (outside the Canvas)
+		Transform myObject = Instantiate(myPrefab);
+		
+		//OR instantiate object on the Canvas
+		Transform modalObject = Instantiate(prefabModal, Vector3.zero, Quaternion.identity, GameObject.Find("Canvas").transform);
+		
+		//call method from script attached to object
+		MyScriptB myScriptB = myObject.gameObject.GetComponent<MyScriptB>()
+		myScriptB.CustomMethod();
+	}
+}	
+</code>

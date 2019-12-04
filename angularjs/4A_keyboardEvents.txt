@@ -1,0 +1,27 @@
+##Keyboard Events
+
+#Global
+<code>
+<ng-keyup ng-keyup="expression"></ng-keyup>
+</code>
+
+#One Element
+<code>
+<div ng-keyup="expression"></div>
+</code>
+
+#Examples
+
+<code>
+<input ng-keyup="count = count + 1" ng-init="count = 0" /> Keyup Count: {{ count }}
+</code>
+
+<code>
+//in template
+<input ng-keyup="MyHandler($event)" />
+//in controller
+$scope.MyHandler = function($event) {
+	var keycode = $event.keyCode;
+	var altKeyDown = $event.altKey;
+};
+</code>

@@ -1,0 +1,61 @@
+##Script
+
+Scripts are custom GML named functions.
+
+A script action can pass up to 5 arguments. The code editor can pass up to 16 arguments. Argument types are real, string, boolean, and special.
+
+<code>
+//Version 1.4 or 2
+script_execute(scr_myScript, arg0, arg1, ...); //script names are keywords not strings
+
+//Version 2
+scr_myScript(arg0, arg1, ...);
+</code>
+
+Scripts can be imported from *.txt files.  Scripts in GameMaker are saved as *.gmx.
+
+If you make this syntax error, you can get strange behavior, like an entirely different script being called (this happened to me).
+<code>
+script_execute(scr_myScript(arg0, arg1));
+</code>
+
+#Syntax
+
+Syntax looks like basic JavaScript.
+
+All variables are declared 'var'.
+Lines end in ;
+//Comments /*Comments*/
+If/else
+
+Naming a code box - custom code in an object action
+<code>
+///The Action Name
+//place that line at the top of the code
+</code>
+
+#Argument
+
+<code>
+var x = argument[0];
+
+var count = argument_count; //number of arguments passed in
+</code>
+
+#Organization
+
+The scripts resource tree does not allow subfolders. It allows child scripts. That means that a script in the tree, when opened, could contain several child scripts that do not show up in the tree, but can be called like normal.  The parent script and child scripts all display as tabs in the parent script editor.
+
+To add a child script to a parent script, open it and click on the <plus empty tab> that is next to the open tab.
+
+#Search
+
+You can search for text within a script by opening the script and using the Search feature there.
+
+You can search all scripts (anywhere that can contain code) at once from main menu Scripts > Search Scripts. Double-clicking on a result will open that script to the indicated line.
+
+#Common Commands
+
+<code>
+room_goto(rm_my_room);
+</code>

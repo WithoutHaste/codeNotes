@@ -1,0 +1,35 @@
+##Scripts
+
+#Find all references
+
+Search the database definitions for a string.
+
+<code>
+USE myDatabase;
+DECLARE @text VARCHAR(100);
+SET @text = 'IsCommitted';
+SELECT
+	sys.objects.object_id,
+	sys.schemas.name as [schema],
+	sys.objects.name as [objectName],
+	sys.objects.type_desc as [type],
+	@text as [searchString]
+FROM
+	sys.sql_modules (NOLOCK)
+	INNER JOIN sys.objects (NOLOCK) ON sys.sql_modules.object_id = sys.objects.object_id
+	INNER JOIN sys.schemas (NOLOCK) ON sys.objects.schema_id = sys.schemas.schema_id
+WHERE
+	sys.sql_modules.definition COLLATE SQL_Latin1_General_CP1_CI_AS LIKE '%'+@text+'%'
+ORDER BY
+	sys.objects.type_desc, sys.schemas.name, sys.objects.name
+</code>
+
+#Performance
+
+Get a list of counters used to determine database performance and load.  Requires the View Server State permission.
+
+<code>
+SELECT * 
+FROM sys.dm_os_performance_counters 
+WHERE instance_name = 'databaseName';
+</code>

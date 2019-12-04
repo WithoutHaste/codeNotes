@@ -1,0 +1,29 @@
+##Operating System (OS)
+
+To check what OS the game is running on:
+<code>
+if(os_type == os_windows)
+{
+	//code
+}
+if(os_type == os_macosx)
+{
+	//code
+}
+</code>
+
+#Filenames
+
+Here's what I've used to access my Included Files on each OS.
+<code>
+var filename = working_directory;
+if(os_type == os_windows)
+{
+	filename = filename + "\\" + myIncludedFilename;
+}
+else if(os_type == os_macosx)
+{
+	filename = filename + "_" + myIncludedFilename;
+}
+</code>
+For some reason, Mac prefixed my included files with "_".

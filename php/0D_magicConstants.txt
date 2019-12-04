@@ -1,0 +1,23 @@
+##Magic Constants
+
+Magic constants are provided automatically by the php engine, provided the correct extensions are installed.
+
+<code>
+$current_line_number_in_file = __LINE__;
+
+$current_path_and_filename = __FILE__;
+
+$current_directory = __DIR__;
+//or
+$current_directory = dirname(__FILE__);
+
+$current_function_name = __FUNCTION__;
+
+$current_class_name_with_namespace = __CLASS__;
+
+$current_trait_name_with_namespace = __TRAIT__;
+
+$current_class_method_name = __METHOD__;
+
+$current_namespace = __NAMESPACE__;
+</code>

@@ -1,0 +1,159 @@
+##Filters
+
+Filters can cancel the generation of an HTTP response, or edit the response.
+
+Filters can be set on individual action methods, on an entire controller, and on a global level.
+
+Filters are good places to put logic that will be repeated across multiple actions/controllers.
+
+<code>
+[MyCustomFilter]
+public ActionResult MyAction() { }
+</code>
+
+#Execution Order
+
+Authentication Filters
+Authorization Filters
+
+Pre Action Filters
+Action Method Executed
+Post Action Filters
+
+Pre Result Filters
+Action Result Executed
+Post Result Filters
+
+Exception Filters (whenever an exception is thrown)
+
+When using multiple filters of the same type, they could be executed in any order on each request. You can explicitly set an execution order thus:
+<code>
+[MyActionFilter(Order=1)] //1 executes first
+</code>
+For the Action and Result Filters that have a pre and post method, the pre methods will be executed from 1 to N, and the post methods from N to 1.
+
+More generally scoped filters will be executed before more specific ones.
+
+#Global Filters
+
+Global-level filters should be registered during Application_Start event.
+Add them to Project/App_Start/FilterConfig.cs > RegisterGlobalFilters.
+
+#Authentication Filter
+
+Authentication filters validate that the user is who they claim to be.
+
+<code>
+class MyAuthenticationFilter : IAuthenticationFilter { }
+</code>
+
+#Authorization Filter
+
+Authorization filters validate that the user is allowed to run this action method.
+
+<code>
+class MyAuthorizationFilter : IAuthorizationFilter { }
+</code>
+
+Authorize Filter: verifies user credentials before allowing them to access the action.
+<code>
+[Authorize] //user is logged in
+public ActionResult MyAction()
+{
+	return View();
+}
+
+[Authorize(Roles="Admin"] //user is logged in as an Admin
+public ActionResult MyAction2()
+{
+	return View();
+}
+</code>
+
+#Action Filter
+
+<code>
+class MyActionFilter : IActionFilter 
+{ 
+	//before action method
+	public void OnActionExecuting(ActionExecutingContext context) { }
+
+	//after action method
+	public void OnActionExecuted(ActionExecutedContext context) { }
+}
+</code>
+
+OutputCache Filter: allows the browser to cache the resulting page from this request.
+<code>
+[OutputCache(Duration=60)] //cache result for an hour
+public ActionResult MyAction()
+{
+	//a lengthy operation
+	return View();
+}
+</code>
+
+#Result Filter
+
+<code>
+class MyResultFilter : IResultFilter 
+{ 
+	//before result execution
+	public void OnResultExecuting(ResultExecutingContext context) { }
+
+	//after result execution
+	public void OnResultExecuted(ResultExecutingContext context) { }
+}
+</code>
+
+#Exception Filter
+
+Exception filters are good for logging, or for showing custom error pages.
+
+<code>
+class MyExceptionFilter : IExceptionFilter  { }
+</code>
+
+#Custom Filters
+
+- Add new class to Project/Filters/MyNameAttribute.cs (Ex: LogAttribute.cs)
+<code>
+using System;
+using System.Web;
+using System.Web.Mvc;
+
+namespace MyApp.Filters
+{
+	public class LogAttribute : ActionFilterAttribute
+	{
+		//before action executes
+		public override OnActionExecuting(ActionExecutingContext context)
+		{
+		}
+		//after action executes
+		public override OnActionExecuted(ActionExecutedContext context)
+		{
+		}
+		//before result executes
+		public override OnResultExecuting(ResultExecutingContext context)
+		{
+		}
+		//after result executes
+		public override OnResultExecuted(ResultExecutedContext context)
+		{
+		}
+	}
+}
+</code>
+- Fill in whichever event handlers you want to use.
+
+Use custom filters just like normal filters:
+<code>
+using MyApp.Filters;
+
+[LogAttribute]
+public ActionResult MyAction()
+{
+	return View();
+}
+</code>

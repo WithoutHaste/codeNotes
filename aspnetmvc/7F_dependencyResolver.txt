@@ -1,0 +1,73 @@
+##Dependency Resolver
+
+#Design Patterns
+
+Dependency Injection means that the concrete class your Action needs is created by the Controller constructor, and is passed into the Action as an Interface implementation. The Action depends on the Interface, and that dependency is injected (passed into) the Action.
+(Or something like that. Dependency Injection is not easily supported by ASP.Net MVC.)
+
+Generalized example:
+<code>
+public Caller()
+{
+	Dependency dependency = new Dependency();
+	Callee(dependency);
+}
+
+public Callee(IDependency dependency)
+{
+	//do something
+}
+</code>
+
+A Service Locator is a class that holds references to many dependencies that might be needed.
+The Service Locator does not need to be passed around, it can be called from whereever it is needed.
+It will provide whichever dependency is required.
+
+Generalized example:
+<code>
+public Caller()
+{
+	ServiceLocator.Register<IDependency, Dependency>();
+	Callee();
+}
+
+public Callee()
+{
+	IDependency dependency = ServiceLocator.GetService<IDependency>(); //returns a new Dependency object
+	//do something
+}
+</code>
+
+#IDependencyResolver
+
+As of ASP.Net MVC 3, the DependencyResolver class is available as a Service Locator.
+
+Just implement this interface:
+<code>
+public interface IDependencyResolver
+{
+	Object GetService(Type serviceType);
+	IEnumerable<Object> GetServices(Type serviceType);
+}
+</code>
+
+#Register
+
+To register your custom resolver:
+<code>
+protected void Application_Start()
+{
+	MyResolver resolver = new MyResolver();
+	DependencyResolver.SetResolver(resolver);
+}
+</code>
+
+#Usage
+
+To use your resolver:
+<code>
+public ViewResult MyAction()
+{
+	Dependency dependency = DependencyResolver.GetService(typeof(IDependency));
+}
+</code>

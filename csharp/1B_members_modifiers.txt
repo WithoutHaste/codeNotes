@@ -1,0 +1,366 @@
+##Members
+
+#Field
+
+a variable declared directly in a class or struct
+see Instance Fields vs Static Fields
+
+#Property
+
+<code>
+public int Name
+{
+	get; //get accessor
+	set; //set accessor
+}
+</code>
+special methods called accessors provide a flexible mechanism to read and write data
+
+#Method
+
+functions specific to a class
+
+To get reflection information:
+<code>
+using System.Reflection;
+
+public class MyType 
+{ 
+	public void MyMethod() { }
+}
+
+//within method...
+Type type = typeof(MyType);
+MethodInfo methodInfo = type.GetMethods()[0];
+</code>
+	
+#Event
+
+publisher classes raise events to alert subscriber classes
+	
+#Operator
+
+such as + ++ - * / ?: new
+
+#Index
+
+allows a class to be indexed like an array
+resembles a Property
+<code>
+public int this[int i]
+{
+	get;
+	set;
+}
+</code>
+
+Indexes can accept a variaty of parameters. You can overload indexors by using different parameter lists in the same object.
+
+<code>
+public class MyClass<T>
+{
+	private List<T> list = new List<T>();
+	private Dicationary<string, T> dictionary = new Dicationary<string, T>();
+	
+	public T this[int key]
+	{
+		get 
+		{
+			return list[key];
+		}
+	}
+	
+	public T this[int row, int column]
+	{
+		get 
+		{
+			return list[row][column];
+		}
+	}
+	
+	public T this[string key]
+	{
+		get
+		{
+			return dictionary[key];
+		}
+	}
+	
+	public T this[params string[] keys]
+	{
+		get
+		{
+			return //something that uses multiple string keys
+		}
+	}
+}
+//calling the indexors
+MyClass<Object> myClass = new MyClass<Object>();
+Object a = myClass[5];
+Object b = myClass["name"];
+Object c = myClass["a", "b", "c"];
+</code>
+	
+#Constructor
+
+special functions called on class instantiation
+Constructors do not have a return type
+<code>
+Customer() { }
+</code>
+
+Constructor chaining to a base-type constructor:
+<code>
+class A
+{
+	public A(int x) 
+	{
+		//handle x
+	}
+}
+class B : A
+{
+	public B(int x, int y) : base(x)
+	{
+		//handle y
+	}
+}
+</code>
+
+Constructor chaining to another constructor in this type:
+<code>
+class A
+{
+	public A(int x) : this(x, defaultY)
+	{
+	}
+	public A(int x, int y)
+	{
+		//handle x and y
+	}
+}
+</code>
+
+#Static Constructor
+
+Special function called only once per type, either automatically before the first instance is created, or automatically before the first static method is called. The static constructor can initialize static fields, or run other one-time operations.
+<code>
+class A
+{
+	static A(int x)
+	{
+	}
+	public A(int y)
+	{
+	}
+}
+</code>
+
+#Destructor
+
+a special function to destruct a class
+only one allowed per class
+Destructors cannot be called, they are invoked automatically
+the Destructor implicitly calls Finalize on the object's base class
+Destructors do not have a return type
+<code>
+~Customer() { }
+</code>
+
+#Nested Type
+
+a class or struct declared inside another class
+the inner class can only be used by the outer class
+
+##C# 6.0 One-Liners
+	
+#Auto Property Initializers
+
+Succinct read-only property initialization.
+
+As of C# 6.0 (.Net Framework 4.6)
+
+<code>
+public string Name { get; } = "Steven";
+
+public DateTime Timestamp { get; } = new DateTime();
+
+public int Id { get; } = NextId();
+</code>
+
+#Expression Bodied Methods
+
+Succinct one-line methods.
+
+As of C# 6.0 (.Net Framework 4.6)
+
+<code>
+Public override string ToString() => string.Format("{0} {1}", X, Y);
+</code>
+
+#Expression Bodied Properties
+
+Succinct one-line read-only properties.
+
+As of C# 6.0 (.Net Framework 4.6)
+
+<code>
+Public int Area => Width * Height;
+</code>
+
+##Access Modifiers
+
+Access modifiers can be used on members and types (classes, structs, interfaces).
+
+#public
+
+Accessible to the current assembly and any assembly referencing it
+
+#private
+
+Accessible to the same class or struct.
+One instance of the class will have access to private members of another instance of the same class.
+
+#protected
+
+Accessible to the same class or struct, and to any class directly derived from this one.
+
+Only accessible to other classes when referrenced through a derived type.
+<code>
+class A 
+{ 
+	protected int x = 5; 
+}
+
+class B : A 
+{ 
+	public B() 
+	{ 
+		x = 6; //valid
+	} 
+}
+
+class C
+{
+	public static void Main()
+	{
+		A a = new A();
+		B b = new B();
+		
+		a.x = 10; //INVALID
+		b.x = 10; //valid
+	}
+}
+</code>
+
+#internal
+
+Accessible to the current assembly only
+
+#protected internal
+
+Accessible to the current assembly, and to any class directly derived from this one in another assembly
+
+##Other Modifiers
+
+#abstract class
+
+A class that cannot be instantiated, it can only be derived from.
+
+Classes are either abstract or concrete. (Concrete classes do have a special keyword, they just lack the abstract keyword.)
+
+#abstract method
+
+A method signature with no implementation that must be defined in the derived class
+Only valid in abstract classes
+
+#sealed class
+
+Class cannot be inherited from
+
+#new
+
+Explicitly hides a member inherited from a base class, when that member was not virtual
+
+#override
+
+Defines a new implementation of an inherited virtual member
+
+#virtual
+
+Marks that a member may be overriden in a derived class
+
+#static member
+
+A member that belongs to the type instead of to an instance of the type
+
+#static class
+
+A class that cannot be instantiated, but whose static members can be accessed
+All members of the class must also be static
+The class is implicitly sealed
+
+#const
+
+immutable values known at compile time
+only built-in types (primitives + Objects) can be declared as Constants
+constants are implicitly also static
+constant values can only be set when they are declared
+	
+#readonly
+
+A field that can only be set (once) in a Constructor or where the field is declared
+This field cannot be set in a derived class
+
+#extern
+
+A method that is implemented externally, such as in another assembly
+
+#partial
+
+Allows the definition of a class, struct, or interface to be spread across several files
+
+#implicit
+
+Declare an implicit user-defined type conversion.
+<code>
+class MyType
+{
+	private string term;
+	private string description;
+	
+	public static implicit operator string(MyType a)
+	{
+		return a.ToString();
+	}
+	
+	public override string ToString()
+	{
+		return term + ": " + description;
+	}
+}
+</code>
+
+#explicit
+
+Declare an explicit user-defined type conversion. (You cannot define both an implicit and explicit conversion between the same two types)
+<code>
+class MyType
+{
+	private string term;
+	private string description;
+	
+	public static explicit operator string(MyType a)
+	{
+		return a.ToString();
+	}
+	
+	public override string ToString()
+	{
+		return term + ": " + description;
+	}
+}
+</code>
+
+
+	

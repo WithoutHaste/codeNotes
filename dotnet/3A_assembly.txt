@@ -1,0 +1,58 @@
+##Assembly vs Namespace
+
+An assembly is collection of files compiled into a DLL (library) or EXE (executable program).
+
+A namespace is a logical organization created by the programmer.  It can span across assemblies, and an assembly can contain multiple namespaces.
+
+##Assembly
+
+An assembly is an EXE or a DLL.
+An assembly is the smallest unit of deployment.
+An assembly is a collection of types and resources.
+
+#Private Assembly
+
+A private assebly can only be used by the application is was deployed with. It must be located in the application's home folder or one of its subdirectories.
+
+A private assembly must be designed for side-by-side work with other versions of itself. It must be accompanied by an assembly manifest to make this possible.
+
+#Shared Assembly
+
+A shared assembly can be used by multiple applications. It will be loaded into the Global Assembly Cache. These assemblies are only loaded into memory if they are required.
+
+A shared assembly must be strong-named, ie. have a unique id to prevent assembly conflicts.
+
+#Dynamic Assembly
+
+An assembly created by an application as it runs.
+
+#Satellite Assembly
+
+A satellite assembly is a DLL containing localization resources specific to a given culture.  They are only loaded if an application needs that culture's information (language or images).
+
+These assemblies do not contain code (beyond what is auto-generated). They contain text, images, etc. Just resources.
+
+These assemblies are not in the main assembly of an application, so that they can be changed without requiring a re-compilation of the entire application.
+
+#Find Assembly in GAC
+
+Windows hack to find the location of an assembly in the GAC:
+1. Run > C:\\Windows\assembly\gac_msil
+2. Find the assembly in the list, select it to see the location in the address bar
+
+##Assembly Strong Name
+
+This is a unique id made up of:
+	the assembly name
+	the version number
+	optional cultural information
+	a digital signature
+	and a public key
+	
+The public key corresponds to the private key the used for the digital signature.
+
+Assemblies with the same Strong Name should be identical.
+
+##Assembly Manifest
+
+The assembly manifest is an XML file containing the names and hashes of all files in the assembly, and a reference list of all external dependencies.

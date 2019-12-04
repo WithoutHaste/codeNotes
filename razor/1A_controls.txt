@@ -1,0 +1,74 @@
+##Controls
+
+The Razor Engine can usually tell when to switch between C# code and HTML in these code blocks.
+
+When it sees an HTML tag, it knows to switch to HTML interpretation.
+If you try to start with plain text, it will give an error:
+<code>
+@for(var i=0; i<10; i++)
+{
+	Plain Text causes error
+	@:Plain Text does not cause error
+	<p>Line @i</p>
+}
+</code>
+
+#For
+
+<code>
+<body>
+	@for(var i=0; i<10; i++)
+	{
+		<p>Line @i</p>
+	}
+</body>
+</code>
+
+#Foreach
+
+<code>
+<body>
+	@foreach(var item in list)
+	{
+		<p>Item @item.Name</p>
+	}
+</body>
+</code>
+
+#If Else
+
+<code>
+<body>
+	@if(age < 50)
+	{
+		<p>the age is @age</p>
+	}
+</body>
+</code>
+
+<code>
+<body>
+	@if(hour < 12)
+	{
+		<p>It is morning</p>
+	}
+	else
+	{
+		<p>It is afternoon</p>
+	}
+</body>
+</code>
+
+#Switch
+
+<code>
+<body>
+	@switch(x)
+	{
+		case 0: y = "text"; break;
+		case 1: y = "other text"; break;
+		default: y = "";
+	}
+	<p>@y</p>
+</body>
+</code>

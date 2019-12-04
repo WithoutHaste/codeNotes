@@ -1,0 +1,33 @@
+##Diagnostics
+
+#ASP.Net Health Monitoring
+
+In machine-level Web.config file:
+(Example location C:\Windows\Microsoft.NET\Framework\v4.0.30319\Config\web.config)
+<code>
+	<system.web>
+		<healthMonitoring enabled="true">
+			<providers /> <!-- set publication destinations for this information -->
+			<rules> <!-- maps event buckets to providers -->
+				<add name="All Events" eventName="All Events" provider="SqlWebEventProvider" />
+			</rules>
+			<eventMappings /> <!-- categorizes all possible events into buckets with friendly names -->
+		</healthMonitoring>
+	</system.web>
+</code>
+This file applies to every ASP.Net application running on this computer, with the specified framework version.
+
+#log4net
+
+#Elmah.MVC
+
+ELMAH = Error Logging Modules And Handlers.
+
+Open-source tool available through NuGet. 
+Supports sending error messages as email, or posting to a web site, etc.
+
+With no code changes or setup, you can go to http://localhost:<port>/elmah to see a report of your errors.
+
+See the new elmah section of Project/Web.config for settings such as what roles can view the elmah page, what url route to use, etc.
+
+#P&P Application Logging Block
