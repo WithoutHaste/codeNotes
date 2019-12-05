@@ -1,0 +1,13 @@
+##RawCap
+
+!![RawCap](https://www.netresec.com/index.ashx?page=RawCap)
+
+RawCap can log localhost traffic in Windows 10.
+Logs are saved in PCAP format, which can be viewed in WireShark.
+
+No installation, just run the exe in command prompt.
+Ex: RawCap.exe 127.0.0.1 log.pcap
+- use "127.0.0.1" rather than "localhost"
+- Ctrl+C in the RawCap window to save logs and close the program
+
+RawCap will not capture SOAP traffic (at least not in a useful way) - try Fiddler instead.

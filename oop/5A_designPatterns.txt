@@ -176,6 +176,12 @@ public abstract class TemplateExample
 
 Access the elements of an aggregate object sequentially, without exposing its underlying representation
 
+#Mediator
+
+A mediator object encapsulates how a set of objects will interact.  A mediator has great control on how a program runs.
+
+Business objects do not communicate directly with each other. They communicate through the mediator only. The mediator is like an internal Adapter or an anti-corruption layer.
+
 #Composite
 
 An individual object and a collection of those objects are treated uniformally

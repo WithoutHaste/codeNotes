@@ -1,0 +1,16 @@
+##Dependency Injection Framework
+
+
+#Service Registrations
+
+Transient: each time the service is requested, a new instance is created.
+- Use this by default.
+
+Singleton: one instance of the service will be used for lifetime of the application. I.e. after the first service is instantiated, it will continue to be used for each subsequent request.
+- Holds state for the lifetime of the application.
+- Only use if you're sure you need it.
+
+Transient inside Singleton: a Singleton service instantiates a Transient service.
+- De facto you have two Singleton services, because the outer service only requests the inner service once, resulting in the inner service being the same instance for the lifetime of the outer service.
+
+Scoped: often means one instance of the service per web request. Technically means that the service is tied to the lifetime of a particular object.

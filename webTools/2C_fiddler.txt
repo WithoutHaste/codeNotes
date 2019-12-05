@@ -1,0 +1,9 @@
+##Fiddler
+
+!![Fiddler](https://www.telerik.com/fiddler)
+
+Fiddler is an easy to use network traffic sniffer.
+It picks up HTTP and SOAP traffic by default.
+It picks up localhost traffic by default.
+
+Recommended.
