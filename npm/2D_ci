@@ -1,0 +1,11 @@
+##npm ci
+
+Install a project with a clean slate. Ensures clean install of dependencies.
+Intended for automated environments - skips certain user-oriented features that "npm install" would have included.
+
+More strict than "npm install" - can catch errors that incrementally-installed environments would not.
+
+From the project's root folder:
+<code>
+npm ci
+</code>

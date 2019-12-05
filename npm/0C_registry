@@ -1,0 +1,6 @@
+##Registry
+
+Any registry website that implements the CommonJS Package Registry specification.
+Used to resolve name/version ids.
+
+npm defaults to using https://registry.npmjs.org.

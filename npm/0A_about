@@ -1,0 +1,24 @@
+##What is npm
+
+npm stands for Node Package Manager.
+npm is a software registry, a package manager, and a package installer.
+
+Open-source developers use npm to share software.
+You can share packages at https://ww.npmjs.com.
+
+npm is run from the command line.
+
+npm is installed as part of Node.js.
+npm was first created for Node.js and has since expanded to other uses.
+
+To check if npm is installed (from command line):
+<code>
+npm
+</code>
+which will pull up the basic help text.
+
+To see what version of npm you are running:
+<code>
+npm -v
+</code>
+will output the version number.

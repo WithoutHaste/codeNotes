@@ -1,0 +1,6 @@
+##npm publish
+
+To publish a package to the global registry:
+<code>
+npm publish
+</code>

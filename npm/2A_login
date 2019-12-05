@@ -1,0 +1,11 @@
+##npm login
+
+To check if you are logged in:
+<code>
+npm whoami
+</code>
+
+To login:
+<code>
+npm login
+</code>

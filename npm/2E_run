@@ -1,0 +1,6 @@
+##npm run
+
+Run a script named in "package.json":
+<code>
+npm run script-name
+</code>

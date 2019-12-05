@@ -167,6 +167,8 @@ No other invocations were made, except those already verified:
 mock.VerifyNoOtherCalls();
 </code>
 
+If you get an error about extension methods not being supported, check that you have the right parameters in the Verify(i => i.Method()). If the method signature is not recognized, Moq assumes it is an extension method (which are not supported).
+
 #Errors
 
 Error: "Mock does not contain a definition for Setup".

@@ -1,0 +1,61 @@
+##Package
+
+A package can be any of the following:
+(a) a folder containing "package.json" and a program
+(b) a gzipped tarball containing (a)
+(c) a url that resolves to (b)
+(d) a name@version published on the registry with (c)
+(e) a name@tag that points to (d)
+(f) a name that has a "latest" tag satisfying (e)
+(g) a git url that resolves to (a)
+
+#package.json
+
+"package.json" must contain at least:
+<code lang="json">
+{
+	"name": "package name",
+	"version": "1.0.0"
+}
+</code>
+@name/version forms a unique id for your package.
+name cannot be longer than 214 characters (including scope).
+name cannot start with a period (.) or underscore (_).
+name must be all lowercase.
+name should use hyphens (-) to delimit words. Ex: more-than-one-word.
+name must be url-safe, as it will become a file name, a folder name, and a url.
+name should not include "node" or "js" as this is assumed.
+version must be parseable by node-semver.
+	Good examples:
+		1.2.3
+		v1.2.3
+		1.2.3-alpha
+	Bad examples:
+		a.b.c
+
+Any dependencies must also be defined in "package.json".
+<code lang="json">
+{
+	"name": "package name",
+	"version": "1.0.0",
+	"dependencies": {
+		"@other-package-name/build-scripts": "^1.0.443",
+		"@pie/components": "1.0.849"
+	}
+}
+</code>
+
+##package-lock.json
+
+"package-lock.json" is an optional file in the same directory as "package.json".
+
+This file will be automatically generated if npm modifies the node_modules tree or your "package.json".
+This file ensures that everyone's dependency trees remain synced, regardless of intermediate changes.
+
+This file is not published, and will be ignored anywhere except in the package root directory.
+
+##shrinkwrap.json
+
+Same format and purpose as "package-lock.json", but can be published.
+
+Takes precedence over "package-lock.json" if both are present.

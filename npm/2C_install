@@ -1,0 +1,31 @@
+##npm install
+
+Installs a package, plus any package that it depends on.
+	If the package has a package-lock or shrinkwrap file, that will direct dependency installation.
+	If both exist, npm-shrinkwrap.json will take precedence.
+
+Install the current project (from the root folder):
+<code>
+npm install
+</code>
+Installs dependencies into the local node_modules folder.
+
+Global mode:
+<code>
+npm install -g
+npm install --global
+</code>
+Installs dependencies into the current package context (i.e. working directory) as a global package.
+
+Ignore "devDependencies" in "package.json":
+<code>
+npm install --production
+</code>
+
+Install a specificed package:
+<code>
+npm install <package name>
+npm install <url>
+npm install <tarball file>
+npm install <folder>
+</code>

@@ -1,0 +1,20 @@
+##Terminology
+
+#CLI
+
+CLI stands for Command Line Interface.
+This program can be run from the command line.
+
+#Web Hook
+
+An API or web service that a 3rd party service calls asynchronously. Used to implement event reactions.
+aka Web Callback aka HTTP Push API aka Reverse API
+A way for a service to provide other apps with real-time information; Web Hooks deliver data as it happens.
+
+Web Hooks will usually POST to your app.
+
+1) give the Web Hook provider a url to deliver requests to (must be publicly accessible)
+2) data will usually be POSTED as JSON (or maybe XMl or form data)
+
+Can be tricky to debug as you usually trigger an event and then wait for the asynchronous response.
+Postman is a useful tool for spoofing Web Hooks requests.
