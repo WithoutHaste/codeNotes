@@ -1,0 +1,26 @@
+##Part 1
+
+#Preface
+
+A model represents a portion of reality or an idea of interest.
+
+The domain of a software project is the subject area to which the user apples the software.
+
+Models are tools for grappling with breadth and complexity of knowledge of the domain required to implement the software project.
+
+"An appropriate model makes sense of information and focuses it on a problem."
+
+"A domain model is not a particular diagram; it is the idea that the diagram is intended to convey."
+
+"[A domain model] is not just the knowledge in the domain expert's head; it is a rigorously organized and selective abstraction of that knowledge."
+
+"Domain modeling...is loosely representing reality to a particular purpose...a domain modeler chooses a particular model for its utility."
+
+Model Utility:
+(1) Model and implementation shape each other. This keeps the model relevant and ensures the analysis that went into it applies to the final product. You should be able to interpret the code based on your understanding of the model.
+(2) Ubiquitous Language. The language of the model is used by technical and non-technical people alike. This facilitates communication.
+(3) The model is distilled knowledge. It distinguishes elements of most interest. It is a shared understanding of the domain.
+
+"The binding of model and implementation makes experience with early versions of the software applicable as feedback into the modeling process."
+
+"The heart of software is its ability to solve domain-related problems for its user. All other features...support this basic purpose."
