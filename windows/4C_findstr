@@ -1,0 +1,83 @@
+##Findstr
+
+Findstr is a search tool for Windows similar to grep in Linux.
+By default, findstr interprets the search string as a regular expression.
+
+#By File
+
+Search results of "dir" for a string
+<code lang="bash">
+dir | findstr "notes"
+</code>
+
+Search a file for a string:
+<code lang="bash">
+findstr "notes" fileName
+</code>
+Outputs each line containing that string.
+
+Display line number of each match:
+<code lang="bash">
+findstr /n "notes" fileName
+</code>
+
+Search for multiple strings using "space" delimiter:
+<code lang="bash">
+findstr "notes other" fileName
+</code>
+
+#By Directory
+
+List files in directory that contain the string:
+<code lang="bash">
+findstr /M "notes" directoryName
+</code>
+
+List lines in files in directory that contain the string:
+<code lang="bash">
+findstr "notes" directoryName
+</code>
+
+Search directory recursively:
+<code lang="bash">
+findstr /s "notes" directoryName
+</code>
+Displays path to file with each match.
+
+#Parameters
+
+/a: colorAttribute Specifies color attributes with two hexadecimal digits
+
+/b Matches pattern only to beginning of line
+
+/c: string Runs literal match search on for "string"
+
+/d: dirList Searches this comma-delimited list of directories
+
+/e Matches pattern only to end of line
+
+/f: fileName Processes files listed in this file
+
+/g: fileName Gets search strings from this file
+
+/i Case-insensitive search
+
+/l Matches search string literally (slash-letter-ell)
+
+/m Prints only the file name of each file with a match
+
+/n Prints the line number with each match
+
+/o Prints seek-offset before each matching line
+
+/offline Processes files with offline attribute sets
+
+/p Skips files with non-printable characters
+
+/r Matches search string as a regular expression (default, unless you use /l)
+
+/s Search directory recursively
+
+/v Prints only lines can do not match
+
+/x Matches entire line only

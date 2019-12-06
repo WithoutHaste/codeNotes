@@ -1,0 +1,25 @@
+##Command Line
+
+Windows command line tools, for those who miss Linux.
+
+#Copy from
+
+To copy from the command line:
+- Drag and drop with mouse to highlight text
+- Right-click mouse
+The text has been copied to your clipboard.
+
+#more
+
+Display the first screen-worth of a file:
+<code lang="bash">
+more fileName
+</code>
+Click "enter" to see one more line.
+Click "space" to see one more screen-worth.
+Click "q" for Quit to exit.
+
+Skip the first 10 lines of the file:
+<code lang="bash">
+more +10 fileName
+</code>
