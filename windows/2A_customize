@@ -1,0 +1,12 @@
+##Customize Environment
+
+#Command Prompt
+
+To change your default directory (in Windows 10, as of Dec 2019)
+- Go to: C:\Users\<name>\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Windows System
+- Right-click Command Prompt > Properties
+- Shortcut tab > change "Start in" to any bash path
+
+If you have pinned Command Prompt to your taskbar, you'll need to remove it and then re-pin it to see the change.
+
+AppData is a hidden folder.

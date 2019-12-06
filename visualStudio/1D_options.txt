@@ -5,3 +5,19 @@
 menu Tools > Options > Projects and Solutions > Build and Run > MSBuild project build output verbosity
 Default: Minimal
 Full: Diagnostic
+
+#Code Style
+
+VS can provide suggestions for refactoring based on a set of coding style standards.
+
+There are defaults in the Options dialog.
+The defaults will be overridden by the .editorconfig file in the root directory of the project.
+
+Ex:
+<code lang="ini">
+# Prefer method-like constructs to have an expression body
+csharp_style_expression_bodied_methods = true:error
+csharp_style_expression_bodied_constructors = true:error
+csharp_style_expression_bodied_operators = true:error
+</code>
+This will underline block bodies in red (because "error") with the suggestion to refactor them to expression bodies.

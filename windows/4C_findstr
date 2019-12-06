@@ -25,6 +25,9 @@ Search for multiple strings using "space" delimiter:
 <code lang="bash">
 findstr "notes other" fileName
 </code>
+To search for strings containing spaces, do one of the following:
+- use "/c: string" parameter
+- use "." instead of " "
 
 #By Directory
 

@@ -33,6 +33,30 @@ public class MyType
 Type type = typeof(MyType);
 MethodInfo methodInfo = type.GetMethods()[0];
 </code>
+
+As of C# 6.0 or 7.0, you can format a method as an expression body:
+<code>
+//with expression body
+public class Foo
+{
+	public string Name { get; }
+	public string Age { get; }
+	
+	public Foo(string name, int age) => (Name, Age) = (name, age);
+}
+//with block body
+public class Foo
+{
+	public string Name { get; }
+	public string Age { get; }
+	
+	public Foo(string name, int age)
+	{
+		Name = name;
+		Age = age;
+	}
+}
+</code>
 	
 #Event
 

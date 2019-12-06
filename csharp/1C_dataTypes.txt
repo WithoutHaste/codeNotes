@@ -85,9 +85,11 @@ You can add strings to the interning list at runtime. Use this if you expect to 
 String.Intern(myCustomString);
 </code>
 
-#String Formatting
+#Composite Formatting
 
-for String.Format or Console.WriteLine
+Supported by String.Format, Console.WriteLine, StringBuilder.AppendFormat, TextWriter.WriteLine, Debug.WriteLine, etc.
+
+Note that {0} indicates param index 0. It can be used repeatedly throughout the string, such as "{0} {1} {0} {0}".
 
 Insert text into string based on the index. This is faster than string concatenation when combining four or more strings.
 <code>
@@ -109,6 +111,15 @@ Align text
 Console.WriteLine("{0,10}{1,20}{2,-5}", a, b, c); //number after comma gives width of column, negative number means left-align text
 </code>
 
+(I think this is new in C# 6.0, but haven't found confirmation or what it is called)
+
+Using variable name instead of index:
+<code>
+Console.WriteLine("My name is {@name} and age is {@age}.", name, age);
+</code>
+
+#String Formatting
+
 Padding
 <code>
 string x = "abc".PadLeft(5); //add spaces to beginning of string until length equals 5
@@ -129,6 +140,36 @@ num = Convert.ToInt32(upperCaseHex, 16);
 Repeat a character x times
 <code>
 string s = new String('#', x);
+</code>
+
+#Interpolated Strings
+
+C# 6.0 and later.
+
+Interpolated strings can contain interpolation expression, surrounded by curly braces {}.
+When the string is resolved, each interpolation expression is replaced by its result (as a string).
+
+<code>
+$"Hello"
+$"Hello, {name}. Today is {DateTime.Now.DayOfWeek}."
+</code>
+
+Formatting results:
+<code>
+$"The time is {DateTime.Now:HH:mm}."
+</code>
+The "HH:mm" is called the "format string component".
+
+Aligning results:
+<code>
+$"Columns|{"Left", -7}|{"Right", 7}"
+</code>
+The integer is the minimum number of characters to show.
+Positive means right-aligned in that space, negative means left-aligned.
+
+Special characters:
+<code>
+$"{{braces}}" //equals "{braces}"
 </code>
 
 ##Enums
