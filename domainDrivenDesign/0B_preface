@@ -1,0 +1,33 @@
+##Preface
+
+"
+This book provides a framework for making design decisions and a techincal vocabulary for discussin domain design. It is a synthesis of widely accepted best practices along with Evans' insights and experiences.
+"
+
+Domain driven design facilitates the iterative invention/discovery of domain models that simplify software development.
+
+A poor domain model can doom a project as well as a lack of technical expertise can.
+
+"
+When complexity gets out of hand, developers can no longer understand the the software well enough to change or extend it easily and safely.
+"
+
+"
+The premise of this book is twofold:
+1. For most software projects, the primary focus should be on the domain and domain logic.
+2. Complex domain designs should be based on a model.
+
+Domain driven design is both a way of thinking and a set of priorities, aimed at accelerating software projects...
+"
+
+This book will discuss both design and process, and their intersection.
+
+To implement domain driven design,
+1. Development must be iterative.
+2. Developers and domain experts must have a close relationship throughout the entire project.
+
+"
+XP works best for developers with a sharp design sense. The XP process assumes that you can improve a design by refactoring, and that you will do this often and rapidly. But past design choices make refactoring either itself easier or harder. The XP process attempts to increase team communication, but model and design choices clarify or confuse communication.
+"
+
+Individuals can benefit from reading this book. It will really shine when whole teams read and implement it together.

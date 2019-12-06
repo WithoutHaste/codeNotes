@@ -4,7 +4,7 @@ Domain driven design is about focusing on the complexity that is intrinsic to th
 
 Domain driven design is intended for domains with complex business logic, rather than techinical complexity.  It is about how to model the domain-specific logic.
 
-Destinguish the core domain, unique to the business, from the supporting subdomains that are generic.
+Distinguish the core domain, unique to the business, from the supporting subdomains that are generic.
 
 Consists of a set of patterns for building enterprise applications from the domain model out.
 
