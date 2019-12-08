@@ -50,3 +50,17 @@ I've had trouble with BULK INSERT when the last column is a BIT. It works fine f
 
 Errors:
 - "Unexpected end of file" may indicate that you have too many columns in the data file.
+
+To bulk insert special characters (such as "āiḤjĭä"):
+(1) Save the csv file with Unicode encoding.
+- In C#, the command is like "new StreamWriter(fileName, append: false, encoding: Encoding.Unicode);"
+(2) Set column types to "N" columns (such as NVARCHAR instead of VARCHAR).
+(3) Import with "DATAFILETYPE ='widechar'"
+<code>
+BULK INSERT TableName
+FROM 'fileNameWithFullPath.csv'
+WITH (FIRSTROW = 2,
+    FIELDTERMINATOR = ',',
+	ROWTERMINATOR='\n',
+	DATAFILETYPE ='widechar');
+</code>
