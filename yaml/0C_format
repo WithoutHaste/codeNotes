@@ -1,0 +1,59 @@
+##Format
+
+YAML uses Python-style indentation to specify nesting.
+Spaces only; tabs are not allowed.
+
+#Comments
+
+Comments after "start line sharp" or "space sharp"
+<code>
+ #comments to end of line
+text #comments start after a space then a sharp
+</code>
+
+#List
+
+List items after "dash space"
+<code>
+- list item A
+- list item B
+- list item C
+ #or
+[item A, item B, item C]
+</code>
+
+#Map
+
+Dictionary or map elements after "colon space"
+<code>
+settings:
+    color: Red
+	weight: Bold
+ #or
+settings: {color: Red, weight: Bold}
+</code>
+
+#Booleans
+
+True values:
+yes
+True
+TRUE
+
+False values:
+no
+False
+FALSE
+
+#Break Line
+
+YAML lines can span multiple text lines if they are split with pipe "|" or greater than ">"
+<code>
+sentence: >
+    The quick brown
+	fox jumped over
+	the lazy dog.
+</code>
+
+Pipe "|" will preserve new line characters.
+Greater than ">" will not.

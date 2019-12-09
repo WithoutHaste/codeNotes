@@ -1,0 +1,5 @@
+##About
+
+YAML stands for YAML Ain't Markup Language.
+
+It is a human-readable data serialization language commonly used for configuration files.
