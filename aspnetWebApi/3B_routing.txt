@@ -1,0 +1,290 @@
+##Routing
+
+A single project can use convention and attribute routing at the same time.
+
+Actions are still selected top-down, i.e. the first matching action in the controller will be selected.
+
+#Convention Routing
+
+aka Convention based routing
+
+Convention routing defines all route patterns in one place.
+
+To enable convention routing:
+<code>
+using System.Web.Http;
+
+namespace WebApplication
+{
+	public static class WebApiConfig
+	{
+		public static void Register(HttpConfiguration config)
+		{
+			config.Routes.MapHttpRoute(
+				name: "DefaultApi",
+				routeTemplate: "api/{controller}/{id}",
+				defaults: new { id = RouteParameter.Optional }
+			);
+		}
+	}
+}
+</code>
+
+#Attribute Routing
+
+aka Attribute based routing
+
+Attribute routing is better than convention routing at supporting RESTful URI patterns.
+A RESTful API commonly contains routes like "/customers/<id>/orders/<id>/items".
+Convention routing is built to support routes like "/customers", "/orders", and "/items".
+
+You can add a Route Attribute to a Controller and/or an Action.
+The Action's route will be appended to the end of the Controller's route.
+Controllers and Actions without a route attribute will default to convention routing.
+
+You can apply multiple routes to one Controller and/or Action. All specified routes will lead to that Controller/Action.
+If the Controller and the Action have multiple routes, all possible combinations will be evaluated.
+
+Format of URI templates:
+<code>
+//literal path segment
+[Route("abc")]
+
+//path seperator
+[Route("abc/123")]
+
+//reference parameter value
+[Route("abc/{customerId}/orders")]
+public ActionResult GetCustomerOrders(long customerId) { }
+
+//overloading URI segments
+[Route("abc/{id}")]
+[Route("abc/xyz")]
+</code>
+
+To define a common route prefix for all Actions in a Controller:
+<code>
+[RoutePrefix("api/v1")]
+public class MyController : ApiController { }
+</code>
+Route prefixes can include parameters that will be matched based on the Action.
+?How is this different from defining a route on the controller?
+
+To override a route prefix on an Action, use a tilde-slash:
+<code>
+[Route("~/api/v1/customers")]
+public ActionResult MyAction() { }
+</code>
+Or just a slash:
+<code>
+[Route("/api/v1/customers")]
+public ActionResult MyAction() { }
+</code>
+
+To make a URI parameter optional, suffix with question mark and provide a default value:
+<code>
+[Route("books/{lcid:int?}")]
+public ActionResult GetBooks(int lcid = 1033) { }
+
+//or this
+[Route("books/{lcid:int=1033}")]
+public ActionResult GetBooks(int lcid) { }
+//this requires "1033" to go through normal model binding
+</code>
+
+To specify a wildcard or catch-all segment, prefix with an asterisk:
+<code>
+[Route("customers/{*queryValues}")]
+public ActionResult MyAction(string queryValues) { }
+</code>
+Wildcards can accept single or multiple segments.
+Wildcards can still use constraints.
+
+To enable attribute routing:
+<code>
+using System.Web.Http;
+
+namespace WebApplication
+{
+	public static class WebApiConfig
+	{
+		public static void Register(HttpConfiguration config)
+		{
+			config.MapHttpAttributeRoutes();
+		}
+	}
+}
+</code>
+
+#Route Token Replacement
+
+Token replacement in route templates:
+<code>
+[Route("api/v1/[controller]/[action]", Name="[controller]_[action]")]
+</code>
+
+"[area]" is replaced with the Area name.
+"[controller]" is replaced with the Controller name.
+"[action]" is replaced with the Action name.
+
+Control characters "[" and "]" can be escaped as "[[" and "]]".
+
+Token replacement can be customized with a parameter transformer. For example, route value "SubscriptionManagement" can be transformed into "subscription-management".
+<code>
+//custom transformer
+public class SlugifyParameterTransformer : IOutboundParameterTransformer
+{
+	public string TransformOutbound(object value)
+	{
+		if (value == null) 
+			return null;
+		return Regex.Replace(value.ToString(), "([a-z])([A-Z])", "$1-$2").ToLower();
+	}
+}
+
+//register convention
+public void ConfigureServices(IServiceCollection services)
+{
+	services.AddMvc(options =>
+	{
+		options.Conventions.Add(new RouteTokenTransformerConvention(
+			new SlugifyParameterTransformer()));
+	});
+}
+
+//route evaluation
+public class SubscriptionManagementController : Controller
+{
+	[HttpGet("[controller]/[action]")] //matches /subscription-management/list-all
+	public IActionResult ListAll() { }
+}
+</code>
+
+#Complex Route Segments
+
+Complex segments are processed by matching up literals from right-to-left in a non-greedy way.
+<code>
+[Route("/abc{x}xyz")]
+</code>
+
+#Route Constraints
+
+Attribute routing can use route constraints.
+Route constraints limit what route parameters can be matched to.
+
+Format {parameter:constraint}
+<code>
+[Route("customers/{x:int}")] //integers only
+[Route("customers/{x:long}")] //longs only
+[Route("customers/{x:decimal}")] //decimals only
+[Route("customers/{x:double}")] //doubles only
+[Route("customers/{x:float}")] //floats only
+[Route("customers/{x:alpha}")] //a-zA-Z only
+[Route("customers/{x:bool}")] //boolean only
+[Route("customers/{x:datetime}")] //datetime only
+[Route("customers/{x:guid}")] //GUID only
+
+[Route("customers/{x:min(100)}")] //only integers >= 100
+[Route("customers/{x:max(100)}")] //only integers <= 100
+[Route("customers/{x:range(10, 100)}")] //only integers from 10 to 100
+
+[Route("customers/{x:length(6)}")] //only strings of length 6
+[Route("customers/{x:length(10,100)}")] //only strings of length 10 through 100
+[Route("customers/{x:minlength(6)}")] //only strings of length 6 or more
+[Route("customers/{x:maxlength(6)}")] //only strings of length up to 6
+
+[Route("customers/{x:regex(^\d\d-\d\d-\d\d\d\d$)}")] //only strings matching a pattern
+</code>
+
+Multiple constraints use a colon delimiter:
+<code>
+[Route(customers/{x:int:min(100)}")]
+</code>
+
+Custom route constraints can be made by inheriting from IHttpRouteConstraint.
+<code>
+//define constraint
+public class MyConstraint : IHttpRouteConstraint
+{
+	public bool Match(HttpRequestMessage request, IHttpRoute route, string parameterName, IDictionary<string, object> values, HttpRouteDirection routeDirection)
+	{
+		//your code here
+	}
+}
+
+//register constraint
+public static class WebApiConfig
+{
+	public static void Register(HttpConfiguration config)
+	{
+		var constraintResolver = new DefaultInlineConstraintResolver();
+		constraintResolver.ConstraintMap.Add("mine", typeof(MyConstraint));
+		config.MapHttpAttributeRoutes(constraintResolver);
+	}
+}
+
+//use constraint
+[Route("customers/{id:mine}")]
+</code>
+
+#Route Names
+
+In Web API, every route has a name. This is useful for returning links.
+
+To specify a name:
+<code>
+[Route("api/books/{id}", Name="GetBookById")]
+public ActionResult GetBook(int id) { }
+
+//elsewhere
+string uri = Url.Link("GetBookById", new { id = book.Id });
+</code>
+
+#Route Order
+
+Routes are always evaluated in a particular order.
+You can specify a custom order.
+
+Evaluation order depends on:
+- Order property first
+- Then, for each URI segment
+  - Literal segments first
+  - Then parameter segements with constraints
+  - Then parameter segements without constraints
+  - Then wildcard segments with constraints
+  - Then wildcard segments without constraints
+- Finally, by the literal string-sort order of the route templates
+
+<code>
+[Route("pending", RouteOrder=1)]
+</code>
+The default value is 0.
+
+#Route Inheritance
+
+Routing attributes will be inherited:
+<code>
+[Route("api/v1/[controller]")]
+public abstract class MyBaseController : Controller { }
+
+public class ProductsController : MyBaseController 
+{
+	[HttpGet] //matches /api/v1/Products
+	public IActionResult List() { }
+	
+	[HttpPut("{id}")] //matches /api/v1/Products/{id}
+	public IActionResult Edit(int id) { }
+}
+</code>
+
+#HTTP Verbs
+
+An action named "PutCustomers" will default to matching HTTP verb "PUT" even without the "[HttpPut]" attribute. If an HTTP verb attribute is specified, it will override the action name.
+This works for verbs DELETE, GET, HEAD, OPTIONS, PATCH, POST, and PUT.
+For other verbs, use the AcceptVerbs attributes, such as [AcceptVerbs("MKCOL")].
+
+You can define routes directly in an HTTP verb attribute:
+<code>
+[HttpGet("{id}")]
+public ActionResult Customers(int id) { }
+</code>

@@ -49,6 +49,13 @@ Displays path to file with each match.
 
 #Parameters
 
+Parameters can be specified individually, or all together.
+These commands are the same, specifying recursive directory search, case insensitive, display just file name, and don't search files with strange characters.
+<code lang="bash">
+findstr /s /i /m /p "string" *
+findstr /simp "string" *
+</code>
+
 /a: colorAttribute Specifies color attributes with two hexadecimal digits
 
 /b Matches pattern only to beginning of line
