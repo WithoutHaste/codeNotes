@@ -24,3 +24,66 @@ Model Utility:
 "The binding of model and implementation makes experience with early versions of the software applicable as feedback into the modeling process."
 
 "The heart of software is its ability to solve domain-related problems for its user. All other features...support this basic purpose."
+
+#Chapter 1 Crunching Knowledge
+
+Extended example of building a brand new domain model in brainstorming sessions with domain experts.
+- Use the language of the domain experts
+- Focus on the important parts of the model, based on the current task
+- Iterate the design by discussing how processes will use the model
+
+Ingredients of Effective Modeling:
+(1) Binding the model and the implementation.
+(2) Cultivating a language based on the model.
+(3) Developing a knowledge-rich model. Include behavior, rules, etc. It's more than a data schema.
+(4) Distilling the model. Don't include what you don't need now.
+(5) Brainstorming and experimenting. Rapid iteration with pencil/paper models.
+
+"As the team went through scenarios, the spoken expressions themselves provided a quick viability test of a proposed model, as the ear could quickly detect either the clarity and ease or the awkwardness of expression."
+
+Knowledge Crunching is the sifting, combining, recombining, and distillation of domain knowledge into a concise and useful model that can be applied to your particular problems.
+
+"Knowlege crunching is not a solitary activity. A team of developers and domain experts collaborate..."
+
+You need rapid and constant feedback between developers and domain experts.
+Developers need to take an active interest in learning about the domain they are programming for.
+
+It's not just about making Noun Objects (Document, Customer, Order, etc).
+Business is all about abstract concepts like Responsibility, Policy, and step by step Processes.
+Example of making domain knowledge clear: Business rule allows shipping to be overbooked to %110.
+<code lang="csharp">
+//bad, hides domain knowledge in a guard clause
+public int makeBooking(Cargo cargo, Voyage voyage)
+{
+	double maxBooking = voyage.capacity() * 1.1;
+	if((voyage.bookedCargoSize() + cargo.size()) > maxBooking)
+		return -1;
+	voyage.addCargo(cargo);
+	return 1;
+}
+
+//good, raises domain knowledge up, makes it visible
+public class OverbookingPolicy : Policy
+{
+	public bool isAllowed(Cargo cargo, Voyage voyage)
+	{
+		return (cargo.size() + voyage.bookedCargoSize()) <= (voyage.capacity() * 1.1);
+	}
+}
+
+public int makeBooking(Cargo cargo, Voyage voyage)
+{
+	if(!OverbookingPolicy.isAllowed(cargo, voyage))
+		return -1;
+	voyage.addCargo(cargo);
+	return 1;
+}
+</code>
+Make it easy to connect the code with the requirements.
+Make it easy for non-techincal people to understand the high-level code.
+
+Deep Models are models which go beyond surface-level understanding of a domain. They can be surprising, and require many iterations over lots of time to be discovered.
+
+Frustration from your domain experts may mean that you are missing the point or the important part of their business, even if they can't put it into words yet.
+
+"Knowledge crunching is an exploration, and you can't know where you will end up."
