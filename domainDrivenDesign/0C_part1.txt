@@ -87,3 +87,70 @@ Deep Models are models which go beyond surface-level understanding of a domain. 
 Frustration from your domain experts may mean that you are missing the point or the important part of their business, even if they can't put it into words yet.
 
 "Knowledge crunching is an exploration, and you can't know where you will end up."
+
+#Chapter 2 Communication and the Use of Language
+
+"The model is a set of concepts built up in the heads of people on the project, with terms and relationships that reflect domain insight. These terms and interrelationships provide the semantics of a language that is tailored to the domain while being precise enough for technical development."
+
+The model is not limited to what can be expressed by UML diagrams. It pervades every medium of communication: diagrams, requirements, documents, the code, and (especially) verbal communication.
+
+Ubiquitous Language is the terminology used by both domain experts and developers to discuss this particular project and the domain problems it solves. It is a shared team language that developes and changes over time. A shared language means that far less knowledge is lost through translation.
+
+The ubiquitous language must serve all needs, or it will naturally die off. It must express distinctions in the domain, and it must be consistent and precise enough for computers.
+- It includes the names of classes and prominent operations.
+- It includes terms for discussing business rules.
+- It uses the names of patterns applied to the domain model.
+- Should be usable when domain experts talk among themselves.
+- Should be usable when developers discuss system design.
+
+It takes conscious effort to create and maintain a ubiquitous language.
+- Developers must keep their documentation and code and conversation up to date with the language.
+- Domain experts must keep their documents and conversation up to date with the language.
+
+The domain model can be the backbone of a ubiquitous language.
+"The model relationships become the combinatory rules all languages have. The meanings of words and phrases echo the semantics of the model."
+
+You can't just use the common jargon of the domain experts, because it contains contradictions, overlaps, and imprecise language.
+You can't just use technical jargon, because it lacks the semantics of the domain.
+- Developers should call out imprecision and ambiguity in domain jargon.
+- Domain experts should call out incorrect or inadequate usage of domain jargon.
+
+"Persistent use of the ubiquitous language will force the model's weaknesses into the open...To create a supple, knowledge-rich design calls for a versatile, shared team language, and a lively experimentation with language that seldom happens on software projects...The team will experiment and find alternatives to awkward terms or combinations...As gaps are found in the language, new words will enter the discussion...It is vital that we play around with words and phrases, harnessing our linguistic abilities to the modeling effort..."
+
+Changes to the ubiquitous language are changes to the domain model.
+Code will need to be refactored - and it is worth the time-investment to do so.
+- rename classes, rename methods, rewrite processes
+
+Putting effort into forming a language will make communication both faster and more precise.
+Ex: Say "Routing Specification" instead of "the origin, destination, and arrival time and such..."
+
+"Technical people often feel the need to shield the business experts from the domain model...Of course there are technical components of the design that may not concern the domain experts, but the core of the model had better interest them. Too abstract? How do you know that the abstractions are sound? Do you understand the domain as deeply as they do?...If sophisticated domain experts don't understand the model, there is something wrong with the model."
+
+"...the process of groping towards a shared model begins. It may start out awkward and incomplete, but it will gradually get refined."
+
+Diagrams are good at showing relationships, but not the full context and details of concepts.
+Use diagrams along side full text as needed.
+Use diagrams that illustrate important points. It is not useful to display so much detail that the diagram is illegible.
+
+You simply cannot communicate the entire design of the project through UML diagrams.
+- Too complete: so much detail that the main points are lost.
+- Too incomplete: leaves out the larger context, behavior, and constraints.
+
+Having a focused diagram up during discussions helps keep everyone on the same page.
+
+"Diagrams are a means of communication and explanation, and they facilitate brainstorming. They serve these ends best if they are minimal...Comprehensive diagrams of the entire object model fail to communicate or explain; they overwhelm the reader with detail and they lack meaning...This leads us to simplified diagrams of the conceptually important parts of the object model that are essential to understanding the design...I prefer to turn things inside out - rather than a diagram annotated with text, I write a text document illustrated with selective and simplified diagrams."
+
+Use non-standard diagrams when they are useful. UML is very generic and therefore not the best format for every domain.
+
+"The model is not the diagram. The diagram's purpose is to help communicate and explain the model."
+
+The code contains the complete details of the existing design. The diagrams do not need to attempt to replicate that.
+
+"Although the behavior [of code] is unambiguous, that doesn't mean it is obvious...And developers are not the only people who need to understand the model...Well-written code can be very communicative, but the message it communicates is not guaranteed to be accurate...It takes fastidiousness to write code that doesn't just do the right things but also says the right thing."
+
+Written documents are useful records. It takes effort to keep them up to date. It is worth the effort for well selected, useful documents.
+Documents should complement code and conversation.
+
+"A document shouldn't try to do what the code already does well...Other documents need to illuminate meaning, to give insight into large-scale structures, and to focus attention on core elements...Documents can clarify design intent...The greatest value of a design document is to explain the concepts of the model, help navigating the detail of the code, and perhaps to give some insight into the model's intended style of use...If terms explained in a design document don't start showing up in conversations and code, the document is not fulfilling its purpose...People are either not reading it or not finding it compelling."
+
+"The thrust of this book is that one model should underlie implementation, design, and team communication. Having separate models for these separate purposes poses a hazard."
