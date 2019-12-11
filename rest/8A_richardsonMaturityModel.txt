@@ -1,0 +1,45 @@
+##Richardson Maturity Model
+
+!![Original Article](https://restfulapi.net/richardson-maturity-model/)
+
+Leonard Richardson analyzed a hundred different web service designs and divided them into four categories based on how much they are REST compliant. This model of division of REST services to identify their maturity level is called Richardson Maturity Model.
+
+Richardson used three factors to decide the maturity of a service:
+- URI
+- HTTP Methods
+- HATEOAS (Hypermedia as the Engine of Application State)
+The more a service employs these technologies, the more mature it shall be considered.
+
+In this analysis, Richardson described these maturity levels as below:
+
+#Level Zero
+
+Level zero of maturity does not make use of any of URI, HTTP Methods, or HATEOAS capabilities.
+
+These services have a single URI and use a single HTTP method (typically POST). For example, most Web Services (WS-*)-based services use a single URI to identify an endpoint, and HTTP POST to transfer SOAP-based payloads, effectively ignoring the rest of the HTTP verbs.
+
+Similarly, XML-RPC based services which send data as Plain Old XML (POX). These are the most primitive ways of building SOA applications with a single POST method and using XML to communicate between services.
+
+#Level One
+
+Level one of maturity makes use of URIs only.
+
+These services employ many URIs but only a single HTTP verb – generally HTTP POST. They give each individual resource in their universal URI. Every resource is separately identified by a unique URI – and that makes them better than level zero.
+
+#Level Two
+
+Level two of maturity makes use of URIs and HTTP.
+
+Level two services host numerous URI-addressable resources. Such services support several of the HTTP verbs on each exposed resource – Create, Read, Update and Delete (CRUD) services. Here the state of resources, typically representing business entities, can be manipulated over the network.
+
+Here the service designer expects people to put some effort into mastering the APIs – generally by reading the supplied documentation.
+
+Level 2 is the good use-case of REST principles, which advocate using different verbs based on the HTTP request methods and the system can have multiple resources.
+
+#Level Three
+
+Level three of maturity makes use of all three: URIs, HTTP, and HATEOAS.
+
+This is the most mature level of Richardson’s model which encourages easy discoverability and makes it easy for the responses to be self-explanatory by using HATEOAS.
+
+The service leads consumers through a trail of resources, causing application state transitions as a result.

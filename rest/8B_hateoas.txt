@@ -1,0 +1,43 @@
+##HATEOAS
+
+#About
+
+HATEOAS stands for Hypermedia as the Engine of Application State.
+Hypermedia refers to any content that contains links to other forms of media, such as images, movies, or text.
+
+This is a constraint of REST architecture.
+REST lets you include hypermedia links in your response contents so clients can dynamically navigate to the appropriate resource.
+
+Example
+<code lang="json">
+{
+	"departmentId": 10,
+	"departmentName": "Administration",
+	"locationId": 1700,
+	"managerId": 200,
+	"links": [
+		{
+			"href": "10/employees",
+			"rel": "employees",
+			"type" : "GET"
+		}
+	]
+}
+</code>
+The client can use "links" to jump to the resource they want. It specifies the HTTP verb and relative url.
+
+This can free you from backward-compatibility constraints.
+If your clients are used to following these links to find resources, then you can change where the resources are and simply update the links being returned to the clients.
+
+In addition, clients can discover the functionality of your web service by starting at one point and walking the network.
+
+There is no strong standard for link format.
+
+#Possible Pitfalls
+
+Regarding the claim that "clients do not need to hardcode URIs anymore".
+
+The client no longer hardcodes URIs, because they look them up through the web service itself.
+But, they do need to hardcode the link labels, such as "rel":"employees" in the example above. So hardcoding is still required.
+
+And there will be a performance hit to lookup these links from the root web service every time. You can cache the results, but then you must decide how often to refresh the crawl, since these values could change anytime.
