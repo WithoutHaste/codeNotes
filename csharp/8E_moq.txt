@@ -50,6 +50,10 @@ Mock<IMyInterface> mock = new Mock<IMyInterface>() { DefaultValue = DefaultValue
 
 #Setup Methods
 
+Setup methods will overwrite each other. The last general setup of method A will overwrite all previous setups of method A.
+You are allowed to have multiple setups for method A provided they all have different parameter specifications.
+If you have some setups for method A with variable specifications, but they don't cover all possible eventualities, the rest of the possible calls will default to returning null.
+
 Method with parameter and return value:
 <code>
 mock.Setup(i => i.Method("parameter")).Returns("result");
@@ -100,6 +104,27 @@ mock.Setup(i => i.Method(It.IsInRange<int>(0, 10, Range.Inclusive)));
 Accept any parameter by regular expression:
 <code>
 mock.Setup(i => i.MethodCondition5(It.IsRegex("\s+", RegexOptions.IgnoreCase)));
+</code>
+
+Mocking a method that accepts a Func<Expression> and returning a particular value based on the parameter values passed into the expression:
+<code>
+//example of real method call
+string accountId = "a";
+string itemId = "b";
+MyModel result = await repository.SingleOrDefaultAsync(x => x.AccountId == accountId && x.ItemId == itemId);
+
+//example of mocking the call
+string ValidAccountId = "x";
+string ValidItemId = "y";
+string ValidUserId = "z";
+mockRepository
+	.Setup(moq => moq.SingleOrDefaultAsync(It.Is<Expression<Func<MyModel, bool>>>(e =>
+			e.Compile().Invoke(new MyModel { AccountId = ValidAccountId, ItemId = ValidItemId }))))
+	.Returns(Task.FromResult<MyModel>(new MyModel() { UserId = ValidUserId }));
+	
+//specifies the successful case, where both fields match valid values
+//by default, all other cases will just return null
+//behavior verified by stepping through test cases
 </code>
 
 #Setup Properties

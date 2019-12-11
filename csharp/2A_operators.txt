@@ -133,6 +133,32 @@ public class MyClass
 }
 </code>
 
+#Default
+
+Default Operator "default"
+Default Value Expression "default(type)"
+
+The default value of reference-types is null:
+<code>
+Object x = default(Object); //x = null
+</code>
+
+The default value of value-types is something like 0:
+<code>
+int x = default(0); //x = 0
+</code>
+
+You can define your own default value on classes and structs.
+
+As of C# 7.0, you can use just "default" instead of "default(type)" anywhere the compiler can infer the type. This is called the Default Literal Operator.
+<code>
+public Object MyMethod(List<int> list = default)
+{
+	int x = default; //x = 0
+	return default; //returns null
+}
+</code>
+
 #Operator Overloading
 
 You can overload any operator.
