@@ -106,6 +106,8 @@ Accept any parameter by regular expression:
 mock.Setup(i => i.MethodCondition5(It.IsRegex("\s+", RegexOptions.IgnoreCase)));
 </code>
 
+#Setup Methods with Expressions
+
 Mocking a method that accepts a Func<Expression> and returning a particular value based on the parameter values passed into the expression:
 <code>
 //example of real method call
@@ -125,6 +127,23 @@ mockRepository
 //specifies the successful case, where both fields match valid values
 //by default, all other cases will just return null
 //behavior verified by stepping through test cases
+</code>
+
+I've tried this simpler syntax, but it returns null in all cases. Do not use.
+<code>
+//example of real method call
+string accountId = "a";
+string itemId = "b";
+MyModel result = await repository.SingleOrDefaultAsync(x => x.AccountId == accountId && x.ItemId == itemId);
+
+//example of mocking the call
+string ValidAccountId = "x";
+string ValidItemId = "y";
+string ValidUserId = "z";
+mockRepository
+	.Setup(moq => moq.SingleOrDefaultAsync(x => x.AccountId == ValidAccountId && x.ItemId == ValidItemId))
+	.Returns(Task.FromResult<MyModel>(new MyModel() { UserId = ValidUserId }));
+//Do not use. Does not return the specified value.
 </code>
 
 #Setup Properties

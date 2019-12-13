@@ -154,3 +154,26 @@ Documents should complement code and conversation.
 "A document shouldn't try to do what the code already does well...Other documents need to illuminate meaning, to give insight into large-scale structures, and to focus attention on core elements...Documents can clarify design intent...The greatest value of a design document is to explain the concepts of the model, help navigating the detail of the code, and perhaps to give some insight into the model's intended style of use...If terms explained in a design document don't start showing up in conversations and code, the document is not fulfilling its purpose...People are either not reading it or not finding it compelling."
 
 "The thrust of this book is that one model should underlie implementation, design, and team communication. Having separate models for these separate purposes poses a hazard."
+
+#Chapter 3 Binding Model and Implementation
+
+Dangers of designing the model without considering implementation:
+- The model has intricate relationships that cannot be implemented in code or stored in a database
+- The model misses crucial discoveries about the domain that are made when implementation is taken into account
+- The importance of different parts of the model will be misunderstood
+
+If a model cannot be used to write code, then the code and model will diverge. The model will become irrelevant and the knowledge in it will likely be lost.
+
+"...software that lacks a concept at the foundation of its design is, at best, a mechanism that does useful things without explaining its actions."
+
+"An analysis must capture fundemental concepts from the domain in comprehensible, expressive ways...The design has to specify a set of components that can be constructed with the programming tools in use on the project that will perform efficiently in the target deployment environment and will correctly solve the problems posed for the application."
+
+Model Driven Design: integrate the analysis model with code design to create a single model that serves both purposes.
+"Each object in the design plays a conceptual role described in the model. This requires us to be more demanding of the chosen model, since it must fulfill two quite different objectives."
+
+There are many possible ways to abstract any given domain. The task is to find one that works both as conceptual analysis and as code design.
+"When a model doesn't seem to be practical for implementation, we must search for a new one. When a model doesn't faithfully express the key concepts of the domain, we must search for a new one. The modeling and design process then become a single iterative loop."
+
+All of this effort will make the model relevent to ongoing development.
+
+"The code becomes an expression of the model, so a change to the code may be a change to the model. Its effect must ripple through the rest of the project's activities accordingly.

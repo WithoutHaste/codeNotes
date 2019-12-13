@@ -1,0 +1,152 @@
+##Xunit Testing
+
+Testing with the Xunit library, available through NuGet.
+<code>
+using Xunit;
+</code>
+
+!![Xunit on GitHub](https://github.com/xunit/xunit)
+
+#Fact
+
+The basic way of writing tests.
+
+When your tests are run, this shows up as a single test.
+
+<code>
+using Xunit;
+
+public class CalculatorTests
+{
+	[Fact]
+	public void TestAdd()
+	{
+		//arrange
+		Calculator calculator = new Calculator();
+		int a = 1;
+		int b = 2;
+		
+		//act
+		int result = calculator.Add(a, b);
+		
+		//assert
+		Assert.Equal(3, result);
+	}
+}
+</code>
+
+#Theory
+
+Theories are used to run multiple values through a single test.
+
+When your tests run, this shows up as one test per InlineData.
+Remember that tests can be run in any order.
+
+InlineData can only refer to const values and literals. "static readonly" values cannot be used.
+
+<code>
+using Xunit;
+
+public class CalculatorTests
+{
+	[Theory]
+	[InlineData(1, 2, 3)]
+	[InlineData(-4, -6, -10)]
+	[InlineData(-2, 2, 0)]
+	[InlineData(int.MinValue, -1, int.MaxValue)]
+	public void TestAdd(int a, int b, int expectedResult)
+	{
+		//arrange
+		Calculator calculator = new Calculator();
+		
+		//act
+		int result = calculator.Add(a, b);
+		
+		//assert
+		Assert.Equal(expectedResult, result);
+	}
+}
+</code>
+
+There is no option for adding a label to an InlineData.
+
+#Dedicated Class
+
+If the parameters you need to test are not constants, you can create a dedicated class to provide data to one test method.
+
+When your tests run, this shows up as one test per enumerated value set.
+Remember that tests can be run in any order.
+
+<code>
+using Xunit;
+
+public class CalculatorTests
+{
+	[Theory]
+	[ClassData(typeof(MyTestData))]
+	public void TestAdd(int a, int b, int expectedResult)
+	{
+		//arrange
+		Calculator calculator = new Calculator();
+		
+		//act
+		int result = calculator.Add(a, b);
+		
+		//assert
+		Assert.Equal(expectedResult, result);
+	}
+}
+
+public class MyTestData : IEnumerable<object[]>
+{
+	IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+	public IEnumerator<object[]> GetEnumerator()
+	{
+		yield return new object[] {1, 2, 3};
+		yield return new object[] {-4, -6, -10};
+		yield return new object[] {-2, 2, 0};
+		yield return new object[] {int.MinValue, -1, int.MaxValue};
+	}
+}
+</code>
+
+Make sure each value set is independent of each other; for instance, not sharing references to objects. You can get weird bugs in your test cases.
+
+#Member Data
+
+If you don't want to create a whole different class, in a different file, you can use a local method instead.
+
+When your tests run, this shows up as one test with "multiple result outcomes". In Visual Studio, this does not display as multiple tests.
+Remember that tests can be run in any order.
+
+MemberData cannot refer to any class instance data. All values must be marked const, marked static, or be literals.
+
+<code>
+using Xunit;
+
+public class CalculatorTests
+{
+	[Theory]
+	[MemberData(nameof(MyTestData))]
+	public void TestAdd(int a, int b, int expectedResult)
+	{
+		//arrange
+		Calculator calculator = new Calculator();
+		
+		//act
+		int result = calculator.Add(a, b);
+		
+		//assert
+		Assert.Equal(expectedResult, result);
+	}
+
+	public static List<object[]> MyTestData => new List<object[]> {
+		new object[] {1, 2, 3},
+		new object[] {-4, -6, -10},
+		new object[] {-2, 2, 0},
+		new object[] {int.MinValue, -1, int.MaxValue}
+	};
+}
+</code>
+

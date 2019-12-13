@@ -6,3 +6,10 @@ Settings menu > Preferences
 
 Allows you to open more than one window at a time:
 Multi-instance > Always in multi-instance mode
+
+# Bug: saving files with no extension
+
+By default, files are being saved with no extension.
+
+To fix it:
+Settings > Preferences > Default Directory > uncheck "Use new style save dialog"
