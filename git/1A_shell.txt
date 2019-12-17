@@ -266,7 +266,7 @@ Merge selected branch into current branch
 <code>
 git merge <branch-to-merge-in>
 </code>
-Example: "git merge origin/master"
+Example: "git merge origin/master" will merge master into current branch (pull master locally first)
 If a merge is performed, it'll automatically make a new commit just for the merge edits.
 If a fast-forward is all that you need (meaning you just caught up to current commits, no merging needed), there will be no extra commit made.
 If there are merge conflicts, you'll get a message that you must fix the conflicts and then commit the result. You'll also need to delete any left-over *.orig files.
@@ -330,6 +330,30 @@ git rebase master
 </code>
 Rebase prunes and moves a commit. It can make it appear that a commit was made on a different branch that it was. This can be used to avoid complex branching and merging trees in the log.
 This example rebases the current branch onto "master".
+
+Rebase example:
+<code lang="text">
+      A---B---C topic
+     /
+D---E---F---G master
+</code>
+From in the "topic" branch:
+<code>
+git rebase master
+</code>
+will result in
+<code lang="text">
+              A---B---C topic
+             /
+D---E---F---G master
+</code>
+You can similarly rebase a branch from master onto another branch.
+
+To rebase through GitHub.com:
+- Go to the branch or pull request page
+- Click "Edit" to the right of the branch name
+- Use the "base" drop down to select a new base
+- Accept changes
 
 Watch out for conflicting changes during a rebase. In case of merge conflicts, go through the same steps as normal to resolve the issues.
 Instead of committing at the end, use:
