@@ -6,3 +6,17 @@ You can start multiple projects in on solution at the same time, with debugging 
 
 Solution > right-click > Properties > Common Properties > Startup Project
 Select "multiple startup projects" and set Action to "start" on the ones you want to debug.
+
+#Sync Inherited NuGet Package
+
+Scenario: 
+- MyProject references NuGet package version 1.0
+- TestProject references MyProject and inherits the NuGet package reference 1.0
+- I update MyProject to reference version 1.1
+- TestProject is still referencing version 1.0
+
+Solution:
+- In TestProject, remove dependency/reference to MyProject
+- In TestProject, add dependency/referene to MyProject back in
+
+This will force TestProject to update its inherited NuGet references.
