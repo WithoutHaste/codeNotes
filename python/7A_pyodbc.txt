@@ -33,6 +33,13 @@ for row in cursor: #row is a Tuple
 Errors:
 - I got a login error when actually I had a typo in the database name.
 
+<code>
+--SQLExpress
+    r"SERVER=(localdb)\MSSQLLocalDB;"
+--SQL Server
+    r"SERVER=localhost;"
+</code>
+
 #ODBC Drivers
 
 {SQL Server} - released with SQL Server 2000
