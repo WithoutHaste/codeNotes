@@ -1,6 +1,6 @@
 ##Part 1
 
-#Preface
+#Preface: Putting the Domain Model to Work
 
 A model represents a portion of reality or an idea of interest.
 
@@ -176,4 +176,16 @@ There are many possible ways to abstract any given domain. The task is to find o
 
 All of this effort will make the model relevent to ongoing development.
 
-"The code becomes an expression of the model, so a change to the code may be a change to the model. Its effect must ripple through the rest of the project's activities accordingly.
+"The code becomes an expression of the model, so a change to the code may be a change to the model. Its effect must ripple through the rest of the project's activities accordingly."
+
+"Development becomes an iterative process of refining the model, the design, and the code as a single activity...To make a Model Driven Design payoff, the correspondence must be literal, exact within the bounds of human error."
+
+Model Driven Design is better supported by Object Oriented languages than by Procedural languages.
+
+"Letting the bones show: why models matter to users"
+A mismatch between the actual model of a system and the model that is presented to the user causes confusion and lost opportunites because 
+the user will attempt incorrect intuitions about what is possible, and will not guess what is actually possible.
+"When a design is based on a model that reflects the basic concerns of the users and domain experts, the bones of the design can be revealed to the user to a greater extent than with other design approaches. Revealing the model gives the user more access to the potential of the software and yields consistent, predictable behavior."
+
+The common metaphor that programming is similar to manufacturing causes a lot of problems, because every level of programming involves design decisions, unlike workers on an assemblyline performing the same task repeatedly.
+"...overseparation of responsibility for analysis, modeling, design, and programming interfers with Model Driven Design...The effectiveness of an overall design is very sensitive to the quality of consistency of fine-grained design and implementation decisions...Programmers are modelers, whether anyone likes it or not...Every developer must be involved in some level of discussion about the model and have contact with domain experts."

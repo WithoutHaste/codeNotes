@@ -1,0 +1,17 @@
+##Part 2
+
+#Preface: The Building Blocks of Model Driven Design
+
+"Certain kinds of decisions keep the model and implementation aligned with each other, each reinforcing the other's effectiveness. This alignment requires attention to the details of individual elements."
+
+"The design style in this book largely follows the principle of Responsibilty Driven Design...and Design By Contract."
+
+"Elaborate models can cut through complexity only if care is taken with the fundementals, rsulting in detailed elements that the team can confidently combine."
+
+#Ch 4 Isolating the Domain
+
+
+
+#Ch 5 A Model Expressed in Software
+
+#Ch 6 The Life Cycle of a Domain Object
