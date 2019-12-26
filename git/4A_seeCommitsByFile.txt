@@ -1,0 +1,22 @@
+##See Commits By File
+
+See that commits that affected one file. Does not track file renaming well (see "git log path").
+
+Displays summary of each commit that affected the file.
+<code>
+git log --follow -- FileName
+</code>
+Click "space" to see more results.
+Click "q" to exit the viewer.
+
+Displays actual before/after edits for each commit that affected the file.
+<code>
+git log -p FileName
+</code>
+
+Suggested for when someone makes changes, but forgets where they made them.
+<code>
+git log --all --first-parent --remotes --reflog --author-date-order -- FileName
+</code>
+
+I've found "git log -p FileName" to be the most useful for finding when a particular edit was made.
