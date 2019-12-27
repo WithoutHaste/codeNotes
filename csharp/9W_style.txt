@@ -1,0 +1,153 @@
+##Style
+
+Thoughts on code style standards. Nothing here is absolute, just my opinions with anecdotal evidence.
+
+(Note that my perferences are always overriden by the code style standards set by my team. Always follow your team's standards.)
+
+#var
+
+I don't use "var" anywhere I can explicitly state the Type.
+
+Using "var" everywhere hides the rare places it is actually needed.
+
+It is harder to read the code to find out what types are being used.
+Especially when the variable is storing a return type. Now I have to hover my mouse for Visual Studio to tell me what the type is. Much faster just to read it.
+
+I don't mind typing in the explicit Type. I write it once, I read it many many times. Any style convention that just tries to reduce the number of characters I type is suspicious.
+
+I see it being used inconsistently when devs are not familiar with the "default" keyword. And using "default" this way is clunky and only required to use "var" consistently.
+<code>
+string x = null;
+//versus
+var x = default(string);
+</code>
+
+It is impossible to use 3rd party tools to search the code.
+- For instance, I've worked on a microservices system where each microservice was one .Net Solution. The Solutions used shared libraries. Visual Studio does not support "Find all references" across Solution boundaries, so I used Windows "findstr" (grep). But since the coding standard was to use "var" everywhere, there were searches I could not perform. The string I was looking for just wasn't in the code.
+
+It is nearly impossible to work outside of an IDE like Visual Studio while using "var" everywhere. This limits choice.
+
+(I was going to say that Visual Studio quick navigation commands are limited with "var", but I just tested that and it works the same.)
+
+C# is a strongly typed language and I dislike seeing that obscured. I like that C# has strict rules because it keeps the code and the design clean.
+
+#Expression Bodies
+
+<code>
+//Expression Body
+public int Sum(int a, int b) => a + b;
+
+//Block Body
+public int Sum(int a, int b)
+{
+	return a + b;
+}
+</code>
+
+I'm ok with Expression Bodies for Properties when only Get is implemented and it is simple. I still prefer Block Body in these cases.
+I dislike Expression Bodies everywhere else.
+
+I think it's harder to read.
+
+I dislike that I have to restructure the Method/whatever to add a second line of code to it. It obscures what was edited in Git comparisons.
+
+I dislike that some Methods/whatever will be formatted one way and some another, based on how many lines of code they contain.
+
+#Tuples
+
+I don't like tuples in C#.
+They're great in Python, because Python is a loosely-typed mess.
+C# is strongly-typed. Know what your return values are and make a Type for them.
+
+The way they're implemented even feels like a compromise.
+You can define field names on tuples, which greatly improves their legibility. But then you're one tiny jump away from defining a Type. Just define the Type.
+<code>
+public (string name, int age) Get()
+{
+	return ("Bob", 30);
+}
+</code>
+
+#Intellisense
+
+Intellisense is a really useful tool that I appreciate having about once a year. The rest of the time I turn it off.
+
+Its popups cover up the section of code I am currently working in. It frequently covers up something I was referencing for the current line of code.
+
+I type fast, and Intellisense flickers its suggestions to keep up. That's annoying.
+- It also slows me down to read the suggestions and think "yes, that's the one I want" instead of just typing it myself.
+
+It's quick to fill-in text for me, which means I have to undo its changes. This most often happens when the Type/Namespace/Variable I am referencing is not fully set up. So maybe I need to add a using statement, so what, I can do that after.
+
+I learn less of the code when I have Intellisense turned on.
+
+Auto-completion of braces is the worst.
+I've never had trouble closing my own braces. This auto-complete trips up my reflexes everytime.
+
+#Wish List
+
+Idle thoughts.
+
+For the common method format of "the entire thing is wrapped in a try/catch", it'd be cool if C# supported this sort of syntax.
+<code>
+public MyType Operation()
+{
+	DoSomething();
+}
+catch(ArgumentException ex)
+{
+	Cleanup();
+}
+catch(Exception ex)
+{
+	OtherThing();
+}
+</code>
+See, the compiler converts it into a try/catch around the entire body of the method, so the catches have full access to local variables.
+The benefit is removing clutter from the method so we can visually focus on the happy-path logic.
+"But what about when you have try/catch around just part of the method?" -> decompose that functionality.
+
+For the common method format of "a bunch of guard clauses / data validation before we get to the main operation", we could do something similar.
+<code>
+[Guard(ValidForOperation, a, ArgumentException)]
+[Guard(ValidForOperation, b, return)]
+public void Operation(TypeA a, TypeB b)
+{
+	DoSomething();
+}
+
+private bool ValidForOperation(TypeA a)
+{
+	return (a.x != null && a.y > 100 && !String.IsNullOrEmpty(a.z));
+}
+
+private bool ValidForOperation(TypeB b)
+{
+	if(b.x) return ((b.y == EnumY.Y1 || b.y == EnumY.Y2) && b.z != null);
+	else return (b.y == Enum.Y3);
+}
+</code>
+I'm not convinced by this one, actually. Since the main method body doesn't get nested, it's not such a problem.
+
+What I'd really like is more support for Aspect Oriented Programming.
+Why do I need to use a 3rd party service to add logging before/after marked methods? It'd be easier and cleaner for the CLR to handle that.
+<code>
+[Logging]
+private TypeA Operation(int b, string c)
+{
+	return DoSomething();
+}
+</code>
+Auto-log the method name and parameter values on entry.
+Auto-log the method name, parameter values, and return value on exit.
+All it has to do is compile the above into:
+<code>
+private TypeA Operation(int b, string c)
+{
+	Log("Method Start: {name}, parameters {parameters}, {datetime}", MethodBase.GetCurrentMethod(), b, c, DateTime.Now);
+	TypeA result = DoSomething();
+	Log("Method End: {name}, parameters {parameters}, returns {result}, {datetime}", MethodBase.GetCurrentMethod(), b, c, result, DateTime.Now);
+	return result;
+}
+</code>
+Could set the message format when the logging is configured.
