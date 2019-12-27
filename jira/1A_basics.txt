@@ -1,0 +1,38 @@
+##Basics
+
+!![From Tutorial](https://www.atlassian.com/agile/tutorials/how-to-do-scrum-with-jira-software)
+
+You can create Projects with the Scrum or Kanban template.
+A new Project has an empty Backlog (aka product backlog).
+
+The Backlog is a list of potential work items.
+Jira calls all work items, user stories, tasks, and bugs the same thing: Issues.
+
+User Stories use non-technical descriptions and are written from the user's perspective.
+Ex: As a _Customer Care rep_, I want _clients to be able to set themselves up for ACH payments using any bank_ so that I _spend less time doing this manually_.
+
+The development team will add detailed, technical Tasks (aka subtasks) under the User Story to show how to achieve the goal.
+The development team will assign Story Points to the User Story, indicating the estimated amount of time/effort required to complete it.
+
+In the Backlog, Issues can be drag-n-dropped to reorder them, which indicates their priority.
+
+Create a Sprint from the Backlog page (maximum 1 sprint per backlog).
+A Sprint is a fixed time duration during which the development team commits to completing a selection of Issues.
+Issues assigned to a Sprint make up the Sprint Backlog.
+You can name each Sprint.
+Your Active Sprint is the current sprint. In next-gen Scrum, this is called the Board.
+
+The product owner may set a Sprint Goal - a theme for the work to be completed. The Sprint is a success if the Sprint Goal is achieved.
+Ex: Improve automation.
+
+Once the sprint is finished, click Complete Sprint on the sprint page.
+Incomplete issues can be moved to the backlog or to a future sprint.
+
+The Burn Down Chart (under Reports) shows the estimated amount of work assigned to the sprint, a guideline for how much should be completed each day (veeeeeeery rough), and a line of how much has actually been moved to Done each day.
+Warnings signs of various problems:
+- The team finishes early sprint after sprint because they aren't committing to enough work.
+- The team misses their forecast sprint after sprint because they're committing to too much work.
+- The burndown line makes steep drops rather than a more gradual burndown because the work hasn't been broken down into granular pieces.
+- The product owner adds or changes the scope mid-sprint.
+
+The Sprint Report (under Reports) shows a summary of the sprint: including the burn down chart, completed issues, not-completed issues, and the backlog that isn't on the sprint.

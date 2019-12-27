@@ -1,0 +1,25 @@
+##Query
+
+#Find
+
+Find will return a list of records.
+
+Where field equals X:
+<code>
+db.getCollection('MyCollection').find({"myField": "X"})
+db.getCollection('MyCollection').find({"myObject.myField": "X"})
+db.getCollection('MyCollection').find({"myField": UUID("12345678-1234-1234-1234-123456789012")})
+</code>
+
+Where field exists:
+<code>
+db.getCollection('MyCollection').find({"myObject.myField":{"$exists": true}})
+</code>
+If any link in the path to the field does not exist, then the field does not exist.
+
+#Aggragate
+
+Count results (returns integer):
+<code>
+db.getCollection('MyCollection').find({"myField": "X"}).count()
+</code>

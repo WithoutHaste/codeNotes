@@ -10,8 +10,52 @@
 
 #Ch 4 Isolating the Domain
 
+"The part of the software the specifically solves problems from the domain usually constitutes only a small portion of the entire software system...We need to decouple the domain objects from other functions of the system, so we can avoid confusing the domain concepts with other concepts related only to software technology or losing sight of the domain altogether in the mass of the system."
 
+See Layered Architecture / Onion Architecture / Clean Architecuture.
+Briefly, isolate the domain logic and don't make it dependent on any other part of the system.
+
+Discussion of when it is appropriate to not use Layered Architecture: fast, simple projects with non-expert developers. See Smart UI Pattern.
 
 #Ch 5 A Model Expressed in Software
+
+"Associations between objects are simple to conceive and to draw, but implementing them is a potential quagmire...Associations illustrate how crucial detailed implementation decisions are to the viability of a Model Driven Design."
+
+Patterns of model elements:
+- Value Object
+- Entity
+- Service
+
+An Entity has a identity that has continuity even as the state of the object changes, even if all its data changes. An Entity's identity may stretch across multiple systems and representations.
+
+A Value Object merely describes an attribute, a value. They could all be immutable without affecting the system.
+
+Services express actions or operations. Services perform operations upon request. These are the operations that don't make sense inside your Entities or Value Objects. These operations need to be done, but they don't correspond with State.
+
+"A sense of the basic principles will help developers stay on course through the inevitable compromises."
+
+Design Principle: "For every traversable association in the model, there is a mechanism in the software with the same properties."
+
+"It is important to restrain relationships as much as possible...In real life, there are lots of many-to-many associations, and a great number are naturally bidirectional. The same tends to be true of early forms of a model as we brainstorm and explore the domain. But these general associations complicate implementation and maintentance. Furthermore, they communicate very little about the nature of the relationship...A bidirectional association means that both objects can be understood only together."
+
+Options to replace a many-to-many relationship:
+1) Impose a 1-to-many relationship on it
+2) Reduce multiplicity by adding a condition/filter/qualifier to the relationship
+3) Remove it entirely if it is non-essential
+
+"This refinement actually reflects insight into the domain, as well as making a more practical design...It captures the understanding that one direction of the association is much more meaningful and important than the other."
+Ex: Country <-> President is bidirectional, but we rarely ask "Which country was X president of?" and we rarly say "Y was president of both A and B countries." So we can simplify this relationship to Country -> President.
+
+Entity vs Value Object example:
+At a bank, two transactions on the same day, for the same account, for the same amount are Entities because they are distinct from each other despite appearing similar.
+The amount of those transactions is a Value Object, because there is no usefullness in distinguishing them from each other or tracking their indentities across time.
+
+Design Principle: Provide all Entities with a way to compare their identity regardless of current state or history. Most commonly, this will be a unique key.
+
+"Identity is not intrinsic to a thing in the world; it is a meaning superimposed because it is useful."
+
+The common theme for these decisions is "what is useful to our purpose?"
+
+"[When modeling Entities] strip the Entity object's definition down to the most intrinsic characteristics, particularly those that identify it or are commonly used to find or match it. Add only behavior that is essential to the concept and attributes that are required by that behavior. Beyond that, look to remove behavior and attributes into other objects associated with the core Entity...Entities tend to fulfill the responsibilities by coordinating the operations of objects they own."
 
 #Ch 6 The Life Cycle of a Domain Object

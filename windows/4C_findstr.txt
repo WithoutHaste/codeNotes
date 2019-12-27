@@ -91,3 +91,12 @@ findstr /simp "string" *
 /v Prints only lines can do not match
 
 /x Matches entire line only
+
+#Regular Expressions
+
+period (.) matches any single character
+
+asterisk (*) means the previous character/set/etc can be matched 0 or more times
+
+So "A.*C" will match "AC", "ABC", "A483hskduf89C", etc
+I think
