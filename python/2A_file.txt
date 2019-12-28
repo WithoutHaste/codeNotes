@@ -18,6 +18,11 @@ f.write("more text")
 f.close()
 </code>
 
+Append or create
+<code>
+f = open("filename.txt", "a+")
+</code>
+
 #Read
 
 Read - read the entire file as one string
@@ -76,4 +81,26 @@ file.seek(relativeBytePosition, 1)
 Seek(position, 2) - move to the specified byte position, counting backward from the end of the file
 <code>
 file.seek(fromEndOfFile, 2)
+</code>
+
+#Exists
+
+<code>
+import os.path
+from os import path
+<code>
+
+Path or file exists
+<code>
+x = path.exists('path/fileName.txt')
+</code>
+
+Path is a directory
+<code>
+x = path.isdir('path')
+</code>
+
+Path is a file
+<code>
+x = path.isfile('path/fileName.txt')
 </code>

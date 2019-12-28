@@ -24,8 +24,21 @@ except:
 raise ValueError("message")
 </code>
 
-Convention says do not raise generic Error
+Convention says do not raise generic Exception
 
 #Error Types
 
 IOError, ValueError, ImportError, EOFError, KeyboardInterrupt
+
+#Custom Errors
+
+"Errors" all inherit from the base "Exception" class.
+The naming convention is that all errors/exception Types end with "Error".
+
+Define a custom error type:
+<code>
+class MyError(Exception):
+	def __init__(self, expression, message):
+		self.expression = expression
+		self.message = message
+</code>
