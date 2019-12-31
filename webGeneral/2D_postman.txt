@@ -2,6 +2,11 @@
 
 Desktop tool for creating API requests - useful for testing APIs.
 
+#Team
+
+A Team can contain multiple Workspaces.
+You can invite Users to join a Team.
+
 #Workspace
 
 A Workspace can store multiple Collections.
