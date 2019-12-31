@@ -1,0 +1,51 @@
+##Defunctionalization
+
+!![Defunctionalization at Work by Danvy, Nielson](https://www.brics.dk/RS/01/23/BRICS-RS-01-23.pdf)
+!![Defunctionalization: Everybody does it, Nobody talks about it](https://blog.sigplan.org/2019/12/30/defunctionalization-everybody-does-it-nobody-talks-about-it/)
+
+#Definitions
+
+Higher Order Function: a function which (A) accepts a function as a parameter AND/OR (B) returns a function.
+
+First Order Function: a function that is not a higher order function.
+
+Defunctionalization: the transformation of higher order functions into first order functions that perform the equivalent work but do not accept function-type parameters.
+
+Direct Form (or Functionalized Form): the use of higher order functions instead of first order functions.
+
+#Ex: Filters
+
+Higher Order Function: a list-filtering function that acceps the conditional filter as a parameter.
+<code>
+public List<T> Filter<T>(List<T> list, Func<T, bool> filter)
+{
+	//returns only elements that pass the filter
+}
+</code>
+
+First Order Function: defines several commonly-used filters as options.
+public List<T> Filter<T>(List<T> list, FilterEnum filter)
+{
+	//runs a predefined filter based on the enum value passed in
+}
+
+To make this refactor in your own code, you'd look for everywhere that uses Filter, and move all those conditions into their own functions that can be called based on the enum value.
+
+If the conditions require passing in variables (such as a "less than X" filter), then instead of an enum, define a data type with a subtype for each condition. Filter can require the Type to use instead of the Enum.
+
+#Ex: Recursion
+
+You can turn a recursive operation into an iterative one with an explicit stack.
+
+For instance, to search a binary tree without recursion:
+- keep a list of "pending" nodes, initialized with the root node
+- while the list is not empty, process the next "pending" node
+- processing means removing the node from "pending", running the search, and appending any child nodes to the "pending" list
+
+#Pros
+
+It is difficult to serialize a function to pass across the internet. Defunctionalization helps when building distributed systems.
+
+#Cons
+
+It is harder to add a new implementation/option.

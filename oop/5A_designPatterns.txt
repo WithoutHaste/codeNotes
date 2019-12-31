@@ -445,6 +445,15 @@ Connecting elements into a pipeline is analogous to Function Composition (combin
 
 Linux operations like Grep, Sed, and Awk are designed to be used this way.
 
+#Continuation
+
+aka Continuation Passing Style (CPS)
+
+Each function is given an extra function-type argument (the continuation function).
+Once the function has its return value, it will invoke the continuation function with that return value, and return that result instead.
+
+Ex: you follow a web link, you aren't logged into that site yet so you are redirected to the login page, once you login you are redirected to the page you started on.
+
 ##Compound Patterns
 
 Larger design patterns made up of several basic patterns

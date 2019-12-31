@@ -56,6 +56,29 @@ Design Principle: Provide all Entities with a way to compare their identity rega
 
 The common theme for these decisions is "what is useful to our purpose?"
 
-"[When modeling Entities] strip the Entity object's definition down to the most intrinsic characteristics, particularly those that identify it or are commonly used to find or match it. Add only behavior that is essential to the concept and attributes that are required by that behavior. Beyond that, look to remove behavior and attributes into other objects associated with the core Entity...Entities tend to fulfill the responsibilities by coordinating the operations of objects they own."
+"[When modeling Entities,] strip the Entity object's definition down to the most intrinsic characteristics, particularly those that identify it or are commonly used to find or match it. Add only behavior that is essential to the concept and attributes that are required by that behavior. Beyond that, look to remove behavior and attributes into other objects associated with the core Entity...Entities tend to fulfill their responsibilities by coordinating the operations of objects they own."
+
+"[Value Objects] are the objects that describe things...An object that represents a descriptive aspect of the domain with no conceptual identity is called a Value Object...We care about what they are, but not who/which they are."
+
+Example of when an Address is a Value Object: The domain is a mail-order company. It needs your address for your parcel. But if your roommate also places an order, it is not important to realize that the two addresses are the same.
+
+Example of when an Address is an Entity: The domain is an electrical company that runs lines to houses/businesses. They do need to realize that both roommates at the same addresses put in an order. (In this case, maybe the Entity is a "Dwelling" which has a Value Object "Address". There are many ways to organize a domain model.)
+
+Value Objects can be made up of other objects. They do not have to be a primitives like a String or Int.
+Value Objects can include references to Entities. Ex: a driving route (Value Object) that links two locations (Entities).
+Value Objects are frequently transient (never saved in long-term memory).
+Value Objects are frequently attributes of Entities.
+
+"The attributes that make up a Value Object should form a conceptual whole. For example, street, city, and postal code shouldn't be separate attributes of a Person object. They are part of a single, whole Address, which makes a simpler Person, and more coherent Value Object."
+
+Why Value Objects should be Immutable:
+- Memory can be conserved by sharing Value Objects without risking data corruption.
+  - Ex: PersonA and PersonB share a Name. PersonA edits their Name by instantiating a new Name object, so that PersonB's Name is not affected.
+  - A lot of memory can be used up by repeated Value Objects. For instance, imagine every Electrical Outlet in a Floor Plan was a unique object instead of one shared object.
+- Value Objects can be passed as arguments without worrying about unintended side effects.
+  - Ex: PersonA passes their Name into a method. They know the method will not edit the Name because it cannot.
+
+Not all the constraints we define in the model can be enforced with the programming language we are using. In these cases, you must rely on conventions, good naming standards, and good communication.
+
 
 #Ch 6 The Life Cycle of a Domain Object

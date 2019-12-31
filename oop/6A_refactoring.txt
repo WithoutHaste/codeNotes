@@ -1,0 +1,3 @@
+##Refactoring
+
+Refactor means to change the structure/design of code without changing the functionality.

@@ -29,3 +29,12 @@ Skip the first 10 lines of the file:
 <code lang="bash">
 more +10 fileName
 </code>
+
+#where
+
+List all the paths where this program is found.
+<code lang="bash">
+where python
+</code>
+
+Useful for figuring out why the old version of python is still running.
