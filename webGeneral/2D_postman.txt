@@ -1,0 +1,48 @@
+##Postman
+
+Desktop tool for creating API requests - useful for testing APIs.
+
+#Workspace
+
+A Workspace can store multiple Collections.
+A Workspace can be accessed/shared by multiple users.
+
+Changes saved to a shared Workspace will appear in other users' Workspaces very quickly, and automatically.
+
+To switch with Workspace you are using:
+- click Workspace drop down at middle-top of screen
+- select Personal or Team Workspaces
+- select you Workspace
+
+To add users to a Workspace:
+- switch to the Workspace
+- click "Invite" at middle-top of screen
+- invite users
+
+#Collection
+
+A Collection is an ordered grouping of API calls.
+
+To give users more access to a Collection:
+- switch to the Workspace
+- hover over the Collection in the left-hand bar > click "..." > click "Manage Roles"
+- you can give/remove user access here
+
+#Test Suites
+
+Create a Collection of the APIs you want to call, in order.
+
+To connect the output of one request to the input of another:
+- Add a Test Script to the first request
+<code lang="javascript">
+var jsonData = JSON.parse(responseBody);
+postman.setEnvironmentVariable("nextInput", jsonData.my_field);
+</code>
+- Update the Body of the second request to accept a Postman Environment Variables
+<code lang="javascript">
+{
+	"my_field": "{{nextInput}}"
+}
+</code>
+
+Click "Runner" (top-left) > select Colletion > select options > click "Run".
