@@ -80,5 +80,38 @@ Why Value Objects should be Immutable:
 
 Not all the constraints we define in the model can be enforced with the programming language we are using. In these cases, you must rely on conventions, good naming standards, and good communication.
 
+The associations between Value Objects should be kept simple for the same reasons as for Entities.
+With the addendum that there is never a reason to have a bi-directional association between Value Objects. If you're sure you need one, they are probably actually Entities.
+
+"Some concepts from the domain aren't natural to model as objects."
+Services are for domain operations that have no proper Entity to belong to.
+Services frequently orchestrate interactions between many Entities at once.
+Services must be stateless - they can change the state of the system, but must not keep any internal state.
+Services are named for verbs instead of for nouns.
+- Operation names should still be a part of the ubiquitous language.
+- Parameters and results should be domain objects.
+
+"Now, the more common mistake is to give up too easily on fitting the behavior into an appropriate object, gradually slipping towards procedural programming. But when we force an operation into an object that doesn't fit the object's definition, the object loses its conceptual clarity and becomes hard to understand or refactor...Complex operations can easily swamp a simple object, obscuring its role."
+
+"Services should be used judiciously and not allowed to strip the Entities and Value Objects of all their behavior."
+
+Where is the division between Application Services and Domain Services?
+Ex: Giving banking software
+- ExportReportToCSV is an Application Service because it involves concepts (like file format) that do not exist in the banking domain and does not involve any business rules.
+- TransferMoneyBetweenAccounts is a Domain Service because it heavily involves banking domain concepts and business rules.
+
+Domain Services can become a useful medium-grained layer between the application and the fine-grained Entity objects of the domain.
+They can form a set of use cases, and can keep business rules from creeping into the application layer.
+
+Modules (aka Packages aka Assemblies) are both a technical division of code, and a conceptual division of the design.
+If the domain is divided into multiple Modules, take care that the resulting Modules have low coupling between them and high cohesion within them.
+Modules that are divided well will reduce the mental strain of working in the Modules, because they will have low coupling between them, so you can focus on one small part of the code at a time.
+
+"Modules and the smaller elements should coevolve, but typically they do not. Modules are chosed to organize an early form of the objects. After that, the objects tend to change in ways that keep them in the bounds of the existing Module definition...Even developers who refactor a lot tend to content themselves with Modules conceived early in the project...Refactoring Modules is more work and more disruptive than refactoring classes, and probably can't be as frequent. But just as Model Objects tend to start out naive and concrete and then gradually transform to reveal deeper insight, Modules can become subtle and abstract."
+
+"Like everything else in a domain-driven design, Modules are a communications mechanism. The meaning of the objects being partitioned needs to drive the choice of the Modules. When you place some classes together in a Module, you are telling the next developer who looks at your design to think about them together."
+
+If you must make trade-offs between conceptual cohesion and technical cohesion, choose greater conceptual clarity. The technical difficulties can be handled when the story the code tells is understandable.
 
 #Ch 6 The Life Cycle of a Domain Object
+

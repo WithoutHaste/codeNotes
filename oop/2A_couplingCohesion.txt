@@ -1,0 +1,31 @@
+##Coupling vs Cohension
+
+(Modules aka Packages aka Assemblies)
+
+This discussion is about the Module level, but coupling and cohesion apply equally to every level of detail in programming.
+
+How large is a Module? A programmer should be able to hold the whole Module in their head at one time.
+
+#Coupling
+
+Coupling is the degree of interdependence between software modules.
+For instance, the more Types from ModuleA that ModuleB depends on (uses), the more tightly coupled the two modules are.
+The goal is to reduce coupling between Modules.
+
+Benefit of low coupling:
+- Reduced mental strain, because you can focus on one section of the code at a time.
+- Supports parallel development, where teams can work on different parts of the code at once without affecting each other.
+- Easier deployments, because you don't have to deploy the entire code base every time.
+- Fewer bug in general.
+
+#Cohesion
+
+Cohesion is the degree to which Elements inside a Module belong together.
+In other words, how closely related are the Elements (conceptually, or through code dependency).
+The goal is to have highly cohesive Modules.
+
+"Incoherent fragments of ideas are as hard to understand as an undifferentiated soup of ideas." from Domain Driven Design.
+
+Benefits of high cohesion:
+- Usually occurs simultaneously with low coupling, because everything is where it should be. An element in ModuleA that belongs in ModuleB means that coupling is higher than it needs to be.
+- Demonstrates a deep understanding of the domain, which will improve the entire project.
