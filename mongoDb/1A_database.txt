@@ -1,0 +1,5 @@
+##Database
+
+A database contains multiple Collections.
+
+Each database on a server has it's own section of the file system.

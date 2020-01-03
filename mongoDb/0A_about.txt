@@ -1,0 +1,17 @@
+##About
+
+MongoDb is a document database (i.e. a no SQL database).
+
+It is advertised as cross-platform, providing high performance, high availability, and easy scalability.
+
+#Schemaless
+
+MongoDb is a schemaless database. Every document can be a different structure, if you want.
+
+#Relationships
+
+MongoDb does not support relationships between Collections or Documents.
+If you want data to be used together, save it as one document.
+
+Instead of relying on foreign keys, just duplicate the data whereever it is needed.
+MongoDb says disk space is cheap.

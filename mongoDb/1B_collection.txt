@@ -1,0 +1,10 @@
+##Collection
+
+A collection contains multiple Documents.
+
+A collection is analogous to a SQL Table.
+
+#Dynamic Schema
+
+MongoDb Collections do not enforce a schema, meaning that documents in the same collection do not have to have the same fields.
+Fields with the same Key do not need to contain the same data types.

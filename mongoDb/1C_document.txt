@@ -1,0 +1,29 @@
+##Document
+
+A document contains multiple Key/Value Pairs called Fields.
+
+A document is analogous to a SQL Row/Record.
+
+#JSON
+
+Documents are displayed, edited, etc as JSON objects.
+
+Ex:
+<code lang='javascript'>
+{
+	_id: ObjectId(7df78ad8902c),
+	title: 'Test',
+	comments: [
+		{
+			user: 'Steve',
+			comment: 'Test comment'
+		}
+	]
+}
+</code>
+
+#Default Key
+
+MongoDb provides a default key Field called "_id".
+You can specify the _id when inserting a record, or allow MongoDb to generate it.
+The default _id is made up of the timestamp, machine id, process id, and sequence number.
