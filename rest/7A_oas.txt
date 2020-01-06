@@ -1,0 +1,181 @@
+##OAS
+
+!![OAS on GitHub](https://github.com/OAI/OpenAPI-Specification)
+
+OAS stands for OpenAPI Specification.
+OAS is a format for documenting RESTful APIs.
+OAS is language-agnostic, machine-readable, and human-readable.
+
+You can test your OAS by opening it in Swagger UI.
+
+#Terminology
+
+Endpoint: a relative URI
+
+Operation: an HTTP Verb
+
+Operation Parameters: input and output parameters
+
+Path Templating: the use of curly braces {} to mark a variable section of a URI
+Ex: /users/{userId}/contacts means that you should insert the User Id into the URI
+
+Fields:
+	All field names are case-sensitive
+	Fixed Fields have a declared name
+	Patterned Fields have a regex-driven name
+
+#Format
+	
+Your documentation should be valid in both JSON and YAML format.
+
+Recommended file name is openapi.json or openapi.yaml
+
+#Info Object
+
+The Info Object provides metadata about the API.
+
+<code lang="javascript">
+{
+  "title": "Sample Pet Store App",
+  "description": "This is a sample server for a pet store.",
+  "termsOfService": "http://example.com/terms/",
+  "contact": {
+    "name": "API Support",
+    "url": "http://www.example.com/support",
+    "email": "support@example.com"
+  },
+  "license": {
+    "name": "Apache 2.0",
+    "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
+  },
+  "version": "1.0.1"
+}
+</code>
+
+<code lang="yaml">
+title: Sample Pet Store App
+description: This is a sample server for a pet store.
+termsOfService: http://example.com/terms/
+contact:
+  name: API Support
+  url: http://www.example.com/support
+  email: support@example.com
+license:
+  name: Apache 2.0
+  url: https://www.apache.org/licenses/LICENSE-2.0.html
+version: 1.0.1
+</code>
+
+#Contact Object
+
+The Contact Object provides contact information.
+
+<code lang="javascript">
+{
+  "name": "API Support",
+  "url": "http://www.example.com/support",
+  "email": "support@example.com"
+}
+</code>
+
+<code lang="yaml">
+name: API Support
+url: http://www.example.com/support
+email: support@example.com
+</code>
+
+#License Object
+
+#Server Object
+
+All relative paths are relative to these URLs.
+
+Single server:
+<code lang="javascript">
+{
+  "url": "https://development.gigantic-server.com/v1",
+  "description": "Development server"
+}
+</code>
+
+<code lang="yaml">
+url: https://development.gigantic-server.com/v1
+description: Development server
+</code>
+
+Multiple servers:
+<code lang="javascript">
+{
+  "servers": [
+    {
+      "url": "https://development.gigantic-server.com/v1",
+      "description": "Development server"
+    },
+    {
+      "url": "https://staging.gigantic-server.com/v1",
+      "description": "Staging server"
+    },
+    {
+      "url": "https://api.gigantic-server.com/v1",
+      "description": "Production server"
+    }
+  ]
+}
+</code>
+
+<code lang="yaml">
+servers:
+- url: https://development.gigantic-server.com/v1
+  description: Development server
+- url: https://staging.gigantic-server.com/v1
+  description: Staging server
+- url: https://api.gigantic-server.com/v1
+  description: Production server
+</code>
+
+#Path Object
+
+A relative path to an Endpoint and the Endpoint's Operations.
+
+Paths must begin with a "/" slash.
+Path templates are allowed.
+
+<code lang="javascript">
+{
+  "/pets": {
+    "get": {
+      "description": "Returns all pets from the system that the user has access to",
+      "responses": {
+        "200": {          
+          "description": "A list of pets.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/pet"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+</code>
+
+<code lang="yaml">
+/pets:
+  get:
+    description: Returns all pets from the system that the user has access to
+    responses:
+      '200':
+        description: A list of pets.
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/pet'
+</code>

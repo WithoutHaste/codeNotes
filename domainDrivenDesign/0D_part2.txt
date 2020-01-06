@@ -113,5 +113,25 @@ Modules that are divided well will reduce the mental strain of working in the Mo
 
 If you must make trade-offs between conceptual cohesion and technical cohesion, choose greater conceptual clarity. The technical difficulties can be handled when the story the code tells is understandable.
 
+Some frameworks or infrastructures impose module divisions on a project. Do not allow this to complicate your domain. It is more important to have an easily comprehended domain than to follow a particular framework's rules.
+
+Object-oriented programming is a good choice because:
+- Objects and relationships correlate well with the domain model.
+- It has been proven over time to be easily comprehended by both technical and non-technical people.
+- It is widely understood, so you can find experienced programmers.
+- There are many support and integration tools already in existance.
+
+A good bit of talk about the usefullness of sticking with Model Driven Design, despite technical obstacles.
+
+"Although a Model Driven Design does not have to be object oriented, it does depend on having an expressive implementation of the model constructs...If the available tool does not facilitate that expressiveness, reconsider the choice of tools...An unexpressive implementation negates the advantage of the extra paradigm."
+
+Rules of thumb for mixing non-object elements into an object-oriented system:
+- Don't fight the implementation paradigm. "There's always another way to think about a domain. Find model concepts that fit the paradigm."
+- Lean on the ubiquitous language. "Even when there is no rigorous connection between tools, very consistent use of language can keep parts of the design from diverging."
+- Don't get hung up on UML. "Sometimes the fixation on a tool, such as UML diagramming, leads people to distort the model to make it fit what can easily be drawn."
+- Be skeptical. "Is the tool really pulling its weight? Just because you have some rules, that doesn't necessarily mean you need the overhead of a rules engine."
+
+"Before taking on the burden of mixed paradigms, the options within the dominant paradigm should be exhausted...Even though some domain concepts don't present themselves as obvious objects, they often can be modeled within the paradigm."
+
 #Ch 6 The Life Cycle of a Domain Object
 

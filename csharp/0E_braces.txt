@@ -1,16 +1,34 @@
 ##Braces
 
-#Roman
+!![Identation and Brace Styles](https://en.wikipedia.org/wiki/Indentation_style)
+
+#Allman style
+
+The standard for C#.
 
 <code>
 class MyClass
 {
+	void MyMethod()
+	{
+		DoSomething();
+	}
 }
 </code>
 
-#Egyptian
+Also called "Roman style" by some blog.
+
+#1TBS
+
+The standard for Javascript.
+1TBS stands for "1 true brace style".
 
 <code>
 class MyClass {
+	void MyMethod() {
+		DoSomething();
+	}
 }
 </code>
+
+Also called "Egyptian style" by some blog.

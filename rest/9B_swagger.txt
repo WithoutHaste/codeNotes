@@ -1,0 +1,20 @@
+##Swagger
+
+#Swagger Specification
+
+The Swagger Specification is a text format for documenting RESTful APIs.
+
+The Swagger Specification was renamed to the OpenAPI Specification (OAS) when Swagger donated it to the OpenAPI Initiative.
+
+#Swagger UI
+
+Swagger UI is a tool that will translate your OAS into an interactive API console.
+
+#Swashbuckle
+
+generating OAS from .Net Core WebAPI projects
+https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-3.1&tabs=visual-studio
+
+generate on build instead of dynamicallty on view-page
+https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/541
+"Now available on Nuget - dotnet-swagger.1.2.0-beta1"
