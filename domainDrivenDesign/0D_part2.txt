@@ -135,3 +135,47 @@ Rules of thumb for mixing non-object elements into an object-oriented system:
 
 #Ch 6 The Life Cycle of a Domain Object
 
+Challenges of managing long-lived objects:
+- Maintaining integrity throughout the life-cycle.
+- Preventing the model from getting swamped by the complexity of managing the life-cycle.
+
+Patterns:
+- Aggregates
+- Factories
+- Repositories
+
+(I'm used to "Aggregate" meaning either a collection, like a list or dictionary, or an operation against a collection, like average or minimum.)
+(Would the name "Composite" work better?)
+
+An Aggregate is a cluster of associated objects that are treated as a single unit in regards to edits.
+Each Aggregate has a root and a boundary.
+This boundary gives hard rules about how much of the data could be affected by editing the Aggregate. This is enormously helpful in maintaining data integrity in a complex project.
+
+The Aggregate root is a single, specific Entity.
+The root is the only object in the Aggregate that outside objects are allowed to reference.
+Non-root Entities within the Aggregate only require local ids (unique within the Aggregate).
+
+Ex: the domain is a car repair shop.
+A car is an Entity and the root of its Aggregate.
+The car knows which tires it has, and their rotation history.
+The system will never make a global search for a tire. It will only search of a car and ask it about its tires.
+If a tire is removed from a car, the system will not care that that particular tire ends up in the junk yard or on another car.
+Thus, the tires are part of the car Aggregate.
+However, engine blocks have their own serial numbers and are commonly moved from car to car. Therefore, the engine block might be the root of its own Aggregate.
+
+An Invariant is a consistency rule that must be maintained whenever data changes.
+Invariants will involve relationships among members of an Aggregate. There rules are expected to stay up-to-date with each transaction.
+Invariants that span Aggregates are expected to be out-of-sync sometimes.
+
+Aggregate rules:
+- The root Entity has a globally unique id.
+- The root Entity is responsible for maintaining Invariants for its Aggregate.
+- Non-root Entities in the Aggregate have locally unique ids.
+- Objects outside the Aggregate may only refernce the root Entity.
+- The root Entity can hand object references out, but they are expected to be short-term, transient references.
+- Only root Entities can be obtained directly with database queries.
+- If the root Entity is deleted, then everything in the Aggregate must be deleted.
+
+(MongoDb and document-oriented databases in general are already Aggregate-oriented. Aggregate == Document.)
+
+Factories encapsulate the creation of complex Entities or Aggregates.
