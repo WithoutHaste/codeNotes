@@ -46,6 +46,8 @@ Options to replace a many-to-many relationship:
 "This refinement actually reflects insight into the domain, as well as making a more practical design...It captures the understanding that one direction of the association is much more meaningful and important than the other."
 Ex: Country <-> President is bidirectional, but we rarely ask "Which country was X president of?" and we rarly say "Y was president of both A and B countries." So we can simplify this relationship to Country -> President.
 
+"An object should be distilled until nothing remains that does not relate to its meaning or support its role in interactions." (from ch 6)
+
 Entity vs Value Object example:
 At a bank, two transactions on the same day, for the same account, for the same amount are Entities because they are distinct from each other despite appearing similar.
 The amount of those transactions is a Value Object, because there is no usefullness in distinguishing them from each other or tracking their indentities across time.
@@ -178,4 +180,60 @@ Aggregate rules:
 
 (MongoDb and document-oriented databases in general are already Aggregate-oriented. Aggregate == Document.)
 
+"Much of the power of objects rests in the intricate configuration of their internals and their associations...Problems arise from overloading a complex object with responsibility for its own creation."
+
+Factories are responsible for creating other objects.
 Factories encapsulate the creation of complex Entities or Aggregates.
+Factories provide a way to divide the creation of an object from the operations that are the purpose of the object.
+Each creation method is atomic and enforces all Invariants of the Entity/Aggregate it returns.
+Creation methods do not require the client to know what concrete classes will be returned.
+
+"Because cars are never assembled and driven at the same time, there is no value in combining both of these functions into the same mechanism. Likewise, assembling a complex compound object is a job that is best separated from whatever job that object will have to do when it is finished."
+
+"Complex object creation is the responsibility of the domain layer, yet that task does not belong to the objects that express the model...Object creation and assembly usually have no meaning in the domain; they are a necessity of the implementation...We are adding elements [Factories] to the design that do not correspond to anything in the model, but they are nonetheless part of the domain layer's responsibility."
+
+Some Factory design patterns are Factory Method, Abstract Factory, and Builder.
+Factory methods frequently exist in the root Entity of the Aggregate affected, or in a highly-related Entity that already contains much of the information needed for the Factory.
+A dedicated Factory object or Service should be created if there is no natural Entity to add the Factory Method to.
+
+Use a constructor instead of a Factory when:
+- The class is not part of a hierarchy and is not polymorphically used by implementing an interface.
+- The client does care which concrete class is returned (such as when using the Strategy Pattern, or when performance is sensitive to implementation selection).
+- The client already has all the information needed to create the object.
+- The constructor is simple.
+
+"Avoid calling constructors within constructors of other classes. Constructors should be dead simple...The threshold for choosing to use a little Factory Method isn't high."
+
+Does the Invariant logic belong in the Factory or the Entity? It should stay in the Entity.
+The Factory can rely on the Entity to validate that its Invariant rules have been satisfied.
+- There are exceptions for Aggregate-level Invariant rules. (Such as rules that only apply during creation, and are enforced by the immutabilty of the data after that.)
+- But never move Entity Invariant logic into a Factory Method that lives in another object.
+
+Factories can also be used to reassemble a flattened object that was saved to persistent storage.
+
+How to acquire the reference to an object?
+- Create the object
+- Traverse a series of references to the object
+- Query a database to find the object
+
+Reconstitution: restoring an object from a database to memory (distinct from Instantiation when the Entity was first created)
+
+Problems with writing to much save/load logic:
+- Your mind is more concerned with the technology than with your domain model.
+- Your tempted to bypass object operations and edit the database directly.
+- Your tempted to query exactly the data you need instead of traversing to it from an Aggregate root.
+- Domain logic becomes embedded in database queries.
+
+The Repository pattern encapsulates all data storage and retrieval concerns so that you can continue concentrating on your domain.
+
+"A Repository represents all objects of a certain type as a conceptual set...It acts like a collection, except with more elaborate querying capability. Objects of the appropriate type are added and removed, and the machinery behind the Repository inserts them or deletes them from the database."
+
+"A Repository lifts a huge burden from the client, which can now talk to a simple, intention-revealing interface, and ask for what it needs in terms of the model. To support all this requires a lot of complex techinical infrastructure, but the interface is simple and conceptually connected to the domain model."
+
+Principle: For each type of object that needs global access, create an object that can provide the illusion of an in-memory collection of all objects of that type. Provide Repositories only for Aggregate roots that actually need direct access.
+
+A Repository may manage one abstract or parent type, rather than using one Repository for each concrete type.
+
+Developers will still need to understand how the Repository works, so they can take performance issues into account.
+
+The client applicatio will still be charge of deciding when to commit transactions, as the client understands the full context of the operation.
