@@ -236,4 +236,26 @@ A Repository may manage one abstract or parent type, rather than using one Repos
 
 Developers will still need to understand how the Repository works, so they can take performance issues into account.
 
-The client applicatio will still be charge of deciding when to commit transactions, as the client understands the full context of the operation.
+The client application will still be in charge of deciding when to commit transactions, as the client understands the full context of the operation.
+
+Keep your Factories and Repositories separate. The Reposistory can use the Factory, but don't merge them together. The Factory is in charge of an object's beginning. The Repository is in charge of an object's middle-of-life.
+
+"The most common non-object component of primarily object-oriented software systems is the relational database. This reality presents the usual problems of a mixture of paradigms. But the database is more intimately related to the object model than are most other components."
+- If the database is just for storing the objects, it is worth limiting the object model to what the database can store so that the mapping between them is simple and stays in sync as the object model is refactored.
+- If the database is just for storing objects, do not let any other system edit the database. This is likely to break the object invariant rules.
+- The database may be partially denormalized to support the object model or performance goals.
+- If the data comes from a legacy system, then the database model will be different and separate from the object model.
+- The ubiquitous language can help tie the object and the relational components together to a single model.
+
+"The tradition of refactoring that has increasingly taken hold in the object world has not really affected relational database design much. What's more, serious data migration issues discourage frequent changes. This may create a drag on the refactoring of the object model, but if the object model and the database model start to diverge, transparency can be lost quickly."
+
+"Cutting [the database model and the object model] loose from each other is a seductive path. It is often taken unintentionally, when the team fails to keep the database current with the model. If the separation is chosen consciously, it can result in a clean database schema - not an awkward one full of compromises conforming to last year's object model."
+
+#Ch 7 Using the Language: An Extended Example
+
+Example of building and modifying a domain model.
+Example of using the ubiquitous language to talk about user stories.
+Example of moving behavior out of one object into its own object to clarify important domain concepts.
+Example of turning a many-to-many relationship into a many-to-one by being more specific.
+Example of differentiating Entities from Value Objects.
+Example of determining the direction of relationships.

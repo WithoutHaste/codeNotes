@@ -28,6 +28,10 @@ View log of commits on repository
 <code>
 git log
 </code>
+Visualize the branching and merging.
+<code>
+git log --graph
+</code>
 Commits are listed newest to oldest.
 <code>
 git log --oneline
