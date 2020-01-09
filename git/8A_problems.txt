@@ -1,0 +1,14 @@
+##Problems
+
+#Cannot delete branch
+
+Scenario:
+In Git browser, I cannot click the delete "trashcan" on a branch because "a pull request depends on it".
+No pull request depends on it.
+
+Fix:
+I can delete the branch through Git Desktop.
+
+Follow Up:
+It turns out there was a PR into that branch which I was unaware of. Deleting the branch automatically closed the PR.
+It still stands that I was able to force the delete through Git Desktop.
