@@ -1,0 +1,13 @@
+##Part 3: Refactoring Toward Deeper Insight
+
+#Ch 8 Breakthrough
+
+#Ch 9 Making Implicit Concepts
+
+#Ch 10 Supple Design
+
+#Ch 11 Applying Analysis Patterns
+
+#Ch 12 Relating Design Patterns to the Model
+
+#Ch 13 Refactoring Toward Deeper Insight

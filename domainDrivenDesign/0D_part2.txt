@@ -225,6 +225,7 @@ Problems with writing to much save/load logic:
 - Domain logic becomes embedded in database queries.
 
 The Repository pattern encapsulates all data storage and retrieval concerns so that you can continue concentrating on your domain.
+A Repository is not limited to CRUD operations. It encompasses specially designed queries for specific business needs.
 
 "A Repository represents all objects of a certain type as a conceptual set...It acts like a collection, except with more elaborate querying capability. Objects of the appropriate type are added and removed, and the machinery behind the Repository inserts them or deletes them from the database."
 
@@ -259,3 +260,27 @@ Example of moving behavior out of one object into its own object to clarify impo
 Example of turning a many-to-many relationship into a many-to-one by being more specific.
 Example of differentiating Entities from Value Objects.
 Example of determining the direction of relationships.
+Example of when to use bidirectional relationship.
+Example of when to use a circular relationship.
+Example of drawing in the Aggregate Boundaries.
+Example of deciding which Aggregates need Repositories.
+Example of how discussing User Stories in terms of the Domain Model informs all of these decisions.
+Example of using Constructors and Factories.
+Example of refactoring the Design Model as implementation reveals annoyances and/or implementation cannot satisfy User Stories with the current Domain Model.
+Example of replacing a persistent object with a derived (transient) object.
+
+Some objects that exist in the Domain Model and the Object Model may not exist in the Database Model. They might be the result of a query.
+This example shows how to remove the difficulties of implementing a circular reference by making a Domain Object transient instead of persisted.
+
+A sign of a good design: User Stories that make changes only within one Aggregate Boundary.
+
+Example of common errors in partitioning Modules:
+- Partitioning by Entity/Value Object/Service
+- Partitioning by Persistent/Transient
+- Partitioning by anything that does not take into account the meaning of the objects
+
+Example of Module names becoming part of the Ubiquitous Language.
+Example of adjusting to new requirements.
+Example of integrating with another system.
+Example of naming a Service to be informative.
+Example of designing an Anti-Corruption Layer.

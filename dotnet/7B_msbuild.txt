@@ -206,6 +206,8 @@ $(FxCopDir) The path to the fxcop.cmd file. The fxcop.cmd file is not installed 
 
 $(IntDir) Path to the directory specified for intermediate files. If this is a relative path, intermediate files go to this path appended to the project directory. This path should have a trailing slash. This resolves to the value for the Intermediate Directory property. Do not use $(OutDir) to define this property.
 
+$(NuGetPackageRoot) Path to NuGet packages.
+
 $(OutDir) Path to the output file directory. If this is a relative path, output files go to this path appended to the project directory. This path should have a trailing slash. This resolves to the value for the Output Directory property. Do not use $(IntDir) to define this property.
 
 $(Platform) The name of current project platform, for example, "Win32".

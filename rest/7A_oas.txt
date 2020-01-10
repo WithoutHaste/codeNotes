@@ -8,6 +8,8 @@ OAS is language-agnostic, machine-readable, and human-readable.
 
 You can test your OAS by opening it in Swagger UI.
 
+!![Looks like a useful resource of OAS syntax](https://apihandyman.io/writing-openapi-swagger-specification-tutorial-part-5-advanced-input-and-output-modeling/)
+
 #Terminology
 
 Endpoint: a relative URI
@@ -29,6 +31,15 @@ Fields:
 Your documentation should be valid in both JSON and YAML format.
 
 Recommended file name is openapi.json or openapi.yaml
+
+#Data Types
+
+string
+number
+integer
+boolean
+array (with child "items")
+object (with child "properies")
 
 #Info Object
 
@@ -178,4 +189,107 @@ Path templates are allowed.
               type: array
               items:
                 $ref: '#/components/schemas/pet'
+</code>
+
+#Components
+
+The components section holds reusable data structures that can be referenced repeatedly.
+
+<code lang='yaml'>
+components:
+  # Reusable schemas (data models)
+  schemas:
+    ...
+  # Reusable path, query, header and cookie parameters
+  parameters:
+    ...
+  # Security scheme definitions (see Authentication)
+  securitySchemes:
+    ...
+  # Reusable request bodies
+  requestBodies:
+    ...
+  # Reusable responses, such as 401 Unauthorized or 400 Bad Request
+  responses:
+    ...
+  # Reusable response headers
+  headers:
+    ...
+  # Reusable examples
+  examples:
+    ...
+  # Reusable links
+  links:
+    ...
+  # Reusable callbacks
+  callbacks:
+    ...
+</code>
+
+You do not make a list of these subsections. You simple enter multiple values.
+<code lang='yaml'>
+components:
+  schemas:
+    User:
+      type: object
+      ...
+    Pet:
+      type: object
+      ...
+</code>
+
+You can address a component thus:
+<code lang='yaml'>
+something:
+  - $ref "#/components/schemas/MySchema"
+</code>
+References never have sibling elements.
+
+requestBody can also accept a list of possible schemas:
+<code lang='yaml'>
+paths:
+  /my/path:
+    post:
+	  summary: My Summary
+	  requestBody:
+	    content:
+		  application/json:
+		    schema:
+			  oneOf:
+			    - $ref: "#/components/requestBodies/MyRequestBodyA"
+			    - $ref: "#/components/requestBodies/MyRequestBodyB"
+</code>
+I'm not sure this is actually supported by OAS. There are many error reports against different editing tools saying that this part is not supported, and currently editor.swagger.io doesn't display it right.
+This Swagger documentation shows an example of it, so it should be valid:
+!![Swagger requestBody/schema/oneOf example](https://swagger.io/docs/specification/data-models/oneof-anyof-allof-not/)
+
+#Inheritance and Polymorphism
+
+!![On Swagger](https://swagger.io/docs/specification/data-models/inheritance-and-polymorphism/)
+
+You can define composition/inheritance hierarchies for your components.
+<code lang="yaml">
+components:
+  schemas:
+    BasicErrorModel:
+      type: object
+      required:
+        - message
+        - code
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          minimum: 100
+          maximum: 600
+    ExtendedErrorModel:
+      allOf: # Combines the BasicErrorModel and this inline model
+        - $ref: '#/components/schemas/BasicErrorModel'
+        - type: object
+          required:
+            - rootCause
+          properties:
+            rootCause:
+              type: string
 </code>
