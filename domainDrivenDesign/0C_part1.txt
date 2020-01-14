@@ -4,9 +4,9 @@
 
 A model represents a portion of reality or an idea of interest.
 
-The domain of a software project is the subject area to which the user apples the software.
+The domain of a software project is the subject area to which the user applies the software.
 
-Models are tools for grappling with breadth and complexity of knowledge of the domain required to implement the software project.
+Models are tools for grappling with the breadth and complexity of knowledge of the domain required to implement the software project.
 
 "An appropriate model makes sense of information and focuses it on a problem."
 
@@ -49,7 +49,7 @@ You need rapid and constant feedback between developers and domain experts.
 Developers need to take an active interest in learning about the domain they are programming for.
 
 It's not just about making Noun Objects (Document, Customer, Order, etc).
-Business is all about abstract concepts like Responsibility, Policy, and step by step Processes.
+Business is all about abstract concepts like Responsibility, Policy (Rule), and step by step Processes.
 Example of making domain knowledge clear: Business rule allows shipping to be overbooked to %110.
 <code lang="csharp">
 //bad, hides domain knowledge in a guard clause
@@ -94,7 +94,7 @@ Frustration from your domain experts may mean that you are missing the point or 
 
 The model is not limited to what can be expressed by UML diagrams. It pervades every medium of communication: diagrams, requirements, documents, the code, and (especially) verbal communication.
 
-Ubiquitous Language is the terminology used by both domain experts and developers to discuss this particular project and the domain problems it solves. It is a shared team language that developes and changes over time. A shared language means that far less knowledge is lost through translation.
+Ubiquitous Language is the terminology used by both domain experts and developers to discuss this particular project and the domain problems it solves. It is a shared team language that develops and changes over time. A shared language means that far less knowledge is lost through translation.
 
 The ubiquitous language must serve all needs, or it will naturally die off. It must express distinctions in the domain, and it must be consistent and precise enough for computers.
 - It includes the names of classes and prominent operations.
@@ -146,7 +146,7 @@ Use non-standard diagrams when they are useful. UML is very generic and therefor
 
 The code contains the complete details of the existing design. The diagrams do not need to attempt to replicate that.
 
-"Although the behavior [of code] is unambiguous, that doesn't mean it is obvious...And developers are not the only people who need to understand the model...Well-written code can be very communicative, but the message it communicates is not guaranteed to be accurate...It takes fastidiousness to write code that doesn't just do the right things but also says the right thing."
+"Although the behavior [of code] is unambiguous, that doesn't mean it is obvious...And developers are not the only people who need to understand the model...Well-written code can be very communicative, but the message it communicates is not guaranteed to be accurate...It takes fastidiousness to write code that doesn't just do the right things but also says the right things."
 
 Written documents are useful records. It takes effort to keep them up to date. It is worth the effort for well selected, useful documents.
 Documents should complement code and conversation.

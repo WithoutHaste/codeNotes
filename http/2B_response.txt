@@ -7,10 +7,68 @@ The HTTP Response document.
 The status of the requested operation.
 
 100-199: informational
+	100: Continue
+	101: Switching Protocols
+	103: Early Hints
+
 200-299: success
+	200: OK - request succeeded
+	201: Created - request succeeded and created a resource
+	202: Accepted - request received but not acted on yet
+	203: Non-Authoritative Information
+	204: No Content - request succeeded and client can stay on the same page
+	205: Reset Content - request succeeded and client needs to refresh their page
+	206: Partial Content - request succeeded and client needs the updates returned in this response
+
 300-399: redirection
+	300: Multiple Choices
+	301: Moved Permanently
+	302: Found
+	303: See Other
+	304: Not Modified
+	307: Temporary Redirect
+	308: Permanent Redirect
+
 400-499: client errors
+	400: Bad Request - client error, such as malformed input
+	401: Unauthorized - request does not contain valid authentication credentials
+	402: Payment Required
+	403: Forbidden - request has valid authentication, but not permissions for this operation
+	404: Not Found - the requested resource was not found
+	405: Method Not Allowed - request method is not supported for this resource
+	406: Not Acceptable
+	407: Proxy Authentication Required
+	408: Request Timeout - this connection has been idle too long
+	409: Conflict - request does not make sense given the current state of the server
+	410: Gone - access to the requested resource is no longer available here
+	411: Length Required - "Content-Length" header required
+	412: Precondition Failed
+	413: Payload Too Large
+	414: URI Too Long
+	415: Unsupported Media Type
+	416: Range Not Satisfiable
+	417: Expectation Failed - request's "Expect" header could not be satisfied
+	418: I'm a teapot (a joke)
+	422: Unprocessable Entity
+	425: Too Early
+	426: Upgrade Required
+	428: Precondition Required
+	429: Too Many Requests
+	431: Request Header Fields Too Large
+	451: Unavailable For Legal Reasons
+
 500-599: server errors
+	500: Internal Server Error - unexpected error on the server
+	501: Not Implemented
+	502: Bad Gateway - received an invalid response from an upstream server
+	503: Service Unavailable
+	504: Gateway Timeout - request to an upstream server timed out
+	505: HTTP Version Not Supported
+	506: Variant Also Negotiates
+	507: Insufficient Storage
+	508: Loop Detected
+	510: Not Extended
+	511: Network Authentication Required
 
 #Headers
 

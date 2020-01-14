@@ -8,3 +8,22 @@ A collection is analogous to a SQL Table.
 
 MongoDb Collections do not enforce a schema, meaning that documents in the same collection do not have to have the same fields.
 Fields with the same Key do not need to contain the same data types.
+
+#Design
+
+What to divide into multiple Collections, and what to keep in one Collection?
+
+Put multiple types in one Collection:
+- Collections cannot be joined for queries.
+- Aggregations cannot be performed across multiple Collections.
+
+One type per Collection:
+- To deserialize, you must know what type you are dealing with.
+  - If mixing types in a Collection, make sure they can be easily differentiated. Maybe by a "type" field.
+- Indexes on the Collection will be updated whether or not the new/edited records contains the field being indexed.
+  - If the Indexed fields are all shared fields, that's an indication these types should be in the same Collection.
+- If only part of a Collection is frequently updated, it should probably be its own Collection. Otherwise you'll get locking conflicts.
+  - Ex: An "auction item" has an array of "bids" under it. Now it's hard for people to all save their bids because they lock each other out of the database.
+  
+Many suggestions online says don't nest data more than 1 level deep. But that probably depends on how variable the structure is and how precise of a programmer you are.
+- Ex: Don't have a array of objects which also contain arrays. At least, not when you'll want to search by those value.
