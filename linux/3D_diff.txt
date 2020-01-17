@@ -1,0 +1,6 @@
+##Diff
+
+Diff returns the differences between two files, compared line-by-line.
+Diff tells you what changes need to be made to make the files identical.
+
+The files must be pre-sorted.

@@ -1,0 +1,8 @@
+##Short Commands
+
+#Sort
+
+Sort the lines in a file
+<code>
+sort FileName
+</code>

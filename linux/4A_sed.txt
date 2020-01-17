@@ -4,7 +4,7 @@ Sed = Stream EDitor.  It is for modifying files automatically.
 
 #Substitution
 
-Replace text based on regular expressions.  By default, sed will only replace the FIRST occurance of a substring in each line.
+Replace text based on regular expressions.  By default, sed will only replace the FIRST occurrence of a substring in each line.
 
 Replace substring "current" with string "new" throughout old_filename. Save the output to new_filename.
 <code>
@@ -78,6 +78,11 @@ The ignore case flag.
 sed 's/current/new/I' old_filename > new_filename
 </code>
 
+Delete selected text
+<code>
+sed '/text/ d' FileName
+</code>
+
 #Options
 
 Make multiple substitutions at once.
@@ -120,4 +125,11 @@ sed '3,/STOP/ s/current/new/' old_filename > new_filename
 Delete all lines from the 3rd to the end of file.
 <code>
 sed '3,$ d' old_filename > new_filename
+</code>
+
+#Cookbook
+
+Remove blank and empty lines
+<code>
+sed '/^\s*$/d' FileName
 </code>

@@ -1,0 +1,39 @@
+##Pipes
+
+Utilities in Linux can be formed into a pipeline where the output of one command becomes the input of another.
+
+#Pipe
+
+Forward (left to right) pipeline
+<code>
+head FileName | sort | awk '{print}'
+</code>
+
+#STDIN
+
+You can use a backwards redirection (not sure that's the official name) to provide STDIN to a utility.
+<code>
+sort < FileName
+</code>
+FileName is the STDIN for sort.
+
+STDIN will be executed before pipes.
+<code>
+sort < FileName | tail
+</code>
+So this will sort the file, then print the tail.
+
+You can group commands with parentheses
+<code>
+tail < (sort FileName)
+</code>
+So this will sort the file, then print the tail.
+At least, I've read that you can do this. It doesn't work in my environment (Bash 4.1.2).
+- "You cannot pass file descriptors over SSH. <(...) creates virtual files on your system and does not have a meaning when executing on a remote system." That would explain it, I'm using a remote system.
+
+#STDOUT
+
+Save the output of a utility to a file
+<code>
+sort FileName > NewFileName
+</code>

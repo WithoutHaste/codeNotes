@@ -1,0 +1,3 @@
+##Cmp
+
+Cmp will compare two files byte-by-byte.

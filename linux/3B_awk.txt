@@ -1,0 +1,36 @@
+##Awk
+
+Awk can manipulate text files.
+
+#Print
+
+Prints results to STDOUT
+<code>
+awk '{print}' FileName
+</code>
+With nothing else specified, this will just print the file.
+
+#Fields
+
+Awk will split lines into fields (default delimiter is whitespace).
+
+The fields are accessible as $1, $2, etc. 
+These are the Field Variables. 
+$0 holds the entire line.
+
+Print just the 1st and 4th columns of data.
+<code>
+awk '{print $1,$4}' FileName
+</code>
+
+Specifying a different field delimiter.
+<code>
+awk 'BEGIN { FS="|" } ; { print $1 }' FileName
+</code>
+
+#Filter
+
+This will only print lines that contain the regex
+<code>
+awk '/regex here/ {print}' FileName
+</code>

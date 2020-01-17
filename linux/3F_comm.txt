@@ -1,0 +1,24 @@
+##Comm
+
+Comm will compare two files line-by-line.
+It outputs (A) the lines just in File 1 (B) the lines just in File 2 (C) the lines in both files.
+
+The files must be pre-sorted.
+
+If the comparison seems to not be working, check how lines are ended. Line-Feed vs Carriage-Return-Line-Feed, for instance.
+
+#Options
+
+-1 to suppress column 1 (lines unique to File 1)
+-2 to suppress column 2 (lines unique to File 2)
+-3 to suppress column 3 (lines shared by both files)
+
+Getting the lines that only appear in File 1
+<code>
+comm -23 File1 File2
+</code>
+
+--check-order will check that the files are sorted
+--nocheck-order will not check that the files are sorted
+
+--output-delimiter=X sets the column delimiter
