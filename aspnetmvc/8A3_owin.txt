@@ -1,0 +1,197 @@
+##OWIN
+
+!![a blog](https://weblog.west-wind.com/posts/2015/Apr/29/Adding-minimal-OWIN-Identity-Authentication-to-an-Existing-ASPNET-MVC-Application)
+
+Scenario: 
+You started a new Asp.Net MVC application with Individual User Accounts.
+Microsoft.Owin is added to the template by default.
+
+Scenario cont:
+You want to support cookie based login with username/password input.
+You want to support external logins from Google, Facebook, etc.
+You want users to be able to create new accounts using either type of login.
+
+Instructions:
+
+(1) Turn off IIS Authentication in Web.config
+<code lang="xml">
+<system.web>   
+    <authentication mode="None" />   
+<system.web>
+</code>
+If you don't do this, your browser will open browser authentication dialogs instead of using your login page.
+
+(2) Make sure these NuGet packages are installed.
+- Microsoft.Owin.Host.SystemWeb (or Host.SelfHost if not using IIS)
+- Microsoft.Owin.Security.Cookies
+- Microsoft.Owin.Security.Google (or whatever specific sites you want to support)
+- Owin.Security.Providers (if you want to support the 3rd party logins this provides)
+
+(3) Configure authentication settings during Startup
+Either add method ConfigureAuth(IAppBuilder) to file <project>/Startup.cs or, if this already exists, edit the one in <project>/App_Start/Startup.Auth.cs
+<code>
+using System;
+using System.Security.Claims;
+using System.Web.Helpers;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.Owin;
+using Microsoft.Owin.Security.Cookies;
+using Microsoft.Owin.Security.Google;
+using Owin;
+
+public partial class Startup
+{
+	public void Configuration(IAppBuilder app)
+	{
+		ConfigureAuth(app);
+	}
+
+	// For more information on configuring authentication, please visit http://go.microsoft.com/fwlink/?LinkId=301864
+	public void ConfigureAuth(IAppBuilder app)
+	{
+		// Enable the application to use a cookie to store information for the signed in user
+		app.UseCookieAuthentication(new CookieAuthenticationOptions
+		{
+			AuthenticationType = DefaultAuthenticationTypes.ApplicationCookie,
+			LoginPath = new PathString("/Account/LogOn")
+		});
+
+		app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
+		
+		// App.Secrets is application specific and holds values in CodePasteKeys.json
+		// Values are NOT included in repro – auto-created on first load
+		if (!string.IsNullOrEmpty(App.Secrets.GoogleClientId))
+		{
+			app.UseGoogleAuthentication(                
+				clientId: App.Secrets.GoogleClientId,
+				clientSecret: App.Secrets.GoogleClientSecret);
+		}
+
+		if (!string.IsNullOrEmpty(App.Secrets.TwitterConsumerKey))
+		{
+			app.UseTwitterAuthentication(
+				consumerKey: App.Secrets.TwitterConsumerKey,
+				consumerSecret: App.Secrets.TwitterConsumerSecret);
+		}
+
+		if (!string.IsNullOrEmpty(App.Secrets.GitHubClientId))
+		{
+			app.UseGitHubAuthentication(
+				clientId: App.Secrets.GitHubClientId,
+				clientSecret: App.Secrets.GitHubClientSecret);
+		}
+
+		AntiForgeryConfig.UniqueClaimTypeIdentifier = ClaimTypes.NameIdentifier;
+	}
+}
+</code>
+
+(4) Login
+OWIN provides an authentication manager that is accessible here:
+<code>
+HttpContext.GetOwinContext().Authentication;
+</code>
+This manager will check for the cookies that tell it a user is already logged in, and will add login data to each request to the backend service.
+
+Create a class for logging in and out:
+<code>
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Web; //in addition, project must have a reference to Microsoft.Owin.Host.SystemWeb
+using Microsoft.AspNet.Identity;
+using Microsoft.Owin.Security;
+
+namespace Fob.Public.MvcSite.Authentication
+{
+	public static class AuthenticationManager
+	{
+		private static IAuthenticationManager OwinManager {
+			get {
+				return HttpContext.Current.GetOwinContext().Authentication;
+			}
+		}
+
+		public static void IdentitySignout()
+		{
+			OwinManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie, DefaultAuthenticationTypes.ExternalCookie);
+		}
+
+		public static void IdentitySignin(long userId, string userName, string providerKey = null, bool isPersistent = false)
+		{
+			List<Claim> claims = new List<Claim>() {
+				new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
+				new Claim(ClaimTypes.Name, userName)
+			};
+
+			ClaimsIdentity identity = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
+
+			AuthenticationProperties authenticationProperties = new AuthenticationProperties() {
+				AllowRefresh = true,
+				IsPersistent = isPersistent,
+				ExpiresUtc = DateTime.UtcNow.AddDays(7) //login expires in 7 days
+			};
+
+			OwinManager.SignIn(authenticationProperties, identity);
+		}
+	}
+}
+</code>
+
+Create a base controller class that will ensure user login data is always available:
+<code>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.Routing;
+
+namespace Fob.Public.MvcSite.Controllers
+{
+    public class BaseController : Controller
+    {
+		protected override void Initialize(RequestContext requestContext)
+		{
+			base.Initialize(requestContext);
+
+			LoadUserDataFromIdentity();
+		}
+
+		private void LoadUserDataFromIdentity()
+		{
+			long? userId = null;
+			string userName = null;
+			if(User is ClaimsPrincipal)
+			{
+				ClaimsPrincipal user = User as ClaimsPrincipal;
+				List<Claim> claims = user.Claims.ToList();
+
+				userId = GetUserId(claims);
+				userName = GetUserName(claims);
+			}
+
+			ViewData["UserId"] = userId;
+			ViewData["UserName"] = userName;
+		}
+
+		private long? GetUserId(List<Claim> claims)
+		{
+			Claim claim = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+			if(claim == null)
+				return null;
+			return Int64.Parse(claim.Value);
+		}
+
+		private string GetUserName(List<Claim> claims)
+		{
+			Claim claim = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name);
+			if(claim == null)
+				return null;
+			return claim.Value.ToString();
+		}
+	}
+}
+</code>

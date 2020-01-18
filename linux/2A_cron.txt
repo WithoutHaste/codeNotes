@@ -26,30 +26,30 @@ By default, cron jobs are run as the user who created them.
 
 Example of structure:
 <code>
-# Setup default environment that these scheduled commands will run in
-SHELL=/bin/bash
-MAILTO=root@example.com
-PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
-
-# For details see "crontab man"
-
-# Example of job definition:
-# .---------------- minute (0 - 59)
-# |  .------------- hour (0 - 23)
-# |  |  .---------- day of month (1 - 31)
-# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
-# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
-# |  |  |  |  |
-# *  *  *  *  * user-name  command-to-be-executed
-
-# backup using the rsbu program to the internal 4TB HDD and then 4TB external
-01 01 * * * /usr/local/bin/rsbu -vbd1 ; /usr/local/bin/rsbu -vbd2
-
-# Set the hardware clock to keep it in sync with the more accurate system clock
-03 05 * * * /sbin/hwclock --systohc
-
-# Perform monthly updates on the first of the month
-# 25 04 1 * * /usr/bin/dnf -y update
+ # Setup default environment that these scheduled commands will run in
+ SHELL=/bin/bash
+ MAILTO=root@example.com
+ PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+ 
+ # For details see "crontab man"
+ 
+ # Example of job definition:
+ # .---------------- minute (0 - 59)
+ # |  .------------- hour (0 - 23)
+ # |  |  .---------- day of month (1 - 31)
+ # |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+ # |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+ # |  |  |  |  |
+ # *  *  *  *  * user-name  command-to-be-executed
+ 
+ # backup using the rsbu program to the internal 4TB HDD and then 4TB external
+ 01 01 * * * /usr/local/bin/rsbu -vbd1 ; /usr/local/bin/rsbu -vbd2
+ 
+ # Set the hardware clock to keep it in sync with the more accurate system clock
+ 03 05 * * * /sbin/hwclock --systohc
+ 
+ # Perform monthly updates on the first of the month
+ # 25 04 1 * * /usr/bin/dnf -y update
 </code>
 
 MAILTO sets where the results of the cron job will be sent.
@@ -63,20 +63,20 @@ You can leave any/all time specifications as *.
 
 You can list time specifications:
 <code>
-# Run quarterly reports
-02 03 1 1,4,7,10 * /usr/local/bin/reports.sh
+ # Run quarterly reports
+ 02 03 1 1,4,7,10 * /usr/local/bin/reports.sh
 </code>
 
 You can use a range:
 <code>
-# Remind me each hour of the work-day
-01 09-17 * * * /usr/local/bin/hourlyreminder.sh
+ # Remind me each hour of the work-day
+ 01 09-17 * * * /usr/local/bin/hourlyreminder.sh
 </code>
 
 You can run every x-th time-unit:
 <code>
-# Run every 5 minutes, but only during even-numbered hours between 8am and 6pm
-*/5 08-18/2 * * * /usr/local/bin/mycronjob.sh
+ # Run every 5 minutes, but only during even-numbered hours between 8am and 6pm
+ */5 08-18/2 * * * /usr/local/bin/mycronjob.sh
 </code>
 The division must have a remainder of 0.
 
