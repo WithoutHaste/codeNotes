@@ -16,6 +16,16 @@ public int Name
 </code>
 special methods called accessors provide a flexible mechanism to read and write data
 
+As of C# 7, property accessors can be expression bodied:
+<code>
+private strin name;
+public string Name
+{
+	get => name;
+	set => name = value.ToUpperCase();
+}
+</code>
+
 #Method
 
 functions specific to a class
@@ -57,6 +67,56 @@ public class Foo
 	}
 }
 </code>
+
+#Local Function
+
+As of C# 7, you can declare functions inside other methods.
+The inner Local function is only avaliable to the outer method.
+
+Example of separating validation code from implementation code:
+<code>
+public static IEnumerable<char> AlphabetSubset(char start, char end)
+{
+	if (start < 'a' || start > 'z')
+		throw new ArgumentOutOfRangeException(paramName: nameof(start), message: "start must be a letter");
+	if (end < 'a' || end > 'z')
+		throw new ArgumentOutOfRangeException(paramName: nameof(end), message: "end must be a letter");	
+	if (end <= start)
+		throw new ArgumentException($"{nameof(end)} must be greater than {nameof(start)}");
+	
+	return alphabetSubsetImplementation();
+	
+	IEnumerable<char> alphabetSubsetImplementation()
+	{
+		for (var c = start; c < end; c++)
+			yield return c;
+	}
+}
+</code>
+
+Example of ensuring that exceptions from validation are thrown before asynchronous work begins:
+<code>
+public Task<string> PerformLongRunningWork(string address, int index, string name)
+{
+	if (string.IsNullOrWhiteSpace(address))
+		throw new ArgumentException(message: "An address is required", paramName: nameof(address));
+	if (index < 0)
+		throw new ArgumentOutOfRangeException(paramName: nameof(index), message: "The index must be non-negative");
+	if (string.IsNullOrWhiteSpace(name))
+		throw new ArgumentException(message: "You must supply a name", paramName: nameof(name));
+	
+	return longRunningWorkImplementation();
+	
+	async Task<string> longRunningWorkImplementation()
+	{
+		var interimResult = await FirstWork(address);
+		var secondResult = await SecondStep(index, name);
+		return $"The results are {interimResult} and {secondResult}. Enjoy.";
+	}
+}
+</code>
+
+See Lambda Expressions for similar functionality.
 	
 #Event
 
@@ -165,6 +225,17 @@ class A
 }
 </code>
 
+As of C# 7, constructors can be expression bodied:
+<code>
+class A
+{
+	public int X { get; set; }
+	public int Y { get; set; }
+	
+	public A(int x, int y) => (X, Y) = (x, y);
+}
+</code>
+
 #Static Constructor
 
 Special function called only once per type, either automatically before the first instance is created, or automatically before the first static method is called. The static constructor can initialize static fields, or run other one-time operations.
@@ -180,7 +251,7 @@ class A
 }
 </code>
 
-#Destructor
+#Destructor / Finalizer
 
 a special function to destruct a class
 only one allowed per class
@@ -191,10 +262,68 @@ Destructors do not have a return type
 ~Customer() { }
 </code>
 
+As of C# 7, destructors can be expression bodied:
+<code>
+~Customer() => Console.WriteLine("Finalized");
+</code>
+
 #Nested Type
 
 a class or struct declared inside another class
 the inner class can only be used by the outer class
+
+#Deconstructor
+
+C# 7 and above.
+
+This pattern provides Type-to-Tuple conversion.
+
+You can define multiple Deconstruct methods for a Type.
+The deconstructor used will depend on the tuple it is being assigned to.
+
+<code>
+public class Person
+{
+	public int Age { get; set; }
+	public string Name { get; set; }
+	public string Title { get; set; }
+	
+	//constructor
+	public Person(int age, string name, string title)
+	{
+		Age = age;
+		Name = name;
+		Title = title;
+	}
+	
+	//deconstructor
+	public void Deconstruct(out int age, out string name)
+	{
+		age = Age;
+		name = Name;
+	}
+	
+	//deconstructor
+	public void Deconstruct(out int age, out string name, out string title)
+	{
+		age = Age;
+		name = Name;
+		title = Title;
+	}
+}
+
+var person = new Person(23, "Smith", "Engineer");
+var (age1, name1) = person;
+var (age2, name2, title2) = person;
+</code>
+
+Deconstrutors can be added as Extension Methods.
+
+Deconstructor as expression:
+<code>
+	public void Deconstruct(out int age, out string name, out string title) =>
+		(age, name, title) = (Age, Name, Title);
+</code>
 
 ##C# 6.0 One-Liners
 	
@@ -284,6 +413,12 @@ Accessible to the current assembly only
 #protected internal
 
 Accessible to the current assembly, and to any class directly derived from this one in another assembly
+
+#private protected
+
+(.Net 7.2)
+
+Accessible to the current assembly, only by the containing class and derived classes
 
 ##Other Modifiers
 

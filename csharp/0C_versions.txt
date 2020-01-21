@@ -7,3 +7,5 @@ C# 3.0 - Nov 2007 - .Net Framework 2.0, 3.0, 3.5
 C# 4.0 - Apr 2010 - .Net Framework 4.0
 C# 5.0 - Aug 2012 - .Net Framework 4.5
 C# 6.0 - Jul 2015 - .Net Framework 4.6
+C# 7.0 -          - .Net Framework 4.7
+C# 8.0 -          - .Net Framework 4.8

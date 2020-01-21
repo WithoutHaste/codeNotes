@@ -1,0 +1,13 @@
+##Equations
+
+Refers to one cell. If you copy/paste (or square-drag) this equation, the value will be updated to maintain the same relationship between the equation-cell and the referenced-cell as the original has.
+<code>
+=A0
+</code>
+
+A coordinate prefixed with $ will remain static when copy/pasted (or square-dragged).
+<code>
+=$A0
+=A$0
+=$A$0
+</code>

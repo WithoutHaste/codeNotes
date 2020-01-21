@@ -1,5 +1,18 @@
 ##Exceptions
 
+#Throw
+
+<code>
+throw new Exception("Error");
+</code>
+
+As of C# 7, throw is an expression instead of a statement.
+This means you can use throw in more locations in your code, including all the expression bodies that C# 7 also made possible.
+Example of now valid usage:
+<code>
+string argument = args.Length > 2 ? args[2] : throw new ArgumentException("Name not found");
+</code>
+
 #Recommended Usage
 
 You can throw:

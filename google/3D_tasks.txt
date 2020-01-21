@@ -1,0 +1,7 @@
+##Tasks
+
+A to do list.
+
+Not sharable. Private.
+
+Can drag-and-drop an email into Task list to link the email to a new Task.

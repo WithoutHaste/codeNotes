@@ -1,0 +1,20 @@
+##Arguments
+
+#Named Arguments
+
+You can name a specific argument to:
+1) specify an argument out of order
+2) improve legibility of the caller, like "what does that bool mean?"
+
+<code>
+public void MyMethod(int a, int b = 0, int c = 1)
+{
+}
+
+MyMethod(5, c: 6);
+</code>
+Named arguments must come after all unnamed arguments.
+
+(.Net 7.2)
+
+You can now use named arguments before unnamed arguments, provided they are in their correct position.

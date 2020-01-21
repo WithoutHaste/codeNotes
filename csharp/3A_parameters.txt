@@ -55,6 +55,16 @@ public void DemoOutKeyword()
 }
 </code>
 
+As of C# 7, you can declare the out argument inline with the method call:
+<code>
+public int? ToInt(string input)
+{
+	if(int.TryParse(input, out int result)
+		return result;
+	return null;
+}
+</code>
+
 #Ref
 
 'ref' can be used to cause a parameter to be passed by reference.  The variable must be initialized before passing it in.  The variable's value does not have to be changed within the function.
@@ -71,6 +81,46 @@ public void DemoRefKeyword()
 	Console.WriteLine("Before: {0}", x);
 	ChangeValue(ref x);
 	Console.WriteLine("After: {0}", x);
+}
+</code>
+
+As of C# 7, you can also explicitly return a reference.
+This example finds an element in a matrix and returns a reference to the selected element:
+<code>
+public static ref int Find(int[,] matrix, Func<int, bool> predicate)
+{
+	for (int i = 0; i < matrix.GetLength(0); i++)
+		for (int j = 0; j < matrix.GetLength(1); j++)
+			if (predicate(matrix[i, j]))
+				return ref matrix[i, j];
+	throw new InvalidOperationException("Not found");
+}
+
+ref var item = ref MatrixSearch.Find(matrix, (val) => val == 42);
+item = 24; //overwrites the contents of that cell in the matrix
+
+var item = ref MatrixSearch.Find(matrix, (val) => val == 42);
+item = 24; //just this copy of the value is modified, the matrix is not affected
+</code>
+"ref locals" cannot be used with async methods.
+
+As of C# 7.2, you can explicitly return a readonly reference.
+<code>
+public static ref readonly Object MyMethod()
+{
+	return ref someObject;
+}
+</code>
+The returned object cannot be edited by the caller.
+
+#In
+
+As of C# 7.2, an "in" parameter is passed by reference but will not be edited inside the method.
+
+<code>
+public void MyMethod(in Person person)
+{
+	//do something
 }
 </code>
 

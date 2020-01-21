@@ -1,0 +1,7 @@
+##Keep
+
+Google Keep is for notes.
+
+Notes can be linked to Email and other stuff.
+
+Color coding, labels, to do lists, share with coworkers in real-time, etc.

@@ -31,6 +31,16 @@ Structs cannot define default field values.
 
 Structs can now define explicit parameterless constructors.
 
+(.Net 7.2)
+
+Structs can now be declared readonly. This is now an immutable data type.
+<code>
+public readonly struct Point
+{
+	//...
+}
+</code>
+
 ##Inheritance
 
 #Classes

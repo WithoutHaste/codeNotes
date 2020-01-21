@@ -23,6 +23,24 @@ int b = numbers[++index]; //b = numbers[3]
 
 In a for loop like (int x=0; x<length; x++) it does not make a difference.
 
+#Conditional Operator
+
+Aka Ternary Operator
+
+The Conditional Operator is used to write a Conditional Expression.
+
+A single-line if/else statement:
+<code>
+bool result = (1 < 2) ? true : false;
+</code>
+
+(.Net 7.2)
+
+Can produce a ref result.
+<code>
+ref var r = ref (array != null ? ref array[0] : ref otherArray[0]);
+</code>
+
 #Null Coalesce (??)
 
 <code>
@@ -150,7 +168,7 @@ int x = default(0); //x = 0
 
 You can define your own default value on classes and structs.
 
-As of C# 7.0, you can use just "default" instead of "default(type)" anywhere the compiler can infer the type. This is called the Default Literal Operator.
+As of C# 7.1, you can use just "default" instead of "default(type)" anywhere the compiler can infer the type. This is called the Default Literal Operator.
 <code>
 public Object MyMethod(List<int> list = default)
 {

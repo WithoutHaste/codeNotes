@@ -1,0 +1,210 @@
+##GMail
+
+#Menus
+
+Upper-left three-line icon: show/collapse left-hand menu.
+
+Action Row is the button bar at the top of the Messages.
+
+The ? in a circle icon > Help > opens 24/7 support.
+
+In left-hand menu > the "Compose" or "Plus" button > start a new email.
+
+GSuite launcher lets you go to other Google apps.
+You can drag-and-drop app icons in the launcher to reorder them.
+
+The gear icon for Settings.
+
+Right-hand menu > quick access to other Google apps, such as Calendar > click to open a Pane next to GMail
+- In Calendar > click ... icon to change viewing settings
+- In Calendar > click a meeting to see the details
+- In Calendar > meeting > click the envelope icon to email all guests of the meeting
+- Click the X icon to close the pane
+
+#Settings
+
+Gear icon >
+
+General Tab:
+Maximum Page Size
+Hover Actions > on/off
+Default Text Styles
+Grammar > on/off
+Spellings > on/off
+Autocorrect > on/off
+Smark Compose > on/off
+Conversation Threads > on/off
+Preview Pane > Mark conversation as read after X time
+Desktop Notifications
+  - will require "Allow" when the browser asked you for confirmation
+Stars > order and show/hide of Star options
+Signature Tool
+Vacation Responder (Out of Office)
+  - not linked to Calendar
+  - Save Changes to complete setup
+  
+Labels Tab:
+System Labels > show/hide each
+  - if you delete a label, the messages are not deleted, the sticky note is just removed from the messages
+
+Inbox Tab:
+
+Account Tab:
+
+Filters and Blocked Addresses Tab:
+
+Advanced Tab:
+Preview Pane
+Templates
+Custom Keyboard Shortcuts
+
+Offline Tab:
+Sync Settings between online and offline usage
+
+Themes:
+Background Image
+
+#Screen Setup
+
+Gear Icon > Display Density > how densly messages are displayed.
+
+Gear Icon > Configure Inbox > put different tabs at the top of the screen.
+- Google can pre-sort emails in to tabs: Primary, Social, Promotion, Update, Forum.
+- You cannot rename these tabs, Google manages this whole thing.
+
+Left-hand menu > Inbox down-arrow > select Inbox Type.
+- ex: Unread first or Starred first
+- Priority Inbox is good for managing lots and lots of email
+
+Gear Icon > Settings > can make it look more this Outlook.
+
+Newspaper Icon (next to Gear Icon) > set how the screen is split into panes.
+
+#Labels
+
+GMail doesn't have "folders", it has "labels".
+
+You can drag-and-drop a message to a Label, but it's really intended to drag-and-drop Labels onto Messages.
+Like a sticky note.
+You can apply more than one to each Message.
+
+Labels you've chosen to hide/make inactive are visible under "More" in the left-hand menu.
+
+Left-hand menu > "Manage Labels" and "Create New Label" to create/edit labels.
+
+Labels can be nested under each other.
+- the label appears with the full path to the label
+
+Labels all show up in the left-hand menu.
+- click ... icon to set the color
+
+What labels to make?
+- Make labels based on the next action needed on messages, such as "Follow Up", "Reply With Deliverable", "Request Signature"
+- Make labels based on deadlines, such as "Due Today", "Due End Of Month"
+Now when you click on those labels, you'll see all Messages marked with that label.
+
+#Important Tab
+
+Little gold blocky-left-arrow.
+Future messages from the same sender will be auto-marked Important.
+
+#Star
+
+Click on a star once to Star the message.
+Click multiple times to cycle through other Star types (such as Question Mark and Exclamation Point).
+
+#New Message Dialog
+
+Dialog
+- click double-headed-arrow to enlarge the dialog.
+- Shift+ComposeButton > the new message dialog opens in its own window.
+
+To
+- start typeing, or click on "To" to open a list of contacts.
+- in list of Contacts > select contacts > Manage Labels > Create Labels > this will save a Group of contacts that can be reused (just by you)
+- can drag Contacts from To field to CC or BCC fields.
+
+Subject
+- there is no "mark important" button - write an informative subject instead
+
+Body
+- your signature will be automatically added - and you can edit it per-email
+
+Body > Smart Compose
+- auto-suggestions for how to complete a sentence
+- use arrow-key or space to accept the suggestion
+- there's also auto-correct for spelling and grammar errors
+
+Button bar
+- Send button down-arrow > schedule when the email will be sent
+- underlined A icon > undo/redo/font/size/style/color/justification/lists/indentation
+- paper clip icon > attachments, 25MB limit per message
+  - or drag-and-drop file/email into dialog
+- usb icon > add hyperlinks or convert highlighted text to a hyperlink
+- happy face icon > add emojies
+- triangle icon > Google Drive > for large files, upload to Google Drive and include a link to that in the email
+- mountain photo icon > add images
+- lock and clock icon > confidential mode
+- money icon > 
+- ... icon > spell checking, labels (just for your benefit), templates, default to full screen, other misc operations
+  - templates insert reusable text rather then replacing the entire email, so you can build an email piece-meal
+- trash icon > delete this, do not save as draft
+  
+Composed emails that were closed without being sent are saved automatically to Drafts.
+
+#Messages
+
+Bold text is new email.
+New mail sorted straight into a Label will still show up bold.
+
+Messages from you default to from "me".
+
+Based on your view, Messages may list their attachments so you can open them directly.
+
+Hovering over an email will show message-specific options.
+- RSVP for meeting invites
+
+Shift+ClickEmail > email opens in new window.
+
+Message Details > Action Bar
+- down arrow icon > Archive email
+  - archived messages are still available in All Mail (and under any Label added to the message)
+- exclamation icon > report as Spam
+- trash can icon > delete this message, place in Trash
+  - default: anything in the trash for 30 days is deleted
+- envelope icon > mark as Read or Unread
+- clock icon > snooze > remind me of this message later
+- right arrow folder icon > Move To > removes Inbox Label and adds the selected Label
+- bookmark icon > add multiple Labels to this email
+- ... icon > misc actions
+  - Filter Messages Like These > similar to Outlook filters
+
+right-hand options
+- paperclip icon > attachments
+- swoopy left arrow > reply
+- 
+
+Download All attachments will put them into a zip file.
+
+#Search
+
+Find all emails from a person: right-click the email > Find Emails From.
+
+In search bar: "from:name_or_address".
+
+In search bar: "text" searches for messages containing "text" anywhere.
+In search bar: "text, other" searches for messages containing both "text" and "other".
+
+In the search bar > click the down-arrow for advanced options.
+
+#Conversation Threads
+
+Google groups threads/conversations together with the newest at the bottom.
+
+Turned on by default.
+
+In the Inbox view, there'll be a number next to "from" showing how many messages are in the conversation.
+
+If you Edit Subject in a reply in a conversation, it will create a new conversation.
+
+To turn Threads off: Gear Icon > Settings > General Tab > Conversations

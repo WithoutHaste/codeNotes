@@ -1,0 +1,10 @@
+##Contacts
+
+#Delegate Access
+
+Shares all of your contacts, and all access to them, with another user.
+
+#Export
+
+Export full contact list with others, but does not give any edit access to your list.
+They just import a copy of your contacts to their list.

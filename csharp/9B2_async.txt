@@ -1,0 +1,27 @@
+##Async
+
+#C# 7 ValueTask
+
+Asynchronous methods can return a ValueTask<T> object.
+This improved performance in some use cases.
+
+#C# 7.1 Async Main
+
+You can make a Main method asynchronous now.
+
+Previously:
+<code>
+static int Main()
+{
+	return DoAsyncWork().GetAwaiter().GetResult();
+}
+</code>
+
+Now:
+<code>
+static async Task<int> Main()
+{
+	return await DoAsyncWork();
+	//or just put the body of DoAsyncWork here
+}
+</code>

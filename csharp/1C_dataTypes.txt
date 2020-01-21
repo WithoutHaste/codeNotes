@@ -1,16 +1,57 @@
-##Int
+##Numerics
 
-##Float
+#Int
+
+32-bit integer.
+
+#Long
+
+64-bit integer.
+
+#Float
 
 32-bit floating point number. Can hold 7 significant digits.
 
 Cannot accurately store all numbers within its precision range.
 
-##Double
+#Double
 
 64-bit floating point number - more precise than float. Can hold 15 to 16 significant digits.
 
 Cannot accurately store all numbers within its precision range.
+
+#Decimal
+
+128-bit floating point number - more precise than double. Can hold 28 to 29 significant digits. Comes with slower operations.
+
+Decimal can accurately store any number within its precision range.
+
+#Binary
+
+Binary literal
+<code>
+public const int Sixteen =   0b00010000;
+public const int ThirtyTwo = 0b00100000;
+public const int SixtyFour = 0b01000000;
+</code>
+"0b" prefix indicates a binary number.
+
+#Digit Separator
+
+As of C# 7, you can insert the "_" digit seperator anywhere in a number literal to improve its legibility.
+
+<code>
+public const int Sixteen =   0b0001_0000; //base 2
+public const long BillionsAndBillions = 100_000_000_000; //base 10
+public const double AvogadroConstant = 6.022_140_857_747_474e23; //base 10 decimal places
+</code>
+
+(.Net 7.2)
+
+Binary and hexadecimals can have the digit separator right after the prefix:
+<code>
+public const int Sixteen =   0b_0001_0000; //base 2
+</code>
 
 #NaN
 
@@ -35,12 +76,6 @@ if(Double.IsPositiveInfinity(x))
 {
 }
 </code>
-
-##Decimal
-
-128-bit floating point number - more precise than double. Can hold 28 to 29 significant digits. Comes with slower operations.
-
-Decimal can accurately store any number within its precision range.
 
 ##Strings
 
@@ -244,9 +279,136 @@ int colCount = myArray.GetLength(1);
 int depthCount = myArray.GetLength(2);
 </code>
 
-##List<T>
+##List{T}
 
 x64 Platform: generic list size limited to 2GB
 Limit can be overridden with <gcAllowVeryLargeObjects enabled="true" />
 
 Lists use a doubling algorithm: if they need more space, the double of their current space will be allocated to them. You can specify how much space they start with when you initialize the list.
+
+##Tuple
+
+C# 4 and above.
+
+A tuple is a data structure containing an ordered sequence of values of (possibly) different types.
+Tuples are used where you need a new Type, but don't want to define a new Type.
+
+Tuples can hold up to 8 elements.
+Tuples are immutable.
+Tuples are references types.
+
+#Accessing
+
+<code>
+Tuple<int, string, string> person = new Tuple<int, string, string>(1, "Steve", "Smith");
+
+var person = Tuple.Create(1, "Steve", "Smith");
+
+Console.WriteLine(person.Item1); //outputs 1
+Console.WriteLine(person.Item2); //outputs Steve
+</code>
+
+The 8th element is saved (by default) as a tuple.
+<code>
+var nums = Tuple.Create(1, 2, 3, 4, 5, 6, 7, 8);
+
+Console.WriteLine(nums.Item7); //outputs 7
+Console.WriteLine(nums.Rest); //outputs (8)
+Console.WriteLine(nums.Rest.Item1); //outputs 8
+</code>
+
+You can nest tuples inside tuples to store more than 8 elements.
+Recommendation: don't. Create a proper Type for this data.
+
+#Parameter
+
+You can have tuple parameters.
+
+<code>
+public void MyMethod(int x, Tuple<int, string, string> y)
+{
+}
+</code>
+
+#Return
+
+You can return tuples.
+This is a way to return multiple values without a specific Type, nor by using out, nor ref.
+
+<code>
+var x = MyMethod();
+
+public Tuple<int, string, string> MyMethod()
+{
+	return Tuple.Create(1, "Steve", "Smith");
+}
+</code>
+
+#Deconstruct
+
+This is called deconstructing a tuple.
+It breaks a tuple's values into separate variables.
+
+<code>
+var (age, name) = MyMethod();
+
+(int age, string name) = MyMethod();
+
+int age;
+string name;
+(age, name) = MyMethod();
+</code>
+
+As of C# 7, you can ignore some tuple elements while destructuring by using the "discard" operator "_".
+<code>
+public Tuple<int, string, int, string, string> MyMethod()
+{
+	return (1, "TX", 23, "Engineer", "Smith");
+}
+
+var (_, _, age, _, name) = MyMethod();
+</code>
+
+As of C# 7.1, tuple element names will default to the names of variable arguments:
+<code>
+int age = 23;
+string name = "Smith";
+var person = (age, name);
+Console.WriteLine(person.name); //outputs Smith
+</code>
+
+#C# 7 ValueTuple
+
+A ValueTuple is a value-type Tuple.
+
+Support named members:
+<code>
+(int age, string name) person = (23, "Smith");
+
+var person = (age: 23, name: "Smith");
+
+Console.WriteLine(person.name); //outputs Smith
+</code>
+Unnamed members can still be accessed by ".Item1" etc.
+
+Return:
+<code>
+static (int, string) MyMethod()
+{
+	return (23, "Smith");
+}
+
+var (age, name) = MyMethod();
+
+Console.WriteLine(name); //outputs Smith
+</code>
+<code>
+static (int age, string name) MyMethod()
+{
+	return (23, "Smith");
+}
+
+var person = MyMethod();
+
+Console.WriteLine(name); //outputs Smith
+</code>
