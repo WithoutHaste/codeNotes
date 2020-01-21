@@ -521,5 +521,32 @@ class MyType
 }
 </code>
 
+#unsafe
+
+Any block of code that uses pointers must be marked unsafe.
+
+Unsafe code is unverifiable code.
+Strong typing cannot be verified by the CLR when using pointer arithmetic.
+It is the programmers job to ensure they do not introduce security risks or pointer errors.
+
+Well written pointer operations can increase application performance.
+
+The assembly will need to be compiled with the "-unsafe" option.
+
+You can use unsafe on a Type declaration or a Member.
+
+Marking a method:
+<code>
+unsafe static void MyMethod()
+{
+}
+</code>
+
+Marking a block of code:
+<code>
+unsafe
+{
+}
+</code>
 
 	

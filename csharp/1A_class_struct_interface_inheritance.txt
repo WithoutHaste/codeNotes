@@ -24,9 +24,105 @@ Interfaces can be declared within a class.
 (.Net 8)
 
 Interfaces can define default implementations of their methods.
-These default can be inherited or overriden by the child class.
+These default can be overriden by the child class.
 
-The intent is that API authors can add more methods to an in-use interface without forcing all users to immediately update.
+The intent is that API authors can add more methods to an in-use interface without forcing all users to immediately update their code.
+
+Note that Classes that inherit from Interfaces with default implementations DO NOT inherit the implementations.
+Thus, the allowance for inheriting from multiple Interfaces continues.
+What happens is that the consumer may cast their instance of the Class to the Interface type to access the default implementation.
+And there is no compilation error that the new method has not been implemented in the inheriting Class.
+- Tested and verified this is how it works, despite conflicting articles from Microsoft.
+
+<code>
+public interface IInterface
+{
+	int Random(int a, int b)
+	{
+		return a + b;
+	}
+	
+	int Subtract(int a, int b);
+}
+
+public class MyClass : IInterface
+{
+	public MyClass()
+	{
+	}
+
+	public int Subtract(int a, intb)
+	{
+		return a - b;
+	}
+}
+
+MyClass instance = new MyClass();
+Console.WriteLine(instance.Subtract(10, 2)); //outputs 8
+Console.WriteLine(instance.Random(10, 2)); //compilation error
+Console.WriteLine((instance as IInterface).Random(10, 2)); //outputs 12
+</code>
+
+To override a default interface implementation:
+<code>
+public class MyClass : IInterface
+{
+	public MyClass()
+	{
+	}
+
+	public int Subtract(int a, intb)
+	{
+		return a - b;
+	}
+	
+	//Note that the override keyword is not used
+	public int Random(int a, int b)
+	{
+		return 4;
+	}
+}
+</code>
+You cannot call back to the default implementation, the way you could call back to a base class's implementation.
+
+Interfaces can also now include Static Members to better support this new use case.
+Interfaces can also now include Access Modifiers to better support this new user case.
+
+Example of providing a default implemenation with settings to make it more widely useful:
+<code>
+private static TimeSpan length = new TimeSpan(365 * 2, 0,0,0); // two years
+private static int orderCount = 10;
+private static decimal discountPercent = 0.10m;
+
+public static void SetLoyaltyThresholds(TimeSpan ago, int minimumOrders = 10, decimal percentageDiscount = 0.10m)
+{
+	length = ago;
+	orderCount = minimumOrders;
+	discountPercent = percentageDiscount;
+}
+
+public decimal ComputeLoyaltyDiscount() => DefaultLoyaltyDiscount(this);
+protected static decimal DefaultLoyaltyDiscount(ICustomer c)
+{
+	DateTime start = DateTime.Now - length;
+	if ((c.DateJoined < start) && (c.PreviousOrders.Count() > orderCount))
+	{
+		return discountPercent;
+	}
+	return 0;
+}
+</code>
+
+Example use case of enabling object composition:
+<code>
+interface ILight ...
+interface ITimerLight : ILight ...
+interface IBlinkingLight : ILight ...
+
+public class LedLight : IBlinkingLight, ITimerLight, ILight
+{
+}
+</code>
 
 #Structs
 

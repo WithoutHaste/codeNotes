@@ -91,6 +91,7 @@ Accept any parameter that is passed by ref: (As of Moq 4.8)
 mock.Setup(i => i.Method(ref It.Ref<MyType>.IsAny));
 </code>
 
+With argument constraints:
 Accept any parameter by type and condition:
 <code>
 mock.Setup(i => i.Method(It.Is<int>(i => i % 2 == 0)));
@@ -128,6 +129,8 @@ mockRepository
 //by default, all other cases will just return null
 //behavior verified by stepping through test cases
 </code>
+The default behavior (with no setup) is to return null.
+Be aware that doing multiple setups of the same expression method is flaky as hell. Best to do one setup for each test, and as long as you don't get null back, the setup worked.
 
 I've tried this simpler syntax, but it returns null in all cases. Do not use.
 <code>
