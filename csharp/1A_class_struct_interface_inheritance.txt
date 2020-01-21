@@ -21,6 +21,13 @@ When defining Property signatures, an interface can define read and/or write acc
 Interfaces can be internal. If so, all its members will also be internal.
 Interfaces can be declared within a class.
 
+(.Net 8)
+
+Interfaces can define default implementations of their methods.
+These default can be inherited or overriden by the child class.
+
+The intent is that API authors can add more methods to an in-use interface without forcing all users to immediately update.
+
 #Structs
 
 Structs define value-types.
@@ -40,6 +47,26 @@ public readonly struct Point
 	//...
 }
 </code>
+
+(.Net 8)
+
+Mark methods as readonly if they do not modify the state of the struct.
+<code>
+public readonly override string ToString()
+{
+	return $"({X}, {Y}) is {Distance} from the origin";
+}
+</code>
+You'll get a compiler warning if a readonly method accesses a non-readonly method or property accessor.
+
+Mark properties as readonly if they never change state.
+The compiler does not assume that Get accessors do not change state, so not having a Set accessor is insufficient.
+<code>
+public readonly double Distance => Math.Sqrt(X * X + Y * Y);
+</code>
+The compiler will assume that all auto-generated Get accessors are readonly.
+
+The compiler enforces the rule that readonly members do not alter state.
 
 ##Inheritance
 

@@ -90,6 +90,12 @@ public void MyMethod<T,U>(int a, string b) where T:AbstractClass,new() { }
 </code>
 All the same constraints can be applied to a generic method. The constraints go between the parameter list and the method body.
 
+(.Net 7.3)
+
+Constraint by type System.Enum.
+Constraint by type System.Delegate.
+Constraint where type is unmanaged.
+
 #Example: Paired Strongly-Type Generic Derivatives
 
 Example demonstrating using abstract generic classes to create a paired set of derived classes that return strong-typed values.
