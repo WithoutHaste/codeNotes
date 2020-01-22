@@ -1,0 +1,120 @@
+##Calendar
+
+#Menus
+
+Upper-left > three line icon > expand/collapse left-hand menu
+
+Left-hand menu > Compose button (plus icon) > will init a new event to current date/time.
+Click on a slot in the calendar > will init a new event for that date/time.
+
+Left-hand menu > mini calendar > quick navigation of main calendar view
+- supports click-drag to select multiple days
+
+Top bar > magnifying glass icon > Search
+
+Top bar > question mark icon > Help
+
+Top bar > gear icon > Settings, Trash, Desity, Color, Print
+- print won't print solid blocks of color, just the outlines
+
+#Views
+
+Top bar > Today button > quick navigate to current day
+
+Top bar > Day/Week/etc drop down > select View
+
+Google Chrome > numbers 1 through 6 > quick keys to different calendar views
+- 1 = Day view
+- 2 = Week view
+- 3 = Month view
+- 4 = your custom view
+- 5 = Schedule view
+- 6 = Year view
+
+Keyboard shortcut "t" > go to Today
+Keyboard shortcut "g" > opens dialog to go to selected date
+
+Gmail > Calendar Pane > ... > select Day or Schedule view
+Day: one whole day shown
+Schedule: just events shown in order
+
+Gmail > Calendar Pane > ... > select other Calendars
+Check off all the calendars you want to see overlaid at one time
+
+An event on the calendar with a clock icon on it > someone has proposed a new time
+
+When you view other people's calendars, the color is up to you
+
+Left-hand menu > can display Reminders and Tasks in calendar
+- Reminder is an event type in calendar
+- Reminders are better integrated with calendar than Tasks are, they'll track when the Reminder is completed
+
+#Settings
+
+General:
+Language and Region
+Timezone
+World Clock
+Event Settings
+- Default event duration
+- Default guest permissions
+- Automatically add invites to calendar
+- Notifications
+View Options
+- show weekends
+- view declined events
+- week start day
+Working Hours
+- set your typical working hours so others can see it
+
+Settings per Calendar:
+Share with Specific People
+- give other people access to your calendar
+Event Notifications
+- email about upcoming events or a popup, etc
+All Day Event Notifications
+- what time of day do you want reminders?
+General Notifications
+- new events, changes to events
+- send a daily agenda to yourself each morning
+
+#Create Events
+
+Click on date/time slot in calendar > open new event dialog
+Click-drag across several hours on calednar > open a new event dialog for that time range
+
+Click between date and calendar > init an all day event
+- schedule it across all your work hours, to really show the time is blocked
+
+Can add more details from normal dialog
+Or click left-hand menu Meet With to jump into details
+- Find a Time is available in detailed view > to ensure your invitees can meet at that time
+- in Find a Time, simply click around to change when the event is scheduled
+- diagonal shaded areas are "not at work" times, also shown as a purple moon icon next to the invitees
+
+Color coding is totally up to you
+
+"Public" is public within the domain
+
+Attachments will be uploaded to Google Drive
+- if data is sensitive, send by email instead
+
+Guests/invitees with an asterisk (*) have calendars you cannot see
+- so you can't tell when they are available
+
+Click on the person icon next to each invitee to make them optional/required
+
+"Out of Office" type events
+- can select "Automatically decline events that overlap"
+
+#Invites
+
+Notes added to an invite are public and listed with your RSVP.
+
+#Gmail
+
+Gmail > Message Details > ... in top bar > Create Event > will create a meeting in Calendar with all email-to list as invitees.
+
+#Tasks
+
+Tasks with due dates and times will be added to your Calendar
