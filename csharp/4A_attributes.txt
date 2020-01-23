@@ -2,7 +2,20 @@
 
 #Caller
 
+Get calling method name with stack trace:
+<code>
+using System.Diagnostics;
+
+public void MyMethod()
+{
+	StackTrace stackTrace = new StackTrace();
+	string callingMethodName = stackTrace.GetFrame(1).GetMethod().Name;
+}
+</code>
+
 (.Net 4.5)
+
+Get calling method name with built-in reflection
 
 Uses reflection to provide runtime information:
 <code>

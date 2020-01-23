@@ -1,0 +1,219 @@
+##Drive
+
+#What is it
+
+A file storage facility.
+Can convert file formats.
+Can create and edit files.
+
+Think of folders/filenames as URLs.
+
+Files can be shared with up to 50 people at a time.
+They can edit the file in parallel.
+
+#Menus
+
+Upper-left > New or Plus button > create new file
+
+Left-hand menu > Priority
+- shortcuts to important files
+
+Left-hand menu > My Drive
+- this is the default view
+- this view is private to you
+- all files here are owned by an individual user
+
+Left-hand menu > Shared Drives
+- files are not shared be individuals, but by a group
+
+Left-hand menu > Shared with me
+- files that others have shared with you
+- you can share a link to one of these files with your My Drive view, for easier access
+  - select the file > triangle plus icon > Add to My Drive
+  - in My Drive > select file link > trashcan icon > Remove link from My Drive (does not delete file)
+  
+Only the owner of a file/folder can delete it.
+Everyone else can only delete their link to it.
+
+Left-hand menu > Recent
+- recently viewed files
+
+Left-hand menu > Starred
+- use this category anyway you see fit
+- select a file > right-click > Add to Starred (or Remove from Starred)
+
+Left-hand menu > Trash
+- like the Windows recycle bin
+- can restore
+- can delete for good
+
+Top bar > i icon > one Pane for selected file
+- view details
+- view activity (what is everyone doing with this file)
+- add a description (bottom of view details)
+  - this is searchable metadata
+  - this is only way to edit the metadata
+  
+Top bar > grid icon > change View
+
+#Settings
+
+Gear icon in top bar.
+
+Get Drive File Stream for Windows
+- downloads links to all your files so you can work on them from your desktop
+- Windows system tray with have Drive icon
+- Windows explorer will list Google Drive next to C:/ drive
+- files are edited in the desktop programs you're used to
+- all files still exist on the cloud
+- Drive syncs when you edit a file
+
+Keyboard Shortcuts
+- Shift+z > add link to file to multiple folder
+
+General:
+Offline (not the same as Drive Stream, only works on Google formatted files)
+Density
+Suggestions
+- can toggle Quick Access
+- make Priority your default page
+
+Notifications:
+Browser
+- enable browser notifications
+Notify Me About
+Email
+- get updates via email
+
+Managed Apps:
+3rd party apps
+
+#File Types
+
+Forms: surveys, feedback
+
+Drawings: flowcharts, like visio
+
+Maps
+
+Sites
+
+Data Studio
+
+Jamboard
+
+Google Doc: like Word
+
+When you open a new file, start by clicking "Untitled" and filling in the title.
+
+#Views
+
+Quick Access > Google's best guess of what you'll want to see
+- can be turned off in Settings > General > Suggestions
+
+Grid View
+- large icon view
+
+List View
+- looks like a folder/file view (folders first, then files)
+- folder icon with person in it is a Shared Folder
+- person icon next to filename is a Shared File
+- number icon next to filename indicates updates have occurred since you last view the file
+
+Selected File > Top Bar
+- usb icon > get sharable link to file
+- person plus icon > share file
+- eye icon > preview file
+- trash icon > delete file
+
+#Workspaces
+
+Under Priority view - you have private workspaces
+This is an organizational tool
+
+Create > name workspace > add files
+
+select file anywhere > right-click > Add to Workspace
+
+select file in workspace > ... icon > Remove from Workspace
+
+select file in workspace > ... icon > Hide
+select a workspace > ... icon > Unhide
+
+select a workspace > ... icon > Remove Workspace
+- files are not deleted
+
+#Shared Drives
+
+No individual owners.
+These files aren't in anyone's My Drive.
+
+Add members > set roles
+
+#Folders
+
+New button > Folder > name the folder > creates new folder
+
+Can change folder color.
+
+Can create a private folder, then share a folder within it.
+Top bar > person plus icon > share file or folder
+- recommended to always use Advanced options for this
+- recommended to only share with Specific People
+
+Permissions:
+View
+View and Organize (add/subtract from folder)
+Can also prevent editors from changing permissions or adding more people.
+Access can have a expiration time.
+
+Can drag-and-drop folders in/out of other folders.
+
+#Files
+
+New > File Upload > select file
+- Keep As Separate File is an option when you've uploaded the same file before
+- If you don't keep it separate, it will merged as a new version of that file
+
+select file > right-click > Manage Versions
+- see the different versions of a file
+- only for Microsoft formats (Google formats have all versioning embedded in file)
+
+Microsoft format files can be edited through Google without having Microsoft's software.
+- but you won't have all the features, because it is Google's version
+
+All file edits are auto-saved.
+
+Convert Microsoft format to Google format:
+- Excel => Sheets > you will lose your Macros
+- Powerpoint => Slides > you will need to reconnect audio/video sources
+
+Sharing:
+select file > person plus icon > Advanced > share file
+
+Permissions:
+Edit (everything except delete)
+Comment (all edits are suggestions only)
+View (read only)
+Can disable Download/Print/Copy
+
+Can drag-and-drop files into other folders.
+
+#Homepages
+
+Docs, Sheets, etc all have a homepage.
+
+You can create files from templates here.
+Can also access templates from Drive > New > From Template
+
+#Gmail
+
+Just click on an attachment to see a preview of it.
+- from here > triangle plus icon > add file to Drive
+
+From Message Detail > triangle icon > add all attachments to Drive
+- or hover over one attachment > triangle icon > add attachment to Drive
+
+In search > advanced > can look for messages with attachments
+- or in search bar > has:drive, filename:pdf, etc
+- see Help > "advanced" > for more advanced search options
