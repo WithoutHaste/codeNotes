@@ -172,6 +172,13 @@ Filters elements by a conditional statement
 IEnumerable<Student> students = students.Where(x => x.LastName == "Roberts");
 </code>
 
+#OfType
+
+Filters elements by their Type
+<code>
+IEnumerable<Student> students = people.OfType<Student>();
+</code>
+
 #Union
 
 Given two enumerables, returns the distinct elements of both enumerables together.

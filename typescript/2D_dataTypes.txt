@@ -1,0 +1,128 @@
+##Data Types
+
+#Boolean
+
+<code>
+let x: boolean = false;
+</code>
+
+#Number
+
+As with JavaScript, all TypeScript numbers are floating-point numbers.
+
+<code>
+let decimal: number = 6;
+let hex: number = 0xf00d;
+let binary: number = 0b1010;
+let octal: number = 0o744;
+</code>
+
+#String
+
+String literals:
+<code>
+let x: string = "text";
+let y: string = 'text';
+</code>
+
+Template strings:
+<code>
+let fullName: string = `Bob Bobbington`;
+let age: number = 37;
+let sentence: string = `Hello, my name is ${ fullName } and I'm ${ age } years old.`;
+</code>
+
+#Array
+
+<code>
+let x: number[] = [1, 2, 3];
+let y: Array<number> = [1, 2, 3];
+let z:number = x[0];
+</code>
+
+#Tuple
+
+Tuples have a fixed length, and can contain elements of different types.
+
+<code>
+let x:[string, number] = ["Steve", 86];
+let y: string = x[0];
+</code>
+
+#Enum
+
+<code>
+enum Color {Red, Green, Blue}
+let c: Color = Color.Green; //1
+let s: string = Color[1]; //Green
+</code>
+
+Default numbering starts at 0.
+You can initialize the number explicitly.
+<code>
+enum Color {Red=5, Green, Blue}
+</code>
+Or explicit set all numbers
+<code>
+enum Flags {Red=1, Green=2, Blue=4, White=8}
+</code>
+
+#Any
+
+Any is an anonymous type. These values come from dynamic content.
+Any opts out of type checking.
+
+<code>
+let x: any = 4;
+x = false;
+x = "text";
+</code>
+
+#Void
+
+Void is the absence of a value.
+Void is commonly used as a return type to indicate no data is returned.
+
+<code>
+function print(message): void {
+	console.log(message);
+}
+</code>
+
+#Null, Undefined
+
+With --strictNullChecks turned on, null and undefined can only be assigned to any-type variables.
+
+#Never
+
+Never is a type that never occurs.
+It can be used as a return type instead of void.
+
+<code>
+function error(message: string): never {
+	throw new Error(message);
+}
+</code>
+
+Never can be assigned to all other types.
+
+#Object
+
+Non-primitive types; not a number, string, boolean, bigint, symbol, null, or undefined.
+
+<code>
+function create(o: object | null): object {
+	return new Whatever();
+}
+</code>
+
+#Type Assertions
+
+Type assertions are for when you know more about the type than the compiler does.
+A type assertions forces a conversion, with no checking or validation.
+
+<code>
+let x: any = "text";
+let y: number = (<string>x).length;
+let z: number = (x as string).length;
+</code>

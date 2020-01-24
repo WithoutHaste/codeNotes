@@ -1,0 +1,117 @@
+##Module
+
+#Module
+
+Modules were previously called External Modules.
+
+Modules are executed within their own scope, not the global scope.
+Variables/functions/classes/etc declared in a Module are not visible outside the Module unless they are explicitly Exported.
+An exported declaration from a Module must then be imported to be used elsewhere.
+
+In Typescript, any file containing top-level import or export commands is considered a Module.
+All other files are treated as Scripts.
+
+#Script
+
+In Typescript, a Script is any file with no top-level import or export commands.
+
+Scripts exist in the global scope.
+
+#Namespace
+
+Namespaces were previously called Internal Modules.
+
+#Declaration
+
+A Declaration is any statement that declares a variable, function, class, type alias, or interface.
+A Declaration can be exported from a Module.
+
+#Export
+
+Add the export keyword before the Declaration to make is accessible outside the current Module.
+<code>
+export interface MyValidator {
+}
+</code>
+
+Alias an export
+<code>
+class MyValidator {
+}
+
+//not sure why the example lists both, do I need both?
+export { MyValidator };
+export { MyValidator as XyzValidator };
+</code>
+
+Re-export: export a declaration from another Module without importing it into your Module
+<code>
+export {XyzValidator as GeneralValidator) from "./MyInterface";
+export * from "./File";
+export * as Utilities from "./MyInterface";
+</code>
+
+#Import
+
+Import declaractions that have been exported from other Modules.
+<code>
+import { MyValidator } from "./MyInterface";
+
+let x = new MyValidator();
+
+//cleaner syntax
+import type { MyValidator } from "./MyInterface";
+</code>
+Imports declaration MyValidator from file "./MyInterface.ts"
+
+Import multiple declarations
+<code>
+import { MyValidator, MyCalculator, MyUtilities } from "./MyInterface";
+</code>
+
+Alias a declaration
+<code>
+import { MyValidator as GeneralValidator } from "./MyInterface";
+
+let x = new GeneralValidator();
+</code>
+
+Import everything into one variable
+<code>
+import * as Library from "./MyInterface";
+
+let x = new Library.MyValidator();
+</code>
+
+Import just the side-effects (the changes to global state)
+<code>
+import "./MyInterface";
+</code>
+This is not recommended.
+
+#Default Export
+
+A module can optionally export one default export.
+
+jQuery example:
+<code>
+declare let $: JQuery;
+export default $;
+</code>
+
+Importing is different:
+<code>
+import $ from "jquery";
+
+$("button.continue").html("Next step...");
+</code>
+
+Class example:
+<code>
+//export from MyModule.ts
+export default class MyClass {
+}
+
+//import into Test.ts
+import x from "./MyModule";
+</code>

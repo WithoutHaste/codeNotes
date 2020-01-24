@@ -1,0 +1,9 @@
+##Inheritance
+
+#Instance Members
+
+Instance members can be inherited.
+
+#Static Members
+
+Static members can be inherited.

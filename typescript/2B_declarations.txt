@@ -1,0 +1,30 @@
+##Declarations
+
+#Interface
+
+#Class
+
+#Field
+
+A variable in a class/interface.
+
+#Property
+
+A property (field+getter+setter) in a class/interface.
+
+#Member Function
+
+A function in a class/interface.
+
+#Function
+
+A function in global (or module) scope.
+
+#Variable
+
+A variable in global (or module) scope.
+
+<code>
+myVariable: number = 3;
+myVariable: string = "text";
+</code>

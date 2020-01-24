@@ -1,5 +1,7 @@
 ##Syntax
 
+#Javascript
+
 First, valid JavaScript is always valid TypeScript.
 
 For instance, if you want an anonymous immediately invoking function, just write a JavaScript one:
@@ -7,4 +9,217 @@ For instance, if you want an anonymous immediately invoking function, just write
 (function() {
 	console.log("run");
 })();
+</code>
+
+#Braces
+
+Convention:
+<code>
+interface MyInterface {
+	myFunction(x: string) {
+		return x;
+	}
+}
+</code>
+
+#Capitalization
+
+As in JavaScript, names use camel case, starting with a lowercase letter.
+Ex: oneTwoThree
+
+Classes and Interfaces use camel case, starting with a capital letter.
+Ex: OneTwoThree
+
+#Comments
+
+<code>
+// single line comments
+
+/*
+ block comments
+*/
+</code>
+
+#Documentation Comments
+
+This is the convetion for TypeScript comments. It is supported by tools like VSCode.
+!![TSDoc](https://github.com/Microsoft/tsdoc)
+
+These comments are ignored unless they are on (immediately above) exported declarations.
+Or if they are the Package Documentation.
+
+Package Documentation
+<code>
+/**
+ * Package documentation summary.
+ *
+ * @remarks
+ * Package documentation remarks.
+ *
+ * @packageDocumentation
+ */
+
+/**
+ * Normal declaration documentation starts here
+ */
+export interface IWidget {
+}
+</code
+
+Documenting a function:
+<code>
+export class MyClass {
+	/**
+	 * Summary of member function here - be brief.
+	 * 
+	 * @remarks
+	 * lengthy remarks here
+	 *
+	 * @privateRemarks
+	 * remarks not intended for the public
+	 *
+	 * @example
+	 * example usage here
+	 * ```ts
+	 * This is a TypeScript formatted code snippet
+	 * ```
+	 *
+	 * @example
+	 * another example here
+	 *
+	 * @param x - description of x
+	 * @param y - description of y
+	 * @returns description of return value
+	 */
+	public static MyFunction(x: number, y: number): number {
+		return x + y;
+	}
+}
+</code>
+
+Documenting a variable:
+<code>
+/**
+ * Summary here
+ * 
+ * @defaultValue `true`
+ */
+export public x: boolean = true;
+</code>
+Default value should only be used on fields/properties of a class/interface.
+<code>
+ * literal value
+ * @defaultValue 3
+ *
+ * code span value
+ * @defaultValue `true`
+ *
+ * rich value
+ * @defaultValue An instance of the {@link Widget} object
+</code>
+
+Documenting a Getter and Setter:
+<code>
+/**
+ * Summary here
+ */
+export public get y(): string {
+	return "y";
+}
+export public set y(value: string) {
+	//do something
+}
+</code>
+Matched Getter and Setters are considered a single declaration, so just put documentation on the first one.
+
+Documenting a generic
+<code>
+/**
+ * A collection of items.
+ * @typeParam TItem - the type of the items in the collection
+ * @public
+ */
+export class ItemCollection<TItem extends object> {
+  private readonly _items: TItem[] = []
+
+  /**
+   * Add an item to the collection.
+   * @param item - the item to add
+   */
+  public add(item: TItem): void {
+      this._items.push(item);
+  }
+}
+</code>
+
+Override a member of a class:
+<code>
+export class MyClass extends MyBaseClass {
+	/**
+	 * {@inheritDoc MyBaseClass.MyFunction}
+	 * @override
+	 */
+	public static MyFunction() {
+	}
+}
+</code>
+Indicates the member is overriding an inherited member.
+
+Linking to another part of the documentation
+<code>
+export class MyClass {
+	/**
+	 * Add link to {@link module_name#declaration_name | link_display_text}
+	 * Add link to {@link local_declaration_name | link_display_text}
+	 * Add link to {@link http://url.com | link_display_text}
+	 */
+	public static MyFunction() {
+	}
+}
+</code>
+
+Inherit documentation from another declaration:
+<code>
+/**
+ * {@inheritDoc local_declaration_name}
+ * {@inheritDoc local_declaration_name.member_name}
+ * {@inheritDoc module_name#declaration_name}
+ */
+export class MyClass {
+}
+</code>
+Will copy Summary, Remarks, Params, TypeParams, and Returns.
+
+Documentation Modifiers: @alpha, @beta, @public, @internal, @virtual, @override, @sealed, @readonly, @deprecated
+Documentation Modifiers are NOT related to TypeScript privacy modifiers.
+Documentation Modifiers are applied recursively to all contained declarations.
+<code>
+export class MyClass {
+	/**
+	 * Summary of function here
+	 *
+	 * @beta @virtual
+	 */
+	public static MyFunction() {
+	}
+
+export class MyClass {
+	/**
+	 * Summary of function here
+	 * @deprecated Use {@link module_name#declaration_name.member_name} instead.
+	 */
+	public static MyFunction() {
+	}
+}
+</code>
+@internal - only intended for use by other Modules by this maintainer - not by 3rd parties
+@alpha, @beta - new functionality still being tested
+@public - functionality officially released, will be supported
+@eventProperty - only for class/interface properties - means the property returns an event object that handlers can attach to
+
+Shorthand
+<code>
+/** @public */
+export class MyClass {
+}
 </code>

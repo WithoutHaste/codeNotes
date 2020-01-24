@@ -1,0 +1,64 @@
+##Dependency Injection
+
+This is about using the .Net ServiceProvider class as a Dependency Injection container.
+
+#Registering Implementations
+
+<code>
+public interface IMyInterface {}
+
+public class MyImplementation : IMyInterface {}
+
+//setup
+using Microsoft.Extensions.DependencyInjection;
+public void ConfigureServices(IServiceCollection services)
+{
+	services.AddScoped<IMyInterface, MyImplementation>();
+}
+
+//example usage: Web API
+public class MyController : Controller
+{
+	//this argument is automatically provided by the CLR with the appropriate concrete type
+	public MyController(IMyInterface myInterface)
+	{
+	}
+}
+</code>
+
+#Registering Multiple Implementations
+
+Scenario: you have multiple implementations of an interface, and each should be used in different places in your code.
+
+"They will be returned in the same order they are registered in when injected into calling code. Depending on your requirements, this may be useful and important."
+
+<code>
+public interface IMyInterface {}
+
+public class AImplementation : IMyInterface {}
+
+public class BImplementation : IMyInterface {}
+
+//setup
+using Microsoft.Extensions.DependencyInjection;
+public void ConfigureServices(IServiceCollection services)
+{
+	services.AddScoped<IMyInterface, AImplementation>();
+	services.AddScoped<IMyInterface, BImplementation>();
+}
+
+//example usage: Web API
+using System.Linq;
+public class MyController : Controller
+{
+	//this argument is automatically provided by the CLR with the appropriate concrete type
+	public MyController(IEnumerable<IMyInterface> myInterfaces)
+	{
+		BImplementation b = myInterfaces[1] as BImplementation;
+		//or to be less fragile
+		BImplementation b = myInterfaces.OfType<BImplementation>().First();
+		//or even better, using a method on your IMyInterface
+		IMyImplementation x = myInterfaces.First(CanHandle("this operation"));
+	}
+}
+</code>
