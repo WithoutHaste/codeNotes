@@ -14,7 +14,7 @@ div { }
 
 Element has id:
 <code>
-#myId { }
+ #myId { }
 </code>
 
 Element has class:

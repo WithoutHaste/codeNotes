@@ -9,3 +9,22 @@ CSS can be included in the HTML file, or in a separate CSS file.
 #XML
 
 HTML is a subset of XML. XML stands for Extensible Markup Language.  HTML is an extension of this language.  It's rules are more specific, but the basic structure is the same.
+
+#Template Page
+
+A basic HTMl page template
+<code>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8">
+		<meta name="description" content="description">
+		<meta name="keywords" content="word,word,word">
+		<meta name="author" content="author">
+		<title>Title Goes Here</title>
+	</head>
+	<body>
+		<p>This is my web page</p>
+	</body>
+</html>
+</code>
