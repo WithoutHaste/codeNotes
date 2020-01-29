@@ -1,0 +1,53 @@
+##Operations
+
+#Referential Transparency
+
+A function is referentially transparent if every duplicate call to the function produces duplicate results.
+
+Ex: "5 + 5" is transparent because it always produces "10"
+
+Ex: Console.ReadLine() is opaque because calling it several times will produce different results
+
+#Idempotent
+
+An operation performed more than once has the same result as performing it once.
+
+An operation is idempotent if it will produce the same results if executed one or more times.
+An operation is idempotent if it has the property of f(f(x)) = f(x) for any value of x.
+
+Ex:
+set contains (1, 2, 3)
+set.Add(4)
+set contains (1, 2, 3, 4)
+set.Add(4)
+set contains (1, 2, 3, 4)
+Running the same Add(x) operation multiple times results in the same Set as running the operation once.
+
+The opposite is called Non-Idempotent.
+
+An Idempotency Key is a unique value added to a request so that if the request is submitted multiple times, it will only be fulfilled once. For example, a web form may contain an Idempotency Key so that pressing "Send" multiple times does not result in the request being repeated multiple times. The server will only fulfill one request per key.
+
+#Nullipotent
+
+An operation performed once has the same effect on the system as performing it zero times.
+
+An operation is nullipotent if it has no side effects, meaning that is does not change the state of the system.
+
+Ex: querying a database
+Ex: calculating 5 + 5
+
+#Pure Function
+
+An operation which has Referential Transparency and is Nullipotent.
+Meaning that passing in the same arguments returns the same result, and there are no side effects.
+
+Ex of Referential Transparency with Nullipotence: summing A + B
+
+Ex of Referential Transparency without Nullipotence: summing A + B and also logging that the operation was called.
+
+Ex of Referential Opacity with Nullipotence: reading from one file can return different values, but has no side effects.
+- it can return different values if the file is altered by another operation or process.
+
+Ex of Referential Opacity without Nullipotence: Console.ReadLine() will return different values, and removes a value from Standard In.
+
+The opposite is called Impure Function.

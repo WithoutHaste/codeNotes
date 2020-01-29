@@ -1,0 +1,70 @@
+##Hexagonal Architecture
+
+aka Ports and Adapters Pattern
+
+See Clean Architecture for details about implementing this design.
+
+#Purpose
+
+Allow an application to equally be driven by users, programs, automated tests, or batch scripts.
+And to be developed and tested in isolation from its eventual run-time devices and databases.
+
+#Principles
+
+Explicitly separate Application, Domain, and Infrastructure.
+- Application: the front-end, what the end users interacts with (aka User Side)
+- Domain: business logic
+- Infrastructure: non-domain things the software depends on, such as database, file system, logging, email (aka Server Side)
+
+Dependencies point only from Application and Infrastructure into the Domain.
+
+Boundaries are isolated by using ports and adapters.
+
+#Benefits
+
+Separation of concerns.
+
+Making the Domain (business logic) the most important and stable part of the system.
+
+Enable isolated testing.
+
+#Implementation
+
+The Domain has no dependencies on anything else in the system.
+
+The Domain defines at least two interfaces: one for the Application to implement and one for the Infrastructure to implement.
+The Application and Infrastructure implement the interfaces they need, which gives the Domain control of those parts of the system without the Domain having a code dependency on them.
+
+Ex:
+Domain.IManageCustomers defines FindCustomer(Id) method
+Domain.ManageCustomers implements IManageCustomer; this class is private
+Domain.ICustomerRepository defines FindCustomer(Id) method
+Infrastructure.SqlCustomerRepository implements Domain.ICustomerRepository which actually accesses the database
+Application.ConsoleAdapter instantiates Infrastructure.SqlCustomerRepository
+Application.ConsoleAdapter instantiates Domain.ManageCustomers(ICustomerRepository) and passes it Infrastructure.SqlCustomerRepository
+Application.ConsoleAdapter calls Domain.ManageCustomers.FindCustomer(Id) which causes Domain.ManageCustomer to use its Domain.ICustomerRepository which is actually Infrastructure.SqlCustomerRepository
+
+The Application drives the Domain through an Interface defined in the Domain.
+The Domain drives the Infrastructure through an Interface defined in the Domain.
+The Interfaces are Explicit Insulators between different parts of the system.
+
+See Dependency Inversion.
+
+#Ports and Adapters
+
+In this metaphor, each Interface is a Port.
+Each implementation of an Interfaces is an Adapter.
+All kinds of Adapters can be interchanged and connected to the Ports.
+
+#Hexagon
+
+Imagine a hexagon with the Domain in the center.
+There are three sides on the left where different Applications can connect to the Domain (website, console, 3rd party API, etc).
+There are three sides on the right where different Infrastructures can connection to the Domain (SQL Server, MongoDb, file system, etc).
+
+This is one way to visualize the benefits of this pattern.
+
+#Organization
+
+Recommended that you organize your code files by business function rather than by programming category.
+Ex: folders for RequestQuote and BindPolicy rather than for Repositories and Controllers.

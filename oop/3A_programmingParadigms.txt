@@ -15,11 +15,3 @@ These languages also Lack Side-Effects or, in other words, is Referentially Tran
 Uses statements that change a program's state.
 
 Procedural Programming is a subset of Imperative Programming.
-
-##Referential Transparency
-
-A function is referentially transparent if every duplicate call to the function produces duplicate results.
-
-Ex: Console.ReadLine() is opaque because calling it several times will produce different results
-
-Ex: "5 + 5" is transparent because it always produces "10"

@@ -6,11 +6,11 @@
 
 "The design style in this book largely follows the principle of Responsibilty Driven Design...and Design By Contract."
 
-"Elaborate models can cut through complexity only if care is taken with the fundementals, rsulting in detailed elements that the team can confidently combine."
+"Elaborate models can cut through complexity only if care is taken with the fundementals, resulting in detailed elements that the team can confidently combine."
 
 #Ch 4 Isolating the Domain
 
-"The part of the software the specifically solves problems from the domain usually constitutes only a small portion of the entire software system...We need to decouple the domain objects from other functions of the system, so we can avoid confusing the domain concepts with other concepts related only to software technology or losing sight of the domain altogether in the mass of the system."
+"The part of the software that specifically solves problems from the domain usually constitutes only a small portion of the entire software system...We need to decouple the domain objects from other functions of the system, so we can avoid confusing the domain concepts with other concepts related only to software technology or losing sight of the domain altogether in the mass of the system."
 
 See Layered Architecture / Onion Architecture / Clean Architecuture.
 Briefly, isolate the domain logic and don't make it dependent on any other part of the system.
