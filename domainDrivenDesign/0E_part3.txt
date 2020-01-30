@@ -1,6 +1,61 @@
 ##Part 3: Refactoring Toward Deeper Insight
 
+"[I've] laid down a foundation for maintaining the correspondence between model and implementation...the real challenge is to actually find an incisive model, one that captures subtle concerns of the domain experts and can drive practical design."
+
+"...a model that captures a deep understanding of the domain...should make the software more in tune with the way the domain experts think and more responsive to the user's needs."
+
+About useful models:
+- sophisticated domain models are achievable and worth the trouble.
+- they are seldom developed except through an iterative process of refactoring, including close involvement of the domain experts with developers interested in learning about the domain.
+- they may call for sophisticated design skills to implement and to use effectively.
+
+"Refactoring is the redesign of software in ways that do not change its functionality...Rather than making elaborate up-front design decisions, developers take code through a continuous series of small, discrete design changes, each leaving existing functionality unchanged while making the design more flexible or easier to understand."
+
+"But nearly all the literature on how to refactor focuses on mechanical changes to the code that make it easier to read or to enhance at a very detailed level...it is primarily a technical view of the quality of a design."
+
+"The refactorings that have the greatest impact on the viability of the system are those motivated by new insights into the domain or those that clarify the model's expression through the code...The goal is not only can a developer understand what the code does; he or she can also understand why it does what it does and can relate that to the ongoing communication with the domain experts."
+
+It is not possible to compile a cookbook of domain-level refactorings, as they are each so particular to one project.
+
+"Modeling is as inherently unstructured as any exploration...Refactoring to deeper insight should follow wherever learning and deep thinking lead...Modeling and design call for creativity."
+
+"The traditional way of explaining object analysis involves identifying nouns and verbs in the requirements documents and using them as the initial objects and methods. This explanation is recognized as an oversimplification...[but] initial models usually are naive and superficial, based on shallow knowledge."
+
+Example of how a model changed from (Ship, Container) to (Vessel Voyage, Bill of Lading, etc).
+
+"A deep model provides a lucid expression of the primary concerns of the domain experts and their most relevant knowledge while it sloughs off the superficial aspects of the domain."
+
+"Versatility, simplicity, and explanatory power come from a model that is truly in tune with the domain."
+
+"A model-driven design stands on two legs. A deep model makes possible an expressive design. At the same time, a design can actually feed insight into the model discovery process when it has the flexibility to let a developer experiment and the clarity to show a developer what is happening...This half of the feedback loop is essential, because the model we are looking for is not just a nice set of ideas: it is the foundation of the system."
+
+"You will usually depend on creativity and trial and error to find good ways to model the concepts you discover, but sometimes someone has laid down a pattern you can follow." (see Analysis Patterns)
+
 #Ch 8 Breakthrough
+
+"The returns from refactoring are not linear...some of the most important insights come abruptly and send a shock through the project."
+
+Most refactorings will be small. Occasionally, an insight will be revealed that enables a massive change to the model.
+
+"Each refinement of code and model gives developers a clearer view. This clarity creates the potential for a breakthrough of insights...A rush of change leads to a model that corresponds on a deeper level to the realities and priorities of the users...Versatility and explanatory power suddenly increase even as complexity evaporates."
+
+"This sort of breakthrough is not a technique; it is an event...Don't become paralyzed trying to bring about a breakthrough. The possibility usually comes after many modest refactorings."
+
+Sounds like enlightment being an accident, which meditation makes more likely.
+
+Example of a real project experiencing a breakthrough.
+Model (Investment, Load Investment, Loan Adjustment) becomes (Share Pie, Share, Percent Pie, Amount Pie).
+
+"Suddenly, on the basis of this new way of looking at the domain, we could run through every scenario we had ever encountered relatively effortlessly, much more simply than ever before...And our model diagrams made perfect sense to the business experts, who had often indicated that the diagrams were 'too technical' for them."
+
+Having a brilliant insight will require a lot of changes to the code. This will have to be scheduled like any other task.
+It will probably not be possible to complete the changes as a series of small refactorings - rather you'll need some large single-edits.
+
+"When the prospect of a breakthrough to a deeper model presents itself, it is often scary. Such a change has higher opportunity and higher risk than most refactorings."
+
+"To set the stage for a breakthrough, concentrate on knowledge crunching and cultivating a robust Ubiquitous Language. Probe for important domain concepts and make them explicit in the model. Refine the design to be suppler. Distill the model. Push on these more predictable levers, which increase clarity - usually a precursor of breakthroughs."
+
+"Don't hold back from modest improvements, which gradually deepen the model, even if confined within the same general conceptual framework...Don't be paralyzed by looking too far forward."
 
 #Ch 9 Making Implicit Concepts
 
