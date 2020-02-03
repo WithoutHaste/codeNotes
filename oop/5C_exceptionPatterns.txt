@@ -118,5 +118,5 @@ This can be much easier to unit test, because the error handling code is already
 
 Use Assertions: cause the program to fail until the problem is solved by a person. This is for errors that the program absolutely cannot handle.
 
-Bottom Propagation: a special value that does not cause errors when operated on, but also generally does not change value when operated on. This does imply that anything is really wrong, just that a edge has been hit.
+Bottom Propagation: a special value that does not cause errors when operated on, but also generally does not change value when operated on. This doesn't imply that anything is really wrong, just that a edge has been hit.
 Similar to NullObject.

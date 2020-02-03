@@ -57,7 +57,47 @@ It will probably not be possible to complete the changes as a series of small re
 
 "Don't hold back from modest improvements, which gradually deepen the model, even if confined within the same general conceptual framework...Don't be paralyzed by looking too far forward."
 
-#Ch 9 Making Implicit Concepts
+#Ch 9 Making Implicit Concepts Explicit
+
+"A deep model has power because it contains the central concepts and abstractions that can succinctly and flexibly express essential knowledge of the users' activities, their problems, and their solutions."
+
+The model progresses when a concept that turned up in discussions becomes an explicit object or relationship in the model.
+
+"The process starts with recognizing the implied concepts in some form, however crude."
+
+How to identify these implicit concepts?
+- listen to the language of the team
+  - is there a succint term that encapsulates something complicated?
+  - do the experts keep correcting your word choice?
+  - do the users use words that are not in your model at all?
+- scrutinize awkwardness in the design
+- scrutinize seeming contradictions in the statements of experts
+- search the literature of the domain - read the book
+- experiment with the model
+
+"Hearing a new word produces a lead, which you follow up with conversation and knowledge crunching, with the goal of carving out a clean, useful concept."
+
+Example: a result that is compiled from multiple objects, may turn out to be an important object in its own right.
+Example: all the work is being done, but the placement of the actions in objects feels awkward.
+Example: continuing the Shipping project.
+
+"The place to dig is the most awkward part of your design. The place where procedures are doing complicated things that are hard to explain. The place where every new requirement seems to add complexity."
+
+Example: project about earning interest on assets.
+
+"Pesky contradictions, which we encounter all the time when digging into program requirements, can be great clues to deeper models...Some are just variations in terminology or are based on misunderstanding. But there is a residue where two factual statements by experts seem to contradict."
+
+"It is not practical to reconcile all contradictions, and it may not even be desirable."
+
+"The examples I've given don't convey the amount of trial and error involved. I might follow half a dozen leads in conversation before finding one that seems clear and useful enough to try out in the model...A modeler/designer cannot afford to get attached to his own ideas."
+
+"All these changes of direction are not just thrashing. Each change embeds deeper insight into the model. Each refactoring leaves the design more supple, easier to change the next time, ready to bend in the places that turn out to need to bend."
+
+What to make explicit?
+- Constraints
+- Policies
+- Processes
+- Specifications
 
 #Ch 10 Supple Design
 
