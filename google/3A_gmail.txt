@@ -52,6 +52,9 @@ Inbox Tab:
 Account Tab:
 
 Filters and Blocked Addresses Tab:
+- AND only, no OR
+- ex: DOES NOT HAVE *feature01* AND *feature02* AND *feature03*
+- I've experienced that editing a filter may not take effect for a full day
 
 Advanced Tab:
 Preview Pane

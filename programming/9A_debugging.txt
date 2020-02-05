@@ -1,0 +1,23 @@
+##Debugging
+
+#When You Have No Idea What's Wrong
+
+Test in different environments.
+
+Log everything. Step through everything that you have access to.
+
+Run in debug mode and step through the code one statement at a time. Watch the variable values changing.
+
+Watch the network traffic. Use browser Dev Tools, use Fiddler.
+
+Verify everything, every little step in the whole process.
+
+Verify the environment is setup correctly.
+
+Verify all settings.
+
+Verify you're looking at the right logs, the right queues, the right monitors.
+- just wasted time looking at the wrong environment
+
+Verify your reports and monitors are reliable.
+- just found out the tool I'm using is only about 95% accurate

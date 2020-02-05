@@ -11,12 +11,12 @@ using System;
 using System.IO;
 </code>
 
-You can alias a namespace:
+You can alias a type. This is useful if two Type names conflict.
 <code>
 using System;
-using My = MyNamespace;
+using MyType = MyNamespace.MoreNamespace.AnotherNamespace.SomeType;
 ...
-My.AddInts(5, 7);
+MyType.AddInts(5, 7);
 </code>
 
 (.Net 4.6)

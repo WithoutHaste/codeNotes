@@ -1,0 +1,14 @@
+##Logging
+
+#Microsoft.Extensions.Logging
+
+<code>
+using Microsoft.Extensions.Logging;
+
+ILogger<MyClass> logger = new ILogger<MyClass>();
+
+Message message = new Message("text", DateTime.Now);
+
+logger.LogInformation($"Message: {message}"); //outputs Message: Namespace.Message
+logger.LogInformation("Message: {@message}", message); //outputs Message: Message{"Text":"text","Timestamp":"YYYY-MM-DD..."}
+</code>
