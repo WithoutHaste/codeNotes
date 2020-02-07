@@ -19,6 +19,13 @@ using MyType = MyNamespace.MoreNamespace.AnotherNamespace.SomeType;
 MyType.AddInts(5, 7);
 </code>
 
+You can alias a Generic Type. This is useful for really long Generic definitions.
+<code>
+using Widget = Company.Server.Mediator.UseCase.Whatsit<Company.Server.Models.SpecificUseCaseErrorType, Company.Server.Models.ThirdParty.Gizmo[]>;
+...
+Widget x = new Widget();
+</code>
+
 (.Net 4.6)
 
 You can now import a specific static class.
