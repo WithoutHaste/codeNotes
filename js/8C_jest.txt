@@ -1,0 +1,118 @@
+##Jest
+
+Jest is a unit test library for JavaScript and TypeScript.
+
+<code>
+import 'jest-dom/extend-expect';
+</code>
+
+#Describe
+
+Describe groups and labels a set of tests.
+Describes can be nested inside each other.
+
+<code>
+describe('group label', () => {
+	// tests in here
+});
+</code>
+
+BeforeEach function will be run once before each direct-child It and Describe nested in this Describe.
+<code>
+describe('group label', () => {
+	beforeEach(() => {
+		// running beforeEach
+	});
+	
+	it('a', () => {
+		// runs beforeEach first
+		// test logic here
+	});
+	
+	describe('sub group label', () => {
+		// runs beforeEach first
+
+		it('b', () => {
+			// test logic here
+		});
+				
+		describe('sub sub group label', () => {
+			it('c', () => {
+				// test logic here
+			});
+			
+			
+		});
+	});
+});
+</code>
+
+AfterEach function has the same logic, running after each direct-child It and Describe nested in this Describe.
+<code>
+describe('group label', () => {
+	afterEach(() => {
+	});
+});
+</code>
+
+There should be no Expects inside a BeforeEach or AfterEach - these are for setup and cleanup only.
+
+#It
+
+It contains one test.
+Its must be inside a Describe.
+
+<code>
+describe('group label', () => {
+	it('invalid credentials - displays error', () => {
+		// test logic here
+	});
+});
+</code>
+
+Override the default timeout on a test:
+<code>
+it('some test', () => {
+}, 8000); // 8000 = 8 seconds
+</code>
+
+#Expect
+
+Expect in Jest is like Assert in C#.
+
+Verify element was found (is not undefined or null):
+<code>
+expect(anElement).toBeTruthy();
+</code>
+
+Verify element was not found:
+<code>
+expect(anElement).toBeNull();
+</code>
+
+Verify element matches the saved snapshot:
+<code>
+expect(anElement).toMatchSnapshot();
+</code>
+
+Verify element exists in the baseElement:
+<code>
+expect(anElement).toBeInTheDocument();
+</code>
+
+Verify value is equal to:
+<code>
+expect(anElement.value).toBe('someValue');
+</code>
+
+Negation of a condition:
+<code>
+expect(anElement).not.toBeInTheDocument();
+</code>
+
+Verify values in a form:
+<code>
+let email = 'test@test.com';
+let businessName = 'Business Name';
+expect(aFormElement).toHaveFormValues({ email, businessName });
+</code>

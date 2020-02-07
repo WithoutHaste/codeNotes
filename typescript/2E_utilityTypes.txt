@@ -1,0 +1,18 @@
+## Utility Types
+
+#Partial
+
+Partial allows you to define an object of a Type without defining all required properties of that Type.
+
+<code>
+interface Customer {
+	id: number;
+	name: string;
+	nickname: string;
+};
+const x:Partial<Customer> = {
+	id: 1,
+	name: 'Beatrice'
+	// nickname is not defined
+};
+</code>
