@@ -6,10 +6,19 @@ Defines errors raised by the service, ie. tells the client what kinds of faults 
 By default, services use Error Masking: all exceptions are passed to the client as generic FaultExceptions.
 
 <code>
+using System.ServiceModel;
+
 //in service contract
 [OperationContract]
 [FaultContract(typeof(MathFault))]
 int Divide(int a, int b);
+
+//does NOT inherit from Exception
+[DataContract]
+public class MathFault
+{
+	public string Message { get; set; }
+}
 
 //in service
 int Divide(int a, int b)
@@ -24,4 +33,4 @@ int Divide(int a, int b)
 	}
 }
 </code>
-
+Note that MathFault does not inherit from System.Exception - it justs contains the Properties it needs.
