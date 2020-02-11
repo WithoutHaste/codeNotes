@@ -1,0 +1,57 @@
+##DOM Testing Library
+
+[Documentation](https://testing-library.com/docs/dom-testing-library/intro)
+
+possible import statement
+<code>
+import { render } from '@testing-library/react';
+</code>
+
+#Queries
+
+getBy* returns first matching node, throws error if no match is found
+getAllBy* returns array of matching nodes, throws error if no match is found
+
+queryBy* returns first matching node, returns null if no match is found, throws error if multiple matches are found
+queryByAll* returns array of matching nodes, returns empty array if not matches are found
+
+findBy* returns a Promise that resolves when a matching element is found, rejects Promise if 0 or multiple matches are found
+- default timeout of 4500ms
+- this is a combination of getBy* and waitForElement
+findAllBy* returns a Promise that resolves to an array of matching elements, rejects Promise if 0 matches are found
+- default timeout of 4500ms
+- this is a combination of getAllBy* and waitForElement
+
+All these queries accept a string, regular expression, or function.
+
+*LabelText searches for a matching Label, then returns the element associated with that Label
+*PlaceholderText searches for an element with a matching placeholder attribute
+*Text searches for an element containing a text node with matching textContent
+*AltText searches for an element with a matching alt attribute
+*Title searches for an element with a matching title attribute
+*DisplayValue searches for an element (input/textarea/select) with a matching display value
+*Role searches for an element with a matching role attribute (implicit or explicit)
+- ex: Button tags have an implicit button role
+- see Default ARIA Roles
+*TestId searches for an element with a matching data-testid attribute
+
+Example: ways of matching
+<code>
+const result = getByLabelText(container, 'Plain Text');
+const result = getByLabelText(container, /regex/i);
+const result = getByLabelText(container, (content, element) => content.startsWith('X')); //function returns true or false for each element
+</code>
+
+Example: Placeholder options
+<code>
+let options = {
+	exact: true,
+	normalizer: NormalizerFn // don't know what this is
+};
+const result = getByPlaceholderText(element, "Your Name", options);
+</code>
+
+querySelector searches by any selection criteria
+<code>
+const result = container.querySelector('[data-testid="Text"]');
+</code>

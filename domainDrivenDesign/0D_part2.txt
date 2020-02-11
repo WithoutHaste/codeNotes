@@ -98,7 +98,7 @@ Services are named for verbs instead of for nouns.
 "Services should be used judiciously and not allowed to strip the Entities and Value Objects of all their behavior."
 
 Where is the division between Application Services and Domain Services?
-Ex: Giving banking software
+Ex: Given banking software
 - ExportReportToCSV is an Application Service because it involves concepts (like file format) that do not exist in the banking domain and does not involve any business rules.
 - TransferMoneyBetweenAccounts is a Domain Service because it heavily involves banking domain concepts and business rules.
 
@@ -109,7 +109,7 @@ Modules (aka Packages aka Assemblies) are both a technical division of code, and
 If the domain is divided into multiple Modules, take care that the resulting Modules have low coupling between them and high cohesion within them.
 Modules that are divided well will reduce the mental strain of working in the Modules, because they will have low coupling between them, so you can focus on one small part of the code at a time.
 
-"Modules and the smaller elements should coevolve, but typically they do not. Modules are chosed to organize an early form of the objects. After that, the objects tend to change in ways that keep them in the bounds of the existing Module definition...Even developers who refactor a lot tend to content themselves with Modules conceived early in the project...Refactoring Modules is more work and more disruptive than refactoring classes, and probably can't be as frequent. But just as Model Objects tend to start out naive and concrete and then gradually transform to reveal deeper insight, Modules can become subtle and abstract."
+"Modules and the smaller elements should coevolve, but typically they do not. Modules are chosen to organize an early form of the objects. After that, the objects tend to change in ways that keep them in the bounds of the existing Module definition...Even developers who refactor a lot tend to content themselves with Modules conceived early in the project...Refactoring Modules is more work and more disruptive than refactoring classes, and probably can't be as frequent. But just as Model Objects tend to start out naive and concrete and then gradually transform to reveal deeper insight, Modules can become subtle and abstract."
 
 "Like everything else in a domain-driven design, Modules are a communications mechanism. The meaning of the objects being partitioned needs to drive the choice of the Modules. When you place some classes together in a Module, you are telling the next developer who looks at your design to think about them together."
 

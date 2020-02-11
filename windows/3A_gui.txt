@@ -1,0 +1,7 @@
+##GUI
+
+#Can't See Open Window
+
+An application window is open, but is off the screen so I can't see it.
+
+Shift+Right-click window in Task Bar > select Move > move the cursor around until you can see the window

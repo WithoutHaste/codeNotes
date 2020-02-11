@@ -11,6 +11,8 @@ import 'jest-dom/extend-expect';
 Describe groups and labels a set of tests.
 Describes can be nested inside each other.
 
+Each top-level describe is one test suite.
+
 <code>
 describe('group label', () => {
 	// tests in here
@@ -76,6 +78,11 @@ it('some test', () => {
 }, 8000); // 8000 = 8 seconds
 </code>
 
+To run just one test out of a suite, call it "fit" instead of "it".
+- the "f" is for "force"
+
+To skip tests in a suite, call them "xit" instead of "it".
+
 #Expect
 
 Expect in Jest is like Assert in C#.
@@ -115,4 +122,38 @@ Verify values in a form:
 let email = 'test@test.com';
 let businessName = 'Business Name';
 expect(aFormElement).toHaveFormValues({ email, businessName });
+</code>
+
+#Function Mock
+
+<code>
+const mock = jest.fn(); //empty mock
+
+const mock = jest.fn().mockImplementation((arg) => 42 + arg);
+
+expect(mock).toHaveBeenCalledTimes(1);
+</code>
+
+#Class Mock
+
+There are several ways to mock imports.
+
+Mocking a function import:
+<code>
+//in WidgetApi.ts
+export const callService = async (days: number): Promise<Response> => await fetch(`/url/path/getData?days=${days}`, {
+  method: 'GET'
+});
+
+//in Widget.test.ts
+import { callService } from './WidgetApi';
+
+const mockCallService = jest.fn();
+jest.mock('./WidgetApi', () => {
+  return jest.fn().mockImplementation(() => {
+    return { 
+		callService: mockCallService
+	};
+  });
+});
 </code>
