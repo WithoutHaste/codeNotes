@@ -1,0 +1,54 @@
+##Hooks
+
+Hooks let you use state without writing a class.
+
+Hooks let you keep related code together (such as Start/Stop actions) and keep unrelated code separate (such as a StatusChange and an ActionCountChange).
+
+#Effect Hook
+
+UseEffect example that runs after each Render.
+<code>
+import * as React from 'react';
+
+function example() {
+	const initialCount = 0;
+	const [count, setCount] = React.useState(initialCount);
+
+	React.useEffect(() => {
+		document.title = `You clicked ${count} times`;
+	});
+
+	return (
+		<div>
+			<button onClick={() => setCount(count + 1)}>
+				Click Me
+			</button>
+		</div>
+	);
+}
+</code>
+
+UseEffect example that runs after Renders when one of the specified variables had changed value:
+<code>
+React.useEffect(() => {
+	doSomething();
+}, [count, anotherCount]);
+</code>
+Pass in an empty array [] to run the UseEffect exactly once.
+
+UseEffect does not block the browser from updating the screen.
+
+Some operations do not require cleanup: anything that does not alter the DOM.
+
+To specify a cleanup function, return it:
+<code>
+React.useEffect(() => {
+	startAThing();
+	
+	return function cleanup() {
+		stopAThing();
+	};
+});
+</code>
+This cleanup is performed when the component unmounts.
+This cleanup is run if the same useEffect is called again, to cleanup before the next one runs.

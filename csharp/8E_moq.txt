@@ -68,6 +68,9 @@ Method with an out parameter and a return value:
 <code>
 int outParameter = 0;
 mock.Setup(i => i.Method("parameter", out outParameter)).Returns("result");
+
+//async
+mock.Setup(i => i.Method("parameter", out outParameter)).Returns(Task.FromResult("result"));
 </code>
 
 Method with a ref parameter:
@@ -79,6 +82,8 @@ mock.Setup(i => i.Method("parameter", ref refParameter));
 Throw an exception:
 <code>
 mock.Setup(i => i.Method("parameter")).Throws<InvalidOperationException>();
+
+mock.Setup(i => i.Method("parameter")).ThrowsAsync(new Exception());
 </code>
 
 Accept any parameter of the correct data type:

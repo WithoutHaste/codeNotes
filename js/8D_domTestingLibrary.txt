@@ -55,3 +55,20 @@ querySelector searches by any selection criteria
 <code>
 const result = container.querySelector('[data-testid="Text"]');
 </code>
+
+#FireEvent
+
+Fire events to interact with a page.
+
+<code>
+fireEvent.click(anElement);
+
+const rightClick = { button: 2 };
+fireEvent.click(anElement, rightClick);
+
+fireEvent.change(anElement, { target: { value: 'a' } });
+
+fireEvent.keyDown(anElement, { key: 'Enter', code: 13 });
+fireEvent.keyPress
+fireEvent.keyUp
+</code>

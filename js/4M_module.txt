@@ -54,3 +54,23 @@ require('myModule');
 </code>
 
 CommonJS only loads modules synchronously, meaning the web page will be blocked while modules are loaded from the server. CommonJS is designed for server-side use.
+
+#Exports
+
+Default export
+<code>
+// file A.js
+export default myThing;
+
+// file B.js
+import myThing from './A';
+</code>
+
+Non-default export
+<code>
+// file A.js
+export const myThing;
+
+// file B.js
+import { myThing } from './A';
+</code>

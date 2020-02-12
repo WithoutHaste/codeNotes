@@ -99,7 +99,43 @@ What to make explicit?
 - Processes
 - Specifications
 
+Examples of Specifications implementations and patterns (Chemical Warehouse Packer).
+
 #Ch 10 Supple Design
+
+"The ultimate purpose of software is to serve users. But first, that same software has to serve developers...People have to work with this stuff [the code]. But will they want to?"
+
+"Duplication starts to appear as soon as a developer isn't confident of repdeicting the full implications of a computation...Duplication is forced when design elements are monolithic, so that the parts cannot be recombined."
+
+The worse code is to work with, the slower the project will progress. To enable continuous fast delivery, you must maintain clean code with a supple design.
+
+"Supple design is the complement to deep modeling. Once you've dug out implicit concepts and made them explicit, you have the raw material."
+
+"A lot of overengineering has been justified in the name of flexibility. But more often than not, excessive layers of abstraction and indirection get in the way...Look at the design of software that really empowers the people who handle it; you will usually see something simple. Simple is not easy."
+
+"To be open to change, a design must be easy to understand, revealing the same underlying model that the client developer is drawing on. It must follow the contours of a deep model of the domain, so most changes bend the design at flexible points. The effects of its code must be transparently obvious, so the consequences of a change will be easy to anticipate...There is no formula for designing software like this."
+
+Useful patterns that help create a Supple Design:
+- Ubiquitous Language
+- Model-Driven Design
+- Intention-Revealing Interfaces
+- Side-Effect-Free Functions (see Nullipotent Functions)
+- Assertions
+- Stand Alone Classes
+- Conceptual Contours
+- Closure of Operations
+
+Abstractions that do not clearly state their effects are not valuable, because you must read within the abstraction to understand what it is doing. Developers should not need to dig into the internals of objects/modules, but they frequently do because the interface is not communicative.
+
+"We are always fighting cognitive overload: If the client developer's mind is flooded with detail about how a component does its job, his mind isn't clear to work out the intricacies of the client design...If a developer must consider the implementation of a component in order to use it, the value of encapsulation is lost."
+
+When purpose is inferred by another developer later, they may infer that a coincidental side effect is promised functionality, and write their code to rely on functionality that becomes transitory.
+
+"To obtain the value of explicity modeling a concept in the form of a class or method, we must give these program elements names that reflect those concepts. The names of classes and methods are great opportunities for improving communication between developers, and for improving the abstraction of the system...All public elements of a design together make up its interface, and the name of each of those elements presents an opportunity to reveal the intention of the design...Type names, Method names, and Argument names all combine to form an Intention-Revealing Interface."
+
+"Name classes and operations to describe their effect and purpose, without reference to the means by which they do what they promise...These names should conform to the Ubiquituous Language so that team members can quickly infer their meaning...Pose the question, but don't present the means by which the answer shall be found."
+
+Ongoing example: Paint Mixer.
 
 #Ch 11 Applying Analysis Patterns
 
