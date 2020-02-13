@@ -1,6 +1,6 @@
 ##Styles
 
-#Selectors
+#CSS Selectors
 
 Multiple selectors:
 <code>
@@ -37,6 +37,48 @@ Any descendants
 (any div tag that is somewhere within a "classA" tag)
 <code>
 .classA div { }
+</code>
+
+Attribute exists
+<code>
+[data-category]
+</code>
+
+Attribute value equals
+<code>
+[data-category="Book"]
+</code>
+
+Attribute contains substring
+<code>
+[data-category*="Book"]
+</code>
+
+Attribute contains whole-word
+<code>
+[data-category~="Book"]
+</code>
+Matches "Paperback Book" but not "Books" nor "My-Book"
+
+Attribute value starts with whole-word
+<code>
+[data-category|="Book"]
+</code>
+Matches "Book" and "Book-On-Order" but not "Books"
+
+Attribute value starts with
+<code>
+[data-category^="Book"]
+</code>
+
+Attribute value ends with
+<code>
+[data-category$="Book"]
+</code>
+
+Multiple attribute selectors
+<code>
+[data-category="Book"][name="Customer"]
 </code>
 
 #Cursor
