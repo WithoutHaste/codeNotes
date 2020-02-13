@@ -137,6 +137,18 @@ When purpose is inferred by another developer later, they may infer that a coinc
 
 Ongoing example: Paint Mixer.
 
+This book uses terms Commands/Modifiers (functions with side-effects) and Queries/Functions (functions without side-effects, i.e. Nullipotent functions).
+This book follows the standard usage of Side-Effect in programming: a Side-Effect is any change to the system, whether it was intentional or not.
+
+Nullipotent functions are safe to call and combine.
+Nullipotent functions lower risk.
+Separating functionality into Nullipotent functions where possible will improve the design of code by making it clear which operations are safe.
+This decreases the cognitive load on developers and increases their power in the system.
+
+It is suggested that functions with side-effects should not return domain data. (Considering this, it brings up performance questions.)
+
+Using Value Objects as immutable objects helps you make more of your functions in to Nullipotent functions, because operations will return a new object instead of modifying an existing one.
+
 #Ch 11 Applying Analysis Patterns
 
 #Ch 12 Relating Design Patterns to the Model
