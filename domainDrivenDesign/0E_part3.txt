@@ -141,6 +141,7 @@ This book uses terms Commands/Modifiers (functions with side-effects) and Querie
 This book follows the standard usage of Side-Effect in programming: a Side-Effect is any change to the system, whether it was intentional or not.
 
 Nullipotent functions are safe to call and combine.
+Nullipotent functions are easier to test.
 Nullipotent functions lower risk.
 Separating functionality into Nullipotent functions where possible will improve the design of code by making it clear which operations are safe.
 This decreases the cognitive load on developers and increases their power in the system.
@@ -148,6 +149,44 @@ This decreases the cognitive load on developers and increases their power in the
 It is suggested that functions with side-effects should not return domain data. (Considering this, it brings up performance questions.)
 
 Using Value Objects as immutable objects helps you make more of your functions in to Nullipotent functions, because operations will return a new object instead of modifying an existing one.
+
+"Place as much of the logic of the program as possible into [nullipotent] functions...Structly segregate [non-nullipotent] commands into very simple operations that do not return domain information. Further control side effects by moving complex logic into Value Objects when a concept fitting the responsibility presents itself."
+
+"The developer using the high-level command must understand the consequences of each underlying command. So much for encapsulation...And because object interfaces do not restrict side effects, two subclasses the implement the same interface can have different side effects. The developer using them will want to know which is which to anticipate the consequences. So much for abstraction and polymorphism...The necessity of tracing concrete execution defeats abstraction."
+
+Assertions:
+- make side effects explicit
+- part of Design By Contract
+- Post Conditions describe the side effects of the operation
+- Pre Conditions describe what must be true for the Post Conditions to be trusted
+- Class Invariants make Assertions about the state of the object at the end of any operation
+- Assertions to include the effects of delegation (down stream side effects)
+  - this could require more validation during refactoring - if one down stream side effect is removed, you must update all Assertions up the stack and verify that this was the only source of that side effect
+
+"All these assertions describe state, not procedures, so they are easier to analyze."
+
+"If you trust the guarantee of a Post Condition, you don't have to worry about how a method works."
+
+"If Assertions cannot be coded directly in your programming language, write automated unit tests for them. Write them into documentation...Seek models with coherent sets of concepts, which lead a developer to infer the intended Assertions..."
+
+Conceptual Contours
+
+"There is a logical consistency deep in most domains, or else they would not be viable in their own sphere...There is a rhyme and reason somewhere, or else modeling would be pointless. Because of this underlying consistency, when we find a model that resonates with some part of the domain, it is more likely to be consistent with other parts that we discover later...This is one reason why repeated refactorings eventually leads to suppleness."
+
+"The conceptual contours emerge as the code is adapted to newly understood concepts or requirements."
+
+"The twin fundamentals of high cohesion and low coupling play a role in design at all scales, from individual methods up through classes and modules to large-scale structures. These two principles apply to concepts as much as to code...To avoid slipping into a mechanistic view of them, temper your technical thinking by frequently touching base with your intuition for the domain...Find the conceptually meaningful unit of functionality, and the resulting design will be both flexible and understandable."
+
+"Observe the axes of change and stability through successive refactorings and look for the underlying conceptual contours that explain these shearing patterns."
+
+"The goal is a simple set of interfaces that combine logically to make sensible statements in the uiquitous language, and without the distraction and maintenance burden of irrelevant options."
+
+"Encountering a requirement that forces extensive changes in the breakdown of the objects and methods is a message: our understanding of the domain needs refinement."
+
+Example: continues with Accruals/Loans.
+"This ease of extension did not coume becaus she anticipated the change. Nor did it come because she made a design so versatile it could accommodate any conceivable change. It happened because in the previous refactoring, the design was aligned with underlying concepts of the domain."
+
+Standalone Classes
 
 #Ch 11 Applying Analysis Patterns
 

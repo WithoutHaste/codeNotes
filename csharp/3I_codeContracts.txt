@@ -1,0 +1,146 @@
+##Code Contracts
+
+see Design By Contract
+
+#Benefits
+
+Improved testing: Code contracts provide static contract verification, runtime checking, and documentation generation.
+
+Automatic testing tools: You can use code contracts to generate more meaningful unit tests by filtering out meaningless test arguments that do not satisfy preconditions.
+
+Static verification: The static checker can decide whether there are any contract violations without running the program. It checks for implicit contracts, such as null dereferences and array bounds, and explicit contracts.
+
+Reference documentation: The documentation generator augments existing XML documentation files with contract information. There are also style sheets that can be used with Sandcastle so that the generated documentation pages have contract sections.
+
+#Usage
+
+<code>
+using System.Diagnostics.Contracts;
+</code>
+
+Most methods in the contract class are conditionally compiled; that is, the compiler emits calls to these methods only when you define a special symbol, CONTRACTS_FULL, by using the #define directive. CONTRACTS_FULL lets you write contracts in your code without using #ifdef directives; you can produce different builds, some with contracts, and some without.
+
+#Pre Conditions
+
+The run-time behavior of failed preconditions is determined by the runtime analyzer.
+
+Preconditions specify state when a method is invoked. They are generally used to specify valid parameter values.
+
+Preconditions are listed at the top of a method.
+
+Example:
+<code>
+class Calculations
+{
+	public int Division(int numerator, int denominator)
+	{
+		Contract.Requires(denominator != 0, "denominator cannot be 0");
+		Contract.Requires(numerator > denominator, "numerator should be greater than denominator");
+		
+		return numerator / denominator;
+	}
+}
+</code>
+
+Example:
+<code>
+class Validation
+{
+	public string GetCustomerPassword(string customerID)
+	{
+		//throw an Exception if this pre condition fails
+		Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(customerID), "Customer ID cannot be Null");
+
+		string password="AAA@1234";
+		if (customerID != null)
+		{
+			return password;    
+		}
+		else
+		{
+			return null;
+		}
+	}
+}
+</code>
+
+#Post Conditions
+
+Example:
+<code>
+class Validation
+{
+	public string GetCustomerPassword(string customerID)
+	{
+		//post condition that the method does not return null
+		Contract.Ensures(Contract.Result<string>() != null);
+
+		string password="AAA@1234";
+		if (customerID != null)
+		{
+			return password;    
+		}
+		else
+		{
+			return "unknown";
+		}
+	}
+}
+</code>
+
+#Invariants
+
+Set contracts on method variables.
+
+<code>
+Contract.Invariants...
+</code>
+
+#Interfaces
+
+You can define contracts on interfaces.
+
+Example:
+<code>
+[ContractClass(typeof(ValidationContract))]
+interface IValidation
+{
+	string CustomerID{get;set;}
+	string Password{get;set;}
+}
+
+[ContractClassFor(typeof(IValidation))]
+sealed class ValidationContract:IValidation
+{
+	string IValidation.CustomerID
+	{
+		[Pure] //this get-method does not change the state of the object
+		get
+		{
+			return Contract.Result<string>();
+		}
+		set
+		{
+			Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(value), "Customer ID cannot be null!!");
+		}
+	}
+
+	string IValidation.Password
+	{
+		[Pure] //this get-method does not change the state of the object
+		get
+		{
+			return Contract.Result<string>();
+		}
+		set
+		{
+			Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(value), "Password cannot be null!!");
+		}
+	}
+}
+</code>
+
+#ContractAbbreviator
+
+(.Net 4.5)
+
