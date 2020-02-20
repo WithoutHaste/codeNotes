@@ -1,0 +1,10 @@
+##About
+
+A .editorconfig file can apply to any language. It is used by an IDE to enforce coding conventions.
+
+In .Net, file .editorconfig is located at solution/project root.
+
+.editorconfig uses INI format.
+.editorconfig files should be UTF-8 encoded, with LF or CRLF line separators
+
+!![editorconfig.org](https://editorconfig.org/)

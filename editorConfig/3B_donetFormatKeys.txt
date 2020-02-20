@@ -1,0 +1,107 @@
+##.Net Formatting Keys
+
+Key-Value pairs recognised by .Net IDEs.
+
+!![documentation](https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-formatting-conventions)
+
+#organize using directives
+
+"true" means sort System.* directives alphabetically and place above all others.
+<code lang="ini">
+ [*.{cs,vb}]
+ dotnet_sort_system_directives_first = true
+ dotnet_sort_system_directives_first = false
+</code>
+
+"true" means insert a blank line between groups of using directives, based on their root namespace.
+<code lang="ini">
+ [*.{cs,vb}]
+ dotnet_separate_import_directive_groups = true
+ dotnet_separate_import_directive_groups = false
+</code>
+
+#new line
+
+When should an opening brace { be placed on a new line? Specify "all", "none", or a specific list of elements that the rule applies to.
+<code lang="ini">
+ [*.cs]
+ csharp_new_line_before_open_brace = all
+ csharp_new_line_before_open_brace = none
+ csharp_new_line_before_open_brace = accessors, anonymous_methods, anonymous_types, control_blocks, events, indexers, lambdas, local_functions, methods, object_collection_array_initializers, properties, types
+</code>
+
+"true" means these statements should start on a new line.
+<code lang="ini">
+ [*.cs]
+ csharp_new_line_before_else = true
+ csharp_new_line_before_catch = true
+ csharp_new_line_before_finally = true
+ csharp_new_line_before_members_in_object_initializers = true
+ csharp_new_line_before_members_in_anonymous_types = true
+ csharp_new_line_between_query_expression_clauses = true
+</code>
+
+#indentation
+
+"true" means these statements should be indented extra.
+<code lang="ini">
+ [*.cs]
+ csharp_indent_case_contents = true
+ csharp_indent_switch_labels = true
+ csharp_indent_labels = true
+ csharp_indent_block_contents = true
+ csharp_indent_braces = true
+ csharp_indent_case_contents_when_block = true
+</code>
+
+#spacing
+
+"true" means spaces should be inserted.
+<code lang="ini">
+ [*.cs]
+ csharp_space_after_cast = true
+ csharp_space_after_keywords_in_control_flow_statements = true
+ csharp_space_between_parentheses = control_flow_statements, type_casts
+ csharp_space_before_colon_in_inheritance_clause = true
+ csharp_space_after_colon_in_inheritance_clause = true
+ csharp_space_around_binary_operators = before_and_after
+ csharp_space_between_method_declaration_parameter_list_parentheses = true
+ csharp_space_between_method_declaration_empty_parameter_list_parentheses = false
+ csharp_space_between_method_declaration_name_and_open_parenthesis = false
+ csharp_space_between_method_call_parameter_list_parentheses = true
+ csharp_space_between_method_call_empty_parameter_list_parentheses = false
+ csharp_space_between_method_call_name_and_opening_parenthesis = false
+ csharp_space_after_comma = true
+ csharp_space_before_comma = false
+ csharp_space_after_dot = false
+ csharp_space_before_dot = false
+ csharp_space_after_semicolon_in_for_statement = true
+ csharp_space_before_semicolon_in_for_statement = false
+ csharp_space_around_declaration_statements = false
+ csharp_space_before_open_square_brackets = false
+ csharp_space_between_empty_square_brackets = false
+ csharp_space_between_square_brackets = false
+</code>
+
+#wrap
+
+"true" means if multiple statements are on one line, keep it that way.
+Ex: int i = 0; string name = "John";
+<code lang="ini">
+ [*.cs]
+ csharp_preserve_single_line_statements = true
+ csharp_preserve_single_line_statements = false
+</code>
+
+"true" means if multiple statements are on one line in a block, keep it that way.
+Ex: public int Foo { get; set; }
+<code lang="ini">
+ [*.cs]
+ csharp_preserve_single_line_blocks = true
+ csharp_preserve_single_line_blocks = false
+</code>
+
+
+
+
+

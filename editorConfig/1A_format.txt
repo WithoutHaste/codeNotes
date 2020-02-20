@@ -1,0 +1,104 @@
+##Format
+
+Leading whitespaces are ignored.
+
+Lines can be:
+- blank
+- comments
+- section header
+- key-value pair
+
+#Preamble
+
+The preamble is everything above the first Section Header.
+
+Optional.
+
+Setting "root=true" means don't search in parent directories for more .editorconfig. This is the root.
+<code lang="ini">
+	# http://editorconfig.org
+	root = true
+</code>
+
+#Comments
+
+Comments are lines starting with ; or #
+Only full-line comments are allowed
+
+#Section Header
+
+Section headers are enclosed in [ ]
+- uses / as path separator on all operating systems
+
+#Section Name
+
+Section name is the text between the [ ]
+
+Section names are filepath Globs and support pattern matching
+- * for any string of characters, except for path separators
+- ** for any string of characters
+- ? for any single character
+- [abc] for any single character in the defined group
+- [!abc] for any single character not in the defined group
+- {s1,s2,s3} for any string defined in the set
+- {num1..num2} for any integer defined in the range (negatives are allowed)
+- \ to escape a special character
+- Section names have a max length of 4096
+- Non-existing directories will not cause an error
+
+Ex:
+[*] will apply to all files in the project
+[*.md] will apply to all Markdown files in the project
+[*.{cs,vb}] will apply to all CS and all VB files in the project
+
+#Section
+
+A section is all the lines from one section header to the next, or to the end of file.
+
+#Key-Value Pair
+
+Key-Value pair looks like Key=Value or Key = Value
+- strings are not enclosed in "quotes"
+
+Any key-value pair can be disregarded with an unset command
+<code lang="ini">
+ # set a value
+ insert_final_newline = true
+ 
+ # ignore that value
+ insert_final_newline = unset
+</code>
+
+#Example
+
+<code lang="ini">
+ # http://editorconfig.org
+ root = true
+ 
+ # Global settings
+ [*]
+ max_line_length = 0
+ charset = utf-8
+ indent_size = 2
+ indent_style = space
+ insert_final_newline = true
+ trim_trailing_whitespace = true
+ 
+ # Markdown
+ [*.md]
+ trim_trailing_whitespace = false
+ 
+ # Dotnet code style settings
+ [*.{cs,vb}]
+ indent_size = 4
+ indent_style = tab
+ 
+ # Sort using and Import directives with System.* appearing first
+ dotnet_sort_system_directives_first = true
+ 
+ # Avoid "this." and "Me." if not necessary
+ dotnet_style_qualification_for_field = false:error
+ dotnet_style_qualification_for_property = false:error
+ dotnet_style_qualification_for_method = false:error
+ dotnet_style_qualification_for_event = false:error
+</code>

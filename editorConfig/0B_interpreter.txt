@@ -1,0 +1,12 @@
+##Interpreter
+
+.editorconfig files can be used in a hierarchy.
+
+Lower-level configs override higher-level configs.
+
+Set "root=true" in the preamble to say "don't look for a high-level config, this is it".
+
+Anywhere a .editorconfig is found when in your project, the IDE searches upward in the directories until it finds a "root" or reaches the root of the filesystem.
+
+.editorconfig files are read top-to-bottom.
+Lower-down rules can override higher-up rules.

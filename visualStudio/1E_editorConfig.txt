@@ -1,0 +1,40 @@
+##editorconfig
+
+Applies to .Net in general.
+
+File .editorconfig, located at solution/project root, enforces coding conventions for a whole solution/project.
+
+#Format
+
+Example
+<code lang="ini">
+	# http://editorconfig.org
+	root = true
+
+	# Global settings
+	[*]
+	max_line_length = 0
+	charset = utf-8
+	indent_size = 2
+	indent_style = space
+	insert_final_newline = true
+	trim_trailing_whitespace = true
+
+	# Markdown
+	[*.md]
+	trim_trailing_whitespace = false
+
+	# Dotnet code style settings
+	[*.{cs,vb}]
+	indent_size = 4
+	indent_style = tab
+
+	# Sort using and Import directives with System.* appearing first
+	dotnet_sort_system_directives_first = true
+
+	# Avoid "this." and "Me." if not necessary
+	dotnet_style_qualification_for_field = false:error
+	dotnet_style_qualification_for_property = false:error
+	dotnet_style_qualification_for_method = false:error
+	dotnet_style_qualification_for_event = false:error
+</code>

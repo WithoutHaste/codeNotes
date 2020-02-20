@@ -1,0 +1,87 @@
+##Universal Keys
+
+Key-Value pairs recognised by all parsers.
+
+!![editorconfig Specification](https://editorconfig-specification.readthedocs.io/en/latest/)
+
+#root
+
+Only use in the preamble. Specify this file as the root config.
+<code lang="ini">
+ root = true
+</code>
+
+#indent_style
+
+<code lang="ini">
+ # use hard tabs
+ indent_style = tab
+ 
+ # use soft tabs
+ indent_style = space
+</code>
+
+#indent_size
+
+Defines the number of indent characters to use at each level.
+
+<code lang="ini">
+ # whole number
+ indent_size = 4
+ 
+ # use the tab_width value
+ indent_size = tab
+</code>
+
+#tab_width
+
+Defines the number of columns (characters widths) used to represent a tab.
+Defaults to indent_size if tab_width is not specified.
+
+<code lang="ini">
+ # whole number
+ tab_width = 4
+</code>
+
+#end_of_line
+
+<code lang="ini">
+ # carriage return
+ end_of_line = cr
+
+ # carriage return + line feed
+ end_of_line = crlf
+
+ # line feed
+ end_of_line = lf
+</code>
+
+#charset
+
+<code lang="ini">
+ charset = latin1
+ charset = utf-8
+ charset = utf-8-bom
+ charset = utf-16be
+ charset = utf-16le
+</code>
+
+#trim_trailing_whitespace
+
+<code lang="ini">
+ # remove whitespace that preceeds a newline
+ trim_trailing_whitespace = true
+
+ # leave the whitespace as is
+ trim_trailing_whitespace = false
+</code>
+
+#insert_final_newline
+
+<code lang="ini">
+ # ensure file's last character is a newline
+ insert_final_newline = true
+
+ # doesn't care
+ insert_final_newline = false
+</code>

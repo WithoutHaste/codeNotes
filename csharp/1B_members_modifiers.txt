@@ -16,6 +16,10 @@ public int Name
 </code>
 special methods called accessors provide a flexible mechanism to read and write data
 
+TODO: verify this
+By default, the private field linked to "Name" is "_name".
+You can reference these implicit private fields, like "public int Age { get => _age; set => _age = value; }"
+
 As of C# 7, property accessors can be expression bodied:
 <code>
 private strin name;

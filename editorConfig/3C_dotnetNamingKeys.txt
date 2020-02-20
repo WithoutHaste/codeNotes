@@ -1,0 +1,118 @@
+##.Net Naming Convention Keys
+
+Key-Value pairs recognised by .Net IDEs.
+
+!![documentation](https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-naming-conventions)
+
+(VS 2019)
+The order of these rules does not matter (assuming them don't directly overwrite each other).
+They will be auto-sorted from most-general to most-specific.
+
+#Key-Value Format
+
+A rule may require several key-value pairs to fully define, so the parse supports naming a group of pairs.
+
+Generic example:
+<code lang="ini">
+ # define a rule group
+ dotnet_naming_rule.<rule_title>.symbols = <symbol_title>
+ 
+ # specify the rules for a group
+ dotnet_nameing_symbols.<symbol_title>.applicable_kinds = values
+</code>
+
+Specific example:
+<code lang="ini">
+ [*.{cs,vb}]
+ # this is all one rule group "public_members_must_be_capitalized"
+ dotnet_naming_rule.public_members_must_be_capitalized.symbols   = public_symbols
+ dotnet_naming_symbols.public_symbols.applicable_kinds           = property,method,field,event,delegate
+ dotnet_naming_symbols.public_symbols.applicable_accessibilities = public
+ dotnet_naming_symbols.public_symbols.required_modifiers         = readonly
+ 
+ dotnet_naming_rule.public_members_must_be_capitalized.style    = first_word_upper_case_style
+ dotnet_naming_style.first_word_upper_case_style.capitalization = first_word_upper
+ 
+ dotnet_naming_rule.public_members_must_be_capitalized.severity = suggestion
+</code>
+
+#applicable symbols
+
+List which kinds of symbols your rule applies to.
+
+<code lang="ini">
+ # specify all symbols
+ dotnet_naming_symbols.<my_symbol_title>.applicable_kinds = *
+
+ # specify a list of symbols
+ dotnet_naming_symbols.<my_symbol_title>.applicable_kinds = namespace, class, struct, interface, enum, property, method, field, event, delegate, parameter, type_parameter, local, local_function
+</code>
+
+#accessibility level
+
+List which accessibility levels your rule applies to.
+
+<code lang="ini">
+ # specify all accessibility levels
+ dotnet_naming_symbols.<my_symbol_title>.applicable_accessibilities = *
+
+ # specify a list of accessibility levels
+ dotnet_naming_symbols.<my_symbol_title>.applicable_accessibilities = public, internal, private, protected, protected_internal, private_protected, local
+</code>
+"local" means "defined inside a method", such as local functions and local variables.
+
+#modifiers
+
+(optional - default is to match any modifiers)
+List which modifiers of symbols your rule applies to.
+Your rule will only apply to elements that have all the modifiers you specify.
+
+<code lang="ini">
+ # specify a list of modifiers
+ dotnet_naming_symbols.<my_symbol_title>.required_modifiers = abstract, async, const, readonly, static
+</code>
+"static" rules also apply to const elements because const is implicitly static. This can be overriden with a specific "const" rule.
+
+#style
+
+Specify the naming convention for the elements you've selected.
+<code lang="ini">
+ dotnet_naming_rule.<my_rule_title>.style = <my_style_title>
+</code>
+
+You must specify a capitalization style for your rule, otherwise the entire rule might be ignored.
+
+<code lang="ini">
+ # requires prefix
+ dotnet_naming_style.<my_style_title>.required_prefix = my_prefix
+
+ # requires suffix
+ dotnet_naming_style.<my_style_title>.required_suffix = my_suffix
+
+ # requires separator
+ dotnet_naming_style.<my_style_title>.word_separator = my_char
+
+ # requires capitalization
+ dotnet_naming_style.<my_style_title>.capitalization = pascel_case
+ dotnet_naming_style.<my_style_title>.capitalization = camel_case
+ dotnet_naming_style.<my_style_title>.capitalization = first_word_upper
+ dotnet_naming_style.<my_style_title>.capitalization = all_upper
+ dotnet_naming_style.<my_style_title>.capitalization = all_lower
+</code>
+
+#Severity
+
+error - violation causes compiler error (this does not stop a build)
+
+warning - violation causes compiler warning
+
+suggestion - violation causes a suggestion (such as three gray dots under the code)
+
+silent - violation causes nothing, but suggestion appears in the Refactorings menu, and auto-generated code uses this style
+aka refactoring
+
+none - violation causes nothing, but auto-generated code uses this style
+
+<code lang="ini">
+ dotnet_naming_rule.<my_rule_title>.severity = error
+</code>

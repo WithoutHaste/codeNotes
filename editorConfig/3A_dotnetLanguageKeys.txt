@@ -1,0 +1,442 @@
+##.Net Language Keys
+
+Key-Value pairs recognised by .Net IDEs.
+
+!![documentation](https://docs.microsoft.com/en-us/visualstudio/ide/editorconfig-code-style-settings-reference)
+
+Value format is "value:severity".
+
+#Severity
+
+error - violation causes compiler error (this does not stop a build)
+
+warning - violation causes compiler warning
+
+suggestion - violation causes a suggestion (such as three gray dots under the code)
+
+silent - violation causes nothing, but suggestion appears in the Refactorings menu, and auto-generated code uses this style
+aka refactoring
+
+none - violation causes nothing, but auto-generated code uses this style
+
+#this qualifiers
+
+"true" means you should qualify members with the "this" keyword. ("me" is the Visual Basic version of "this")
+
+"false" means you should not qualify members with the "this" keyword.
+
+<code lang="ini">
+[*.{cs,vb}]
+dotnet_style_qualification_for_field = false:suggestion
+dotnet_style_qualification_for_property = false:suggestion
+dotnet_style_qualification_for_method = false:suggestion
+dotnet_style_qualification_for_event = false:suggestion
+</code>
+
+#framework type names
+
+"true" means you should say "int" instead of "Int32".
+
+"false" means you should say "Int32" instead of "int".
+
+<code lang="ini">
+[*.{cs,vb}]
+dotnet_style_predefined_type_for_locals_parameters_members = true:suggestion
+dotnet_style_predefined_type_for_member_access = true:suggestion
+</code>
+
+#modifiers
+
+Should accessibility modifiers be specified? (private, public, protected)
+<code lang="ini">
+[*.{cs,vb}]
+dotnet_style_require_accessibility_modifiers = always:suggestion
+dotnet_style_require_accessibility_modifiers = for_non_interface_members:suggestion
+dotnet_style_require_accessibility_modifiers = never:suggestion
+dotnet_style_require_accessibility_modifiers = omit_if_default:suggestion
+</code>
+"for_non_interface_members" currently works the same as "always".
+
+When this rule is set, it is set to an ordered list of modifiers. This is the order preferred in the code.
+<code lang="ini">
+[*.cs]
+csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:suggestion
+
+[*.vb]
+visual_basic_preferred_modifier_order = Partial,Default,Private,Protected,Public,Friend,NotOverridable,Overridable,MustOverride,Overloads,Overrides,MustInherit,NotInheritable,Static,Shared,Shadows,ReadOnly,WriteOnly,Dim,Const,WithEvents,Widening,Narrowing,Custom,Async:suggestion
+</code>
+
+Should a field that CAN be marked "readonly", be marked such?
+<code lang="ini">
+[*.{cs,vb}]
+dotnet_style_readonly_field = true:warning
+</code>
+
+#parentheses
+
+Prefer "a + (b * c)" over "a + b * c"
+<code lang="ini">
+[*.{cs,vb}]
+dotnet_style_parentheses_in_arithmetic_binary_operators = always_for_clarity:silent
+dotnet_style_parentheses_in_arithmetic_binary_operators = never_if_unnecessary:silent
+</code>
+
+Prefer "(a < b) == (c > d)" over "a < b == c > d"
+<code lang="ini">
+[*.{cs,vb}]
+dotnet_style_parentheses_in_relational_binary_operators = always_for_clarity:silent
+dotnet_style_parentheses_in_relational_binary_operators = never_if_unnecessary:silent
+</code>
+
+Prefer "a || (b && c)" over "a || b && c"
+<code lang="ini">
+[*.{cs,vb}]
+dotnet_style_parentheses_in_other_binary_operators = always_for_clarity:silent
+dotnet_style_parentheses_in_other_binary_operators = never_if_unnecessary:silent
+</code>
+
+Prefer "(a.b).Length" over "a.b.Length"
+<code lang="ini">
+[*.{cs,vb}]
+dotnet_style_parentheses_in_other_operators = always_for_clarity:silent
+dotnet_style_parentheses_in_other_operators = never_if_unnecessary:silent
+</code>
+
+#expression-level
+
+<code lang="ini">
+ [*.{cs,vb}]
+ # prefer var c = new Customer() { Age = 21 };
+ dotnet_style_object_initializer = true:suggestion
+
+ # prefer var c = new Customer(); c.Age = 21;
+ dotnet_style_object_initializer = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs,vb}]
+ # prefer var list = new List<int> { 1, 2, 3 };
+ dotnet_style_collection_initializer = true:suggestion
+
+ # prefer var list = new List<int>(); list.Add(1); list.Add(2); list.Add(3);
+ dotnet_style_collection_initializer = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs,vb}]
+ # prefer (string name, int age) customer = GetCustomer(); var name = customer.name;
+ dotnet_style_explicit_tuple_names = true:suggestion
+ 
+ # prefer (string name, int age) customer = GetCustomer(); var name = customer.Item1;
+ dotnet_style_explicit_tuple_names = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs,vb}]
+ # prefer var tuple = (age, name);
+ dotnet_style_prefer_inferred_tuple_names = true:suggestion
+
+ # prefer var tuple = (age: age, name: name);
+ dotnet_style_prefer_inferred_tuple_names = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs,vb}]
+ # prefer var anon = new { age, name };
+ dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
+
+ # prefer var anon = new { age = age, name = name };
+ dotnet_style_prefer_inferred_anonymous_type_member_names = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs,vb}]
+ # prefer private int Age { get; }
+ dotnet_style_prefer_auto_properties = true:silent
+
+ # prefer private int age; public int Age { get { return age; } }
+ dotnet_style_prefer_auto_properties = false:silent
+</code>
+
+<code lang="ini">
+ [*.{cs,vb}]
+ # prefer if (value is null) return;
+ dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
+
+ # prefer if (object.ReferenceEquals(value, null)) return;
+ dotnet_style_prefer_is_null_check_over_reference_equality_method = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs,vb}]
+ # prefer string s = expr ? "hello" : "world";
+ dotnet_style_prefer_conditional_expression_over_assignment = true:suggestion
+
+ # prefer string s; if (expr) { s = "hello"; } else { s = "world"; }
+ dotnet_style_prefer_conditional_expression_over_assignment = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs,vb}]
+ # prefer return expr ? "hello" : "world"
+ dotnet_style_prefer_conditional_expression_over_return = true:suggestion
+
+ # prefer if (expr) { return "hello"; } else { return "world"; }
+ dotnet_style_prefer_conditional_expression_over_return = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs,vb}]
+ # prefer x += 1;
+ dotnet_style_prefer_compound_assignment = true:suggestion
+
+ # prefer x = x + 1;
+ dotnet_style_prefer_compound_assignment = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.cs]
+ # prefer void DoWork(CancellationToken cancellationToken = default) { ... }
+ csharp_prefer_simple_default_expression = true:suggestion
+
+ # prefer void DoWork(CancellationToken cancellationToken = default(CancellationToken)) { ... }
+ csharp_prefer_simple_default_expression = false:suggestion
+</code>
+
+#null checking
+
+<code lang="ini">
+ [*.{cs,vb}]
+ # prefer var v = x ?? y;
+ dotnet_style_coalesce_expression = true:suggestion
+
+ # prefer var v = x != null ? x : y;
+ dotnet_style_coalesce_expression = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs,vb}]
+ # prefer var v = o?.ToString();
+ dotnet_style_null_propagation = true:suggestion
+
+ # prefer var v = o == null ? null : o.ToString();
+ dotnet_style_null_propagation = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.cs]
+ # prefer this.s = s ?? throw new ArgumentNullException(nameof(s));
+ csharp_style_throw_expression = true:suggestion
+
+ # prefer if (s == null) { throw new ArgumentNullException(nameof(s)); } this.s = s;
+ csharp_style_throw_expression = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.cs]
+ # prefer func?.Invoke(args);
+ csharp_style_conditional_delegate_call = true:suggestion
+
+ # prefer if (func != null) { func(args); }
+ csharp_style_conditional_delegate_call = false:suggestion
+</code>
+
+#parameters
+
+Prefer that unused method parameters are removed from the method signature.
+<code lang="ini">
+ [*.{cs,vb}]
+ # apply to all methods
+ dotnet_code_quality_unused_parameters = all:suggestion
+ 
+ # apply to non-public methods only
+ dotnet_code_quality_unused_parameters = non_public:suggestion
+</code>
+
+#implicit and explicit types
+
+<code lang="ini">
+ [*.{cs}]
+ # prefer var x = 5;
+ csharp_style_var_for_built_in_types = true:suggestion
+ 
+ # prefer int x = 5;
+ csharp_style_var_for_built_in_types = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs}]
+ # prefer var obj = new Customer();
+ csharp_style_var_when_type_is_apparent = true:suggestion
+ 
+ # prefer Customer obj = new Customer();
+ csharp_style_var_when_type_is_apparent = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs}]
+ # prefer var f = this.Init();
+ csharp_style_var_elsewhere = true:suggestion
+ 
+ # prefer bool f = this.Init();
+ csharp_style_var_elsewhere = false:suggestion
+</code>
+
+#expression-bodied members
+
+"true" means the expression-body is preferred over block-body.
+
+"false" means the block-body is preferred over the expression-body.
+
+"when_on_single_line" means expression-body is preferred when it results in a single line.
+
+<code lang="ini">
+ [*.{cs}]
+ csharp_style_expression_bodied_methods = false:silent
+ csharp_style_expression_bodied_constructors = false:silent
+ csharp_style_expression_bodied_operators = false:silent
+ csharp_style_expression_bodied_properties = true:suggestion
+ csharp_style_expression_bodied_indexers = true:suggestion
+ csharp_style_expression_bodied_accessors = true:suggestion
+ csharp_style_expression_bodied_lambdas = true:silent
+ csharp_style_expression_bodied_local_functions = false:silent
+</code>
+
+#pattern matching
+
+<code lang="ini">
+ [*.{cs}]
+ # prefer if (o is int i) {...}
+ csharp_style_pattern_matching_over_is_with_cast_check = true:suggestion
+
+ # prefer if (o is int) {var i = (int)o; ... }
+ csharp_style_pattern_matching_over_is_with_cast_check = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs}]
+ # prefer if (o is string s) {...}
+ csharp_style_pattern_matching_over_as_with_null_check = true:suggestion
+
+ # prefer var s = o as string; if (s != null) {...}
+ csharp_style_pattern_matching_over_as_with_null_check = false:suggestion
+</code>
+
+#inlined variable declarations
+
+<code lang="ini">
+ [*.{cs}]
+ # prefer if (int.TryParse(value, out int i) {...}
+ csharp_style_inlined_variable_declaration = true:suggestion
+
+ # prefer int i; if (int.TryParse(value, out i) {...}
+ csharp_style_inlined_variable_declaration = false:suggestion
+</code>
+
+#code block
+
+"true" means use curly braces even around single-line blocks.
+
+"false" means don't use curly braces if the compiler does not require them.
+
+"when_multiline" means use curly braces around multi-line blocks.
+
+<code lang="ini">
+ [*.{cs}]
+ csharp_prefer_braces = true:suggestion
+ csharp_prefer_braces = false:suggestion
+ csharp_prefer_braces = when_multiline:suggestion
+</code>
+
+#unused value
+
+<code lang="ini">
+ [*.{cs}]
+ # prefer _ = System.Convert.ToInt32("35");
+ csharp_style_unused_value_expression_statement_preference = discard_variable:suggestion
+
+ # prefer var unused = Convert.ToInt32("35");
+ csharp_style_unused_value_expression_statement_preference = unused_local_variable:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs}]
+ # prefer _ = wordCount.TryGetValue(searchWord, out var count);
+ csharp_style_unused_value_assignment_preference = discard_variable:suggestion
+
+ # prefer var unused = wordCount.TryGetValue(searchWord, out var count);
+ csharp_style_unused_value_assignment_preference = unused_local_variable:suggestion
+</code>
+
+#index and range
+
+<code lang="ini">
+ [*.{cs}]
+ # prefer var index = names[^1];
+ csharp_style_prefer_index_operator = true:suggestion
+
+ # prefer var index = names[names.Length - 1];
+ csharp_style_prefer_index_operator = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs}]
+ # prefer var sub = sentence[0..^4];
+ csharp_style_prefer_range_operator = true:suggestion
+
+ # prefer var sub = sentence.Substring(0, sentence.Length - 4);
+ csharp_style_prefer_range_operator = false:suggestion
+</code>
+
+#misc
+
+<code lang="ini">
+ [*.{cs}]
+ # prefer var (name, age) = GetPersonTuple(); (int x, int y) = GetPointTuple();
+ csharp_style_deconstructed_variable_declaration = true:suggestion
+
+ # prefer var person = GetPersonTuple(); (int x, int y) point = GetPointTuple();
+ csharp_style_deconstructed_variable_declaration = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs}]
+ # prefer int fibonacci(int n) { return n <= 1 ? 1 : fibonacci(n-1) + fibonacci(n-2); }
+ csharp_style_pattern_local_over_anonymous_function = true:suggestion
+
+ # prefer Func<int, int> fibonacci = null; fibonacci = (int n) => { return n <= 1 ? 1 : fibonacci(n - 1) + fibonacci(n - 2); };
+ csharp_style_pattern_local_over_anonymous_function = false:suggestion
+</code>
+
+"outside_namespace" means using statements should be placed outside the namespace.
+"inside_namespace" means using statements should be placed inside the namespace.
+<code lang="ini">
+ [*.{cs}]
+ csharp_using_directive_placement = outside_namespace:suggestion
+ csharp_using_directive_placement = inside_namespace:suggestion
+</code>
+
+"true" means local functions should be explicitly declared static.
+<code lang="ini">
+ [*.{cs}]
+ csharp_prefer_static_local_function = true:suggestion
+ csharp_prefer_static_local_function = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs}]
+ # prefer using var a = b;
+ csharp_prefer_simple_using_statement = true:suggestion
+
+ # prefer using (var a = b) { }
+ csharp_prefer_simple_using_statement = false:suggestion
+</code>
+
+<code lang="ini">
+ [*.{cs}]
+ # prefer return x switch { 1 => 1 * 1, 2 => 2 * 2, _ => 0, };
+ csharp_style_prefer_switch_expression = true:suggestion
+
+ # prefer switch (x) { case 1: return 1 * 1; case 2: return 2 * 2; default: return 0; }
+ csharp_style_prefer_switch_expression = false:suggestion
+</code>
