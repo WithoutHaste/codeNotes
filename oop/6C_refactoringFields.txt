@@ -1,0 +1,122 @@
+##Refactoring Fields
+
+#Encapsulate Field
+
+In C# terms: replace a Field with a Property.
+In general: use public Getter/Setter Methods to access a private Field so you know it is always accessed the same way.
+
+When to do this:
+Always, for public mutable Fields.
+
+#Encapsulte Collection
+
+Class A uses a collection to store data. Do not reveal access to the collection publicly.
+If you let other classes access the collection directly, they will rely on Class A always storing its data as this collection.
+And they with muck about with your data.
+
+When to do this?
+Always, for public collections.
+
+<code lang="csharp">
+// before
+public class Course
+{
+	public List<Student> Students { get; set; }
+}
+
+// after
+public class Course
+{
+	private List<Student> _students;
+	public Student Students { get { return _students.ToArray(); } }
+	
+	public void AddStudent(Student student) {
+		_students.Add(student);
+	}
+	
+	public void RemoveStudent(Student student) {
+		_students.Remove(student);
+	}
+}
+</code>
+
+#Move Field
+
+Move Field A from Class X to Class Y.
+
+When to do this?
+When Class Y uses the Field more than Class X does.
+When the field is conceptually related to Y more than to X.
+
+#Replace Data Value with Object
+
+Encapsulate a primitive data value in an class.
+Similar to Extract Class.
+
+When to do this?
+The new class is conceptually important.
+There is behavior specific to this data value that belongs in the new class.
+
+#Change Value to Reference
+
+Replace a value object with a reference object.
+
+When to do this?
+To save memory - many objects can reference the same instance instead of each referencing a private instance.
+To better reflect the domain - to show that this really is the same object that everything is referencing.
+
+Immutability is immaterial here.
+You can save a lot of memory by sharing an immutable object (use Reference).
+A mutable object may need to be shared across a distributed system (use Value).
+
+#Change Reference to Value
+
+Opposite of Change Value to Reference.
+
+When to do this?
+The unique identity of the reference object is not important in the domain.
+The system is distributed such that a single object in memory cannot be shared.
+
+#Replace Magic Number with Symbolic Constant
+
+Give a name to number (and string) literals.
+This will communicate the meaning of the literal.
+
+When to do this?
+Almost always; rarely use number/string literals in your code.
+
+When to NOT do this?
+The literal's meaning is so common and obvious that naming it would be less clear.
+- Ex: if(denominator == 0) throw MathException("Cannot divide by 0");
+- Ex: percent = actual / total * 100;
+- I can only think of math examples, so my rule is to never use string literals, only named constants.
+
+#Replace Type Code with Class
+
+Class A has a primitive Field that can be set to one of several constant values.
+Convert these possible values into a Class that can only be set to one of those values.
+
+In .Net, this means use an Enum.
+Note that in .Net an Enum does not limit what values can be set, but it does communicate which values should be set.
+
+#Replace Type Code with Subclasses
+
+Class A has a primitive Field that can be set to one of several constant values. In addition, the value of the Field affects Class behavior.
+
+Make Class A abstract and create a child Class for each possible value of the Field.
+Use polymorphism instead of conditional logic to determine behavior.
+
+#Replace Type Code with State/Strategy
+
+Class A has a primitive Field that can be set to one of several constant values. In addition, the value of the Field affects Class behavior.
+
+Make the Field of type abstract Class B and create a child Class for each possible value of the Field.
+Use polymorphism instead of conditional logic to determine behavior.
+
+Use this (instead of Replace Type Code with Subclasses) if the value of the Field can change throughout the life of the Object A.
+
+See Replace Conditional with Polymorphism.
+
+#Remove Setter Method
+
+Default to not allowing Fields/Properties to be altered.

@@ -64,3 +64,13 @@ WITH (FIRSTROW = 2,
 	ROWTERMINATOR='\n',
 	DATAFILETYPE ='widechar');
 </code>
+
+To view details of errors, such as the line number that failed import
+<code>
+BULK INSERT TableName
+FROM 'fileNameWithFullPath.csv'
+WITH (FIRSTROW = 2,
+    FIELDTERMINATOR = ',',
+	ROWTERMINATOR='\n',
+	ERRORFILE = 'C:\temp\dbErrors.log');
+</code>

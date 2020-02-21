@@ -1,3 +1,301 @@
 ##Refactoring
 
 Refactor means to change the structure/design of code without changing the functionality.
+Goal: the code is easier to understand.
+Goal: the code is cheaper to modify in the future.
+
+Before refactoring, ensure you have a comprehensive set of automated unit tests, integration tests, and end-to-end tests.
+(You definitely need the unit tests. The others add more reliability.)
+That way you can be sure that you aren't breaking intended functionality.
+Run your tests frequently while refactoring. The fewer changes you've made when a test breaks, the easier it is to debug the error.
+
+"Test, small change, test, small change, test, small change. It is that rhythm that allows refactoring to move quickly and safely."
+
+Refactoring is a process that builds on itself.
+Individual changes may not seem very important, but as they build up they reveal more important changes that can now be made.
+See Domain Driven Design.
+
+Refactoring is more difficult when you are bound by:
+- the database design
+- a public interface
+
+There are times it is faster to start over from scratch than to refactor code.
+In my experience, programmers are more comfortable with and excited by starting over from scratch, and they will chose this option more often than they should.
+Therefore, I recommend erring heavily on the side of refactoring.
+
+Problems with starting over from scratch:
+- you lose business logic that was embedded in the old code, but not documented
+- it will take far longer than you estimate to catch up with the functionality of the old code base
+- you still have to support the old case base anyway
+
+A lot of this terminology is taken from Martin Fowler's book "Refactoring".
+
+#Code Stinks
+
+Things in the code base that make programmers uncomfortable, even before they can say what they don't like about it.
+Terminology is taken from Martin Fowler's "Refactoring".
+
+Vague names (variable, method, class, etc)
+
+Duplicated code
+- code is not duplicated if it is serving different layers of the architecture (ex domain object vs service response object)
+- code is not duplicated if it is serving distinct stakeholders (it will diverge as change requests come in)
+
+Long methods
+
+Large classes
+
+Long parameter lists
+
+Divergent changes - a class is altered repeatedly for very different reasons
+
+Shotgun surgery - every task involves tiny changes in many different classes
+
+Feature envy - a method in Class X that is mostly concerned with data and operations in Class Y
+
+Data clumps - the same few fields show up together in many different classes
+
+Primitive obsession - the disinclination to use small classes for important concepts, just because "classes shouldn't be small"
+
+Switch statements - consider polymorphism instead
+
+Parallel inheritance hierarchies - everytime you make a child of Class X, you also must make a child of Class Y
+
+Lazy classes - a class that isn't worth maintaining
+
+Speculative generality - "we might need this later, so I'll generalize it now"
+
+Temporary field - a field that is only set/used occassionally
+
+Message chains - class X asks class Y asks class Z asks... and eventually the response bubbles back to X
+
+Middle man - a class that delegates too much to other classes
+
+Inappropriate intimacy - a pair of classes that have too much knowledge about each other's private members
+
+Alternative method with different interfaces - methods with the same purpose, but different types of parameters
+
+Incomplete library class - logic that belongs in a library is implemented outside of it (applies when you contol the library)
+
+Data class - a class with data but no behavior
+
+Refused bequest - a child class does not use all the data or operations of the parent class
+
+Comments - comments that mark poor code, or that explain what is happening instead of letting the class/method/variable names make that clear
+- "When you feel the need to write a comment, first try to refactor the code so that any comment becomes superfluous."
+- comments that explain "why" are good comments
+
+String parsing
+- I've seen so many errors around string parsing. Structure your code so that strings are treated as complete units. Limit and carefully test where string parsing occurs.
+
+#Rename
+
+Rename a variable or a method or a class such that they reveal their intention and meaning.
+Avoid abbreviations (unless they are common acronyms in your domain).
+
+It is always worth renaming to increase clarity of meaning.
+
+"Any fool can write code that a computer can understand. Good programmers write code that humans can understand."
+
+#Exit Methods as Soon as Possible
+
+Use as many "return" statements in a Method as you need. 
+If you limit yourself to 1 "return" statement, you will often end up with deeply nested conditional logic.
+By exiting the Method as soon as possible, you make the paths through the Method easier to read.
+
+#Substitute Algorithm
+
+An algorithm is unclear, and you want to restructure it.
+
+#Replace Conditional with Polymorphism
+
+Ex Before: Class X contains conditional logic based on Property P.
+Ex After : Class X is abstract and has several child Classes U, V, W. Each child class is specific to one possible value of Property P.
+
+Instead of conditional logic, each child Class overrides just its own P-specific logic.
+The "condition" is now handled automatically by which Class is instantiated.
+
+This increases the extensibility of the code, and follows the Open/Closed Principle.
+
+#Change Bidirectional Association to Unidirectional
+
+Class A and B reference each other. You simplify this to Class A referencing Class B.
+
+See Domain Driven Design on the topic of simplifying the domain model to focus attention on the most important relationships, instead of trying to accurately map all the details of the real world.
+See Domain Driven Design Aggregates.
+
+Bidirectional associations are difficult to maintain:
+- creating the objects takes some juggling
+- removing the objects from memory is prone to errors
+- the association is harder to store in a database
+
+#Change Unidirectional Association to Bidirectional
+
+Class A points to Class B. Update Class B to point back to Class A.
+
+When to do this?
+Class B requires a reference back to Class A to complete an operation.
+
+I'm not sure about this one.
+I expect this is actually a rare need.
+I expect that more frequently, there is a bigger restructuring of the class diagram that needs to happen here.
+
+#Decompose Conditional
+
+Given a complicated conditional expression, move some or all of the logic to separate Methods.
+This lets you name the logic to explain it.
+
+Example:
+<code lang="csharp">
+// before
+if(date.before(SUMMER_START) || date.after(SUMMER_END))
+	charge = quantity * _winterRate + _winterServiceCharge;
+else
+	charge = quantity * _summerRate;
+
+// after
+if(isSummer(date))
+	charge = quantity * _summerRate;
+else 
+	charge = quantity * _winterRate + _winterServiceCharge;
+</code>
+
+#Consolidate Conditional Expression
+
+Given multiple guard clauses that return the same result, consolidate them in to one Method.
+
+Example:
+<code lang="csharp">
+// before
+double disabilityAmount() {
+	if (_seniority < 2) return 0;
+	if (_monthsDisabled > 12) return 0;
+	if (_isPartTime) return 0;
+	return calculateAmount();
+}
+
+// after
+double disabilityAmount() {
+	if (!eligibleForDisability()) return 0;
+	return calculateAmount();
+}
+bool eligibleForDisability() {
+	return (_seniority >= 2
+		|| _monthsDisabled <= 12
+		|| !_isPartTime);
+}
+</code>
+
+#Consolidate Duplicate Conditional Fragments
+
+Make it clear what part of the logic is conditional and what is not by keeping only conditional logic inside conditions.
+
+Example:
+<code lang="csharp">
+// before
+if (isSpecialDeal()) {
+	total = price * 0.95;
+	send();
+}
+else {
+	total = price * 0.98;	
+	send();
+}
+
+// after
+if (isSpecialDeal()) {
+	total = price * 0.95;
+}
+else {
+	total = price * 0.98;	
+}
+send();
+</code>
+
+#Remove Nested Conditional with Guard Clause
+
+Don't nest conditional statements. Deeply nested code is harder to read.
+
+<code lang="csharp">
+// before
+double getPayAmount() {
+	double result;
+	if(_isDead) 
+		result = deadAmount();
+	else {
+		if(_isSeparated) 
+			result = separatedAmount();
+		else {
+			if (_isRetired) 
+				result = retiredAmount();
+			else 
+				result = normalPayAmount();
+		}
+	}
+	return result;
+}
+
+// after
+double getPayAmount() {
+	if (_isDead) 
+		return deadAmount();
+	if (_isSeparated) 
+		return separatedAmount();
+	if (_isRetired) 
+		return retiredAmount();
+	return normalPayAmount();
+}
+</code>
+
+#Remove Control Flag
+
+Use "break" and "return" instead of a loop control flag.
+Loop control flags are a common source of errors.
+
+<code lang="csharp">
+// before
+boolean found = false;
+for (int i = 0; i < people.length; i++) {
+	if (! found) {
+		if (people[i].equals("Don")){
+			sendAlert();
+			found = true;
+		}
+	}
+}
+
+// after
+for (int i = 0; i < people.length; i++) {
+	if (people[i].equals("Don")){
+		sendAlert();
+		break;
+	}
+}
+</code>
+
+#Preserve Whole Object
+
+Instead of getting several values from Object A and passing them to a method call, just pass the whole object.
+
+When to do this?
+The method is likely to need different Fields/Properties from Object A in the future.
+The method needs all, or almost all, of the Fields/Properties of Object A.
+
+When NOT to do this?
+The method's object ought not to have a code dependency on Object A.
+The method receives these arguments from other sources than Object A, and you don't want a special overload for this use case.
+
+This might be a hint that the method belongs in Object A.
+
+#Replace Error Code with Exception
+
+Instead of returning a special error value (magic number), just thrown an Exception.
+
+See discussions of Soft Errors vs Exceptions.
+
+#Replace Exception with Test
+
+If you can return a valid non-error value on a special case, test for that case instead of throwing an Exception.
+This only applies when the calling code does not need to check for a magic number value before contining execution.
+
+Example: returning 0 will cause proper behavior, so return 0 instead of throwing an Exception.

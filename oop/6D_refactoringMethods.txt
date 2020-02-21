@@ -1,0 +1,295 @@
+##Refactoring Methods
+
+#Extract Method
+
+Take a section of code from Method A and move it into new Method B. 
+Method A now calls Method B.
+
+When to do this?
+When Method B is cohesive and has a single responsibility.
+A good indication is that Method B has a short and communicative name.
+A good indication is that several local variables have been moved to B and are local to just B.
+A good indication is that B has 0-2 parameters.
+A good indication is that B has 0 or 1 return values.
+A good indication is that B has no side effects (nullipotent).
+
+The length of Method A is immaterial.
+There is an added bonus if you shorten a very long method, but the increase in clarity is worth it on its own.
+
+The number of times Method B is called is immaterial.
+There is an added bonus if you reduce code duplication, but the increase in clarity is worth it on its own.
+
+#Inline Method
+
+Replace a method call with the body of the method itself, and delete the method that is no longer needed.
+
+When to do this?
+The method body is as clear as the name of the method.
+The method did not have high cohesion internally and low coupling externally.
+The method is only called from one statement.
+
+In .Net, do not inline a method for performance concerns.
+The .Net compiler will automatically inline methods when (A) they are very short or (B) they are only called from a few places.
+The division of methods is to serve the understanding of the programmers.
+
+Extending the example from the book: inlining the method is not sufficient here.
+<code lang="csharp">
+// before
+boolean moreThanFiveLateDeliveries() {
+	return _numberOfLateDeliveries > 5;
+}
+int getRating() {
+	return moreThanFiveLateDeliveries() ? 2 : 1;
+}
+</code>
+This code matches "method body is as clear as the name of the method", so inlining is the first step.
+But a better solution is to raise this hidden business policy up.
+<code lang="csharp">
+// after
+class LateDeliveryPolicy : IPolicy
+{
+	private const _threshold = 5;
+	
+	boolean IsViolated(Object widget) {
+		return widget.NumberOfLateDeliveries > _threshold;
+	}
+}
+int getRating() {
+	return LateDeliveryPolicy.IsViolated(widget) ? 2 : 1;
+}
+</code>
+I point this out because just inlining the method does not remove the code smell, it just changes it.
+
+#Move Method
+
+Move Method A from Class X to Class Y.
+
+When to do this?
+When Method A uses data from Y, but not data from X.
+When Method A is conceptually related to Y more than to X.
+
+This usually involves renaming the Method to better match its new Class.
+
+Sometimes the old Method is left in Class X and now it just calls the Method in Class Y (delegation).
+This is useful if Class Y has a public interface that you need to continue supporting.
+
+#Replace Method with Method Object
+
+Move a method into an object that exists just for this operation.
+- the operation can be decomposed into many private methods
+- data can be shared between methods with private fields instead of passing lots of parameters around
+See Services in Domain Driven Design.
+
+When to do this?
+The method is very long and the logic is complex. It uses many local variables throughout the process.
+The method coordinates between multiple objects, but does not really belong inside any of them.
+The method is significant to the domain, and deserves to be raised up.
+
+Not all objects are based on Nouns.
+Some operations are important enough in the domain to be raised up to object level.
+
+Method Objects should be stateless.
+
+#Introduce Foreign Method
+
+You want to add a Method to a Class you don't control.
+
+In C#, this is adding an Extension Method.
+
+When to do this?
+Conceptually, this Method belongs in the Class, and you want that communicated in the code.
+
+#Introduce Assertion
+
+In .Net, you'd use a Guard Clause instead of an Assertion.
+
+Verify the state of the parameters before continuing with the method.
+
+#Add Parameter
+
+As part of a larger refactoring, you need to add a Parameter to a Method signature.
+
+#Remove Parameter
+
+As part of a larger refactoring, you need to remove a Parameter to a Method signature.
+
+#Separate Query from Modifier
+
+Separete query/lookup logic from modifier/command logic.
+
+This supports code reuse because the Methods are more granular.
+This separates Nullipotent Methods from Non-Nullipotent Methods, which shows which Methods are safer to call.
+
+Example:
+<code lang="csharp">
+// before
+int getTotalOutstandingAndSetReadyForSummaries() { }
+
+// after
+int getTotalOutstanding() { }
+void setReadyForSummaries() { }
+</code>
+
+#Parameterize Method
+
+Generalize the functionality of several methods into one method by using Parameters.
+
+Example:
+<code lang="csharp">
+// before
+fivePercentRaise();
+tenPercentRaise();
+
+// after
+raise(decimal percentage);
+</code>
+
+#Replace Parameter with Explicit Method
+
+Do not run different logic based on the value of one Parameter.
+
+This is NOT the opposite of Parameterize Method.
+
+Example:
+<code lang="csharp">
+// before
+void setValue (String name, int value) {
+	if (name.equals("height"))
+		_height = value;
+	
+	if (name.equals("width"))
+		_width = value;
+}
+
+// after
+void setHeight(int arg) {
+	_height = arg;
+}
+
+void setWidth (int arg) {
+	_width = arg;
+}
+</code>
+
+#Replace Parameter with Method
+
+Instead of getting a return value from Method A and passing it to Method B, let Method B call Method A directly.
+
+When to do this?
+The value provided to Method B consistently comes from Method A.
+
+Example:
+<code lang="csharp">
+// before
+int basePrice = _quantity * _itemPrice;
+discountLevel = getDiscountLevel();
+double finalPrice = discountedPrice(basePrice, discountLevel);
+
+// after
+int basePrice = _quantity * _itemPrice;
+double finalPrice = discountedPrice(basePrice);
+</code>
+
+#Introduce Parameter Object
+
+You have a set of parameters that are always passed to methods as a set.
+
+Example:
+<code lang="csharp">
+// before
+int operationA(string a, int b, int c, bool d);
+int operationB(string e, int f, string a, int b, int c);
+int operationC(string a, Object g, int b, bool h, int c);
+
+// after
+public class Widget {
+	public string a { get; set; }
+	public int b { get; set; }
+	public int c { get; set; }
+}
+int operationA(Widget w, bool d);
+int operationB(string e, int f, Widget w);
+int operationC(Widget w, Object g, bool h);
+</code>
+
+#Hide Method
+
+Default to methods being private.
+
+#Form Template Method
+
+Two sibling child Classes perform the same series of steps, but what they do at each step is different.
+Use a Template Method to show the similaries in the processes.
+
+Example:
+<code lang="csharp">
+// before
+public class Site {
+}
+public class ResidentialSite : Site {
+	decimal getBillableAmount() {
+		double base = _units * _rate;
+		double tax = base * Site.TAX_RATE;
+		return base + tax;
+	}
+}
+public class LifelineSite : Site {
+	decimal getBillableAmount() {
+		double base = _units * _rate * 0.5;
+		double tax = base * Site.TAX_RATE * 0.2;
+		return base + tax;
+	}
+}
+
+// after
+public class Site {
+	decimal getBillableAmount() {
+		decimal baseAmount = getBaseAmount();
+		return baseAmount + getTaxAmount(baseAmount);
+	}
+	decimal abstract getBaseAmount();
+	deicmal abstract getTaxAmount(decimal baseAmount);
+}
+public class ResidentialSite : Site {
+	decimal override getBaseAmount() {
+		return _units * _rate;
+	}
+	decimal override getTaxAmount(decimal base) {
+		double tax = base * Site.TAX_RATE;
+		return base + tax;
+	}
+}
+public class LifelineSite : Site {
+	decimal override getBaseAmount() {
+		return _units * _rate * 0.5;
+	}
+	decimal override getTaxAmount(decimal base) {
+		double tax = base * Site.TAX_RATE * 0.2;
+		return base + tax;
+	}
+}
+</code>
+
+#Replace Constructor with Factory Method
+
+Constructors are generally very simple. Signal complex logic by using a Factory.
+
+#Encapsulate Downcast
+
+If a Method's callers commonly have to perform a downcast on the return value, the Method should handle that itself.
+(This seems to be a Java problem, because all Collections can only hold Objects.)
+
+To generalize this: If a Method's callers commonly have to perform a transformation on the return value, the Method should handle that itself.
+
+Example:
+<code lang="csharp">
+// before
+Object lastReading() {
+	return readings.lastElement();
+}
+
+// after
+Reading lastReading() {
+	return (Reading)readings.lastElement();
+}
+</code>

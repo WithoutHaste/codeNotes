@@ -8,6 +8,9 @@ Moq is a popular mocking framework for C#. You can install Moq (and its dependen
 
 If you find yourself mocking a normal class, you should probably refactor so the class implements an interface and you are mocking the interface. See "Dependency Inversion" for more.
 
+A thought I had was, if I have an Interface already, why use Moq? Why not just implement a test version of the Interface?
+Answer: With Moq, all the test implementation logic is contained in the test case, and you can easily use a different implementation for each test.
+
 #Basic Example
 
 <code>

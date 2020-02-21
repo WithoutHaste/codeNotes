@@ -1,0 +1,105 @@
+##Refactoring Variables
+
+#Inline Temp
+
+Similar to Replace Temp with Query.
+
+Example:
+<code lang="csharp">
+// before
+double basePrice = anOrder.basePrice();
+return (basePrice > 1000)
+
+// after
+return (anOrder.basePrice() > 1000)
+</code>
+
+#Introduce Explaining Variable
+
+The opposite of Inline Temp.
+
+Example:
+<code lang="csharp">
+// before
+if((platform.toUpperCase().indexOf("MAC") > -1) 
+	&& (browser.toUpperCase().indexOf("IE") > -1)
+	&& wasInitialized() && resize > 0)
+{ }
+
+// after
+const boolean isMacOs = platform.toUpperCase().indexOf("MAC") > -1;
+const boolean isIEBrowser = browser.toUpperCase().indexOf("IE") > -1;
+const boolean wasResized = resize > 0; 
+if(isMacOs && isIEBrowser && wasInitialized() && wasResized)
+{ }
+</code>
+The next step here is to consider if conditionals like "browser.toUpperCase().indexOf("IE") > -1" can be moved into the browser object with a signature like "browser.IsIE". (Or into the owner of the browser string.) Then you can use Inline Temp to re-simplify the if statement.
+
+#Split Temp Variable
+
+A variable is reused for a new purpose.
+
+When to do this? Always. You should never reuse a variable for a different purpose.
+
+Example:
+<code lang="csharp">
+// before
+double temp = 2 * (_height + _width);
+System.out.println (temp);
+temp = _height * _width;
+System.out.println (temp);
+
+// after
+const double perimeter = 2 * (_height + _width);
+System.out.println (perimeter);
+const double area = _height * _width;
+System.out.println (area);
+</code>
+
+#Remove Assignments to Parameters
+
+A parameter value is written over. Use a local variable instead.
+
+When to do this? Always. You should never write over a parameter value.  Why is it there if you're overwriting it?
+
+This does not apply to "out" parameters.
+This does not apply to altering a member of an object parameter.
+
+#Replace Temp with Query
+
+The result of a method call is stored in a local variable.
+The variable value is not changed again, and is just used in a calculation later.
+You can remove the local variable and simply call the method within the calculation.
+
+When NOT to do this:
+When the name of the local variable claifies the meaning of the method return value. (And you don't have access to the method to rename it.)
+When there are several method results used in the calculation, and it improves legibility to collect those values ahead of time in local variables.
+When the method result is used in more than one place, and you want to ensure they don't diverge.
+When the method call is costly, and you need to call it more than once. (Fowler advises to not worry about performance at this stage.)
+
+#Replace Array with Object
+
+You are using an array to hold values with different meanings, rather than to hold a collection of values with one meaning.
+Applies also to lists, dictionaries, tuples, etc.
+
+When to do this?
+Always; you should never use a collection where the position of elements holds specific meanings.
+
+Example:
+<code lang="csharp">
+// before
+string[] record = new string[] { "Janice", "32", "New York City", "Interior Decorator" };
+
+// after
+public class Person
+{
+	public string Name { get; set; }
+	public int Age { get; set; }
+	public string City { get; set; }
+	public string Job { get; set; }
+}
+</code>
+
+Of course, the whole point of tuples is to do exactly this - avoid making a class.
+I like tuples for destructuring such as "var (name, age, city, job) = person.Destructure();".
+I don't like tuples for passing data around.

@@ -1,0 +1,233 @@
+##Refactoring Classes
+
+#Extract Class
+
+One class is doing the work of multiple classes. Extract part of the data and logic into a new class.
+
+When to do this?
+The class does not have a Single Responsibility (or Single Reason to Change).
+The class contains private logic that you want to be able to unit test.
+The class contains a subset of data and logic that forms a cohesive concept with a clear name.
+
+Make sure the new class is well-named (Self-Documenting Code and Intention-Revealing Interface).
+Make sure the new class contains all the cohesive data and logic needed for its calculations (Single Responsibility).
+
+There is no minimum or maximum size for objects, provided they are internally cohesive and externally decoupled.
+
+#Inline Class
+
+The opposite of Extract Class.
+
+When to do this?
+The class is not worth maintaining separately.
+The class merely delegates all its operations to one other class.
+The class is not an important domain concept.
+
+#Extract Subclass
+
+One class has data and behavior that only applies in some cases.
+Pull that into a child Class. The original Class remains concrete.
+
+#Extract Superclass
+
+Multiple classes have data and behavior in common.
+Move their shared data and behavior into a new parent Class from which they will all inherit.
+
+Only do this if the Classes have strong shared concepts.
+For instance, don't combine Person and Institution just because they both have Address data and behavior.
+
+#Extract Hierarchy
+
+A Class is doing too much work, much of it divided by conditional logic.
+Divide the conditional logic into child Classes.
+
+#Extract Interface
+
+When to do this?
+Several clients use the same subset of a Class's interface, and it forms a conceptual whole.
+Multiple Classes share a subset of their interface, and it forms a conceptual whole. 
+
+Extracting an interface is a good way of delineating a use case for a Class that might be used in many different ways.
+
+Example:
+<code lang="csharp">
+// before
+public class Employee {
+	getRate();
+	hasSpecialSkill();
+	getName();
+	getDepartment();
+}
+
+// after
+public interface IBillable {
+	getRate();
+	hasSpecialSkill();
+}
+public class Employee : IBillable {
+	getRate();
+	hasSpecialSkill();
+	getName();
+	getDepartment();
+}
+</code>
+
+#Collapse Hierarchy
+
+Opposite of Extract Subclass.
+
+#Replace Inheritance with Delegation
+
+A child Class uses only part of the parent Class interface, or does not use the parent Class data.
+
+Example:
+<code lang="csharp">
+// before
+public class Vector {
+}
+public class Stack : Vector { 
+}
+
+// after
+public class Vector {
+}
+public class Stack {
+	private Vector _vector;
+}
+</code>
+
+#Replace Delegation with Inheritance
+
+When a Class is constantly delegating to its Member, maybe it ought to inherit from that Member's Class instead.
+
+Opposite of Replace Inheritance with Delegation.
+
+#Hide Delegate
+
+Client calls Class A and related Class B directly.
+Instead, have Client call Class A only, and Class A can delegate some of the calls to Class B.
+
+When to do this?
+Class B is never called without an attached Class A - an indication that Class A is more important conceptually than B.
+Class B is naturally a part of Class A's Aggregate (see Domain Driven Design) and therefore should not be called directly.
+You want to present a smaller interface to the Client.
+
+The example in the book involves a bidirectional link between Class A and Class B.
+This can be extended with examples from Domain Driven Design: once Class B is accessed through Class A, that indicates that the bidirectional link can be simplified to a directional link from Class A to Class B.
+See Change Bidirectional Association to Unidirectional.
+
+#Remove Middle Man
+
+The opposite of Hide Delegate.
+
+#Introduce Local Extension
+
+There is a lot of custom functionality you want to use wrapped around a library Class (a class outside your control).
+Inherit from the library Class or (if it is Sealed) write a Wrapper for it.
+
+When to do this?
+There is a significant amount of custom functionality you want in this library Class.
+
+#Moving Behavior into the Class
+
+Look at the where your Class's getter methods are used. Is there logic outside the Class that should be moved into it?
+
+Ex: Class B gets a collection from Class A and counts how many elements match a standard criteria. Instead, Class A should provide a Method for this.
+
+#Replace Subclass with Fields
+
+Opposite of Replace Type Code with Subclasses.
+
+#Introduce Null Object
+
+Given that you frequently have to check if objects of Class A are null or not before operating on them, create a child Class B that is the "null object".
+B can implement all operations of A such that it does not cause errors if you try to use them.
+This is a form of Polymorphism - instead of checking a conditional before using behavior, you just use the behavior.
+
+Now you never need to check for null.
+
+As a bonus, you can make NullWidget a Singleton to save memory.
+
+Example:
+<code lang="csharp">
+public class Widget {
+	public static Factory() {
+		if(conditional)
+			return new NullWidget();
+		return new Widget();
+	}
+	public virtual int SomeOperation() {
+		return calcuation();
+	}
+}
+public class NullWidget : Widget { 
+	public override int SomeOperation() {
+		return 0;
+	}
+}
+</code>
+
+An example is when Widget needs to display data involving 10 possibly null Properties. If each of them has a Null Object implemented, there is very little conditional logic need to display everything correctly.
+
+#Pull Up Field
+
+All sibling child Classes contain the same Field.
+Raise this Field to the parent Class.
+
+#Pull Up Method
+
+All sibling child Classes contain the same Method.
+Raise this Method to the parent Class.
+
+#Pull Up Constructor Body
+
+All sibling child Classes contain the same Constructor.
+Raise this Constructor to the parent Class.
+
+This may involve the child Classes passing some parameters to the new base Constructor.
+
+#Push Down Field
+
+Class A's field is irrelevant to most of the child Classes.
+Push the field down to the child Classes that use it.
+
+#Push Down Method
+
+Class A's method is irrelevant to most of the child Classes.
+Push the method down to the child Classes that use it.
+
+#Tease Apart Inheritance
+
+An inheritance hierarchy is doing more than one task.
+A sign of this is combinatorial names.
+
+See Bridge Design Pattern.
+
+Example:
+<code lang="csharp">
+// before
+publc class Deal { }
+public class ActiveDeal : Deal { }
+public class TabularActiveDeal : ActiveDeal {}
+
+public class PassiveDeal : Deal { }
+public class TabularPassiveDeal : PassiveDeal { }
+
+// after
+publc class Deal { 
+	private PresentationStyle _style;
+}
+public class ActiveDeal : Deal { }
+public class PassiveDeal : Deal { }
+
+public class PresentationStyle { }
+public class SinglePresentationStyle: PresentationStyle {}
+public class TabularPresentationStyle: PresentationStyle {}
+</code>
+
+#Convert Procedural Design to Objects
+
+You have procedural code and want to restructure it into object-oriented code.
+
+This is a nebulous task.
+
