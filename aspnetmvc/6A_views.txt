@@ -43,6 +43,8 @@ Partial views automatically get a copy of the full view's ViewData dictionary - 
 @Html.Partial("AuthorPartial", book.Author)
 </code>
 
+Partial views cannot include "sections" referenced by a "RenderSection". They will be ignored.
+
 #Global Namespaces
 
 You can set "using" statements that are global to all your views, so that they don't each individually need "using" statements.

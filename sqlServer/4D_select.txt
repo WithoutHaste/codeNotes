@@ -46,6 +46,28 @@ FROM tableA
 INNER JOIN tableB ON tableA.columnA = tableB.columnB;
 </code>
 
+#Cross Apply
+
+Cross apply lets you join against a table using data from the outer select statement.
+
+CROSS APPLY
+matches rows in both tables
+
+OUTER APPLY
+returns everything from the left (first) table, with matches from the right table where possible
+
+Example: find the first-listed employee in each department
+<code>
+SELECT * 
+FROM Department D 
+CROSS APPLY 
+( 
+	SELECT TOP(1) * 
+	FROM Employee E 
+	WHERE E.DepartmentID = D.DepartmentID 
+) as A 
+</code>
+
 #Union
 
 <code>

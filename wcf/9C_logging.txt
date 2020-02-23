@@ -1,0 +1,37 @@
+##Logging
+
+#Setup
+
+In the service Web.config:
+<code>
+<configuration>
+  <system.diagnostics>
+    <sources>
+      <source name="System.ServiceModel.MessageLogging" switchValue="Warning, ActivityTracing">
+        <listeners>
+          <add name="ServiceModelTraceListener" />
+        </listeners>
+      </source>
+      <source name="System.ServiceModel" switchValue="Verbose,ActivityTracing">
+        <listeners>
+          <add name="ServiceModelTraceListener" />
+        </listeners>
+      </source>
+      <source name="System.Runtime.Serialization" switchValue="Verbose,ActivityTracing">
+        <listeners>
+          <add name="ServiceModelTraceListener" />
+        </listeners>
+      </source>
+    </sources>
+    <sharedListeners>
+      <add initializeData="App_tracelog.svclog" type="System.Diagnostics.XmlWriterTraceListener, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" name="ServiceModelTraceListener" traceOutputOptions="Timestamp" />
+    </sharedListeners>
+  </system.diagnostics>
+</configuration>
+</code>
+
+#Reading Logs
+
+File App_tracelog.svclog will be generated in the Project's directory.
+
+Open with Microsoft Service Trace Viewer.

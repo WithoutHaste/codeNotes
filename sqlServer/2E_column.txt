@@ -124,6 +124,8 @@ Defines that the value in this column must also exist in a particular column of 
 
 Values do not have to be unique.
 
+Foreign Keys can reference any UNIQUE index on another table. Usually they references a Primary Key.
+
 If the relationship is clear, and there is only one relation between these two tables, the naming convention is "FK_ThisTableName_ForeignTableName".
 
 If the relationship needs more explanation, or there are multiple relations between these two tables, the naming convention is "FK_ThisTableName_ForeignTableName_Descriptor".
