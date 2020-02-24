@@ -52,7 +52,7 @@ Web.config or App.config on service:
 This is an intranet application, so it is assumed that anyone with access to a computer that can access this application is allowed to use the normal read operations. So there's no security (beyond the defaults) set on that service contract.
 Only the administrative operations have security.
 
-#Internet
+#Internet with Certificate
 
 The services are inside the firewall, the clients are outside the firewall.
 
@@ -125,6 +125,72 @@ By Windows Authentication, in the service config file:
 </code>
 
 If the service starts up without error, you've setup the certificate configuration correctly.
+
+#Internet without Certificate
+
+Custom username/password authentication in a service, without using X509 certificates, https, ssl, etc.
+
+(1A)
+The service needs a login operation to verify credentials:
+<code>
+[OperationContract]
+bool Login(string username, string password);
+</code>
+
+(1B)
+OR The service needs a custom MembershipProvider:
+<code>
+using System.Web.Security;
+
+public class MyMembershipProvider : MembershipProvider
+{ 
+	public override bool ValidateUser(string username, string password)
+	{
+		//check the username and password here
+	}
+	//No need to override the other methods just leave them
+}
+</code>
+<code lang="xml">
+<configuration>
+  <authentication mode="Forms" />
+  <membership defaultProvider="MyMembershipProvider">
+    <providers>
+      <clear />
+      <add name="MyMembershipProvider" type="MyNamespace.MyMembershipProvider" />
+    </providers>
+  </membership>
+</configuration>
+</code>
+<code>
+public bool Login(string username, string password)
+{
+	if(Membership.ValidUser(username, password))
+	{
+		HttpCookie v_Cookie = FormsAuthentication.GetAuthCookie(username, createPersistentCookie: true);
+		HttpContext.Current.Response.Cookies.Add(v_Cookie);
+		return true;
+	}
+	return false;
+}
+</code>
+Pass that cookie back with all requests from the Client:
+<code>
+?
+</code>
+Authenticate the cookie on the Service for private operations:
+<code>
+public void Operation()
+{
+	if (!HttpContext.Current.User.Identity.IsAuthenticated)
+		throw Exception("Requires authentication");
+}
+</code>
+
+I'm not sure I've pieced this together correctly yet.
+Does WCF even have access to Cookie code?
+Would need to store the Cookie client-side and then resend with each service request.
+Could store a custom key in the db user table, and pass that back and forth in the headers?
 
 #Protection Level
 

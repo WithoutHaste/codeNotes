@@ -1,0 +1,54 @@
+##Permutations
+
+A permutation of a set is a particular ordering of the set.
+A permutation of an ordered collection is a particular re-ordering of the collection.
+
+#Fisher-Yates
+
+Produces a random permutation of an array.
+In-place (does not create a new array).
+Every permutation occurs with uniform probability.
+
+Swaps each element of the array with a random (same or later) element.
+
+<code lang="python">
+import random
+
+def fisher_yates(a):
+  n = len(a)
+  for i in range(n - 1):  # i from 0 to n-2, inclusive
+    j = random.randrange(i, n)  # j from i to n-1, inclusive
+    a[i], a[j] = a[j], a[i]  # swap a[i] and a[j]
+</code>
+
+!![Dan Luu analysis](https://danluu.com/sattolo/)
+Produces all permutations with uniform probability:
+"For each random choice we make in the algorithm, if we make a different choice, we get a different output. For example, if we look at the resultant a[0], the only way to place the element that was originally in a[k] (for some k) in the resultant a[0] is to swap a[0] with a[k] in iteration 0. If we choose a different element to swap with, we'll end up with a different resultant a[0].
+
+Once we place a[0] and look at the resultant a[1], the same thing is true of a[1] and so on for each a[i]. Additionally, each choice reduces the range by the same amount -- there's a kind of symmetry, in that although we place a[0] first, we could have placed any other element first; every choice has the same effect. This is vaguely analogous to the reason that you can pick an integer uniformly at random by picking digits uniformly at random, one at a time."
+
+#Sattolo
+
+Produces a random derangement of an array (every element is guaranteed to be in a different position at the end).
+In-place (does not create a new array).
+Does not produce every derangement of the array, but the ones produced are made with uniform probability.
+Only produces derangements that contain 1 cycle (see use-case below).
+
+Swaps each element of the array with a random (later) element.
+
+<code lang="python">
+import random
+
+def sattolo(a):
+  n = len(a)
+  for i in range(n - 1): # i from 0 to n-2, inclusive
+    j = random.randrange(i+1, n)  # j from i+1 to n-1, inclusive
+    a[i], a[j] = a[j], a[i]]  # swap a[i] and a[j]
+</code>
+
+One permutation Sattolo cannot produce is the original array order, because a[0] MUST be swapped with a different element. This applies to every element in turn. And it is not possible for an element to return to its original location through a series of swaps, because when a[x] is first swapped, it is moved to a location that is out of reach for the rest of the swaps.
+
+!![Dan Luu analysis](https://danluu.com/sattolo/)
+One use-case of this is to generate a randomly ordered cyclical graph with a single loop.
+Consider array [0,1,2,3...N] to be interpreted as a[index] points to a[a[index]]. This array contains N+1 cycles. If a[i] is swapped with a[j], their cycles are merged. Thus, passing this array into Sattolo would result in 1 random cyclical loop.
+
