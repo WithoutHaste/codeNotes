@@ -1,0 +1,44 @@
+##Design Patterns
+
+#Database Per Service
+
+Each microservice owns and maintains a private database. Other services can only access this data by querying the owner service.
+
+This keeps the services loosely coupled.
+Each service can use the data storage method that best suits them.
+
+This does not have to be implemented as an entire database per service.  It could be a set of tables per service, or a schema per service, etc.
+
+#Saga
+
+Given the Database Per Service pattern, how do you ensure transactional integrity when an update affects multiple services?
+
+A saga is a sequence of local transactions. As each transaction completes (updates the service's database) it publishes a message that triggers the next service in the process to run their transaction. If any step fails, the saga executes a reverse series of steps that undo (or compensate for) the changes that were already saved.
+
+#API Composition
+
+Given the Database Per Service pattern, how do you handle queries that require joining data across services?
+
+Implement an API Composer, which is a service that you can query, which manages collecting the data from several other services and joining it all together.
+
+This may required in-memory operations on large data sets, which will be inefficient.
+
+#CQRS
+
+CQRS stands for Command Query Responsibility Segregation.
+
+Given the Database Per Service pattern, how do you handle queries that require joining data across services?
+
+Implement a read-only database that replicates the production data. Bring in data from all your various sources. Now queries can be run against this database.
+
+#API Gateway
+
+An API Gateway is a public API that stands between clients and microservices. The clients only call the API Gateway, and the API Gateway calls whichever microservice the request should be delegated to.
+
+See Facade and Adapter Patterns.
+
+#Backend For Frontend
+
+An extension of API Gateway.
+
+Create one API Gateway for each frontend client.
