@@ -1,0 +1,5 @@
+##Bearer Token
+
+A bearer token is a type of access token used with OAuth 2.0
+
+A bearer token is an opaque string (it has no meaning to the Client encoded into it).

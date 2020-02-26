@@ -234,3 +234,30 @@ Mock<IMyInterface> mock = new Mock<IMyInterface>();
 //instead of this
 Mock mock = new Mock<IMyInterface>();
 </code>
+
+#Scripts
+
+Tricky mocks I've had to figure out.
+
+Asp.Net Core MVC: test a Controller Action's use of Headers
+<code>
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Controllers;
+using Microsoft.AspNetCore.Routing;
+using Moq;
+
+//concrete controller
+var controller = new MyController();
+
+//mock 
+var bearerToken = "bearerToken";
+var request = new Mock<HttpRequest>();
+request.SetupGet(x => x.Headers["Authorization"]).Returns(bearerToken);
+var httpContext = new Mock<HttpContext>();
+httpContext.SetupGet(x => x.Request).Returns(request.Object);
+var context = new ActionContext(httpContext.Object, new RouteData(), new ControllerActionDescriptor());
+
+controller.ControllerContext = new ControllerContext(context);
+//can now run a Controller Action and see what it does with the header
+</code>

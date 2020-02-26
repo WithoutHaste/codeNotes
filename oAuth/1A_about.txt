@@ -1,0 +1,6 @@
+##About
+
+OAuth is an open standard for authorization.
+OAuth provides secure delegated access (Party A authorizes User, and Party B trusts what Party A tells them).
+
+The user's credentials are validated, the user is given an Access Token, and that Access Token is trusted going forward.
