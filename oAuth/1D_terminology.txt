@@ -1,0 +1,5 @@
+##Terminology
+
+Access Token: a token identifying an application
+
+Id Token: a token identifying one user

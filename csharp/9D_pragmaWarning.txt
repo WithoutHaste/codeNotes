@@ -1,0 +1,6 @@
+##Pragma Warning
+
+Place at the top of a file so that XML comments are NOT required on public members:
+<code>
+ #pragma warning disable 1591
+</code>

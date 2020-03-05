@@ -150,3 +150,11 @@ public class CalculatorTests
 }
 </code>
 
+#Assert
+
+<code>
+Assert.Throws<ArgumentException>(() => profiles.GetSettingsForUserID(""));
+
+await Assert.ThrowsAsync<ArgumentException>(async () => await MethodThatThrows());
+</code>
+

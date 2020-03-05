@@ -239,6 +239,11 @@ Mock mock = new Mock<IMyInterface>();
 
 Tricky mocks I've had to figure out.
 
+To mock returning a Task aka Task<void>:
+<code>
+mock.Setup(m => m.Method()).Returns(Task.FromResult<object>(null));
+</code>
+
 Asp.Net Core MVC: test a Controller Action's use of Headers
 <code>
 using Microsoft.AspNetCore.Http;
