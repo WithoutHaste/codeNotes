@@ -1,0 +1,17 @@
+##Where
+
+Logical joins
+<code>
+AND
+OR
+</code>
+
+Integer comparison
+<code>
+WHERE column = 1
+</code>
+
+Boolean comparison
+<code>
+WHERE column IS TRUE
+</code>

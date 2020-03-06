@@ -1,0 +1,11 @@
+##Joins
+
+#Lateral
+
+Postgres version of SQL's CROSS APPLY
+
+<code>
+SELECT *
+FROM tableA
+LEFT JOIN LATERAL (SELECT COUNT(*) Cnt FROM tableB WHERE tableB.column = tableA.column) tableB ON TRUE
+</code>
