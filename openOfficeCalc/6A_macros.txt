@@ -1,0 +1,22 @@
+##Macros
+
+Macros record a series of user actions and replay them as needed.
+
+You can view/edit macros at: Tools menu > Macros > Organize Macros > OpenOffice Basic
+
+A macros can contain multiple procedures.
+Running the macros will run "Sub Main".
+
+Macros can be run
+- Manually: Tools menu > Macros > Run Macro
+- Toolbar Button Click: Tools menu > Customize > Customize Toolbar > ...
+- Keyboard Shortcut: Tools menu > Customize > Keyboard Tab > ...
+
+#Event Handler
+
+A macro can be called when an event occurs. This macros is called an event handler.
+
+1) Write your macro
+
+2) Tools menu > Customize > Events Tab
+- events can be saved to OpenOffice Calc, or to a specific file

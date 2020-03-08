@@ -1,0 +1,118 @@
+##Programming
+
+#Functions
+
+Custom user functions determine the contents of a cell.
+
+Function written in Basic:
+<code lang="basic">
+Function Cube( cellA ) As Integer
+	Cube = cellA * cellA * cellA
+End Function
+
+Function SimpleSum( cellA, cellB ) As Decimal
+	SimpleSum = cellA + cellB
+End Function
+</code>
+
+Cell contents:
+<code lang="excel">
+=Cube(A1)
+=SimpleSum(A1;A2)
+</code>
+
+Functions provide a return value by assigning to a variable with the same name as the function.
+Functions will continuing executing after their "return" variable has been assigned to, and that value can be overwritten.
+Functions return 0 if nothing is assigned.
+
+#Procedures
+
+aka Sub 
+aka User Routine
+
+Procedures can be run from any point in the program.
+Procedures have no return value.
+
+Procedure written in Basic:
+<code lang="basic">
+Sub Test
+	' ... here is the actual code of the procedure
+End Sub
+</code>
+
+#Syntax
+
+Comments
+<code lang="basic">
+' these are comments
+</code>
+
+Parameters
+<code lang="basic">
+' Default is pass by reference
+Sub Test (A As Integer, B As String)
+End Sub
+
+' Specify pass by value
+Sub Test (ByVal A As Integer)
+End Sub
+
+' Optional parameters
+Sub Test (Optional A As Integer)
+End Sub
+</code>
+
+Return type
+<code lang="basic">
+Function Cube( cellA ) As Integer
+	Cube = cellA * cellA * cellA
+End Function
+</code>
+
+Declaration
+<code lang="basic">
+Dim ErrorOccured As Boolean
+</code>
+
+If
+<code lang="basic">
+If MyVar Then
+	' code
+End If
+
+If MyVar Then
+	' code
+Else
+	' code
+End If
+</code>
+
+Logic
+<code lang="basic">
+If Not MyVar Then
+	' code
+End If
+
+If A OR B Then
+	' code
+End If
+</code>
+
+Exit function
+<code lang="basic">
+Exit Function
+</code>
+
+Exit procedure
+<code lang="basic">
+Exit Sub
+</code>
+
+#Snippets
+
+Set focus on a particular cell
+<code lang="basic">
+Sheet = ThisComponent.Sheets.getByName("Sheet1")
+Cell = Sheet.getCellRangeByName("B3")
+ThisComponent.CurrentController.select(Cell)
+</code>
