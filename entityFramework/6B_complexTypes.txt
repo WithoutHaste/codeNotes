@@ -1,5 +1,7 @@
 ##Complex Types
 
+(In .Net Core, this is called OwnedTypes)
+
 #Constraints
 
 A complex type is an in-code concept for a set of database columns that is repeated across multiple tables. In your object model, you can normalize those properties into a single complex type.
@@ -8,7 +10,52 @@ Complex types can contain properties that are complex types.
 
 Complex types cannot contain any keys - no primary keys, no foreign keys.
 
-#Example
+#Example: Multiple Complex Types in One Table
+
+Entity Framework 6
+.Net Framework
+
+One table contains two instances of the same complex type:
+<code>
+public class Customer
+{
+	public int Id { get; set; }
+	public string FirstName { get; set; }
+	public string LastName { get; set; }
+	public Address ShippingAddress { get; set; }
+	public Address BillingAddress { get; set; }
+}
+
+[ComplexType]
+public class Address
+{
+	public string Street { get; set; }
+	public string City { get; set; }
+	public string State { get; set; }
+}
+</code>
+
+ModelBuilder pattern:
+<code>
+modelBuilder.Types<Customer>().Configure(ctc => ctc.Property(cust => cust.ShippingAddress.Street).HasColumnName("ShipAddress"));
+modelBuilder.Types<Customer>().Configure(ctc => ctc.Property(cust => cust.BillingAddress.Street).HasColumnName("BillAddress"));
+</code>
+
+To do the same thing in .Net Core:
+<code>
+[Owned]
+public class Address
+{
+	public string Street { get; set; }
+	public string City { get; set; }
+	public string State { get; set; }
+}
+//todo
+modelBuilder.Types<Customer>().Configure(ctc => ctc.Property(cust => cust.ShippingAddress.Street).HasColumnName("ShipAddress"));
+modelBuilder.Types<Customer>().Configure(ctc => ctc.Property(cust => cust.BillingAddress.Street).HasColumnName("BillAddress"));
+</code>
+
+#Example: Complex Type in Multiple Tables
 
 Database schema: Several tables have columns CreatedDateTime and DeletedDateTime.
 
