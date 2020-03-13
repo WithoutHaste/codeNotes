@@ -71,6 +71,11 @@ catch(Exception e)
 {
 }
 </code>
+
+#Things I've Run Into
+
+MissingMethodException: 
+	Typically caused by an up-to-date package calling an out-of-date package. Check that you're using the same versions of NuGet packages in projects that call each other.
 	
 ##Global Exception Handling
 
