@@ -18,10 +18,12 @@ INSERT INTO tableName (columnB, columnD, columnA) VALUES ('Texas', 343.55, 3);
 
 You can also transfer data between tables with SELECT INTO:
 <code>
+-- for creating new tables, such as temp tables
 SELECT * INTO tableB FROM tableA WHERE columnA = value;
 
 SELECT * INTO backupTable IN 'filename.mdb' FROM tableA;
 
+-- for inserting into existing tables
 INSERT INTO backupTable SELECT * FROM tableA;
 
 INSERT INTO backupTable (columnA, columnB) SELECT columnA, columnB FROM tableA;

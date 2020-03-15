@@ -33,3 +33,17 @@ SELECT *
 FROM sys.dm_os_performance_counters 
 WHERE instance_name = 'databaseName';
 </code>
+
+#Execution Plan
+
+Instead of running a query, you can click the "Display Estimated Execution Plan" button in the button bar in SSMS.
+
+This does not work with temp tables. You get an "invalid object" error.
+In that case, place this at the top of the query and execute it.
+<code>
+SET SHOWPLAN_TEXT OFF
+GO
+
+SET STATISTICS PROFILE ON
+GO
+</code>
