@@ -82,6 +82,26 @@ Use UNION ALL to return duplicate rows as well. This is faster.
 
 The column list in each result set must be in the same order, with the same names and data types.
 
+#Intersect
+
+<code>
+SELECT * FROM tableA WHERE columnA = value
+UNION
+SELECT * FROM tableA WHERE columnB = value
+</code>
+
+Returns only rows that appear in both result sets.
+
+#Except
+
+<code>
+SELECT * FROM tableA WHERE columnA = value
+EXCEPT
+SELECT * FROM tableA WHERE columnB = value
+</code>
+
+Returns rows that appear in the first result set AND DO NOT appear in the second result set.
+
 #Top
 
 Select just the first N rows of the result set.
