@@ -298,6 +298,112 @@ The result set will be group by unique combinations for CustomerId/OrderYear.
 Each grouping will be numbered 1 to N with that group.
 So you'll have duplicate YearlyOrders in the final result set.
 
+#Pivot
+
+Convert rows
+<code lang="text">
+category | count
+----------------
+bikes    | 15
+cars     | 294
+</code>
+to columns
+<code lang="text">
+bikes | cars
+----------------
+15    | 294
+</code>
+
+1) Create base result set (with data in rows)
+2) Save the base result set with a derived table or CTE (common table expression)
+3) Pivot
+
+<code>
+SELECT * 
+FROM 
+(
+    SELECT 
+        category, 
+        COUNT(*) as [count]
+    FROM 
+        products
+	GROUP BY
+		category
+) myDerivedTable
+PIVOT(
+    [count] 
+    FOR category IN (
+        [bikes], 
+        [cars])
+) AS pivot_table;
+</code>
+
+If you add an additional column to the base result set, the pivot table will automatically be grouped by that column.
+<code>
+SELECT * 
+FROM 
+(
+    SELECT 
+        category, 
+		year
+        COUNT(*) as [count]
+    FROM 
+        products
+	GROUP BY
+		category, year
+) myDerivedTable
+PIVOT(
+    [count] 
+    FOR category IN (
+        [bikes], 
+        [cars])
+) AS pivot_table;
+</code>
+Results in
+<code lang="text">
+year | bikes | cars
+--------------------
+2007 | 7     | 193
+2008 | 8     | 101
+</code>
+
+If you don't know exactly what values will become column names, you can build the SQL statement dynamically
+<code>
+DECLARE 
+    @columns NVARCHAR(MAX) = '', 
+    @sql     NVARCHAR(MAX) = '';
+ 
+-- select the category names
+SELECT 
+    @columns+=QUOTENAME(category) + ','
+FROM 
+    products;
+ 
+-- remove the last comma
+SET @columns = LEFT(@columns, LEN(@columns) - 1);
+ 
+-- construct dynamic SQL
+SET @sql = '
+SELECT * FROM   
+(
+    SELECT 
+        category, 
+        year,
+        COUNT(*) as [count]
+    FROM 
+        products
+	GROUP BY
+		category, year
+) myDerivedTable 
+PIVOT(
+    [count] 
+    FOR category IN ('+ @columns +')
+) AS pivot_table;';
+ 
+-- execute the dynamic SQL
+EXECUTE sp_executesql @sql;
+</code>
+
 #Aggregate Functions
 
 AVG(col) average the values
