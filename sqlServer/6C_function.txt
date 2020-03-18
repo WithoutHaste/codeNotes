@@ -12,6 +12,7 @@ You can use a scalar-valued function in a SELECT clause, WHERE clause, or HAVING
 
 A function that returns a table-type value.
 
+Single-statement TVF
 <code>
 CREATE FUNCTION fn_functionName (
 	@paramA dataType
@@ -22,6 +23,32 @@ RETURN
 		*
 	FROM tableName
 	WHERE columnA = @paramA
+</code>
+
+Multi-statement TVF
+<code>
+CREATE FUNCTION fn_functionName (
+	@paramA dataType
+)
+RETURNS @resultTable TABLE 
+(
+	Id BIGINT,
+	Name VARCHAR(32)
+)
+AS
+BEGIN
+	-- Fill the table variable with the rows for your result set
+	
+	RETURN 
+END
+GO
+</code>
+
+I don't think you can use temp tables in a TVF. I think you can only "INSERT INTO" the result table.
+But you CAN use Table Variables.
+<code>
+DECLARE @TableVariable TABLE (Id INT, Name VARCHAR(255), ParentId INT, ParentName VARCHAR(255));
+INSERT INTO @TableVariable...
 </code>
 
 #Scalar-Valued Function
