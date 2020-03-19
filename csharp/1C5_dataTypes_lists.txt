@@ -1,0 +1,6 @@
+##List{T}
+
+x64 Platform: generic list size limited to 2GB
+Limit can be overridden with <gcAllowVeryLargeObjects enabled="true" />
+
+Lists use a doubling algorithm: if they need more space, the double of their current space will be allocated to them. You can specify how much space they start with when you initialize the list.

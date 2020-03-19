@@ -1,0 +1,129 @@
+##Strings
+
+#Regular string literals
+
+<code>
+"string"
+"\tstring" //escape character interpreted as Tab
+</code>
+
+Escape characters:
+single quote \' 
+double quote \" 
+backslash \\ 
+?? \0 \u \U
+octal notation \[0-9]+
+hex notation \x[0-9a-fA-F]{1,4}
+alarm sound \a
+backspace \b
+formfeed \f
+new line \n
+carriage return \r
+horizontal tab \t
+vertical tab \v
+
+#Verbatim string literals
+
+<code>
+@"string"
+@"\tstring" //the backslash and t are kept as they are
+@"quotes""here" //the only escape sequence is two double quotes are interpreted as one
+</code>
+
+Verbatim string literals can span multiple lines.
+
+#String Interning
+
+All string literals in your code are compiled into one distinct list to be referenced at runtime, so creating a string literal within a loop will not result in 1000 strings being created - each iteration will reference the same immutable string.
+
+You can add strings to the interning list at runtime. Use this if you expect to use this custom string frequently:
+<code>
+String.Intern(myCustomString);
+</code>
+
+#Composite Formatting
+
+Supported by String.Format, Console.WriteLine, StringBuilder.AppendFormat, TextWriter.WriteLine, Debug.WriteLine, etc.
+
+Note that {0} indicates param index 0. It can be used repeatedly throughout the string, such as "{0} {1} {0} {0}".
+
+Insert text into string based on the index. This is faster than string concatenation when combining four or more strings.
+<code>
+string s = String.Format("{0} is on the {1} under the {2}", noun1, noun2, noun3);
+</code>
+
+Format numbers
+<code>
+Console.WriteLine("${#,0.00}", amount); //show exactly 2 decimal places, show at least one whole digit, use comma as thousands separator
+</code>
+
+Format dates
+<code>
+Console.WriteLine("{0:MM-dd-yyyy}", DateTime.Now);
+</code>
+
+Align text
+<code>
+Console.WriteLine("{0,10}{1,20}{2,-5}", a, b, c); //number after comma gives width of column, negative number means left-align text
+</code>
+
+(I think this is new in C# 6.0, but haven't found confirmation or what it is called)
+
+Using variable name instead of index:
+<code>
+Console.WriteLine("My name is {@name} and age is {@age}.", name, age);
+</code>
+
+#String Formatting
+
+Padding
+<code>
+string x = "abc".PadLeft(5); //add spaces to beginning of string until length equals 5
+</code>
+
+Hexadecimal
+<code>
+int num = 56;
+string upperCaseHex = num.ToString("X");
+string lowerCaseHex = num.ToString("x");
+string upperCaseHex_2Digits = num.ToString("X2");
+string lowerCaseHex_2Digits = num.ToString("x2");
+
+upperCaseHex = String.Format("{0:X}", num);
+num = Convert.ToInt32(upperCaseHex, 16);
+</code>
+
+Repeat a character x times
+<code>
+string s = new String('#', x);
+</code>
+
+#Interpolated Strings
+
+C# 6.0 and later.
+
+Interpolated strings can contain interpolation expression, surrounded by curly braces {}.
+When the string is resolved, each interpolation expression is replaced by its result (as a string).
+
+<code>
+$"Hello"
+$"Hello, {name}. Today is {DateTime.Now.DayOfWeek}."
+</code>
+
+Formatting results:
+<code>
+$"The time is {DateTime.Now:HH:mm}."
+</code>
+The "HH:mm" is called the "format string component".
+
+Aligning results:
+<code>
+$"Columns|{"Left", -7}|{"Right", 7}"
+</code>
+The integer is the minimum number of characters to show.
+Positive means right-aligned in that space, negative means left-aligned.
+
+Special characters:
+<code>
+$"{{braces}}" //equals "{braces}"
+</code>

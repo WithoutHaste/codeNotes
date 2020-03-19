@@ -1,0 +1,66 @@
+##Array
+
+<code>
+int[] x = new int[10];
+int[] y = new int[] { 1, 2, 3 };
+</code>
+
+x64 Platform: array size limited to 2GB
+
+#Indexing
+
+(.Net 8)
+
+Index from end operator: hat "^". Hat is a unary prefix operator.
+Index ^1 is the last element in the array.
+<code>
+int[] numbers = new int[] { 0, 1, 2, 3, 4, 5 };
+Console.WriteLine(numbers[1]); //outputs 1
+Console.WriteLine(numbers[^1]); //outputs 5
+</code>
+
+Select a range from an array with range operator ".."
+<code>
+int[] a = new int[] { 0, 1, 2, 3, 4, 5 };
+int[] b = a[1..3];
+Console.WriteLine(b[0]); //outputs 1
+Console.WriteLine(b[1]); //outputs 2
+//that's it, b.Length == 2
+</code>
+The range specifies an inclusive-start and exclusive-end index.
+
+Edge cases
+<code>
+[..] //selects entire array
+[..4] //selects from beginning to this index
+[4..] //selects from index to the end
+</code>
+
+Set a Range as a variable
+<code>
+int[] a = new int[] { 0, 1, 2, 3, 4, 5 };
+Range r = 1..3;
+int[] b = a[r];
+</code>
+
+Get a range of values
+<code>
+int[] b = Enumerable.Range(0, 100).ToArray(); //values 0 to 99
+</code>
+
+#Multidimensional Arrays
+
+<code>
+int[,] x = new int[5,8]; //5 rows, 8 columns each
+int[,,]y = new int[5,8,3]; //5 rows, 8 columns each, depth of 3 each
+
+int[,] x = new int[,] {{1,2,3}, {4,5,6}}; //init a [2,3] array
+int z = x[1,2]; //z = 6
+</code>
+
+To get length of a dimension:
+<code>
+int rowCount = myArray.GetLength(0);
+int colCount = myArray.GetLength(1);
+int depthCount = myArray.GetLength(2);
+</code>

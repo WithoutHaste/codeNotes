@@ -1,0 +1,64 @@
+##Enums
+
+An enum is a distinct type consisting of a set of named constants. They can be declared at the namespace level, or in a class or struct.
+
+Each constant is automatically assigned an integer value, starting from 0 and incrementing by 1.
+
+There is no validation when a value is set. An integer enum will accept any integer value, not just the ones you defined. You have to call Enum.IsDefined to check that explicitly.
+
+<code>
+public enum Duration { Daily, Weekly, Monthly };
+</code>
+
+You can change the starting integer:
+<code>
+public enum Duration { Daily=5, Weekly, Monthly };
+</code>
+
+You can specify all the values:
+<code>
+public enum Duration { Daily=5, Weekly=3, Monthly=223 };
+</code>
+
+The default datatype is int, but you can also use byte, sbyte, short, ushort, int, uint, long, or ulong.
+<code>
+public enum Duration : byte { Daily, Weekly, Monthly };
+</code>
+
+#Flags
+
+Enums are frequently used for flags, when you intend to combine several options:
+<code>
+public enum MessageType { Error=1, Warning=2, Notice=4, Additional=8 };
+...
+MessageType selectedMessages = MessageType.Warning | MessageType.Notice;
+...
+private bool IsFlagSet(MessageType flags, MessageType includesValue)
+{
+	return ((flags & includesValue) == includesValue);
+}
+</code>
+Note that the explicit values are powers of 2. This allows you to use bitwise operators to combine and check the flags.
+
+#Convert
+
+Converting a string to the enum:
+<code>
+public enum Duration { Daily, Weekly, Monthly };
+Duration e = (Duration)Enum.Parse(typeof(Duration), "Daily");
+</code>
+
+Specify custom string value of an enum
+<code>
+using System.Runtime.Serialization;
+
+public enum MyEnum
+{
+	[EnumMember(Value = "String A")]
+	A,
+	[EnumMember(Value = "String B")]
+	B
+}
+
+string customStringValue = MyEnum.A.ToString();
+</code>
