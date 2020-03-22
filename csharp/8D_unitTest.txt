@@ -2,7 +2,7 @@
 
 General setup
 <code>
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting; //from Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
 
 [TestClass]
 public class TestClass
