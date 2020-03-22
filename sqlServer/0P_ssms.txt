@@ -54,6 +54,20 @@ Backup schema:
 1) Right-click on database > Tasks > Generate Scripts
 2) fill in the forms and save the backup
 
+#Generate Scripts
+
+To generate a full "create database" script:
+right-click Database > Tasks > Generate Scripts > complete dialog
+
+To edit the default settings in Generate Scripts (some of which are hidden from the dialog):
+Tools > Options > SQL Server Object Explorer > Scripting
+
+The settings I found most useful:
+Include Descriptive Headers - FALSE
+Include Triggers - TRUE
+
+When you turn "Include Descriptive Headers" off, it stops putting timestamp comments all over the generating scripts. This makes the result much MUCH more git friendly.
+
 #Bugs
 
 SSMS 18 has a bug that really messes up the display. The application doesn't refresh it's drawing properly, leaving junk across the screen.

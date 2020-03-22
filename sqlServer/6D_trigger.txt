@@ -50,6 +50,8 @@ Inside these stored procedures, you have access to special temp tables that hold
 The "inserted" temp table holds (INSERT) rows to be inserted or (UPDATE) new rows inserted by update.
 The "deleted" temp table holds (UPDATE) existing rows modified by update or (DELETE) rows deleted.
 
+When doing an UPDATE, "inserted" contains the new row data, and "deleted" contains the old; as the the new data is technically inserted, and the old deleted.
+
 #INSTEAD OF
 
 An INSTEAD OF trigger will run instead of the INSERT/UPDATE/DELETE operation. The CRUD operation does not occur at all.
