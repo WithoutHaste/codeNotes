@@ -7,3 +7,13 @@ URL stands for Uniform Resource Locator. Example: https://a.b.com/d
 URN stands for Uniform Resource Name.
 
 URLs and URNs are both types of URIs.
+
+#Breaking Change
+
+A breaking change is any change to the API (the contract) that forces a consumer to also make a change.
+
+Includes:
+- changing the Request or Response format
+  - adding a required Property to the Request
+  - removing a Property from the Response
+  - changing a Property name or data type

@@ -1,0 +1,111 @@
+##Data Types
+
+#Enum
+
+Specify possible values of a request parameter or a model property.
+
+Enum types in REST are assumed to be complete. Adding, removing, or modifying a value counts as a breaking change (i.e. version change).
+
+<code lang="yaml">
+paths:
+  /items:
+    get:
+      parameters:
+        - in: query
+          name: sort
+          description: Sort order
+          schema:
+            type: string
+            enum: [asc, desc]
+		  description: >
+            Sort order:
+             * `asc` - Ascending, from A to Z
+             * `desc` - Descending, from Z to A
+</code>
+
+!![OpenAPI specification for enum](https://spec.openapis.org/oas/v3.0.2#properties)
+!![OpenAPI specification for enum github page](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.3.md#dataTypes)
+The following properties are taken directly from the JSON Schema definition and follow the same specifications:
+...enum
+!![JSON Schema enum](https://json-schema.org/understanding-json-schema/reference/generic.html)
+The enum keyword is used to restrict a value to a fixed set of values. It must be an array with at least one element, where each element is unique.
+- "fixed set" - this is where the "not extensible" discussions are coming from
+
+#Open-ended List
+
+!![Zalando REST API Guidelines: open-ended lists](https://opensource.zalando.com/restful-api-guidelines/#112)
+
+Enumerations are per definition closed sets of values, that are assumed to be complete and not intended for extension. This closed principle of enumerations imposes compatibility issues when an enumeration must be extended. To avoid these issues, we strongly recommend to use an open-ended list of values instead of an enumeration unless:
+- the API has full control of the enumeration values, i.e. the list of values does not depend on any external tool or interface, and
+- the list of value is complete with respect to any thinkable and unthinkable future feature.
+
+To specify an open-ended list of values use the marker x-extensible-enum as follows:
+
+Example:
+<code lang="yaml">
+delivery_methods:
+  type: string
+  x-extensible-enum:
+    - PARCEL
+    - LETTER
+    - EMAIL
+</code>
+
+Note: x-extensible-enum is not JSON Schema conform but will be ignored by most tools.
+Note: Swagger supports the "x-" prefix for vendor extensions.
+
+!![Microsoft Azure enum extensions](https://github.com/Azure/autorest/blob/master/docs/extensions/readme.md#x-ms-enum)
+Enum definitions in OpenAPI indicate that only a particular set of values may be used for a property or parameter. When the property is represented on the wire as a string, it would be a natural choice to represent the property type in C# and Java as an enum. However, not all enumeration values should necessarily be represented as strongly typed enums - there are additional considerations, such as how often expected values might change, since adding a new value to a strongly typed enum is a breaking change requiring an updated API version. Additionally, there is some metadata that is required to create a useful enum, such as a descriptive name, which is not represented in vanilla OpenAPI. For this reason, enums are not automatically turned into strongly typed enum types - instead they are rendered in the documentation comments for the property or parameter to indicate allowed values. To indicate that an enum will rarely change and that C#/Java enum semantics are desired, use the x-ms-enum extension. Note that depending on the code generation language the behavior of this extension may differ.
+
+In C# and Java, an enum type is generated and is declared as the type of the related request/response object. The enum is serialized as the string expected by the REST API.
+
+Example:
+<code lang="yaml">
+accountType:
+  type: string
+  enum:
+  - Standard_LRS
+  - Standard_ZRS
+  - Standard_GRS
+  - Standard_RAGRS
+  - Premium_LRS
+  x-ms-enum:
+    name: AccountType
+    modelAsString: false
+    values:
+    - value: Standard_LRS
+      description: Locally redundant storage.
+      name: StandardLocalRedundancy
+    - value: Standard_ZRS
+      description: Zone-redundant storage.
+    - value: Standard_GRS
+      name: StandardGeoRedundancy
+    - value: Standard_RAGRS
+    - value: Premium_LRS
+</code>
+
+!![oneOf with const values is mentioned at the end of this](https://github.com/OAI/OpenAPI-Specification/issues/1552)
+!![JSON Draft 6 mentions const instead of 1-value enum](https://json-schema.org/draft-06/json-schema-release-notes.html)
+
+Currently, oneOf must specify object types:
+<code lang="yaml">
+schema:
+  oneOf:
+	- $ref: '#/components/schemas/Cat'
+	- $ref: '#/components/schemas/Dog'
+</code>
+The suggestion is to accept primitives as well:
+<code lang="yaml">
+schema:
+  oneOf:
+    - const: foo
+      title: The Foo Thing
+    - const: bar
+      title: The Bar Thing
+      description: There's some explanation about the bar thing
+</code>
+
+#Dictionary
+
+aka Hashmap aka Associative Array
+

@@ -1,0 +1,10 @@
+##Routes
+
+aka Paths
+
+!![RFC3986 Search and Filter](https://tools.ietf.org/html/rfc3986#section-3.4)
+Basically, search/filter belong in the query string because they help to specify the resource.
+
+!![RFC3986 Hierarchy of Delimiters](https://tools.ietf.org/html/rfc3986#section-2.2)
+Reserved delimiters: ":", "/", "?", "#", "[", "]", "@"
+Sub-delimiters: "!", "$", "&", "'", "(", ")", "*", "+", ",", ";", "="

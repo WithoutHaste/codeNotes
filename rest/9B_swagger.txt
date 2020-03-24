@@ -18,3 +18,32 @@ https://docs.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swas
 generate on build instead of dynamicallty on view-page
 https://github.com/domaindrivendev/Swashbuckle.AspNetCore/issues/541
 "Now available on Nuget - dotnet-swagger.1.2.0-beta1"
+
+#Vendor Extensions
+
+aks Specification Extensions
+
+Vendor extensions are custom properties.
+Vendor extensions can be used to describe extra functionality not covered by the standard Swagger specification.
+
+Vendor extension property names start with "x-".
+Vendor extensions are supported at root level, in info, in paths, in reponses, and in tags.
+
+!![Vendor Extensions in Swagger](https://swagger.io/docs/specification/openapi-extensions/)
+
+Example:
+<code lang="yaml">
+securityDefinitions:
+  APIGatewayAuthorizer:
+    type: apiKey
+    name: Authorization
+    in: header
+    x-amazon-apigateway-authtype: oauth2
+    x-amazon-apigateway-authorizer:
+      type: token
+      authorizerUri: arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:account-id:function:function-name/invocations
+      authorizerCredentials: arn:aws:iam::account-id:role
+      identityValidationExpression: "^x-[a-z]+"
+      authorizerResultTtlInSeconds: 60
+</code>
+

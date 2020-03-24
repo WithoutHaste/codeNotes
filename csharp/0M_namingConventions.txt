@@ -25,6 +25,14 @@ Fields that are private even within the object start with an underscore, such as
 Boolean properties and fields start with "Is" or "Has", such as "IsActive" or "HasErrors".
 Methods that return booleans are named the same way.
 
+Class names should not be the same as their Namespace's name.
+It confuses the compiler in some cases about which thing you are referring to.
+It requires you to fully-qualify class names all over your code.
+- What to call the Namespace, then?
+- maybe pluralize the name
+- maybe specify the use of the Namespace more abstractly
+- maybe don't separate this Namespace out at all
+
 #Acronyms
 
 Acronyms are spelled with only their first character capitalized, such as "Xml" or "Tcp".

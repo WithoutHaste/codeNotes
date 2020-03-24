@@ -1,0 +1,27 @@
+##HTTP Verbs
+
+#PUT
+
+Put: the entire object sent with the request is saved at that URI
+
+One danger of PUT is that since the entire object is updated, you must make sure the values you've got are up-to-date.  Otherwise, you'll end up reverting the values of some fields unintentionally.
+- maybe you send in the timestamp of the last GET you ran?
+- and the backend can check if any UPDATES have occured since that GET?
+
+#PATCH
+
+Patch: a partial object is sent with the request and updates part of the URI resource
+
+A patch endpoint accepts a Patch Document which lists the add/edit/delete operations to run on each part of the resource.
+All operations are supposed to be saved as one atomic operation, or not at all.
+And as with Put, you need to check that the object is in a state that can accept these changes.
+
+!![readthedocs PUT vs PATCH](https://restful-api-design.readthedocs.io/en/latest/methods.html#patch-vs-put)
+!![blog PUT vs PATCH](https://www.infoworld.com/article/3206264/how-to-perform-partial-updates-to-rest-web-api-resources.html)
+
+!![HTTP PATCH specification](https://tools.ietf.org/html/rfc5789#section-2)
+"With PATCH, however, the enclosed entity contains a set of instructions describing how a resource currently residing on the origin server should be modified to produce a new version...and it also MAY have side effects on other resources."
+"If the entire patch document cannot be successfully applied, then the server MUST NOT apply any of the changes."
+
+The examples I'm seeing of PATCH routes don't name what part of the object is being updated.
+!![Routes](https://learn.co/lessons/sinatra-restful-routes-readme)
