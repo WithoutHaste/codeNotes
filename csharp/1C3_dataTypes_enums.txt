@@ -59,6 +59,24 @@ public enum MyEnum
 	[EnumMember(Value = "String B")]
 	B
 }
-
-string customStringValue = MyEnum.A.ToString();
 </code>
+When this object is serialized, it will use the custom value.
+This does not affect ToString().
+
+Get the EnumMember string value:
+<code>
+using System;
+using System.Runtime.Serialization;
+
+public static string GetEnumMemberValue(this Enum enumValue)
+{
+	var type = enumValue.GetType();
+	var fieldInfo = type.GetField(enumValue.ToString());
+	var attribute = (EnumMemberAttribute[])(fieldInfo.GetCustomAttributes(typeof(EnumMemberAttribute), false));
+
+	return (attribute.Length > 0)
+		? attribute[0].Value
+		: null;
+}
+</code>
+
