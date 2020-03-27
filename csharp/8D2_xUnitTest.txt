@@ -1,5 +1,8 @@
 ##Xunit Testing
 
+Install NuGet package: xunit
+Install NuGet package: xunit.runner.visualstudio (to run tests in VS Test Window)
+
 Testing with the Xunit library, available through NuGet.
 <code>
 using Xunit;
@@ -158,3 +161,34 @@ Assert.Throws<ArgumentException>(() => profiles.GetSettingsForUserID(""));
 await Assert.ThrowsAsync<ArgumentException>(async () => await MethodThatThrows());
 </code>
 
+#Run Parallel or In Series
+
+(None of this worked me in .Net Framework 4.5.2)
+!![xUnit documentation](https://xunit.net/docs/running-tests-in-parallel.html)
+
+By default, unit tests run in parallel.
+
+If you're actually writing integration tests that rely on shared state, you can force the tests to run in series.
+
+Run tests within as assembly in series:
+<code>
+[assembly: CollectionBehavior(CollectionBehavior.CollectionPerAssembly)]
+</code>
+
+Run all tests in series:
+<code>
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
+</code>
+
+To run select classes in series, give them the same collection name:
+<code>
+[Collection("CollectionName")]
+class TestClassA
+{
+}
+
+[Collection("CollectionName")]
+class TestClassB
+{
+}
+</code>
