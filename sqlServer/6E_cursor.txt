@@ -7,6 +7,8 @@ A SELECT query will return its full result set with one trip to the server, whil
 
 If you must a cursor, consider storing the query results in a temp table first so that the cursor does not have to keep hitting the table.
 
+If a stored procedure calls a stored procedure, note that the cursor names allocated at the same time in each must be different.
+
 #Basic
 
 <code>

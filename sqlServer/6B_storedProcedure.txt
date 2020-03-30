@@ -93,6 +93,16 @@ DECLARE @tableCount INT;
 EXEC dbName.procedureName @paramA = value, @paramB = @tableCount OUTPUT;
 </code>
 
+#Execution
+
+<code>
+--specify parameters in order
+exec dbo.myStoredProcedure 'valueA', 100;
+
+--specify parameters out of order by naming them the same as the stored procedure does
+exec dbo.myStoredProcedure @paramB = 100, @paramA = 'valueA';
+</code>
+
 #Recursion
 
 Stored procedures can recursively call themselves, but only to a depth of 32.
