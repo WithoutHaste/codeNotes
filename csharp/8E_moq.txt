@@ -65,6 +65,17 @@ mock.Setup(i => i.Method("parameter")).Returns("result");
 Method that will return each value, in order, as it is called multiple times:
 <code>
 mock.SetupSequence(i => i.Method()).Returns("resultA").Returns("resultB").Returns("resultC").Throws(new InvalidOperationException());
+
+//newer version of mock
+mock
+	.SetupSequence(i => i.Method(It.IsAny<string>(), It.IsAny<int>()))
+	.Returns((string s, int i) => {
+		if(s == "abc")
+			return 5;
+		if(s != "def" && 1 < 10)
+			return 15;
+		return -1;
+	});
 </code>
 
 Method with an out parameter and a return value:

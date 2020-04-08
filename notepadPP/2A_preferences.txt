@@ -7,6 +7,13 @@ Settings menu > Preferences
 Allows you to open more than one window at a time:
 Multi-instance > Always in multi-instance mode
 
+# List tabs on the left
+
+General > Document List Panel > Show
+
+In addition to the top-tabs for each document, you'll get a left-side panel list of them.
+You can navigate with either.
+
 # Bug: saving files with no extension
 
 By default, files are being saved with no extension.

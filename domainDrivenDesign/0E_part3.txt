@@ -105,7 +105,7 @@ Examples of Specifications implementations and patterns (Chemical Warehouse Pack
 
 "The ultimate purpose of software is to serve users. But first, that same software has to serve developers...People have to work with this stuff [the code]. But will they want to?"
 
-"Duplication starts to appear as soon as a developer isn't confident of repdeicting the full implications of a computation...Duplication is forced when design elements are monolithic, so that the parts cannot be recombined."
+"Duplication starts to appear as soon as a developer isn't confident of predicting the full implications of a computation...Duplication is forced when design elements are monolithic, so that the parts cannot be recombined."
 
 The worse code is to work with, the slower the project will progress. To enable continuous fast delivery, you must maintain clean code with a supple design.
 
@@ -134,6 +134,7 @@ When purpose is inferred by another developer later, they may infer that a coinc
 "To obtain the value of explicity modeling a concept in the form of a class or method, we must give these program elements names that reflect those concepts. The names of classes and methods are great opportunities for improving communication between developers, and for improving the abstraction of the system...All public elements of a design together make up its interface, and the name of each of those elements presents an opportunity to reveal the intention of the design...Type names, Method names, and Argument names all combine to form an Intention-Revealing Interface."
 
 "Name classes and operations to describe their effect and purpose, without reference to the means by which they do what they promise...These names should conform to the Ubiquituous Language so that team members can quickly infer their meaning...Pose the question, but don't present the means by which the answer shall be found."
+(see Declarative Languages)
 
 Ongoing example: Paint Mixer.
 
@@ -148,11 +149,11 @@ This decreases the cognitive load on developers and increases their power in the
 
 It is suggested that functions with side-effects should not return domain data. (Considering this, it brings up performance questions.)
 
-Using Value Objects as immutable objects helps you make more of your functions in to Nullipotent functions, because operations will return a new object instead of modifying an existing one.
+Using Value Objects as immutable objects helps you make more of your functions into Nullipotent functions, because operations will return a new object instead of modifying an existing one.
 
-"Place as much of the logic of the program as possible into [nullipotent] functions...Structly segregate [non-nullipotent] commands into very simple operations that do not return domain information. Further control side effects by moving complex logic into Value Objects when a concept fitting the responsibility presents itself."
+"Place as much of the logic of the program as possible into [nullipotent] functions...Structuraly segregate [non-nullipotent] commands into very simple operations that do not return domain information. Further control side effects by moving complex logic into Value Objects when a concept fitting the responsibility presents itself."
 
-"The developer using the high-level command must understand the consequences of each underlying command. So much for encapsulation...And because object interfaces do not restrict side effects, two subclasses the implement the same interface can have different side effects. The developer using them will want to know which is which to anticipate the consequences. So much for abstraction and polymorphism...The necessity of tracing concrete execution defeats abstraction."
+"The developer using the high-level command must understand the consequences of each underlying command. So much for encapsulation...And because object interfaces do not restrict side effects, two subclasses that implement the same interface can have different side effects. The developer using them will want to know which is which to anticipate the consequences. So much for abstraction and polymorphism...The necessity of tracing concrete execution defeats abstraction."
 
 Assertions:
 - make side effects explicit
@@ -184,7 +185,7 @@ Conceptual Contours
 "Encountering a requirement that forces extensive changes in the breakdown of the objects and methods is a message: our understanding of the domain needs refinement."
 
 Example: continues with Accruals/Loans.
-"This ease of extension did not coume becaus she anticipated the change. Nor did it come because she made a design so versatile it could accommodate any conceivable change. It happened because in the previous refactoring, the design was aligned with underlying concepts of the domain."
+"This ease of extension did not come because she anticipated the change. Nor did it come because she made a design so versatile it could accommodate any conceivable change. It happened because in the previous refactoring, the design was aligned with underlying concepts of the domain."
 
 Standalone Classes
 

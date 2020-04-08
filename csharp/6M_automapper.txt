@@ -1,0 +1,60 @@
+##Automapper
+
+!![automapper](https://automapper.org/)
+
+AutoMapper is a library (availably by NuGet package) that simplifies mapping one object to another.
+
+Ex configuration:
+<code>
+using AutoMapper;
+
+public class MyMapperProfile : Profile
+{
+	public MyMapperProfile()
+	{
+		//create a default mapping from A to B - mapping is determined by Property Names matching
+		CreateMap<ObjectA, ObjectB>();
+
+		//create a custom mapping from A to C
+		//d for destination, s for source
+		CreateMap<ObjectA, ObjectC>()
+			.MapFrom(d => d.Name, s => s.Person.Name)
+			.MapFrom(d => d.Type, s => s.Type)
+			.ForMember(d => d.Contacts, o => o.MapFrom(s => GetContacts(s)))
+			.ForMember(d => d.Addresses, o => o.MapFrom(s => s.Addresses))
+			;
+		CreateMap<AddressA, AddressC>();
+	}
+	
+	private Contact[] GetContacts(ObjectA a)
+	{
+		return new Contact[] {};
+	}
+}
+</code>
+
+Ex usage:
+<code>
+var mapper = new MyMapperProfile();
+return mapper.Map<SomeType>(response);
+</code>
+
+#Pros
+
+For 1-to-1 mappings where all the property names match perfectly, it saves you writing boiler plate code.
+
+#Cons
+
+1)
+There is no compiler error when you use a conversion that does not exist. The error only appears at runtime.
+
+<code>
+return mapper.Map<SomeType>(response); //no compilation error
+</code>
+
+2)
+For complex mappings, you aren't saved any complexity in your implementation.
+
+3)
+It's another object to initialize and use.
+I prefer using Extension Methods to enable fluent syntax, and this adds an extra layer on that.

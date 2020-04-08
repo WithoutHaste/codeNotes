@@ -1,0 +1,17 @@
+##Terminology
+
+#System of Record (SOR)
+
+aka Source System of Record (SSoR)
+
+The system of record is the data store that is authoritative source of a given data element.
+
+In other words, this store is the final authority about this data value, and it trumps all other data stores that might disagree about the value.
+
+#Source of Truth (SoT)
+
+A data store that is trusted to provide a complete picture of an object.  It may bring data together from many Systems of Record.
+
+#Single Source of Truth (SSoT)
+
+The practice of designing systems of data storage so that each data element exists in only one place. It can be referenced from other data stores, but it is not duplicated or cached.

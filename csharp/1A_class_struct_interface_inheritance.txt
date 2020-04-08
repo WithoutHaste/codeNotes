@@ -126,9 +126,12 @@ public class LedLight : IBlinkingLight, ITimerLight, ILight
 
 #Structs
 
-Structs define value-types.
+Structs define value-types (saved in Stack Memory).
 Structs cannot define explicit parameterless constructors.
 Structs cannot define default field values.
+Struct field/properties do not have to be immutable, but that is a common use case.
+
+You cannot set a custom default value for a struct. The default is always "all fields/properties set to their default values".
 
 (.Net 4.6)
 
