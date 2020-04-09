@@ -1,0 +1,49 @@
+##Command Line
+
+!![K8 Commands](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands)
+
+#Create
+
+Create a resource from a file or STDIN.
+Accepts JSON and YAML.
+
+<code lang="bash">
+kubectl create -f <path_to_file>
+
+kubectl create -f <url_to_file>
+</code>
+
+-f or --filename means the filename is next
+
+#Apply
+
+Apply a configuration to a resource by filename or STDIN.
+Accepts JSON and YAML.
+
+<code lang="bash">
+kubectl apply -f <path_to_file>
+
+kubectl apply -k <directory_of_files>
+</code>
+
+#Patch
+
+Update fields of a resource with strategic merge patch, a JSON merge patch, or a JSON patch.
+Accepts JSON and YAML.
+
+Use PATCH to update a resource that has already been CREATED.
+
+<code lang="bash">
+kubectl patch -n "${_namespace}" ingress "${_service}" --patch -f ./cd/k8s/oauth-patch-deploy.yml 
+</code>
+
+Do you need to PATCH or CREATE?
+Bash example:
+<code lang="bash">
+if ! kubectl get ${_resource}/${_service} -n ${_namespace} 2>&1 1>/dev/null
+then
+  kubectl apply -f "${_filename}"
+else
+  kubectl patch ${_resource} ${_service} --patch="$(cat ${_filename})" -n ${_namespace} --dry-run
+fi
+</code>

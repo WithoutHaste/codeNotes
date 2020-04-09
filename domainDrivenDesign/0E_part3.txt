@@ -189,6 +189,22 @@ Example: continues with Accruals/Loans.
 
 Standalone Classes
 
+"Interdependencies make models and designs hard to understand. They aslso make the hard to test and maintain. And interdependencies pile up easily."
+
+"Every association is a dependency, and understanding a class requires understanding what it is attached to...the type of every argument...every return value..."
+
+"Both modules and aggregates are aimed at limiting the web of interdependecies."
+
+One big reason to limit interdepencies is to not overload the developer mentally. Massive webs of interdependent objects are hard to understand and reason about.
+
+"Implicit concepts contribute to this [mental] load even more than explicit references."
+
+A standalone class is a class with zero dependencies (except for primitives and basic library functions, which do not add to mental load).
+- allowing dependencies on primitives, such as integers, does not mean ignoring the meaning of those variables
+- see Paint Mixing example, and pulling Pigment Color out into its own class
+
+"Every dependency is suspect until proven basic to the concept behind the object. This scrutiny starts with the factoring of the model concepts themselves. Then it requires attention to each individual association and operation. Model and design choices can chip away at dependencies, often to zero."
+
 #Ch 11 Applying Analysis Patterns
 
 #Ch 12 Relating Design Patterns to the Model
