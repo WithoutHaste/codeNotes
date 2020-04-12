@@ -38,3 +38,21 @@ PRINT RTRIM(@text);
 PRINT LTRIM(@text);
 PRINT TRIM(@text);
 </code>
+
+Split
+<code>
+STRING_SPLIT('string', ' ')
+</code>
+
+Replace one full string with another full string, wherever it appears in the text.
+<code>
+REPLACE('full text', 'from', 'to')
+</code>
+
+Translate individual characters all at once.
+Each "from" character is translated to its corresponding "to" character.
+<code>
+TRANSLATE('full text', 'from', 'to__')
+
+TRANSLATE('abc', 'cb', 'CB') --results in 'aBC'
+</code>
