@@ -1,0 +1,35 @@
+##Curl
+
+Send a request to a URL.
+
+<code>
+curl http://mysite.com
+</code>
+
+#Options
+
+Output more details
+<code>
+--verbose
+</code>
+
+Specify HTTP verb
+<code>
+--request POST
+</code>
+
+Follow redirects until you reach a real endpoint
+<code>
+--location
+-L
+</code>
+
+Send no data, forcing curl to set "Content-Length:0" header
+<code>
+--data ""
+</code>
+
+Don't require SSL (theoretically - it didn't work for us)
+<code>
+--insecure
+</code>

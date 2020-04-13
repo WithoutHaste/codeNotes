@@ -1,0 +1,32 @@
+##HttpsPolicy
+
+From Microsoft.AspNetCore.HttpsPolicy.dll
+
+#Https Redirect
+
+Redirect all HTTP traffic to an HTTPS port.
+<code>
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+...
+myIServiceCollection.AddHttpsRedirection(options =>
+{
+	options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect; //see also Status301MovedPermanently and Status308PermanentRedirect
+	options.HttpsPort = 8443;
+});
+</code>
+
+#HTTP Strict Transport Security
+
+aka HSTS
+
+The HTTP Strict-Transport-Security response header lets a web site tell browsers that it should only be accessed using HTTPS, instead of using HTTP.
+
+<code>
+using Microsoft.AspNetCore.Builder;
+...
+myIServiceCollection.AddHsts(options =>
+{
+	options.MaxAge = new TimeSpan(365, 0, 0, 0); //1 year
+});
+</code>
