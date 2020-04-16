@@ -1,5 +1,19 @@
 ##Rough Definitions
 
+#System vs Application
+
+An application (in this distinction) is a single executable running on a single machine. It is not the responsibility of the application to solve connectivity problems, such as losing access to a storage location.
+
+A system include multiple executables on (possibly) multiple machines. The system is responsible for solving its own connectivity problems.
+
+Ex: a web page is a system because it involves the server, the client's machine and browser, and probably at least one database.
+
+#RPC vs Queue
+
+RPC stands for Remote Procedure Call, such as a request/response. They are synchronous
+
+Message queues are asynchonous.
+
 #Loosely Coupled Services
 
 Services that communicate with the client or with each other using a set of industry-accepted standards and protocols.

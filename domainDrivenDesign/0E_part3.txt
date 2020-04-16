@@ -205,6 +205,64 @@ A standalone class is a class with zero dependencies (except for primitives and 
 
 "Every dependency is suspect until proven basic to the concept behind the object. This scrutiny starts with the factoring of the model concepts themselves. Then it requires attention to each individual association and operation. Model and design choices can chip away at dependencies, often to zero."
 
+Dependencies on classes within the same module are less of a burden than dependencies on external classes.
+
+When two classes are tightly coupled, even more coupling can actually clarify their relationship.
+
+"The goal is not to eliminate all dependencies, but to eliminate all nonessential ones."
+
+Closure of Operations
+
+This term comes from mathematics.  For example, addition is an operation closed over the set of real numbers. 1 + 1 = 2. Add any two real numbers together, and the result will also be a real number.
+
+"Wherever it fits, define an operation whose return type is the same as the type if its arguments...This pattern is most often applied to the operations of a Value Object."
+
+"A closed operation provides a high-level interface without introducing any dependency on other concepts."
+
+"These techniques require fairly advanced design skills to apply and sometimes even to write a client. The usefulness of a Model Driven Design is sensitive to the quality of the detailed design and implementation decisions, and it only takes a few confused developers to derail a project from the goal."
+
+Declarative Design
+
+"This term means many things to many people, but usually it indicates a way to write a program, or some part of a program, as a kind of executable specification...This can be done through a reflection mechanism or at compile time through code generation...This approach allows another developer to take the declaration at face value."
+
+"Generating a running program from a declaration of model properties is a kind of Holy Grail of Model Driven Design."
+
+Problems with pure Declarative Design
+- the declarative language does not do everything you need, and the framework is difficult or impossible to extend
+- code generation destroys manually-written code
+- in response to these limitations, developers dumb down the model and application
+
+Problems with Rule Engines
+- most systems are not purely Declarative because they include "control predicates" to support performance tuning. this introduces side-effects.
+- adding/removing/reordering rules causes incorrect results
+
+"Many declarative approaches can be corrupted if the developers bypass them intentionally or unintentionally. This is likely when the system is difficult to use or overly restrictive."
+
+"The greatest value I've seen delivered has been when a narrowly scoped framework automates a particularly tedious and error-prone aspect of the design, such as persistence and object-relational mapping...The best of these unburden developers of drudge work while leaving them complete freedom to design."
+
+Domain Specific Languages
+
+"...client code is written in a programming lanuage tailored to a particular model of a particular domain. For example, a language for shipping systems might include terms such as CARGO and ROUTE, along with syntax for associating them...The program is then compiled, often into a conventional object-oriented language, where a library of classes provides implementations for the terms in the language."
+
+Problems with Domain Specific Languages
+- to refine the model, the developer must edit the programming language - designing and editing a programming language is an advanced skill
+- loses the value of an application and model implemented in the same language
+
+Declarative Style
+
+The more you use intention-revealing interfaces, side-effect-free functions, and assertions, the closer you are to being Declarative.
+
+Returning to the Chemical Packing example to look at Specification patterns
+- design that uses trees of objects for combining AND/OR/NOT logic (a basic object-oriented design)
+- design that uses a flat array of objects interpreted as a logic tree (in response to memory constraints)
+
+How to get started on making a design more supple
+- carve out a subdomain and work just on that part
+- draw on established formalisms (such as Accounting or Boolean Logic)
+
+Detailed example of refactoring Loans/Shares
+"Complex logic is encapsulated in specialized Value Objects with side-effect-free functions...State-modifying operations are simple and characterized with Assertions...Model concepts are decoupled; operations entangle a minimum of other types...Familiar formalisms make the protocol easy to grasp."
+
 #Ch 11 Applying Analysis Patterns
 
 #Ch 12 Relating Design Patterns to the Model

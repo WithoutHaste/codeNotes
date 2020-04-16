@@ -16,6 +16,9 @@ myIServiceCollection.AddHttpsRedirection(options =>
 });
 </code>
 
+An HTTP request can bypass this redirect with header "X-Forwarded-Proto:https".
+This pretends that the request is already being made to an HTTPS address.
+
 #HTTP Strict Transport Security
 
 aka HSTS

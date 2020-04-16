@@ -1,0 +1,23 @@
+##Service
+
+Example service yaml:
+<code lang="yaml">
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-a
+  namespace: services-abc
+  labels:
+    application: service-a
+spec:
+  type: NodePort
+  selector:
+    application: service-a
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  - name: https
+    port: 8443
+    targetPort: 8443
+</code>

@@ -1,0 +1,26 @@
+##Distributed System Design
+
+#The 8 Fallacies of Distributed Computing
+
+The network is reliable.
+The network is secure.
+The network is homogenous.
+The topology won't change.
+Latency isn't a problem.
+Bandwidth isn't a problem.
+Transport cost isn't a problem.
+The administrator will know what to do.
+
+(from Deutsch and Gosling)
+
+#The 10 Fallacies of Enterprise Computing
+
+Everything from the 8 Fallacies of Distributed Computing, plus
+
+The system is atomic and/or monolithic.
+The system is finished.
+Business logic can and should be centralized.
+
+(from Neward)
+
+(The name is a joke about counting from 0)

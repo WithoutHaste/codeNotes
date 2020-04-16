@@ -1,0 +1,31 @@
+##Ingress
+
+Ingresses route external http(s) traffic to internal services.
+
+Example ingress yaml:
+<code lang="yaml">
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: service-a
+  namespace: services-abc
+  labels:
+    stable.k8s.psg.io/kcm.class: "default"
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  rules:
+  - host: "service-a-url"
+    http:
+      paths:
+      - path: / #matches any path
+        backend:
+          serviceName: service-a
+          servicePort: 8080
+  tls:
+    - hosts:
+      - "service-a-url"
+      secretName: tls.wildcard.services-abc
+
+</code>

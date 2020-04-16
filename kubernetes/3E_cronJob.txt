@@ -1,0 +1,39 @@
+##Cron Job
+
+Cron jobs run commands on periodic schedules.
+
+Sample con job yaml:
+<code lang="yaml">
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: service-a-some-task
+  namespace: services-abc
+  labels:
+    application: service-a
+spec:
+  schedule: "*/5 * * * *" #every 5 minutes
+  jobTemplate:
+    spec:
+      backoffLimit: 1 #only attempt to run once per scheduled time slot
+      activeDeadlineSeconds: 180 #can run for up to 3 minutes
+      ttlSecondsAfterFinished: 1800 #clean up old jobs 30 minutes after they are completed
+      completions: 1
+      parallelism: 1
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: service-a-some-task
+            image: buildpack-deps:curl
+            command:
+                - /usr/bin/curl 
+                - --verbose
+                - --request 
+                - POST                
+                - '--data'  #to get the Content-Length:0 header
+                - '""'      #to get the Content-Length:0 header
+                - 'http://service-a:8080/private/v1/someTask'
+</code>
+
+A cron job can connect to a service endpoint that does not have a K8S ingress.

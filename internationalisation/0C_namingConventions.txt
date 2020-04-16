@@ -1,0 +1,8 @@
+##Naming Conventions
+
+#i18n
+
+i18n is short for the web internationalisation standard.
+
+You keep the first and last letters, and replace everything in between with the count of the letters replaced.
+- internationalization => i18n

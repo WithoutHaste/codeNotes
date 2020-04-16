@@ -1,0 +1,7 @@
+##Naming Conventions
+
+K8S (pronounced Kates) is short for Kubernetes, following the i18n web internationalisation standard.
+
+You keep the first and last letters, and replace everything in between with the count of the letters replaced.
+- Kubernetes => K8S
+- internationalization => i18n

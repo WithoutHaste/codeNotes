@@ -94,3 +94,28 @@ As of EF 6, you can easily check if any changes exist in a DbContext to be saved
 <code>
 dbContext.ChangeTracker.HasChanges();
 </code>
+
+#Logging
+
+(EF Core)
+
+Filter out messages you don't want to log:
+<code>
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+
+public class MyDbContext : DbContext
+{
+	private static readonly ILoggerFactory _loggerFactory
+            = LoggerFactory.Create(builder =>
+            {
+                builder.AddFilter((category, level) => level > LogLevel.Information);
+            });
+	...
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	{
+		optionsBuilder.UseLoggerFactory(_loggerFactory);
+	}
+}
+</code>
+EF Core spews a lot of Information messages, so this helps keep the logs clear of junk.

@@ -1,0 +1,139 @@
+##Fallacies
+
+!![Advanced Distributed System Design (online course)](https://learn.particular.net/courses/take/adsd-online-free/texts/11460612-welcome-to-the-course)
+
+#The 8 Fallacies of Distributed Computing
+
+The network is reliable.
+The network is secure.
+The network is homogenous.
+The topology won't change.
+Latency isn't a problem.
+Bandwidth isn't a problem.
+Transport cost isn't a problem.
+The administrator will know what to do.
+
+(from Deutsch and Gosling, in the 1970s)
+
+#The 10 Fallacies of Enterprise Computing
+
+Everything from the 8 Fallacies of Distributed Computing, plus
+
+The system is atomic and/or monolithic.
+The system is finished.
+Business logic can and should be centralized.
+
+(from Neward)
+
+(The name is a joke about counting from 0)
+
+#Unreliable network
+
+How do you handle HttpTimeoutException?
+- is the process running correctly, but it's just taking a while?
+- did the request fail?
+
+You can log the error and continue.
+You can forward the error to the user.
+You can retry.
+- but what if the request actually succeeded already?
+- but what about transactional integrity?
+
+You can use a reliable messaging service. (MSMQ, Azure Service Bus, WebSphere, etc)
+- message queues are designed to handle retry/store and forward/transaction integrity behaviors
+- what you lose is request/response - everything will be asynchronous
+
+System design is very different when you cannot rely on request/response interactions.
+
+#Latency
+
+Roundtrip time: time from invocation to response being received
+- includes serialization, server processing, and deserialization
+
+Latency time: time to cross the network in one direction
+- more useful metric for distributed systems
+
+Normalized latencies, based on 1 CPU cycle = 1 second
+- Main memory access = 6 minutes
+- Hard disk access = 2-6 days
+- Internet from San Francisco to New York = 4 years
+- Internet from San Francisco to England = 8 years
+- Internet from San Francisco to Australia = 19 years
+- TCP packet retransmit = 105-317 years
+- OS virtualization system reboot = 423 years
+- SCSI command timeout = 3 millennia
+- Physical system rebook = 32 millennia
+
+Distributed systems can have terrible latency issues.
+
+If you use polymorphism and dependency injection, it may not be clear to when you are even making a remote call.
+If you use cloud services, it may not be clear how often a system will have to reboot under you.
+If you use microservices, which make many remote calls, that will be slower than a single service.
+If you use an ORM with lazy-loading, it may not be clear how many database queries are being run.
+
+In general, avoid using remote objects.
+- ORM lazy loading is an example of remote objects
+- tightly coupled request/response interactions are examples of remote objects
+
+#Limited bandwidth
+
+Bandwidth capacities have grown slower than CPU speed or memory.
+
+How much is a gigabit of bandwidth?
+- that's about 128 megabytes
+- TCP overhead will use up half of it - down to 60 megabytes
+- take another half for the structure of whatever data format you use - down to 30 megabytes
+
+Putting more servers on the same network will not increase your bandwidth.
+
+To avoid wasting bandwidth, you want to load as little data as possible.
+But that conflicts with latency concerns, which recommend you load as much data at once as possible.
+
+The best you can do is load exactly the data you need at one time.
+You may need to decompose your domain model into multiple smaller, more specific models, each one designed to handle a subset of scenarios.
+
+You can move time-critical data to its own network.
+- either truly a separate network
+- or subdivide your bandwidth and allocate a portion of it to each service
+- this is a good reason to divide services into smaller services - based on their bandwidth priority
+
+#Insecure Network
+
+Nothing is secure. Even computers that are disconnected from the network are at risk every time you put in a disk or thumbdrive. Every person with access to the system is a security risk. Faster computers means it's easier to crack encryption.
+
+#Changes to network topology
+
+With cloud computing, the network topology can change on the fly.
+
+With callback contracts (and similar) the server remembers the address of the client so it can push updates to them. What if the client isn't there anymore? HTTP timeouts default to 30 seconds, so it'll be that long to realize the client isn't available. This could even be used as a denial of service attack.
+
+Can the system the designed so that it can preserve its performance when the network topology changes?
+
+So
+Don't hardcode ip addresses, domain names, etc.
+Consider multicasting (talking to a range of addresses). This can be insecure.
+Consider discovery mechanisms for self-configuring systems. It works well until it doesn't work.
+
+Performance test early, starting at 30% of the way through a project. Test with various servers going down or rebooting.
+
+#Fallible administrators
+
+Even if an admin actually knows the whole system top to bottom, you can't rely on them working for you forever. How long will it take their replacement to get up to speed? To become an expert?
+
+Configuration is magic if you don't understand it, and don't expect its effects.
+Some configuration may be in a text file. Some may be in the database. Some may be in environment variables.
+
+So
+Use a configuration management system. See the ITIL standard.
+Keep up-to-date documentation.
+Save stable deployment points.
+Backup the system.
+
+IT will often get push back from the business about when they can/cannot deploy updates, because the business knows that errors are likely to be introduced. This results in large deployments (more likely to contain errors) being deployed less frequently.
+It is better to move towards continuous deployment. Deploy many small updates so often that deployment is not worrying. Errors are easier to track down because the amount of changes that could have caused them is smaller.
+
+If you can make sure the new code is backward compatible, then you can have little or no downtime while you upgrade, because you can upgrade one server at a time. When you test, test multiple versions of the system running in parallel.
+
+Queueing can help with downtime, because while one part of the system is down, another part can still be adding messages to the queue. Or one part can be consuming from the queue while the producer is down.
+
+#Cost of transport

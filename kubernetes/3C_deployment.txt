@@ -1,0 +1,62 @@
+##Deployment
+
+Sample deployment yaml:
+<code lang="yaml">
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-a
+  namespace: services-abc
+  labels:
+    application: service-a
+spec:
+  revisionHistoryLimit: 2
+  replicas: replicas-a
+  minReadySeconds: 20 #give the deployment 20s to spin up.
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1 #rollout 1 at time.
+      maxUnavailable: 1 #don't rollout another until new one is available.
+  selector:
+    matchLabels:
+      application: service-a
+  template:
+    metadata:
+      labels:
+        application: service-a
+    spec:
+      containers:
+        - name: service-a
+          image: docker.cicd.mycompany.com/service-a:1.0.1
+          imagePullPolicy: Always
+          env:
+           - name: ASPNETCORE_ENVIRONMENT
+             value: "<DOTNET_ENVIRONMENT>"
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+              httpHeaders:
+              - name: X-Forwarded-Host
+                value: service-a-url
+              - name: X-Forwarded-Proto
+                value: https
+            initialDelaySeconds: 10
+            periodSeconds: 30
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+              httpHeaders:
+              - name: X-Forwarded-Host
+                value: service-a-url
+              - name: X-Forwarded-Proto
+                value: https
+            initialDelaySeconds: 10
+            periodSeconds: 30
+      imagePullSecrets:
+        - name: mycompany-docker-registry
+</code>

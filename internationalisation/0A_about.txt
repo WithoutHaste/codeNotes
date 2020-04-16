@@ -1,0 +1,3 @@
+##About
+
+Internationalisation is the process of making an application cross-cultural. This mostly involves support for multiple languages.

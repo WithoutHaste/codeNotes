@@ -1,0 +1,24 @@
+##Guidelines
+
+#Semantic Keys
+
+Given the text "Continue" on a button.
+To support multiple languages, you need some label for "Continue" that points to the translation in each language.
+
+But some words that are the same in English, will be translated to different words in some other language, based on context.
+Therefore, you need the context included in the key for this term.
+
+Instead of key "continue", you want something like "form_login:step_1:primary_button" vs "generic:continue".
+
+#Pluralization
+
+Take singular/plural translactions into account. This can affect an entire sentence.
+
+Ex: There is 1 item in the cart.
+Ex: There are 2 items in the cart.
+
+#Separation of Concerns
+
+Keep html/styling/etc out of your translation files.
+
+Ex: Don't put "<p><i>Go to next step</i></p>" in a language file.
