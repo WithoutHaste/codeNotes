@@ -36,3 +36,72 @@ private static Mock<DbSet<Country>> SetupQueryableMockSet(IQueryable<Country> co
 	return mockSet;
 }
 </code>
+
+#In-Memory Database
+
+(examples are for Entity Framework Core)
+
+Use a in-memory database to really test your query logic.
+
+Add a constructor to your Context for testing:
+<code>
+using Microsoft.EntityFrameworkCore;
+
+public class MyContext : DbContext
+{
+    public MyContext()
+    { }
+
+    public MyContext(DbContextOptions<MyContext> options)
+        : base(options)
+    { }
+
+	//make sure you don't set up another provider, if one is already set
+	protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+	{
+		if (!optionsBuilder.IsConfigured)
+		{
+			//setup provider, such as optionsBuilder.UseSqlServer(connectionString);
+		}
+	}
+}
+</code>
+
+Unit tests:
+<code>
+using Microsoft.EntityFrameworkCore;
+//you will need to install NuGet package Microsoft.EntityFrameworkCore.InMemory
+//it comes in under the Microsoft.EntityFrameworkCore namespace, so another using statement is not needed
+
+public void MyUnitTest()
+{
+	var options = new DbContextOptionsBuilder<MyContext>()
+		.UseInMemoryDatabase(databaseName: "in_memory_db")
+		.Options;
+
+	// Run the test against one instance of the context
+	using (var context = new MyContext(options))
+	{
+		var service = new MyService(context);
+		service.AddBlog("https://example.com");
+		context.SaveChanges();
+	}
+
+	// Use a separate instance of the context to verify correct data was saved to database
+	using (var context = new MyContext(options))
+	{
+		Assert.Equal(1, context.Blogs.Count());
+		Assert.Equal("https://example.com", context.Blogs.Single().Url);
+	}
+}
+</code>
+The "databaseName" is the unique identifier of the in-memory database. A new name will cause a new in-memory database to be created.
+
+To clear the in-memory database before a test:
+<code>
+myContext.Database.EnsureDeleted();
+</code>
+Or you can generate each new one with a new unique id such as
+<code>
+optionsBuilder.UseInMemoryDatabase(Guid.NewGuid().ToString());
+</code>
