@@ -31,12 +31,24 @@ Behavioral Patterns
 	Template Method
 	Visitor
 
-#Strategy
+#Strategy aka Policy
+
+Decouple the highly variable part of a process from the stable part.
 
 (similar to State)
-Make algorithms interchangeable by creating an Inteface for them
+Make algorithms interchangeable by creating an Interface for them
 Let your class reference the Interface type, so any implementation of the algorithm can be set
 Allows you to easily change class behavior
+
+Variation
+There are multiple ways to accomplish an objective
+Each way is made up of several algorithm choices
+Group each set of choices into its own object that inherits from a base class
+Now you can swap between the cohesive sets of algorithms
+
+If you see the same conditional sprinkled all over a process, it might be good to split it into two processes with one conditional deciding between them.
+
+Ex: should we judge a Route by the Total Time or the Total Distance? That's a policy decision.
 
 #State
 
