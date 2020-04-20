@@ -312,3 +312,54 @@ Example: Composite pattern
 "Flyweight is a good example of a design pattern that has no correspondence to the domain model...This is an implementation option available for Value Objects and not for Entities...Contrast this with Composite, in which conceptual objects are composed of other conceptual objects. In that case, the pattern applies to both model and implementation, which is an essential trait of a domain pattern."
 
 #Ch 13 Refactoring Toward Deeper Insight
+
+Things to focus on:
+- Live in the domain
+- Keep looking at things a different way
+- Maintain an unbroken dialog with domain experts
+
+"Seeking insight into the domain creates a broader context for the process of refactoring."
+
+How it starts:
+- There is some complexity or awkwardness in the code, and the root of the problem is identified as the Domain
+- The code is tidy, but the model language is disconnected from the domain experts
+- The code is tidy, but new functionality is not fitting in naturally
+- You've learned something new about the domain
+
+"Seeing the trouble spot is often the hardest and most uncertain part. After that, developers can systematically seek out the elements of a new model."
+
+"The initiators of the change pick a couple of other developers who are good at thinking through that kind of problem, who know that area of the domain, or who have strong modeling skills. If there are subtleties, they make sure a domain expert is involved."
+
+- Brainstorm
+- Sketch diagrams
+- Walk through scenarios
+
+Key to this process:
+- Self Determination - a small team self-assembles for a few days only
+- Scope and Sleep - a few short meeting spaced over a few days only
+- Exercising the Ubiquitous Language
+
+Don't reinvent the wheel - pull ideas from any source available.
+
+"As the pieces are fit together, model concerns and design concerns must be dealt with in parallel...Design patterns can often be employed in the domain layer when they fit both an implementation need and the model concept."
+
+"Software isn't just for users. It's also for developers." See intention-revealing interfaces, supple design, etc.
+
+"If you wait until you can make a complete justification for a change, you've waited too long...Your project is already incurring heavy costs, and the postponed changes will be harder to make..."
+
+"Continuous refactoring has come to be considered a best practice, but most project teams are still too cautious about it. They see the risk of changing code and the cost of developer time to make a change; but what's harder to see is the risk of keeping an awkward design and the cost of working around that design...Developers who want to refactor are often asked to justify the decision. Although this seems reasonable, it makes an already difficult thing impossibly difficult..."
+
+Refactor when:
+- the design does not express the team's understanding of the domain
+- important concepts are only implicit
+- you see an opportunity to make an important part of the design suppler
+
+"This aggressive attitude does not justify any change at any time."
+
+Don't refactor:
+- the day before a release
+- just to show off
+- when the domain experts disagree with the model
+- just to follow a strict rule
+
+Refactoring tends to occur in waves, rather than steadily. These intense times might look more like crisis than opportunity.
