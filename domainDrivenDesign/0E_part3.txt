@@ -265,6 +265,29 @@ Detailed example of refactoring Loans/Shares
 
 #Ch 11 Applying Analysis Patterns
 
+(From Fowler's "Analysis Patterns") "Analysis Patterns are groups of concepts that represent a common construction in business modeling. It may be relevant to only one domain or it may span many domains."
+
+These patterns are starting points, based on the trial and error of others. They are not expected to be complete, finished designs appropriate to every project.
+
+"To discuss model idea out of that context makes them harder to apply and risks opening the deadly divide between analysis and design, which is antithetical to Model Driven Design...The principle and application of analysis patterns can be explained better by example than through abstract description."
+
+"In this chapter, I will give two examples of developers making use of a small, representative sample of models fro the chapter 'Inventory and Accounting' in Fowler 1997...The point is to illustrate their integration into the Domain Driven Design process."
+
+Example: Earning interest with accounts
+
+"Sometimes there are parts of our programs that we don't even suspect have the potential to benefit from a domain model. They may have started very simply and evolved mechanistically. They seem like complicated application code, rather than domain logic. Analysis patterns can be particularly helpful in showing us these blind spots."
+
+Example: Posting rules
+
+"When you are lucky enough to have an analysis pattern, it hardly ever is the answer to your particular needs. Yet it offers valuable leads in your investigation, and it provides cleanly abstracted vocabulary."
+
+To reiterate - analysis patterns are excellent sources of vocabulary.
+Warning - do not change the usage of well-defined terms.
+
+"It should also give you guidance about implementation consequences that will save you pain down the road."
+
+"Sometimes the result doesn't even obviously relate to the analysis pattern itself, yet was stimulated by the insights from the pattern."
+
 #Ch 12 Relating Design Patterns to the Model
 
 #Ch 13 Refactoring Toward Deeper Insight
