@@ -1,0 +1,14 @@
+##AutoMapper
+
+AutoMapper is an object-to-object mapper.
+
+!![AutoMapper getting started guide](https://docs.automapper.org/en/stable/Getting-started.html)
+
+#Cons
+
+I don't recommend AutoMapper because it does not give compile-time errors for using a mapping that is not configured. Instead, it throws a runtime exception: "AutoMapper.AutoMapperMappingException: 'Missing type map configuration or unsupported mapping.'"
+
+<code>
+MyMapperProfile myMapper = new MyMapperProfile();
+ToClass toObject = myMapper.Map<ToClass>(fromObject); //this throws an exception
+</code>
