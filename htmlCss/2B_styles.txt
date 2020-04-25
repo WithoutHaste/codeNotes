@@ -1,5 +1,16 @@
 ##Styles
 
+#Order of Precedence
+
+From most important to least important:
+1) Inline CSS
+2) A Selector Rule Marked !important
+3) More Specific Selectors override Less Specific Selectors
+	3a) Ids
+	3b) Classes
+	3c) Elements/Tags
+4) Later Rules override Earlier Rules
+
 #CSS Selectors
 
 Multiple selectors:
