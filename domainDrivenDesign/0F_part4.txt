@@ -1,0 +1,85 @@
+##Part 4: Strategic Design
+
+"As systems grow too complex to know completely at the level of individual objects, we need techniques for manipulating and comprehending large models."
+
+"[Such design] decisions must be made at team level or even negotiated between teams. These are the decisions where design and politics often intersect."
+
+The challenge is to keep a single, integrated, company-wide model while also breaking in into manageable pieces that can be assigned to different teams.
+
+"A monolithic, all-encompassing domain model will be unwieldy and loaded with subtle duplications and contradictions. A set of small, distinct subsystems glued together with ad hoc interfaces will lack the power to solve enterprise-wide problems and allows consistency problems to arise at every integration point."
+
+#Ch 14: Maintaining Model Integrity
+
+Be wary of re-purposing existing classes to new uses. Especially if the usage is only a /little/ different (as this is the most tempting). It is better to make two distinct classes with clearly defined usages.
+
+Explicitly defining Bounded Contexts will help you keep these almost-duplicated classes apart. Every team may have their own "Charge" class inside their own Bounded Context, and each one can be used differently without confusion.
+
+"Although we seldom think about it explicitly, the most fundamental requirement of a model is that it be internally consistent; that its terms always have the same meaning, and that it contain no contradictory rules...The internal consistency of a model, such that each term is unambiguous and no rules contradict, is called Unification."
+
+"But the world of large systems development is not the ideal world. To maintain that level of unification in an entire enterprise system is more trouble than it is worth...Total unification of the domain model for a large system will not be feasible or cost effective."
+
+"It is necessary to allow multiple models to develop in different parts of the system, but we need to make careful choices about which parts of the system will be allowed to diverge and what their relationship to each other will be...None of this happens by itself or through good intentions. It happens only through conscious design decisions and institution of specific processes."
+
+The cost of having multiple models:
+- limits integration
+- makes communication more difficult
+- is inelegent
+
+The cost of combining all models into one:
+- if you refactor too quickly, you'll introduce errors
+- the coordination effort can be too onerous to get anything else done
+- teams may make compromises that damage their projects
+  - either by limiting their own functionality
+  - or by making the final model too complicated
+- political differences can affect the model
+- management priorities can affect the model
+
+It's interesting to see "office politics" given as a reason to divide a model.
+
+"Through a combination of proactive decisions about what should be unified and pragmatic recognition of what is not unified, we can create a clear, shared picture of the situation...We can set about making sure that the parts we want to unify stay that way, and the parts that are not unified don't cause confusion or corruption...We need to chose our strategy consciously and then follow our strategy consistently."
+
+High level overview:
+- map the current terrain of the project
+- divide the total modal up into Bounded Contexts
+- a high level Context Map documents all the Bounded Contexts and how they relate to each other
+- practice Continuous Integration to keep all the Bounded Contexts working together
+- some closely linked contexts will have a Shared Kernel, others will split apart and go their Seperate Ways
+
+Bounded Contexts
+
+"Cells can exist because their membranes define what is in and out and determine what can pass."
+
+"Different models apply in different contexts."
+- integrating with code outside your control probably calls for a different model
+- even small projects can generate conflicts over which part of the model is shared and which is not
+
+"Multiple models are in play on any large project...Failure to keep things straight is ultimately revealed when the running code doesn't work right, but the problems starts in the way teams are organized and the way people interact."
+
+"A model applies in a Context. The context may be a certain part of the code, or the work of a particular team. For a model invented in a brainstorming session, the context could be limited to that particular conversation...The model context is whatever set of conditions must apply to in order to be able to say that the terms in a model have a specific meaning."
+
+"Explicitly define the context within which a model applies. Explicitly set boundaries in terms of team organization, usage within specific parts of the application, and physical manifestations such as code bases and database schemas...Keep the model strictly consistent within these bounds, but don't be distracted or confused by issues outside...By drawing an explicit boundary, you can keep the model pure, and therefore potent, where it is applicable."
+
+"In other contexts, other models apply, with differences in terminology, in concepts and rules, and in dialects of the Ubiquitous Language...Integration across the boundaries necessarily will involve some translation, which you can analyze explicitly."
+(How is the language Ubiquitous if it has dialects?)
+
+Example: Booking Context (back to the Shipping company)
+- if teams do not coordinate carefully and consciously, they will de facto be working in different Contexts
+- if the database schema design is driven by the model design, then the database schema is in the same Context
+- "This Bounded Context is made up of all those aspects of the system that are driven by this particular model..."
+- for the teams in the Bounded Context, they gain clarity
+- for the teams outside the Bounded Context, they gain freedom
+
+Recognizing conceptual splinters within a Bounded Context:
+- code interfaces that don't match up
+- unexpected behavior
+- confusion in the language
+
+"The Context Map charts the territory, giving the big picture of the Contexts and their connections...The relationships between a Bounded Context and its neighbors require care and attention."
+
+#Ch 15: Distillation
+
+#Ch 16: Large-Scale Structure
+
+#Ch 17: Bringing the Strategy Together
+
+#Conclusion
