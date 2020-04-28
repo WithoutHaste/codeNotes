@@ -72,9 +72,55 @@ Example: Booking Context (back to the Shipping company)
 Recognizing conceptual splinters within a Bounded Context:
 - code interfaces that don't match up
 - unexpected behavior
-- confusion in the language
+- confusion in the language 
 
-"The Context Map charts the territory, giving the big picture of the Contexts and their connections...The relationships between a Bounded Context and its neighbors require care and attention."
+Duplicate concepts: you have two model elements (with implementation details) that represent the same concept. Every time one changes, the other has to also.
+
+False cognates: you have one model element being used in two different ways. Usually this happens when two different people/teams are making changes to the same object, and they have slightly different ideas about what that object should do. This leads to difficult-to-discover bugs.
+
+Continuous Integration
+
+"When a number of people [more than two] are working in the same Bounded Context, there is a strong tendency for the model to fragment...Having defined a Bounded Context, we must keep it sound."
+
+"Sometimes developers do not fully understand the intent of some object or interaction modeled by someone else, and they change it in a way that makes it unusable for its original purpose. Sometimes they don't realize that the concepts they are working on are already embodied in another part of the model and they duplicate (inexactly) those concepts and behavior...It is very hard to maintain the level of communication needed to develop a unified system of any size...We need ways of increasing communication and reducing complexity...We also need safety nets that prevent overcautious behavior..."
+
+"Many SP practices are aimed at this specific problem of maintaining a coherent design that is being constantly changed by many people. XP in its purest form is a nice fit for maintaining model integrity within a single Bounded Context."
+
+"...It is essential to have some process of Continuous Integration...[meaning] that all work within the context is being merged and made consistent frequently enough that when splinters happen they are caught and corrected quickly."
+
+Levels of Continuous Integration:
+- The integration of model concepts though communication with team members. Constantly practice your Ubiquitous Language.
+- The integration of the implementation through an automated merge/build/test process.
+
+Successful Continuous Integration Processes:
+- have a step-by-step, reproducible merge/build technique
+- have automated testing suites
+- have rules that put an upper limit on how long changes can remain unintegrated
+- constantly exercise their Ubiquitous Language in discussions of the model and application
+
+"Continuous Integration is essential only within a Bounded Context. Design issues involving neighboring Contexts, including translation, don't have to be dealt with at the same pace."
+
+Context Map
+
+"When connections must be made between different Contexts, they tend to bleed into each other."
+
+"A Context Map is the overlap between project management and software design."
+
+"The Context Map charts the territory, giving the big picture of the Contexts and their connections...The relationships between a Bounded Context and its neighbors require care and attention...You can reduce confusion by defining the relationship between the different Contexts and creating a global view of all the model contexts on the project."
+
+"The natural course of events is for the boundaries to follow the contours of team organization. People who work closely will naturally share a model context...Physical office space can have an impact too...But the interrelationship between team organization and software model and design is still not prominent enough."
+
+"Code reuse between Bounded Contexts is a hazard to be avoided."
+
+"Identity each model in play on the project and define its Bounded Context. This includes implicit models of non-object-oriented subsystems...Name each Bounded Context, and make the name part of the Ubiquitous Language...Describe the points of contact between the models, outlining explicit translation for any communication and highlighting any sharing...Map the existing terrain. Take up transformations later...Whatever form the map takes, it must be shared and understood by everyone on the project."
+
+"Within each Bounded Context, you will have a coherent dialect of the Ubiquitous Language...You can speak unambiguously about the model of any part of the design by making your Context clear."
+
+"[Don't let necessary repair] lead to wholesale reorganization. Until you have an unambiguous Context Map that places all your work into some Bounded Context, with explicit relationships between all connected models, change only the outright contradictions."
+
+Example: Shipping Application with two Contexts
+- a new Bounded Context is created so that a difficult operation can use its own data structures and algorithms
+- translations at boundaries should be easily testable, and the teams on each side should collaborate on building the test suite
 
 #Ch 15: Distillation
 
