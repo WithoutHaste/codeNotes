@@ -7,6 +7,15 @@ Remarks or comments:
 REM single line comments
 </code>
 
+#Line break
+
+A line ending with \ will continue on the next line
+<code>
+this line \
+  continues here and \
+  also here
+</code>
+
 #ECHO
 
 By default, as a bash file runs each command will be echoed to the command prompt. This command turns that off:

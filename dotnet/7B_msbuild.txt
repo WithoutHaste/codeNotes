@@ -254,7 +254,7 @@ $(WebDeployPath) The relative path from the web deployment root to where the pro
 
 $(WebDeployRoot) The absolute path to the location of <localhost>. For example, c:\inetpub\wwwroot.
 
-#Command Line
+#MSBuild Command Line
 
 Build a project with default configuration:
 <code>
@@ -287,3 +287,16 @@ There are several intermittent errors that cleaning (instead of just building) M
 The errors I encountered looked like settings from other versions of the project were leaking, somehow, into the compiling version.
 (1) Sometimes the project built to the wrong Runtime Version, even though the TargetFrameworkVersion was specified.
 (2) Sometimes the project thought it needed extra dependencies that other versions of the project needed, but this one did not.
+
+Restore the dependencies and tools of a project
+If there is more than one Solution or Project in the current folder, specify one
+<code>
+dotnet restore --no-cache --force-evaluate
+dotnet restore MySolution.sln --no-cache --force-evaluate
+</code>
+
+Cleans the output of a project
+<code>
+dotnet clean
+dotnet clean MySolution.sln
+</code>
