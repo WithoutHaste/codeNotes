@@ -6,3 +6,10 @@ You can make any element focusable by adding a tabIndex attribute to it.
 <code>
 	<p tabIndex="4">...</p>
 </code>
+
+#title
+
+Adding a title to a button or input will create a tooltip when you hover over it.
+<code>
+	<button title="Explanation Text">abc</button>
+</code>
