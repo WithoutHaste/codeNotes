@@ -154,11 +154,23 @@ A layer between a client API and your own code
 So your code all references the adapter, and only the adapter references 3rd party code
 This protects most of your code from changes in the 3rd party code
 
+More specifically, and to distinguish Adapter from Facade:
+An Adapter is a wrapper that allows a client to use a different protocol than that understood by the implementer of the behavior.
+When a client sends a message to an Adapter, it is converted to a semantically equivalent message and sent on to the "adaptee". The response is converted and passed back.
+
+Evans: Our emphasis is on translation between two models, but I think this is consistent with the intent of Adapter.
+
+Gamma: The emphasis is on making a wrapped object conform to a standard interface that clients expect.
+
 #Facade
 
 (similar to Adapter)
 Create a single interface between your code and all 3rd party code
 Your code will see a single object in the place of a myriad of client interfaces
+
+More specifically, and to distinguish Facade from Adapter:
+A Facade is an alternative interface for (one or more) subsystems that simplifies access for the client. You can facilitate access to some features and hide the rest.
+A Facade does not change the model of the underlying system. It should be written strictly in accordance with the other system's model.
 
 #Proxy
 

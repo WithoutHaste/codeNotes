@@ -122,6 +122,124 @@ Example: Shipping Application with two Contexts
 - a new Bounded Context is created so that a difficult operation can use its own data structures and algorithms
 - translations at boundaries should be easily testable, and the teams on each side should collaborate on building the test suite
 
+"Model contexts always exist, but without conscious attention they may overlap and fluctuate."
+
+"Contact points with other Bounded Contexts are particularly important to test...Tests help compensate for the subtleties of translation and the lower level of communication the typically exist at boundaries."
+
+Organizing and Documenting Context Maps
+- each Bounded Context should have a name that is part of the Ubiquitous Language
+- everyone has to know where the Boundaries are; therefore, everyone will know what Context a piece of code is a part of
+
+Ubiquitous Language example:
+- instead of saying "George's team's stuff is changing, so we're going to have to change our stuff that talks to it"
+- say "the Transport Network model is changing, so we're going to have to change the translator for the Booking context"
+
+The following are some design patterns for how two Bounded Contexts can relate to each other.
+
+Shared Kernel
+
+A Shared Kernel is a Context that is shared by multiple other Contexts. A common example is an infrastructure framework (created by an internal team) which is used by several other teams. Another common example is the Core Domain.
+
+"Designate some subset of the domain model that the two teams agree to share. Of course this includes, along with this subset of the model, the subset of code or of the database design associated that part of the model. This explicitly shared [kernel] has special status, and shouldn't be changed without consultation with the other team."
+
+"It is a careful balance. The shared kernel cannot be changed as freely as other parts of the design. Decisions involve consultation with another team. Automated test suites must be integrated because all tests of both teams must pass when changes are made."
+
+"The goal is to reduce duplication...and make integration between the two subsystems relatively easy."
+
+Customer/Supplier Development Teams
+
+"Often one subsystem essentially feeds another; the 'downstream' component performs analysis or other functions that feed back very little into the 'upstream' component, and all dependencies go one way...The two subsystems commonly serve very different user communities, who do different jobs, where different models may be useful...Upstream and downstream subsystems separate naturally into two Bounded Contexts."
+
+"Translation is easier for having to operate in one direction only."
+
+Possible problems:
+- "The freewheeling development of the upstream team can be cramped if the downstream team has veto power over changes, or if procedures for requesting changes are too cumbersome."
+- "The upstream team may even be inhibited, worried about breaking the downstream system."
+- "The downstream team can be helpless, at the mercy of upstream priorities."
+- "Downstream needs things from upstream, but upstream is not responsible for downstream deliverables."
+
+"The process can be organized to balance the needs of the two user communities and schedule work on features needed downstream...On an XP project, there already is a mechanism in place for doing just that: the iteration planning process...Whatever analogous method serves to balance the concerns of different users can be expanded to include the downstream application's needs."
+
+"Establish a clear customer/supplied relationship between the two teams...In planning sessions, make the downstream team play the customer role to the upstream team...Negotiate and budget tasks for downstream requirements so that everyone understands the commitment and schedule."
+
+"Jointly develop automated acceptance tests that will validate the interface expected...This testing will free the upstream team to make changes without fear of side effects downstream...Automating the acceptance tests is a vital part of this customer relationship."
+
+"The relationship must be that of customer and supplier, with the implication that the customer's needs are paramount...[not] the poor-cousin relationship that often emerges, in which the downstream team has to come begging to the upstream team for its needs."
+
+Example: Yield Analysis vs Booking
+- teams using different implementation technologies points you more toward Customer/Supplier than Shared Kernel
+- analysis vs operations teams often fall into this Customer/Supplier relationship
+
+"Customer/Supplier teams are more likely to succeed if the two teams work under the same management, so that ultimately they do share goals, or where they are in different companies that actually have those roles."
+
+Conformist
+
+"When two development teams have an upstream/downstream relationship in which the upstream has no motivation to provide for the downstream team's needs, the downstream team is helpless...The downstream project will be delayed until the team ultimately learns to live with what it is given."
+
+Options:
+- abandon use of the upstream altogether (go your Separate Ways)
+- use the upstream, but develop your own model to fix awkwardness or lack on encapsulation - take full responsibility for the translation (see Anti Corruption Layer)
+- use the upstream, and use their model (Conformist)
+
+"Eliminate the complexity of translation between Bounded Contexts by slavishly adhering to the model of the upstream team...Choosing conformity enormously simplifies integration...[And] you will share a Ubiquitous Language with your supplier team."
+
+"It is very unappealing emotionally, which is why we choose it less often than we probably should."
+
+"Where the Shared Kernel is a collaboration between two teams that coordinate tightly, Conformist deals with integration with a team that is not interested in collaboration."
+
+Anti Corruption Layer
+
+"Now we'll take a final step to an even more pessimistic view of the relationship, assuming neither cooperation nor a usable design on the other side..."
+
+"New systems almost always have to be integrated with legacy or other systems, which have their own models. Translation layers can be simple, even elegant, when bridging well-designed Bounded Contexts with cooperative teams...But when the other side of the boundary starts to leak through, the translation layer may take on a more defensive tone."
+
+"The models of legacy systems are usually weak, and even the exception that is well developed may not fit the needs of the current project. Yet there may be a lot of value in the integration, and sometimes it is an absolute requirement."
+
+"The answer is not to avoid all integration with other systems...I've been on projects where people enthusiastically set out to replace all the legacy, but this is just too much to take on at once."
+
+"Integrating with existing systems is a valuable form of reuse."
+
+"When systems based on different models are combined, the need for the new system to adapt to the semantics of the other system can lead to a corruption of the new system's own model...It seems clear enough that errors will result if you take some data from one system and misinterpret it in another."
+
+A common mistake is to assume that you understand how to interpret the data from another system.
+
+"Create an isolating layer to provide clients with functionality in terms of their own domain model. The layer talks to the other system through its existing interface, requiring little or no modification to the other system. Internally, the layer translates in both directions as necessary between the two models."
+
+"The public interface of the Anti Corruption Layer usually appears as a set of Services, although occasionally it can take the form of an Entity."
+
+The other system's model can be completely abstracted, and the Anti Corruption Layer can present an interface perfectly aligned with the current system's model.
+
+See also Facades and Adapters, which do not Translate, but can be useful pieces of an Anti Corruption Layer.
+"The Facade belongs in the Bounded Context of the other system. It just presents a friendlier face specialized for your needs."
+"An Adapter is a wrapper that allows a client to use a different protocol than that understood by the implementer of the behavior."
+
+Example: Legacy Booking Application
+- using an Anti Corruption Layer between new and legacy development, and slower replacing pieces of the legacy system with new development
+
+"Although China might not have become so distinct a culture without the Great Wall, the Wall's construction was immensely expensive and bankrupted at least on dynasty, probably contributing to its fall. The benefits of isolation strategies must be balanced against their costs...There is a time to be pragmatic and make measured revisions to the model, so that it can fit more smoothly with foreign ones."
+
+Separate Ways
+
+"Integration can be very valuable, but it is always expensive. We should be sure it is really needed..."
+
+"We must ruthlessly scope requirements. Two sets of functionality with no indispensable relationship can be cut loose from each other."
+
+Problems with integration:
+- coordinating teams
+- forced compromises - "The simple specialized model that can satisfy a particular need must give way to the more abstract model that can handle all situations."
+- limits technology, based on what can integrate together
+
+"Just because features are related in a use case does not mean they must be integrated."
+
+"Therefore, declare a Bounded Context to have no connection to the others at all, allowing developers to find simple, specialized solutions within this small scope...The features can still be organized in middleware or the UI layer, but there will be no sharing of logic, and an absolute minimum of data transfer through translation layers - preferably none."
+
+Example: An Insurance Project Slims Down
+- an overwhelmed project simplifies by identifying features that can be delivered as standalone development, that only comes together in the UI menu
+
+"Taking Separate Ways forecloses some options. Although continuous refactoring can eventually undo any decision, it i shard to merge models that have developed in complete isolation."
+
+Open Host Service
+
 #Ch 15: Distillation
 
 #Ch 16: Large-Scale Structure
