@@ -55,3 +55,30 @@ Functions do return values.
 	<p>@x.Name: @FormatPrice(x.Price)</p>
 }
 </code>
+
+#Global
+
+You can create global helpers and functions (usable in any View) by adding them to a *.cshtml file in folder Project/App_Code.
+
+Project/App_Code/GlobalHelpers.cshtml
+<code>
+@helper DisplayAuthor(Author author) {
+	<a href="@Url.Action("Details", "Author")">@author.LastName</a>
+}
+
+@functions {
+	public static string SayTest() {
+		return "test";
+	}
+}
+</code>
+
+Any view file:
+<code>
+@GlobalHelpers.DisplayAuthor(book.Authors.First())
+
+@GlobalHelpers.SayTest()
+</code>
+
+Note that the helper/function is accessed based the name of the file it is in.
+
