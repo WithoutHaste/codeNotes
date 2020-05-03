@@ -87,10 +87,25 @@ dbContext.Database.ExecuteSqlCommand(
 
 Eager Loading: bring all data back from database in one query.
 <code>
-Country country = dbContext.Countries.Include(c => c.Cities).First();
+Country country = dbContext.Countries.Include("Cities.Mayor").First();
 </code>
 The more paths you include, the slower the query will run.
 The data is flattened in the database query, and is materialized as different objects by Entity Framework.
+The string object path parameter "Cities.Mayor" uses the same navigation properties as the object has (country.Cities, city.Mayor). 
+You can make one path as many steps long as you want. If the path branches, you need to Include each full path once:
+<code>
+Country country = dbContext.Countries.Include("Cities.Mayor").Include("Cities.PostOffices").First();
+</code>
+
+In this example, all the eager loading is lost:
+<code>
+using(MyContext context = new MyContext())
+{
+	Country country = dbContext.Countries.Include("Cities.Mayor").First();
+	return country.Cities.ToArray();
+}
+</code>
+If you returned "country", all the eager loading would be preserved after the context is disposed. But if you navigate past the object and then dispose the context, you'll lose all the eager loaded data.
 
 Explicit Loading: run extra queries to retrieve related data as needed.
 <code>
