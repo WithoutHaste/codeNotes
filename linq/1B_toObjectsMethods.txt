@@ -144,6 +144,22 @@ Sort the elements by the specified value. Ascending order.
 IEnumerable<Student> students = students.OrderBy(x => x.LastName);
 </code>
 
+Use a custom comparison function:
+<code>
+using System.Collections.Generic;
+
+public class MyComparer : IComparer<MyType>
+{
+	public int Compare(MyType a, MyType b)
+	{
+		//return positive if "a" should be higher, return negative if "b" should be higher
+	}
+}
+
+//to use it
+var result = collection.OrderBy(x => x, new MyComparer())
+</code>
+
 #OrderByDescending
 
 Sort the elements by the specified value. Descending order.
