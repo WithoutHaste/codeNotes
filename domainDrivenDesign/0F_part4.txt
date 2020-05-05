@@ -240,6 +240,26 @@ Example: An Insurance Project Slims Down
 
 Open Host Service
 
+"When a subsystem has to be integrated with many others, customizing a translator for each can bog down the team...If there is any coherence to the subsystem, it is probably possible to describe it as a set of Services that cover the common needs of other subsystems."
+
+"Define a protocol [clean enough to be understood and used by multiple teams] that gives access to your subsystem as a set of Services. Open the protocol so that all who need to integrate with you can use it."
+
+If one subsystem needs to integrate with many other systems that are within your control, flip the relationship so that it is the other subsystems that must integrate with you.
+
+If one team has very specific integration needs, write a custom translator for them, and keep your core protocol simple and clean.
+
+Published Language
+
+"The translation between the models of two Bounded Contexts requires a common language...the translation process itself can become complex and hard to understand."
+
+"When two businesses [or systems] want to exchange information with one another, how do they do it? Not only is it unrealistic to expect one to adopt the domain model of the other, it may be undesirable for both parties."
+- "A domain model is developed to solve problems for its users; such a model may contain features that needlessly complicate communication with another system."
+- "If the model underlying one of the applications is used as the communications medium, it cannot be changed freely to meet new needs..."
+- "Those models may be overly complex or poorly factored."
+- "They are probably undocumented."
+
+"The Open Host Service uses a standardized protocol for multiparty integration. It employs a model of the domain for interchange between systems, even though that model may not be used internally by those systems."
+
 #Ch 15: Distillation
 
 #Ch 16: Large-Scale Structure
