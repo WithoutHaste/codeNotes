@@ -55,6 +55,8 @@ public void DemoOutKeyword()
 }
 </code>
 
+'out' cannot be used on async methods.
+
 As of C# 7, you can declare the out argument inline with the method call:
 <code>
 public int? ToInt(string input)
@@ -83,6 +85,8 @@ public void DemoRefKeyword()
 	Console.WriteLine("After: {0}", x);
 }
 </code>
+
+'ref' cannot be used on async methods.
 
 As of C# 7, you can also explicitly return a reference.
 This example finds an element in a matrix and returns a reference to the selected element:

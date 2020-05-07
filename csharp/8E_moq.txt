@@ -126,6 +126,27 @@ Accept any parameter by regular expression:
 mock.Setup(i => i.MethodCondition5(It.IsRegex("\s+", RegexOptions.IgnoreCase)));
 </code>
 
+Set a "ref" or "out" value:
+Use Moq's Callback to set the desired value after the normal method is run.
+<code>
+public interface IParser
+{
+    bool TryParse(string value, ref int output);
+}
+
+//define a delegate with the same signature as the method under test
+delegate void MockTryParseCallback(string value, ref int output);
+ 
+public void TestCase()
+{
+    var mockParser = new Mock<IParser>();
+    mockParser.Setup(x => x.TryParse("255", ref It.Ref<int>.IsAny))
+              .Callback(new MockTryParseCallback((string s, ref int output) => output = 255)) //this sets the ref or out value
+              .Returns(true);
+	// the rest of the test
+}
+</code>
+
 #Setup Methods with Expressions
 
 Mocking a method that accepts a Func<Expression> and returning a particular value based on the parameter values passed into the expression:
@@ -277,3 +298,10 @@ var context = new ActionContext(httpContext.Object, new RouteData(), new Control
 controller.ControllerContext = new ControllerContext(context);
 //can now run a Controller Action and see what it does with the header
 </code>
+
+#Patterns to avoid
+
+Class implements Interface.
+In testing, you'll Mock the Interface.
+Method on Class makes changes to a reference-type parameter.
+So the code works when it is run for real, but the unit test fails because the Mock does not update the reference-type parameter.
