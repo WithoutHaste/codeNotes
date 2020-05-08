@@ -1,0 +1,34 @@
+##Expressions
+
+#Apply Expression to Object
+
+Given an expression that selects a object's field or property
+And given the new value to set that field or property to
+And given an object
+Apply the expression to change the value on the object
+<code>
+public class UpdateField<T, U>
+{
+	public Expression<Func<T, U>> Field { get; set; }
+	public TField Value { get; set; }
+
+	public UpdateField(Expression<Func<T, U>> field, U value)
+	{
+		Field = field;
+		Value = value;
+	}
+
+	public override void Apply(T target)
+	{
+		var memberSelectorExpression = Field.Body as MemberExpression;
+		if (memberSelectorExpression != null)
+		{
+			var property = memberSelectorExpression.Member as PropertyInfo;
+			if (property != null)
+			{
+				property.SetValue(target, Value, null);
+			}
+		}
+	}
+}
+</code>
