@@ -29,3 +29,15 @@ To see all supported collations:
 SELECT name, description FROM sys.fn_helpcollations();
 </code>
 
+#Dropping Accents
+
+Replace all the accented characters in a string with their unaccented counterparts:
+<code>
+SELECT 'àéêöhello!' Collate SQL_Latin1_General_CP1253_CI_AI;
+-- outputs aeeohello!
+</code>
+
+It does not work on unicode (NVARCHAR), so convert to VARCHAR first:
+<code>
+SELECT cast(N'àéêöhello!' as varchar) Collate SQL_Latin1_General_CP1253_CI_AI;
+</code>
