@@ -250,15 +250,43 @@ If one team has very specific integration needs, write a custom translator for t
 
 Published Language
 
-"The translation between the models of two Bounded Contexts requires a common language...the translation process itself can become complex and hard to understand."
+"The translation between the models of two Bounded Contexts requires a common language."
 
-"When two businesses [or systems] want to exchange information with one another, how do they do it? Not only is it unrealistic to expect one to adopt the domain model of the other, it may be undesirable for both parties."
-- "A domain model is developed to solve problems for its users; such a model may contain features that needlessly complicate communication with another system."
-- "If the model underlying one of the applications is used as the communications medium, it cannot be changed freely to meet new needs..."
-- "Those models may be overly complex or poorly factored."
-- "They are probably undocumented."
+"When two domain models must coexist and information must pass between them, the translation process itself can become complex and hard to document and understand."
 
-"The Open Host Service uses a standardized protocol for multiparty integration. It employs a model of the domain for interchange between systems, even though that model may not be used internally by those systems."
+"If we are building a new system, we will typically believe that our new model is the best available, and so we will think in terms of translating directly into it. But sometimes we are enhancing a set of older systems and trying to integrate them. Choosing one messy model over the other may be choosing the less of two evils...Another situation: when businesses want to exchange information with one another, how do they do it? Not only is it unrealistic to expect one to adopt the domain model of the other, it may be undesirable for both parties."
+
+"A domain model is developed to solve problems for its users; such a model may contain features that needlessly complicate communication with another system."
+
+"If the model underlying one of the applications is used as the communications medium, it cannot be changed freely to meet new needs..."
+
+"The Open Host Service uses a standardized protocol for multi-party integration. It employs a model of the domain for interchange between systems, even though the model may not be used internally by those systems."
+
+"By publish, I simply mean that the language is readily available to the community that might be interested in using it, and is sufficiently documented to allow independent interpretations to be comparable."
+
+"Industry groups have begun to form for the purpose of defining a single standard DTD [Document Type Definition] for their industry so that, say, chemical formula information or genetic coding can be communicated between many parties."
+
+Example: A published language for chemistry
+- see Chemical Markup Language (CML), a dialect of XML
+- XML (and JSON) are sort of published meta-languages
+
+Unifying the Elephant
+
+"If no integration is required, then it doesn't matter that the models are not unified."
+
+"If they require some integration...they will get a lot of value from merely recognizing that they don't agree. This way, at least they don't unknowingly talk as cross-purposes."
+
+"Unifying multiple models almost always means creating a new model."
+
+"...It is the exception when two models purely describe different parts of the whole...Matters are more difficult when two models are looking at the same part in a different way."
+
+"Successful model unification, to a large extent, hinges on minimalism. An elephant trunk is both more and less than a snake, but the less is probably more important than the more. Better to lack the water-spewing ability than to have an incorrect poison-fang feature."
+
+"Recognizing multiple, clashing domain models is really just facing reality...By explicitly defining a context within which each model applies, you can maintain the integrity of each and clearly see the implications of any particular interface you want to create between the two."
+
+Model Context Strategy
+
+"It is important always to draw the Context Map to reflect the current situation at any given time."
 
 #Ch 15: Distillation
 
