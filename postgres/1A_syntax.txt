@@ -1,0 +1,10 @@
+##Syntax
+
+#Strings
+
+Double-quotes denote table names and column names.
+Single-quotes denote string literals.
+
+<code>
+select * from schema."user" where "name" in ('Jane Smith', 'Susan Roth')
+</code>

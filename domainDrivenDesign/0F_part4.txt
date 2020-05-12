@@ -288,6 +288,74 @@ Model Context Strategy
 
 "It is important always to draw the Context Map to reflect the current situation at any given time."
 
+It is recommended that teams decide among themselves where to place the boundaries of Bounded Contexts. If the teams don't make those decisions, though, they must at least know what decisions have been made.
+
+"Decisions about whether to expand or to partition Bounded Contexts should be based on the cost-benefit trade-off between the value of independent team action and the value of direct and rich integration."
+
+"In practice, political relationships between teams often determine how systems are integrated. A technically advantageous unification may be impossible because of reporting structure. [Or] management may dictate an unwieldy merger."
+
+Favoring larger Bounded Contexts:
+- flow between user tasks is smoother when it is all unified
+- team communication is easier with 1 unified model
+- it's easier to understand 1 model than 2 models plus the mapping between them
+- translating between 2 models can be difficult
+
+Favoring smaller Bounded Contexts:
+- lower communication overhead between developers
+- continuous integration is easier
+- you can use more specific, concrete models instead of versatile, abstract ones
+- your can simplify the Ubiquitous Language within a context by putting boundaries between specialized groups that have their own jargon
+
+"Deep integration of functionality between different Bounded Contexts is impractical."
+
+You should generally leave legacy systems and external systems outside your Bounded Context.
+
+Don't assume that each legacy system or external system is 1 Bounded Context. Each system may be made up of many contexts.
+"A Bounded Context is defined by an intention to unify the model within certain boundaries."
+
+Integrating with an external system:
+- consider Separate Ways, i.e. don't integrate at all. "Would it be sufficient to give the user easy access to both systems? Integration is expensive and distracting, so unburden your project as much as you can."
+- consider Conformist, if you are merely extending an existing system. "If you decide on a Conformist design, you must do it wholeheartedly."
+- consider Anti Corruption Layer "where your interface to the other system is small, or where the other system is very badly designed."
+
+"The software your project team is actually building is the 'system under design'...You can define Bounded Contexts within this zome and apply Continuous Integration within each to keep them unified."
+
+How many Bounded Contexts should your project use?
+
+"A single Bounded Context for the entire system under design...This would be a likely choice for a team of fewer than ten people working on highly interrelated functionality."
+
+As the team grows larger, you'll divide the space into more and more Bounded Contexts.
+
+"Generally speaking, there is a correspondence of one team per Bounded Context...One team can maintain multiple Bounded Contexts, but it is hard (though not impossible) for multiple teams to work on one together."
+
+Special Needs
+
+"Different groups within the same business have often developed their own specialized terminologies...These local jargons may be very precise and tailored to their needs. Changing them (for example, by imposing a standardized, enterprise-wide terminology) requires extensive training and analysis to resolve the differences...Even then, the new terminology may not serve as well as the finely tuned version they already had."
+
+Specialized jargons is a good reason to create a new Bounded Context. 
+
+The costs of catering to special needs:
+- loss of communication because the language is not shared
+- the overhead of integration/translation
+- some duplication of effort
+- "it can become an argument against change and a justification for any quirky, parochial model...how valuable is the particular jargon of this user group?"
+
+"Sometimes a deep model emerges that can unify these distinct languages and satisfy both groups. The catch is that deep models emerge later in the life cycle, after a lot of development and knowledge crunching, if at all. You can't plan on a deep model; you just have to accept the opportunity when it arises, change your strategy, and refactor."
+
+Deployment
+
+"Coordinating the packaging and deployment of complex systems is one of those boring tasks that are almost always a lot harder than they look."
+
+"The choice of Bounded Context strategy has an impact on the deployment...The feasibility of a deployment plan should feed back into the drawing of the context boundaries."
+
+Bounded Contexts that integrate together have to take each other into account when deploying. Which versions have been tested together? Both the code and the data migrations.
+
+With lengthy data migrations and with distributed systems, you often will have two versions of a system in production at once, and they must work together until the deployment is complete.
+
+"The Bounded Context relationships can point you toward the hot spots. The translation interfaces have been marked out."
+
+Discussion of how to slower convert one type of boundary to another.
+
 #Ch 15: Distillation
 
 #Ch 16: Large-Scale Structure
