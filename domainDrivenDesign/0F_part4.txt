@@ -354,9 +354,32 @@ With lengthy data migrations and with distributed systems, you often will have t
 
 "The Bounded Context relationships can point you toward the hot spots. The translation interfaces have been marked out."
 
-Discussion of how to slower convert one type of boundary to another.
+Discussion of how to slowly convert one type of boundary to another.
 
 #Ch 15: Distillation
+
+"Distillation is the process of separating the components of a mixture to extract the essence in a form that makes it more valuable and useful. A model is a distillation of knowledge. With every refactoring to deeper insights, we abstract some crucial aspect of domain knowledge and priorities."
+
+Strategic distillation of a domain model:
+- Aids all team members in grasping the overall design of the system and how it fits together
+- Facilitates communication by identifying a core model of manageable size to enter the Ubiquitous Language
+- Guides refactoring
+- Focuses work on areas of the model with the most value
+- Guides outsourcing, use of off-the-shelf components, and decisions about assignments
+
+Core Domain
+
+"A system that is hard to understand is hard to change. The effect of a change is hard to foresee."
+
+"When developers confine their work to specific modules, it further reduces knowledge transfer...smooth integration of the system suffers, and flexibility in assigning work is lost...duplication crops up...so the system becomes even more complex."
+
+"The harsh reality is that not all parts of the design are going to be equally refined...To make the domain model an asset, the model's critical core has to be sleek and fully leveraged to create application functionality."
+
+"Highly skilled developers tend to gravitate to technical infrastructure [projects]...Such parts of the system seem interesting to computer scientists, and are perceived to build transferable professional skills and provide better resume material. The specialized core, that part of the model that really differentiates the application and makes it a business asset, typically ends up being put together by less skilled developers who work with DBAs to create a data schema and then code feature-by-feature without drawing on any conceptual power in the model at all."
+
+(Describing a project) "Most of the strong talent was happily working on database mapping layers and messaging interfaces while the business model was in the hands of developers new to object technology...The single exception, an experienced object developer working on a domain problem, devised a way of attaching comments to any of the long-lived domain objects...Unfortunately, [these features] were peripheral."
+
+"The planning process must drive resources to the most crucial points in the model and design."
 
 #Ch 16: Large-Scale Structure
 
