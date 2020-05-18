@@ -379,7 +379,111 @@ Core Domain
 
 (Describing a project) "Most of the strong talent was happily working on database mapping layers and messaging interfaces while the business model was in the hands of developers new to object technology...The single exception, an experienced object developer working on a domain problem, devised a way of attaching comments to any of the long-lived domain objects...Unfortunately, [these features] were peripheral."
 
-"The planning process must drive resources to the most crucial points in the model and design."
+"The planning process must drive resources to the most crucial points in the model and design...To do that, these points must be identified and understood by everyone during planning and development."
+
+Core Domain: the parts of the model that are distinctive and central to the purposes of the application
+
+"The Core Domain is where the most value should be added in your system...Make the Core small."
+
+"Apply top talent to the Core Domain, and recruit accordingly...Spend the effort in the Core to find a deep model and develop a supple design - sufficient to fulfill the vision of the system...Justify investment in any other part by how it supports the distilled Core."
+
+"Whenever a choice has to be made (due to time limitations) between two desirable refactorings, the one that most affects the Core Domain should be chosen first."
+
+"The patterns in this chapter make the Core Domain easier to see and use and change."
+
+Choosing the Core
+
+"We are looking at those parts of the model particular to representing your business domain and solving your business problems."
+
+"The Core Domain you choose depends on your point of view...One application's Core Domain is another application's generic supporting component."
+Ex: a currency trading application will need a more elaborate view of money than a basic budgeting application.
+
+"...the identification of the Core Domain should evolve through iterations...The importance of a particular set of relationships might not be apparent at first. The objects that seem obviously central at first may turn out to have supporting roles."
+
+Who does the work?
+
+"The most technically proficient members of the project teams seldom have much knowledge of the domain. This limits their usefulness and reinforces the tendency to assign them to supporting components, sustaining a vicious circle in which lack of knowledge keeps them away from the work that would build domain knowledge."
+
+"It is essential to...assemble a team matching up a set of strong developers who have a long-term commitment and an interest in becoming repositories of domain knowledge with one or more domain experts who know the business deeply...It is usually not practical to hire short-term, outside design expertise for the nuts and bolts of creating the Core Domain, because the team needs to accumulate domain knowledge, and a temporary member is a leak in the bucket."
+
+"Domain design is interesting, technically challenging work when approached seriously, and developers can be found who see it this way."
+
+"It is unlikely that the Core Domain can be purchased."
+1) a generic solution with resale value is almost antithetical to the idea of a Core Domain
+2) you lose the value of having complete control over your Core Domain
+
+If an off-the-shelf framework satisfies part of your design, it indicates that it is not part of the Core Domain.
+
+"One way or another, creating distinctive software comes back to a stable team accumulating specialized knowledge and crunching it in to a rich model. No shortcuts. No magic bullets."
+
+Distillation Techniques (ordered from minimally invasive on up)
+
+Generic Subdomains
+
+"Some parts of the model add complexity without capturing or communicating specialized knowledge...The model clogs up with general principles everyone knows or details that belong to specialties which are not your primary focus but play a supporting role. Yet, however generic, these other elements are essential to the functioning of the system and the full expression of the model."
+
+"There is a part of your model that you would like to take for granted. It is undeniably part of the domain model, but it abstracts concepts that would probably be needed for a great many businesses."
+Ex: many businesses need a system for tracking expenses, or for a managerial hierarchy.
+
+"Often a great deal of effort is spent on peripheral issues in the domain...While such components must work, they are not the conceptual core of the system."
+
+"Identify cohesive subdomains that are not the motivation for your project. Factor out generic models of these subdomains and place them in separate modules. Leave no trace of your specialties in them...Give their continuing development lower priority than the Core Domain, and avoid assigning your core developers to the tasks...Also consider off-the-shelf solutions or published models for these Generic Subdomains."
+
+Off-the-shelf Solutions
+Pros
+- less code for you to write and maintain
+- code is probably mature and well tested by many other businesses
+Cons
+- you have to evaluate many of these products to choose one (or none)
+- it probably does contain bugs, and you can't just fix them yourself
+- integration may be more trouble than it's worth
+- it can introduce platform requirements, such as compiler versions
+
+"Off-the-self subdomain solutions are worth investigating, but they are usually not worth the trouble."
+
+"The more generic the subcomponent, and the more distilled its own model, the better the chance that it will be useful."
+
+Published Design or Model
+Pros
+- more mature than your new design
+- includes insights from many people
+- instant, high-quality documentation
+Cons
+- may not cover your use cases
+- may be far over-engineered for your use cases
+
+"This works best when there is a widely distributed model, such as the ones in "Analysis Patterns" by Fowler."
+
+"When the field already has a highly formalized and rigorous model, use it...Accounting and physics are two examples that come to mind. Not only are these very robust and streamlined, but they are widely understood by people everywhere, reducing your present and future training burdens."
+
+Outsource the Implementation
+Pros
+- your team can focus on the Core Domain
+- allows for more development without permanently increasing the team size or losing domain knowledge when the temps leave
+- forces an interface-oriented design and encourages the subdomain remain generic
+Cons
+- your team still needs to contribute to the interface design, coding standards, etc
+- incurs significant overhead when handing off the finished work
+- code quality will vary
+
+"Automated tests can play an important role in outsourcing...The implementers should be required to provide unit tests for the code they deliver...A really powerful approach is to specify or even write automated acceptance tests for the outsourced components."
+
+In-House Implementation
+Pros
+- easy integration
+- you get exactly the functionality you need
+- can be worked on by contractors
+Cons
+- ongoing maintenance and training
+- it is easy to underestimate the time and cost of this approach
+
+"Generic subdomains are the place to try to apply outside design expertise, because they do not require deep understanding of your specialized Core Domain, and they do not present a major opportunity to learn that domain...Confidentiality is less of a concern..."
+
+Example: A Tale of Two Time Zones
+"Twice I've watched as the best developers on a project spent weeks of their time solving the problem of storing and converting times with time zones."
+One project used basic functionality for as long as possible. Once they clearly saw that they needed more time zone conversion support, they assigned a skilled (but temporary) programmer to the task. He researched existing solutions and, starting from a mature solution, back-filled the rest of the functionality that was needed.
+The other project assigned a junior dev to the task before even figuring out the requirements. Not knowing exactly what was needed, the dev set out to handle everything. This was such a difficult task that a senior dev was assigned to help. They wrote complex code with no consumer to verify what was needed, until the project (in general) was canceled. It's possible that complex time zone conversions would never have been needed.
+"We technical people tend to enjoy definable problems like time zone conversion, and we can easily justify spending our time on them. But a disciplined look at priorities usually points to the Core Domain."
 
 #Ch 16: Large-Scale Structure
 

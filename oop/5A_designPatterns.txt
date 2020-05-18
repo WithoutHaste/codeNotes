@@ -273,6 +273,14 @@ public class IsAdminSpecification : CompositeSpecification
 }
 </code>
 
+#Notification
+
+Instead of throwing an Exception when an expected error occurs, return a Result object with the error listed.
+
+Commonly used for data validation: you can return a list of everything that is wrong, instead of returning just the first error hit.
+
+Martin Fowler :"You should use Notification whenever validation is done by a layer of code that cannot have a direct dependency to the module that initiates the validation." For example, when the Presentation Layer needs to validate user input, and the validation logic belongs in the Domain Layer. 
+
 #Bridge
 
 You have two or more categories that combine to create an exponential number of possibilities. Each unique combination has a different implementation. A basic inheritance hierarchy gets out of hand fast.
