@@ -485,6 +485,92 @@ One project used basic functionality for as long as possible. Once they clearly 
 The other project assigned a junior dev to the task before even figuring out the requirements. Not knowing exactly what was needed, the dev set out to handle everything. This was such a difficult task that a senior dev was assigned to help. They wrote complex code with no consumer to verify what was needed, until the project (in general) was canceled. It's possible that complex time zone conversions would never have been needed.
 "We technical people tend to enjoy definable problems like time zone conversion, and we can easily justify spending our time on them. But a disciplined look at priorities usually points to the Core Domain."
 
+"Generic doesn't mean reusable...Assuming that you are implementing the code yourself, in-house or outsourced, you should specifically not concern yourself with the reusability of that code. This would go against the basic motivation of distillation: that you should be applying as much of your effort to the Core Domain as possible and investing in supporting Generic Subdomains only as necessary...You do not have to develop the model in its full generality. You can model and implement only the part you need for your business."
+So I think "generic" here means "not specialized for our domain", this is supported later when he recommends not incorporating industry-specific objects into the generic model.
+
+"Reuse does happen, but not always code reuse. The model reuse is often a better level of reuse, as when you use a published design or model."
+
+Project Risk Management
+
+"Agile processes typically call for managing risk by tackling the riskiest tasks early. XP specifically calls for getting an end-to-end system up and running immediately...The end-to-end system mitigates risk only to the extent that it is an embryonic version of the challenging parts of the actual system. It is easy to underestimate the domain modeling risk."
+
+"Projects face risks from both sides, with some projects having greater technical risks and others greater domain modeling risks...[The domain modeling risk] can take the form of unforeseen complexity, inadequate access to business experts, or gaps in key skills of the developers...The Core Domain is high risk because it is often unexpectedly difficult and because without it, the project cannot succeed."
+
+"Therefore, except when the team has proven skills and the domain is very familiar, the first-cut system should be based on some part of the Core Domain, however simple."
+
+"The next two patterns...show how the use of supplemental documents can, with a very minor investment, improve communication and awareness of the Core Domain and focus development effort."
+
+Domain Vision Statement
+
+"At the beginning of the project, the model usually doesn't even exist, yet the need to focus its development is already there. In later stages of development, there is a need for an explanation of the value of the system that does not require an in-depth study of the model."
+
+"The critical aspects of the domain model may span multiple Bounded Contexts, but by definition these distinct models can't be structured to show their common focus."
+
+"Many project teams write vision statements for management...Usually the vision statement document is abandoned after the project gets funding..."
+
+"A Domain Vision Statement...focuses on the nature of the domain model and how it is valuable to the enterprise. It can be used...during all phases of development to guide resource allocation. to guide modeling choices, and to educate team members."
+
+"If the domain model serves many masters, this document can show how their interests are balanced."
+
+How to write the Domain Vision Statement:
+- write a one page description of the Core Domain, and the value it brings to the company
+- only write about the unique/distinct parts of the Domain
+- show how the domain model serves and balances diverse interests
+- write this early, and keep revising it as you gain new insight
+
+Belongs in the Domain Vision Statement:
+- description of things the model needs to represent (Ex: passenger priorities, and membership in special programs)
+- description of data that can be provided (Ex: such that audit trails can be provided)
+- description of things excluded from the model (Ex: resources required for the process will not be included)
+- technical constraints the model must meet (Ex: support efficient routing)
+- usability constraints on the model (Ex: the representation of the state of the factory should be comprehensible to human managers)
+(pg 416 for full examples)
+
+Doesn't Belong in the Domain Vision Statement:
+- anything about the frontend
+- anything about framework choices
+- anything about architecture choices
+- anything about hardware choices
+
+"A Domain Vision Statement gives the team a shared direction."
+
+"A Domain Vision Statement identifies the Core Domain in broad terms, but it leaves the identification of the specific Core model elements up to the vagaries of individual interpretation. Unless there is an exceptionally high level of communication on the team, the Vision Statement alone will have little impact."
+
+Highlighted Core
+
+"Significant structural changes to the code are the ideal way of identifying the Core Domain, but they are not always practical in the short term...Such mahor code changes are difficult to undertake without the very view the team is lacking."
+
+Before you have the Core Domain refactored the way you want it, you need an intermediate way to describe your goal, in more detail than the Domain Vision Statement.
+
+"Even at an advanced stage, a few carefully selected diagrams or documents provide mental anchor points and entry points for the team."
+
+"Any technique that makes it easy for everyone to know the Core Domain will do."
+
+Highlighted Core: The Distillation Document
+
+"A distillation document is not a complete design document. It is a minimalist entry point that delineates and explains the Core Domain and suggests reasons for closer scrutiny of particular pieces."
+
+"The reader is given a broad view of how the pieces fit and guided to the appropriate part of the code for more details."
+
+"Write three to seven sparse pages that describe the Core Domain and the primary interactions among Core Domain elements."
+"Write the document to be understood by the nontechnical members of the team."
+
+"It can be as simple as a list of the most essential conceptual objects. It can be a set of diagrams focused on those objects, showing their most critical relationships. It can walk through the fundamental interactions at an abstract level or by example. It can use UML class or sequence diagrams, nonstandard diagrams particular to the domain, carefully worded textual explanations, or combinations of these."
+
+Risks:
+- the document is not maintained
+- the document is not read
+- the document just adds to the complexity of existing documentation
+
+"The best way to limit these risks is to be absolutely minimalist."
+
+"Staying away from mundane detail and focusing on the central abstractions and their interactions allows the document to age more slowly, because this level of the model is usually more stable."
+
+Highlighted Core: The Flagged Core
+
+"On my first day on a project at a major insurance company, I was given a copy of the domain model, a two hundred page document...I went through the document and, with the help of a business analyst who knew a great deal about the insurance industry in general and the requirements of the application we were to build in particular, I identified the handful of sections that presented the essential, differentiating concepts we needed to work with...I provided a navigation of the model that clearly showed the Core and its relationship to supporting features...A new prototyping effort started from this perspective, and quickly yielded a simplified application that demonstrated some of the required functionality."
+
+
 #Ch 16: Large-Scale Structure
 
 #Ch 17: Bringing the Strategy Together

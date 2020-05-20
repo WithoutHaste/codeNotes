@@ -1,0 +1,7 @@
+##Jq
+
+jq is a command line tool for parsing, selecting, and re-arranging json data.
+
+jq is actually a c library available for any platform.
+
+I'm putting it here because it is very much a command line tool friendly to pipes.
