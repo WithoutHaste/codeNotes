@@ -570,6 +570,57 @@ Highlighted Core: The Flagged Core
 
 "On my first day on a project at a major insurance company, I was given a copy of the domain model, a two hundred page document...I went through the document and, with the help of a business analyst who knew a great deal about the insurance industry in general and the requirements of the application we were to build in particular, I identified the handful of sections that presented the essential, differentiating concepts we needed to work with...I provided a navigation of the model that clearly showed the Core and its relationship to supporting features...A new prototyping effort started from this perspective, and quickly yielded a simplified application that demonstrated some of the required functionality."
 
+Whatever form your primary model takes, highlight the Core Domain within it.
+"Make it effortless to know what is in or out of the Core."
+
+"If the distillation document outlines the essentials of the Core Domain, then it serves as a practical indicator of the significance of a model change. When a model or code change affects the distillation document, it requires consultation with other team members."
+
+Cohesive Mechanisms
+
+"Hiding complex algorithms in methods with intention revealing names separates the 'what' from the 'how'. This technique makes a design simpler to understand and use."
+
+Sometimes an algorithm is so large and complex that even this is not enough to keep it organized, and clearly reveal its intent.
+
+"A large number of methods that provide algorithms for resolving the problem obscure the methods that express the problem...This proliferation of procedures is a symptom of a problem in the model."
+
+"The first solution to seek is a model that makes the computation mechanism simple. But now that then the insight emerges that some part of the mechanism is itself conceptually coherent...We are not talking about some kind of catch-all calculator. But extracting the coherent part should make the remaining mechanism easier to understand."
+
+"Partition a conceptually Cohesive Mechanism into a separate lightweight framework. Particularly watch for formalisms or well-documented categories of algorithms...[This leaves] a more expressive Core Domain that uses the mechanism through the interface in a more declarative style."
+
+"The model of the Core Domain or Generic Subdomain formulates a fact, rule, or problem. A Cohesive Mechanism resolves the rule or completes the computation as specified by the model."
+
+This separates the Domain from the method used to solve a particular problem.
+This allows the complex calculations to be unit tested in isolation.
+
+Ex: A Mechanism in an Organization Chart
+Separating well-understood graph theory from application-specific organization chart functionality.
+
+What's the different between a Generic Subdomain and a Cohesive Mechanism?
+- a Cohesive Mechanism is totally separated from the Domain model - it just solves a specific algorithmic problem
+- a Generic Subdomain is still part of the Domain, but is less important and specialized than the Core Domain
+
+Sometimes a Cohesive Mechanism is actually proprietary information, and is still part of the Core Domain.
+When the Cohesive Mechanism provides "a key part of the value of the software."
+
+Ex: Full Circle: Organization Chart Reabsorbs Its Mechanism
+Even when a Mechanism is reabsorbed into a Domain, you haven't wasted effort. "The result is usually a deeper model tha more clearly differentiates facts, goals, and Mechanisms."
+
+Distilling to a Declarative Style
+
+"The value of distillation is being able to see what you are doing: cutting to the essence without being distracted by irrelevant detail."
+
+"Important parts of the Core Domain may be able to follow a declarative style, when the supporting design provides an economical language for expressing the concepts and rules of the Core while encapsulating the means of the computing or enforcing them."
+
+"Cohesive Mechanisms are by far the most useful when they provide access through an Intention Revealing Interface, with conceptually coherent Assertions and Side-Effect-Free Functions."
+
+"An exceptional payoff comes when part of the Core Domain itself breaks through to a deep model and starts to function as a language that can express the most important application scenarios flexibly and concisely."
+
+"When a supple design reaches maturity, it provides an easily understood set of elements that can be combined unambiguously to accomplish complex tasks or express complex information, just as words are combined into sentences."
+
+Segregated Core
+
+"You are unlikely ever to find good homes for everything in the Domain model that is not Core."
+
 
 #Ch 16: Large-Scale Structure
 

@@ -1,0 +1,32 @@
+##Clonable
+
+#Serialization
+
+(I haven't tested this method yet, but it looks useful)
+
+Use serialization to clone an object, without having to write out all the clone logic for a deep or complicated object.
+<code>
+public static T Clone<T>(T source)
+{
+	if (!typeof(T).IsSerializable)
+	{
+		throw new ArgumentException("The type must be serializable.", nameof(source));
+	}
+
+	// Don't serialize a null object, simply return the default for that object
+	if (Object.ReferenceEquals(source, null))
+	{
+		return default(T);
+	}
+
+	IFormatter formatter = new BinaryFormatter();
+	Stream stream = new MemoryStream();
+	using (stream)
+	{
+		formatter.Serialize(stream, source);
+		stream.Seek(0, SeekOrigin.Begin);
+		return (T)formatter.Deserialize(stream);
+	}
+}
+</code>
+This serializes the object, then deserializes it into a new instance.
