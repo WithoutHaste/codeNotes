@@ -619,8 +619,77 @@ Distilling to a Declarative Style
 
 Segregated Core
 
+The "Segregated Core" is the most "Core" part of the "Core Domain". (see Segregating the Core of a Cargo Shipping Model for this clarification)
+
 "You are unlikely ever to find good homes for everything in the Domain model that is not Core."
 
+"Refactor the model to separate the Core concepts from supporting players (including ill-defined ones) and strengthen the cohesion of the Core while reducing its coupling to other code. Factor all generic or supporting elements into other objects and place them into other packages, even if this means refactoring the model in ways that separate highly coupled elements."
+
+"This is basically taking the same principles we applied to Generic Subdomains but from the other direction...Eventually, more and more of the residue can be factored into Generic Subdomains, but in the short term any easy solution will do, just so the focus on the Segregated Core is retained."
+
+Typical steps:
+- Identify a Core subdomain
+- Move related classes to a new Module, named for the concept that relates them
+- Refactor code to sever data and functionality that are not directly expressions of the concept. Put the removed aspects into other packages. Don't waste time being perfect about where you put them.
+- Refactor the newly Segregated Core Module to make its relationships and interactions simple and communicative. Minimize its relationships with other Modules.
+- Repeat with more Core subdomains
+
+"Segregating the Core will sometimes make relationships with tightly coupled non-Core classes more obscure or even more complicated, but that cost is outweighed by the benefit of clarifying the Core Domain and making it much easier to work on."
+
+"...the greatest value-added of enterprise software comes from the enterprise-specific aspects of the model." So value a cohesive Core Domain over the cohesion of all other parts of the code.
+
+"The time to chop out a Segregated Core is when you have a large Bounded Context that is critical to the system, but where the essential part of the model is being obscured by a great deal of supporting capability."
+
+"As with many strategic design decisions, an entire team must move to a Segregated Core together...This step requires a team decision process and a team disciplined and coordinated enough to carry out the decision...The challenge is to constraint everyone to use the same definition of the Core while not freezing that decision."
+
+"...new insights must be shared with the team on an ongoing basis, but an individual (or programming pair) cannot act on those insights unilaterally. Whatever the process is for joint decisions, whether consensus or team leader directive, it must be agile enough to make repeated course corrections."
+
+Ex: Segregating the Core of a Cargo Shipping Model
+Look at the Domain Vision Statement to locate the Core Domain classes. Move everything ancillary to the Vision Statement out of the Core Domain.
+The "Segregated Core" is the most "Core" part of the Domain. (I was confused through this whole section about whether the Segregated part was more or less important.)
+Some insights are gained during this process, so you may end up with a slightly different set of classes at the end.
+Example of dividing Customer from CustomerAgreement (what the Customer wants).
+
+Could you call the two resulting parts the "Segregated Core" and the "Ancillary Core"? Which together form the "Core Domain"?
+He also uses the phrase "supporting" several times, so maybe "Supporting Core" instead of "Ancillary Core".
+
+"Recognizing useful, meaning Modules is a modeling activity. Developers and domain experts collaborate in strategic distillation as part of the knowledge crunching process."
+
+Abstract Core
+
+"Even the Core Domain model usually has so much detail that communicating the big picture can be difficult."
+
+"We usually deal with a large model by breaking it into narrower subdomains that are small enough to be grasped and placing them in separate Modules. This reductive style of packaging often works to make a complicated model manageable...But sometimes creating separate Modules can obscure or even complicate the interactions between the subdomains."
+
+"When there is a lot of interaction between subdomains in separate Modules, either many references will have to be created between Modules, which defeats much of the value of the partitioning, or the interaction will have to be made indirect, which makes the model obscure."
+
+"Consider slicing horizontally rather than vertically. Polymorphism gives us the power to ignore a lot of the detailed variation among instances of an abstract type...If most of the interactions across Modules can be expressed at the level of polymorphic interfaces, it may make sense to refactor these types into a special Core Module."
+
+"This is a valuable technique only when the polymorphic interfaces correspond to fundamental concepts in the domain."
+
+"Identify the most fundamental concepts in the model and factor them into distinct classes, abstract classes, or interfaces. Design this abstract model so that it expresses most of the interactions between significant components. Place this abstract overall model in its own Module...Most of the specialized classes will now reference the Abstract Core Module but not the other specialized Modules."
+
+"The Abstract Core gives a succinct view of the main concepts and their interactions."
+
+"The process of factoring out the Abstract Core is not mechanical...Modeling an Abstract Core requires a deep understanding of the key concepts and the roles they play in the major interactions of the system. In other words, it is an example of refactoring to deeper insight. And it usually requires considerable redesign."
+
+Deep Models Distill
+
+"The goal is a design that makes the model obvious, a model that expresses the domain simply."
+
+"A deep model distills the most essential aspects of a domain into simple elements that can be combined to solve the important problems of the application."
+
+Where to Start Refactoring?
+Common advice:
+- Start anywhere, because it all has to be refactored.
+  - DDD: This is impractical. You don't have time to refactor the entire project.
+- Start wherever it is hurting you now. Refactor as you need to to complete your current tasks.
+  - DDD: This treats symptoms instead of the root causes.
+DDD Advice
+- Find the root of problem. If it involves the Core Domain, especially if it is a tangled mess you don't want to touch, then bite the bullet and fix it.
+- When given free reign, focus on the Core Domain first. Work outward to the Supporting Domain and Generic Subdomains.
+
+"This is how to get the most bang for your refactoring buck."
 
 #Ch 16: Large-Scale Structure
 
