@@ -693,6 +693,125 @@ DDD Advice
 
 #Ch 16: Large-Scale Structure
 
+Example of a project with good module breakdown, but so large and complex that this was not sufficient. After much brainstorming and discussion, they devised a set of conceptual layers to organize their project into that made it clear where each part of the project belonged.
+
+"Even with a modular breakdown, a large model can be too complicated to grasp...The modules chunk the design into manageable bites, but there may be too many of them...Modularity does not necessarily bring uniformity to the design. Object to object, package to package, a jumble of design decisions may be applied, each defensible but idiosyncratic."
+
+"In a large system without any overarching principle that allows elements to be interpreted in terms of their role in patterns that span the whole design, developers cannot see the forest for the trees."
+
+"We need to be able to understand the role of an individual part in the whole without delving into the details of the whole."
+
+"A Large Scale Structure is a language that lets you discuss and understand the system in broad strokes. A set of high-level concepts or rules, or both, establishes a pattern of design for an entire system. This organizing principle can guide design as well as aid understanding."
+
+"Devise a pattern of rules or roles and relationships that will span the entire system and that allows some understanding of each part's place in the whole - even without detailed knowledge of the part's responsibility."
+
+"Structure may be confined to one Bounded Context but will usually span more than one...providing the conceptual organization to hold together all the teams and subsystems involved in the project."
+
+"You can't represent most Large Scale Structures in UML, and you don't need to...Most Large Scale Structures shape and explain the model and design but do not appear in it."
+
+"Large Scale Structure can save a project, but an ill-fitting Structure can severely hinder development."
+
+Evolving Order
+
+"To avoid anarchy, projects impose architectures that constrain development in various ways."
+
+"...when architectures start venturing into the arena of the application and domain model, they can create problems of their own. They often prevent the developers from creating designs and models that work well for the specifics of the problem."
+
+"An up-front imposition of a Large Scale Structure is likely to be costly. As development proceeds, you will almost certainly find a more suitable Structure, and you may even find that the prescribed Structure is prohibiting you from taking a design route that would greatly clarify or simplify the application."
+
+"Design free-for-alls produce systems no one can make sense of as a whole, and they are very difficult to maintain. But architectures can straitjacket a project with up-front design assumptions that take too much power away from the developers/designers of particular parts of the application...developers will dumb down the application to fit the structure, or they will subvert it and have no structure at all..."
+
+"The problem is not the existence of guiding rules, but rather the rigidity and source of those rules."
+
+"Let this conceptual Large Scale Structure evolve with the application...Don't over-constrain the detailed design and model decisions that must be made with detailed knowledge."
+
+"Individual parts have natural or useful ways of being organized and expressed that may not apply to the whole, so imposing global rules makes these parts less ideal."
+
+"Choosing to use a Large Scale Structure favors manageability of the model as a whole over optimal structuring of the individual parts...Therefore, there will be some compromise between unifying structure and freedom to express individual components in the most natural way."
+
+"A really nice fit of structure to domain and requirements actually makes detailed modeling and design easier, by helping to quickly eliminate a lot of options."
+
+This chapter speaks about abstract concepts.  Hard to distill it.
+
+"Unlike the Context Map, a Large Scale Structure is optional. One should be imposed when costs and benefits favor it, and when a fitting Structure is found...[good fit means the structure] greatly clarifies the system without forcing unnatural constraints on model development...an ill-fitting Structure is worse than none..."
+
+System Metaphor
+
+The metaphor of a "firewall" has been very useful to defining what features a class of products include, and to help new developers quickly understand the firewall's purpose. But the metaphor is inexact, and also causes some misunderstandings.
+Other metaphors: system "layers", a "kernel" at the center of a design
+
+"Software designs tend to be very abstract and hard to grasp. Developers and users alike need tangible ways to understand the system and share a view of the system as a whole."
+
+Systems are shaped by their metaphors becaues developers will make design decisions based on the metaphor.
+
+"A System Metaphor is a loose, easily understood, Large Scale Structure that is harmonious with the object paradigm."
+
+"Because the System Metaphor is only an analogy to the domain anyway, different models can map to it in an approximate way, which allows it to be applied in multiple Bounded Contexts, helping to coordinate work between them."
+
+"A persuasive Metaphor introduces the risk that the design will take on aspects of the analogy that are not desirable for the problem at hand, or that the analogy, while seductive, may not be apt."
+
+"The System Metaphor should both facilitate communication about the system and guide development of it."
+
+"...a useful Metaphor doesn't present itself on most projects..."
+
+XP programmers use the term "naive metaphor" for the domain model itself. "One trouble with this term is that a mature domain model is anything but naive."
+
+Responsibility Layers
+
+"Layers are partitions of a system in which the members of each partition are aware of and are able to use the services of the layers 'below', but unaware of and independent of the layers 'above'...[Layers] are one of the most successful architectural design patterns."
+
+"In a model with a natural stratification, conceptual layers can be defined around major responsibilities, uniting the two powerful principles of layering and responsibility-driven design...These responsibilities must be considerably broader than those typically assigned to individual objects..."
+
+"Look at the conceptual dependencies in your model and the varying rates and sources of change of different parts of your domain. If you identify natural strata in the domain, cast them as broad abstract responsibilities. These responsibilities should tell a story of the high-level purpose and design of your system. Refactor the model so that the responsibilities of each domain object, Aggregate, and Module fit neatly within the responsibility of one layer."
+
+Example: Layering a Shipping System
+Seeing the stratification of the domain: it is easy to discuss A without B, but it is hard to discuss B without A.
+The domain is divided into two layers. The decisions on where to put each class are guided by both technical and business concerns.
+The layering provides guidance for refactoring towards a deeper model.
+The final layers are Capability, Operations, and Decision Support.
+"Now, this isn't necessarily a better design than the other. They both have pros and cons. But if everyone on a project makes decisions in a consistent way, the design as a whole will be much more comprehensible, and that is worth some modest trade-offs on detailed design choices."
+
+Choosing Appropriate Layers
+
+"Finding good Responsibility Layers, or any Large Scale Structure, is a matter of understanding the problem domain and experimenting. If you allow Evolving Order, the initial starting point is not critical, although a poor choice does add work."
+
+"As layers get switched out, merged, split, and redefined, here are some useful characteristics to look for and preserve."
+- Storytelling: The layers should communicate the basic realities or business priorities of the domain. Choosing a Large Scale Structure is mostly a business modeling decision, not a technical one.
+- Conceptual Dependency: The concepts of the upper layers should have meaning against the backdrop of the lower layers. The lower layer concepts should be meaningful standing alone.
+- Conceptual Contours: If the objects of different layers should have different rates of change or different sources of change, th elayer accommodates the shearing between them.
+
+Some possible layers that are useful in many domains:
+- Potential (aka Capability): What can we do? Regardless of what we will actually do. The resources of the organization, including its people, and the way those resources are organized are the core of the Potential layer.
+- Operation: What is being done? What have we made of these Potentials? In this layer, we are trying to see our own efforts and activities. What we are selling, rather than what enables us to sell.
+- Decision Support: What action should be taken, or policy set? This layer is for analysis and decision making. When projects seek to guide or assist users, or to automate decision making, this is an additional set of responsibilities above Operations.
+- Policy: What are the rules and goals? Rules and goals are mostly passive, but constrain the behavior of other layers.
+- Commitment: What have we promised? Commitments emerge and change as a part of ongoing business activities (like Operations) but also constrain and guide decisions (like Policy).
+
+Expected rate of change to each layer:
+	Decision: almost never
+	Policy: slow
+	Operation: rapid
+	Potential: moderate
+	Commitment: moderate
+
+"It is best to keep the layering system simple; going beyond four or possibly five becomes unwieldy."
+
+"Ultimately, you have to use your intuition, start somewhere, and let the Order Evolve."
+
+Knowledge Level
+
+"A Knowledge Level is a group of objects that describes how another group of objects should behave."
+
+"Knowledge Level untangles things when we need to let some part of the model itself be plastic in the user's hands yet constrained by a broader set of rules. It addresses requirements of software with configurable behavior, in which the roles and relationships among Entities must be changed at installation or even at runtime."
+
+Example: Employee Payroll and Pension
+Consider a domain where the roles and relationships of objects car vary greatly within one organization over a short period of time. How can the software support this without becoming too complex?
+"Neither the fully general objects nor the highly customized ones serve the users' needs." Fully general objects allow the users too much freedom, while highly customized ones must be constantly maintained by the developers.
+"Nested in our model is another model that is about our model. A Knowledge Level separates that self-defining aspect of the model and makes its constraints explicit."
+This is an application of Reflection - software which is self-aware. This is a meta level.
+"Significantly, the pattern is not called a knowledge "layer". As much as it resembles layering, Reflection involves mutual dependencies running in both directions."
+
+
 #Ch 17: Bringing the Strategy Together
 
 #Conclusion
