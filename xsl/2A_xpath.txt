@@ -160,3 +160,11 @@ preceding-sibling = select all siblings of the current node that occurred before
 XPath: "book[3]/ancestor::store"
 Selects elements "store" at 2
 </code>
+
+#Testing
+
+You can test an XPath selector in your browser.
+- F12 to open developer tools
+- go the Inspector (aka Elements) tab
+- Ctrl-F to open Search
+- test your XPath in the Inspector search bar
