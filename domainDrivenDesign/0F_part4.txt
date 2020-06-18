@@ -742,7 +742,7 @@ Other metaphors: system "layers", a "kernel" at the center of a design
 
 "Software designs tend to be very abstract and hard to grasp. Developers and users alike need tangible ways to understand the system and share a view of the system as a whole."
 
-Systems are shaped by their metaphors becaues developers will make design decisions based on the metaphor.
+Systems are shaped by their metaphors because developers will make design decisions based on the metaphor.
 
 "A System Metaphor is a loose, easily understood, Large Scale Structure that is harmonious with the object paradigm."
 
@@ -778,7 +778,7 @@ Choosing Appropriate Layers
 "As layers get switched out, merged, split, and redefined, here are some useful characteristics to look for and preserve."
 - Storytelling: The layers should communicate the basic realities or business priorities of the domain. Choosing a Large Scale Structure is mostly a business modeling decision, not a technical one.
 - Conceptual Dependency: The concepts of the upper layers should have meaning against the backdrop of the lower layers. The lower layer concepts should be meaningful standing alone.
-- Conceptual Contours: If the objects of different layers should have different rates of change or different sources of change, th elayer accommodates the shearing between them.
+- Conceptual Contours: If the objects of different layers should have different rates of change or different sources of change, the layer accommodates the shearing between them.
 
 Some possible layers that are useful in many domains:
 - Potential (aka Capability): What can we do? Regardless of what we will actually do. The resources of the organization, including its people, and the way those resources are organized are the core of the Potential layer.
@@ -810,8 +810,100 @@ Consider a domain where the roles and relationships of objects car vary greatly 
 "Nested in our model is another model that is about our model. A Knowledge Level separates that self-defining aspect of the model and makes its constraints explicit."
 This is an application of Reflection - software which is self-aware. This is a meta level.
 "Significantly, the pattern is not called a knowledge "layer". As much as it resembles layering, Reflection involves mutual dependencies running in both directions."
+Note that the Knowledge Level will not use the reflection built into a programming language. It is operating at a higher level than that.
 
+"The pattern should be used sparingly...Reflection and Knowledge Levels can be intoxicating."
+
+"If the Knowledge Level becomes complex, the system's behavior becomes hard to understand for developers and users alike. The users (or superusers) who configure it will end up needing the skills of a programmer..."
+
+Example: Employee Payroll and Pension II
+Designing a Knowledge Level.
+
+(The author must be aware that his language in this chapter is less well defined than before, because he says "large-scale structure" instead of "LARGE-SCALE STRUCTURE". When he has a well-defined phrase, he puts in all caps.)
+
+"At first glance, Knowledge Level looks like a special case of Responsibility Layers, but it is not...dependencies run in both directions between the levels..."
+
+"Knowledge Level can coexist with most other Large Scale Structures, providing an additional dimension of organization."
+
+Pluggable Component Framework
+
+"Distill an Abstract Core of interfaces and interactions and create a framework that allows diverse implementations of those interfaces to be freely substituted. Likewise, allow any application to use those components, so long as it operates strictly through the interfaces of the Abstract Core."
+
+"High-level abstractions are identified and shared across the breadth of the system; specialization occurs in Modules. The central hub of the application is an Abstract Core within a Shared Kernel."
+
+Downsides to a Pluggable Component Framework:
+- It is a difficult pattern to apply.
+- Applications have limited options.
+- It is so expensive to refactor the Core that it's essentially frozen.
+
+"A Pluggable Component Framework should not be the first Large-Scale Structure applied on a project, nor the second."
+
+Example: The SEMATECH CIM Framework
+"The interesting thing about it is the definition of a Pluggable Component Framework, which allows people to develop software independently and smoothly integrate them into immense systems."
+
+"How can thousands of people work independently to create a quilt of more than 40,000 panels? A few simple rules provide a Large-Scale Structure for the AIDS Memorial Quilt, leaving the details to the individual contributors...Notice how the rules focus on the overall mission, the features of a component that make integration practical, and the ability to handle the quilt in larger sections."
+
+How Restrictive Should a Structure Be?
+
+"...there is a lot of choice about how restrictive to make the rules."
+
+Discussion of using Events to avoid two-way communication between Layers.
+- is this still Layers? using the Events avoids a code dependency, but there is still a conceptual dependency
+
+"A more restrictive structure increases uniformity, making the design easier to interpret. If the Structure fits, the rules are likely to push developers toward good designs."
+
+"On the other hand, the restrictions may take away flexibility that developers need...So you have to fight the temptation to build frameworks and regiment the implementation of the Large Scale Structure."
+
+"The most important contribution of the Large Scale Structure is conceptual coherence, and giving insight into the domain."
+
+"Each Structural rule should make development easier."
+
+Refactoring Toward a Fitting Structure
+
+Structures should not be applied upfront, they should be allowed to grow naturally, as your understanding of the project deepens.
+
+"The team should not saddle itself with a structure conceived of early on, when no one understood the domain or the requirements very well."
+
+"That evolution means that your final structure will not be available at the start, and that means that you will have to refactor to impose it as you go along. This can be expensive and difficult, but it is necessary."
+
+Minimalism
+
+"One key to keeping the cost down is to keep the Structure simple and lightweight. Don't attempt to be comprehensive. Just address the most serious concerns and leave the rest to be handled on a case-by-case basis."
+
+Communication and Self-Discipline
+
+"The entire team must follow the Structure in new development and refactoring. To do this, the Structure must be understood by the entire team."
+
+"Without consistent adherence by the many people involved, Structures have a tendency to decay."
+
+Why is it easy to not follow the Structure?
+- It is not usually explicit in the code.
+- Functional tests do not rely on it.
+- It is often abstract.
+
+"It is critical to incorporate it into the Ubiquitous Language of the project, and for everyone to exercise the Language relentlessly."
+
+Restructuring Yields Supple Design
+
+"Any change to the Structure may lead to a lot of refactoring. The Structure is evolving as system complexity increases and understanding deepens."
+
+"Obviously that is a lot of work [but] this isn't quite as bad as it sounds. I've observed that a design with a Large Scale Structure is usually much easier to transform than one without."
+
+"Part of the answer is that it easier to rearrange something when you can understand its current arrangement...Partly it is that the discipline that it took to maintain the earlier Structure permeates all aspects of the system...But there is something more, I think, because it is even easier to change a system that has had two previous Structures."
+
+"Ever-increasing knowledge is embedded into them and the principal axes of change have been identified and made flexible, while stable aspects have been simplified."
+
+Distillation Lightens the Load
+
+Continue distilling the Domain Model (breaking out Generic Subdomains and such) so that this is less Model that needs Structuring.
+
+The Structure itself may be refactored, such as redefining what Layers your Model is split into.
 
 #Ch 17: Bringing the Strategy Together
+
+
+
+
+
 
 #Conclusion
