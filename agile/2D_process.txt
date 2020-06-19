@@ -1,0 +1,27 @@
+##Process
+
+#User Story Size
+
+Regarding user stories / tickets / whatever you call a task in Jira/TFS/etc.
+
+How large should a user story be? Meaning how much work should be encompassed by a single user story?
+
+I recommend small user stories. Break larger tasks down into smaller, cohesive pieces.
+Ex: You're refactoring, and it will affect several endpoints of your service. If possible, refactor one endpoint at a time.
+Ex: You're adding a create-and-edit feature. Do the creation work first, then the edit work.
+
+Rules of thumb for how to break down a large task:
+- Separate by function, such as create-edit-delete.
+- Separate by code base, such as updating a service, then updating the front-end.
+- Separate by layer, such as adding new objects, then adding the operations that use them.
+- Separate by slice, such as updating one endpoint at a time.
+- Separate by work mode, such as research, then design, then implementation.
+
+Benefits of small user stories:
+- You had to think through the task already, in order to break the task into smaller pieces.
+- Small tasks are easier to hold in your head. You'll forget and overlook less.
+- Small tasks are easier for other developers to validate. A small pull request is easier to sign-off on with confidence.
+- Small tasks are less likely to balloon out of control with unforeseen requirements or implementation problems.
+- Doing a small part of the task first is a good way to establish the pattern that will be followed for the rest.
+- You're mind will be clearer when you can steadily complete small tasks.
+- You're mood will be better when you can steadily complete small tasks.
