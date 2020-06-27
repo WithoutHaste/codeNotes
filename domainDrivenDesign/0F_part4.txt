@@ -901,9 +901,127 @@ The Structure itself may be refactored, such as redefining what Layers your Mode
 
 #Ch 17: Bringing the Strategy Together
 
+Combining Large Scale Structures and Bounded Context
 
+(would "superstructure" be a good ubiquitous language term for "large scale structure"?)
 
+"The three basic principles of strategic design (context, distillation, and large scale structure) are not substitutes for each other; they are complementary and interact in many ways...For example, a large scale structure can exist within one Bounded Context, or it can cut across many of them and organize the Context Map."
 
+An example of fitting a legacy system, crossing multiple Responsibility Layers, into your Large Scale Structure: you can access the legacy system through facades which neatly fit into your Responsibility Layers.
 
+Combining Large Scale Structures and Distillation
+
+"The Large Scale Structure may be an important part of the Core Domain...For example, distinguishing the layering of potential, operations, policy, and decision support distills an insight that is fundamental to the business problem addressed by the software."
+
+Assessment First
+
+1) Draw a Context Map
+2) Refine your Ubiquitous Language
+3) Identify the Core Domain and write a Domain Vision Statement
+4) Assess your technology stack. Will it help or hinder a Model Driven Design?
+5) Do the developers have the technical skills they need?
+6) Are the developers interested in and knowledgeable about the domain?
+
+Who Sets the Strategy?
+
+Handing down an architectural plan before development even begins does not work well. But for a strategic design to benefit the project, it must be followed consistently.
+
+Emergent Structure From Application Development
+
+"A self-disciplined team made up of very good communicators can operate without central authority and follow Evolving Order to arrive at a shared set of principles, so that order grows organically, not by fiat...This is the typical model for an Extreme Programming team."
+
+A design leader - who keeps everyone consistently using the same strategic design - can emerge spontaneously. They don't design everything; they help keep everyone using the design that the team as decided on. They are a hands-on developer.
+
+Each team will need several developers capable of contributing to the design.
+
+A Customer Focused Architecture Team
+
+"When a strategy will be shared among several teams, some centralization of decision making does seem attractive."
+
+"An architecture team can act as a peer with various application teams, helping to coordinate and harmonize their Large Scale Structures as well as Bounded Context boundaries and other cross-team technical issues...The failed model of the ivory tower architect is not the only possibility."
+
+Six Essentials For Strategic Design Decision Making
+
+1) Decisions must reach the entire team
+
+If the architecture team is out of touch with the application teams, a de facto architectural team will form within the application teams.
+
+Whichever strategies disseminate through the developers, that is the one that will be used.
+
+2) The decision process must absorb feedback
+
+"Unlike technical infrastructure and architectures, strategic design does not itself involve writing a lot of code, although it influences all development...What it does require is involvement with the application development teams."
+
+You must really understand the domain and technology stack to create a successful design. Hands-on experience is the best experience.
+
+3) The plan must allow for evolution
+
+"Effective software development is a highly dynamic process...When the highest level of decisions is set in stone, the team has fewer options when it must respond to change."
+
+"While a harmonizing principle can be valuable, it must grow and change with the ongoing life of the development project, and it must not take too much power away from the application developers, whose job is hard abough as it is."
+
+"With strong feedback, innovations emerge as obstacles are encountered in building applications and as unexpected opportunities are discovered."
+
+4) Architecture teams must siphon off all the best and brightest
+
+"Design at this level calls for sophistication that is probably in short supply."
+
+"Managers tend to move the most technically talented developers into architecture teams and infrastructure teams, because they want to leverage the skills of these advanced designers...Such teams almost never include the developer who perhaps has weaker design skills but who has the most extensive experience in the domain."
+
+"But building good applications takes design skills...Even if a strategy team creates a great strategic design, the application team won't have the design sophistication to follow it."
+
+"It is essential to have strong designers on all application teams. It is essential to have domain knowledge on any team attempting strategic design."
+
+5) Strategic design requires minimalism and humility
+
+Minimalism is essential to strategic design. "Even the slightest ill fit has a terrible potential for getting in the way."
+
+"The architects' enthusiasm for their primary responsibility makes them more likely to get carried away...One good idea leads to another, and we end up with an overbuilt architecture that is counterproductive."
+
+"Instead, we have to discipline ourselves to produce organizing principles and core models that are pared down to contain nothing that does not significantly improve the clarity of the design."
+
+"Almost everything gets in the way of something, so each element had better be worth it. Realizing that your best idea is likely to get in somebody's way takes humility."
+
+6) Objects are specialists; developers are generalists
+
+"The essence of good object design is to give each object a clear and narrow responsibility and to reduce interdependence to an absolute minimum. Sometimes we try to make interactions on teams as tidy as they should be in our software."
+
+"A good project has lots of people sticking their nose in other people's business...Developers play with frameworks. Architects write application code. Everyone talks to everyone."
+
+"People love to find ways to chop up tasks so that design experts don't have to know the business and domain experts don't have to understand technology...Overspecialization takes the steam out of Domain Driven Design."
+
+The Same Goes For Technical Frameworks
+
+Everything above applies to designing frameworks, too.
+
+"There is one particular attitude that will surely ruin a framework."
+
+Don't Write Frameworks For Dummies
+
+"Team divisions that assume some developers are not smart enough to design are likely to fail because they underestimate the difficulty of application development...Attempts to coddle them will only put up barriers between them and the tools they need...This attitude also poisons the relationship between teams."
+
+"Encapsulating irrelevant technical detail is completely different from the kind of prepackaging I'm disparaging. A framework can place powerful abstractions and tools in developers' hands and free them from drudgery."
+
+Beware The Master Plan
+
+References Christopher Alexander's writing about why master plans for physical architecture fail. "In practice, master plans fail - because they create totalitarian order, not organic order. They are too rigid; they cannot easily adapt to the natural and unpredictable changes that inevitably arise in the life of a community...At best, the order that results from such a process is banal."
+
+"Alexander and his colleagues advocated instead a set of principles for all community members to apply to every act of piecemeal growth, so that organic growth emerges, well adapted to circumstances."
 
 #Conclusion
+
+"Although it is very satisfying working on a cutting-edge project and experimenting with interesting ideas and tools, for me it is a hollow experience if the software does not find productive use."
+
+"The true test of success is how the software serves over a period of time."
+
+Talks about what happened on all those projects that have been used as examples throughout the book.
+
+"No project will ever employ every technique in this book. Even so, any project committed to Domain Driver Design will be recognizable in a few ways. The defining characteristic is a priority on understanding the target domain and incorporating that understanding into the software."
+
+Looking Forward
+
+"Business software does not have to be a bolted-together mess. Wrestling a complex domain into a comprehensible software design is an exciting challenge for strong technical people."
+
+"Tools that help us think or avoid distraction are good. Efforts to automate what must be the product of thought are naive and counterproductive."
+
+"We can write software that is a pleasure to use and a pleasure to work on, software that doesn't box us in as it grows but creates new opportunities and continues to add value for its owners."
