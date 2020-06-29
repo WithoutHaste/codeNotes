@@ -1,5 +1,13 @@
 ##Query
 
+Mongo's query language is called MQL.
+
+#Comments
+
+<code>
+//comment out a line of MQL
+</code>
+
 #Find
 
 Find will return a list of records.
@@ -17,9 +25,84 @@ db.getCollection('MyCollection').find({"myObject.myField":{"$exists": true}})
 </code>
 If any link in the path to the field does not exist, then the field does not exist.
 
-#Aggragate
+#String Operations
+
+String minus last two characters:
+<code>
+myField: { $substr: [ "$originField", 0, { $subtract: [ { $strLenCP: "$originField" }, 2 ] } ] }
+</code> 
+
+Last two characters of string:
+<code>
+myField: { $substr: [ "$originField", { $subtract: [ { $strLenCP: "$originField" }, 2 ] }, -1 ] }
+</code>
+
+#Aggregate
 
 Count results (returns integer):
 <code>
 db.getCollection('MyCollection').find({"myField": "X"}).count()
 </code>
+
+#Aggregation Pipeline
+
+Each expression (array element) in an aggregate can be mixed up in any order, repeated, etc.
+Ex: You can have three "match" expressions, then a "replaceRoot", then another "match".
+
+Just like find:
+<code>
+db.getCollection('Customers').aggregate([
+	{ $match: { _id: UUID("customer's uuid") } }
+])
+</code>
+
+Find, then raise a nested document to be the new root of each result:
+<code lang="json">
+//given this customer format
+{
+	_id: UUID("uuid"),
+	age: 35,
+	address: {
+		street: "street",
+		city: "city",
+		state: "state"
+	}
+}
+</code>
+<code>
+db.getCollection('Customers').aggregate([
+	{ $match: { _id: UUID("customer's uuid") } },
+	{ $replaceRoot: { newRoot: "$address" } } //pulls all of address up be the root
+])
+</code>
+<code lang="json">
+//results in
+{
+	street: "street",
+	city: "city",
+	state: "state"
+}
+</code>
+
+<code>
+db.getCollection('Customers').aggregate([
+	{ $match: { _id: UUID("customer's uuid") } },
+	{ $replaceRoot: { newRoot: { age: "$age", city: "$address.city" } } } //flattens different levels together
+])
+</code>
+<code lang="json">
+//results in
+{
+	age: 35,
+	city: "city"
+}
+</code>
+
+Group by:
+Start with the group by id, then add as many aggregations as you want.
+<code>
+db.getCollection('Customers').aggregate([
+    { $group: { _id: "$idField", arrayA: { $addToSet: "$aField" }, arrayB: { $addToSet: "$bField" } } }
+])
+</code>
+"addToSet" creates an array of unique values
