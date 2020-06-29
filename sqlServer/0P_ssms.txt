@@ -68,6 +68,14 @@ Include Triggers - TRUE
 
 When you turn "Include Descriptive Headers" off, it stops putting timestamp comments all over the generating scripts. This makes the result much MUCH more git friendly.
 
+#Edit Rows
+
+To edit something other than the first 200 rows:
+- Edit Top 200 Rows
+- right-click on a row > Pane > SQL
+- edit the SQL
+- right-click in the SQL Pane > Execute SQL
+
 #Bugs
 
 SSMS 18 has a bug that really messes up the display. The application doesn't refresh it's drawing properly, leaving junk across the screen.
