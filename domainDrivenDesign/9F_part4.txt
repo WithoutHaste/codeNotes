@@ -1016,7 +1016,7 @@ References Christopher Alexander's writing about why master plans for physical a
 
 Talks about what happened on all those projects that have been used as examples throughout the book.
 
-"No project will ever employ every technique in this book. Even so, any project committed to Domain Driver Design will be recognizable in a few ways. The defining characteristic is a priority on understanding the target domain and incorporating that understanding into the software."
+"No project will ever employ every technique in this book. Even so, any project committed to Domain Driven Design will be recognizable in a few ways. The defining characteristic is a priority on understanding the target domain and incorporating that understanding into the software."
 
 Looking Forward
 
