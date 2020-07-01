@@ -95,6 +95,17 @@ As of EF 6, you can easily check if any changes exist in a DbContext to be saved
 dbContext.ChangeTracker.HasChanges();
 </code>
 
+#Refresh
+
+Refresh ObjectContext cache from the data store.
+
+<code>
+using System.Data.Objects; //from System.Data.Entity.dll
+
+List<object> refreshableObjects = _context.ChangeTracker.Entries().Select(c => c.Entity).ToList();
+objectContext.Refresh(RefreshMode.StoreWins, refreshableObjects);
+</code>
+
 #Logging
 
 (EF Core)
