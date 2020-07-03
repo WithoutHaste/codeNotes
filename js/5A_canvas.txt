@@ -70,3 +70,10 @@ var textWidth = context.measureText(text).width;
 </code>
 
 There is not built-in measurement for text height.
+
+#Images
+
+<code>
+const imageElement = document.getElementById('myImage');
+context.drawImage(imageElement, x, y);
+</code>
