@@ -32,6 +32,13 @@ Line width
 context.lineWidth = 5;
 </code>
 
+Patterns
+<code>
+const img = document.getElementById("myImage");
+const pattern = context.createPattern(img, "repeat");
+context.fillStyle = pattern;
+</code>
+
 #Shapes
 
 <code>
