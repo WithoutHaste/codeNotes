@@ -39,6 +39,14 @@ const pattern = context.createPattern(img, "repeat");
 context.fillStyle = pattern;
 </code>
 
+Rotate and Scale Patterns
+<code>
+//html contains <svg id="mySvg"></svg>
+const svg = document.getElementById('mySvg');
+const matrix = svg.createSVGMatrix();
+pattern.setTransform(matrix.rotate(-45).scale(1.5));
+</code>
+
 #Shapes
 
 <code>
