@@ -1,0 +1,16 @@
+##About
+
+Microservices is a distributed systems architecture.
+- Use of small, autonomous services
+- Services collaborate to complete use cases
+- Microservices are primarily modeled around business domains
+- Microservices have independent life-cycles
+
+Supports principles:
+- The fundamental design of a system should make it easy to change
+
+Pros
+- Gives development teams increased autonomy
+- Different parts of the system can be scaled independently
+- Faster software delivery
+- Easy integration of new technologies

@@ -1,0 +1,8 @@
+##Size
+
+What is the ideal size for a microservice?
+
+Rules of thumb:
+- (Jon Eaves) it could be rewritten in two weeks
+- (Sam Newman) A small development team can manage the whole thing
+- (Sam Newman) You don't think it's too big

@@ -1,0 +1,22 @@
+##Building Microservices
+
+Notes from reading "Building Microservices" by Sam Newman.
+
+Shout out for Eric Evans's "Domain Driven Design": the importance of representing the real world in our code.
+
+Shout out for Alistair Cockburn's Hexagonal Architecture design pattern: guiding us away from layered architectures where business logic can hide.
+
+"Domain driven design. Continuous delivery. On-demand virtualization. Infrastructure automation. Small autonomous teams. Systems at scale. Microservices have emerged from this world."
+
+Microservices are "small, and focused on doing one thing well."
+
+Monolithic codebases generally lose their ideal structures. "Code related to similar functions starts to become spread all over, making fixing bugs or implementations more difficult."
+	(I've seen this happen with microservices as well. You can't replace developer discipline with architecture.)
+	
+"Cohesion - the drive to have related code grouped together...This is reinforced by Robert C. Martin's definition of the Single Responsibility Principle, which states gather together those things that change for the same reason, and separate those things that change for different reasons."
+
+Follow the Single Responsibility Principle by aligning service boundaries with business boundaries. "Making it obvious where code lives for a given piece of functionality."
+
+"How small is small? Jon Eaves characterizes a microservice as something that could be rewritten in two weeks, a rule of thumb that makes sense for his particular context."
+
+"As you get smaller, the benefits around interdependence increase. But so too does some of the complexity that emerges from having more and more moving parts...As you get better at handling this complexity, you can strive for smaller and smaller services."
