@@ -1,0 +1,25 @@
+##Glossary
+
+#API
+
+Application Programming Interface
+
+A service endpoint that another program can call to query for data, or have some piece of work done.
+
+#Bulkhead
+
+Metaphor
+
+"If one component of a system fails, but that failure doesn't cascade, you can isolate the problem and the rest of the system can carry on working."
+
+A bulkhead in a ship separates the ship into multiple water-tight segments (among other purposes). If one part of the ship leaks, only part of the ship will be flooded.
+
+Having "bulkheads" in a software system increases the resiliency of the system.
+
+#PaaS
+
+Platform as a Service (PaaS) 
+Application Platform as a Service (aPaaS)
+Platform-based Service
+
+A category of cloud computing services that provides a platform allowing customers to develop, run, and manage applications without the complexity of building and maintaining the infrastructure typically associated with developing and launching an app.

@@ -1,0 +1,5 @@
+##GitHub
+
+#PR: Files Changes
+
+To collapse all file details at once: Alt + mouse-click-to-collapse-one-file-details

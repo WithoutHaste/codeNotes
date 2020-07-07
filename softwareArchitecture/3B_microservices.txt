@@ -1,17 +1,3 @@
 ##Microservices
 
-#Weaknesses
-
-Refactoring ==============================
-
-(Based on Visual Studio 2019 functionality)
-
-In a monolithic application, existing IDE tools can identify every place in the project that a Type/Method/etc is used.
-
-With microservices, we are dealing with many small applications which are still coupled together through API calls or a message bus or something. Existing IDE tools cannot locate everywhere the code is coupled because it treats each application/project as a stand alone piece of code.
-
-I am reduced to using grep/findstr to verify where an API call or message is being used.
-
-This problem may indicate that the microservices have not been divided correctly. Reorganizing the division of tasks may mean that the microservices to not need to call each other, thereby removing the runtime coupling.
-
-I would only consider this a problem between domain-services.  It is ok for domain-services to be coupled to utility-services (such as a logging service), because utility-services should be very stable.
+!![Link to notes](http://www.withouthaste.com/codeNotes/microservices.php)

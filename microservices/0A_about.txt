@@ -9,8 +9,14 @@ Microservices is a distributed systems architecture.
 Supports principles:
 - The fundamental design of a system should make it easy to change
 
-Pros
+#Strengths
+
+Of a distributed system:
 - Gives development teams increased autonomy
 - Different parts of the system can be scaled independently
+- Resiliency...
+
+Of microservices, specifically:
 - Faster software delivery
-- Easy integration of new technologies
+- Each service can use the technology most appropriate to it (Technology Heterogeneity)
+- Lower risk when trying out new technologies - You can apply it to one service at a time

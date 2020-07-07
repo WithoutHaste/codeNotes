@@ -2,6 +2,8 @@
 
 Notes from reading "Building Microservices" by Sam Newman.
 
+#Chapter 1: Microservices
+
 Shout out for Eric Evans's "Domain Driven Design": the importance of representing the real world in our code.
 
 Shout out for Alistair Cockburn's Hexagonal Architecture design pattern: guiding us away from layered architectures where business logic can hide.
@@ -20,3 +22,21 @@ Follow the Single Responsibility Principle by aligning service boundaries with b
 "How small is small? Jon Eaves characterizes a microservice as something that could be rewritten in two weeks, a rule of thumb that makes sense for his particular context."
 
 "As you get smaller, the benefits around interdependence increase. But so too does some of the complexity that emerges from having more and more moving parts...As you get better at handling this complexity, you can strive for smaller and smaller services."
+
+Rule of thumb is to deploy one service to one machine (or virtual machine). "Although this solution can add some overhead, the resulting simplicity makes our distributed system much easier to reason about."
+
+"All communication between the services themselves are via network calls, to enforce separation between the services and avoid the perils of tight coupling."
+
+Services:
+- can be changed independently of each other
+- can be deployed without requiring consumers to change
+
+"If there is too much sharing, our consuming services become coupled to our internal representations. This decreases our autonomy."
+
+"Our service exposes an API (application programming interface), and collaborating services communicate with us via those APIs."
+
+"The golden rule: can you make a change to a service and deploy it by itself without changing anything else?"
+
+"With a system composed of multiple, collaborating services, we can decide to use different technologies inside each one."
+
+Regarding using multiple technology stacks: "Just like many things concerning microservices, it's all about finding the right balance."
