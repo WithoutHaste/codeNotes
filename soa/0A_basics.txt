@@ -16,6 +16,12 @@ Exposure of an API for your system.
 The client has limited functionality access.
 Clients access functionality by making service calls.
 
+#From Sam Newman
+
+Service-oriented architecture is a design approach where multiple services collaborate to provide some end set of capabilities. A service here typically means a completely separate operating system process. Communication between these services occurs via calls across a network rather than method calls within a process boundary.
+
+(Summarized) The SOA movement got co-opted by vendors for profit and never explained how to achieve its architectural goals. The microservice movement (an extension of SOA) fills in the details of how to design, implement, and maintain such a system.
+
 #SOA vs OOP
 
 Comparison from the client side:
@@ -25,3 +31,8 @@ Comparison from the client side:
 Comparison from the application side:
 - OOP is concerned with the lower-level design decisions.
 - SOA is concerned with the higher-level design decisions.
+
+#Strengths
+
+- Reusability: two applications can call on the same service on the backend
+- Maintenance: a service can be altered or replaced without client applications being aware of it

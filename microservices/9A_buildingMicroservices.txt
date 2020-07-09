@@ -40,3 +40,13 @@ Services:
 "With a system composed of multiple, collaborating services, we can decide to use different technologies inside each one."
 
 Regarding using multiple technology stacks: "Just like many things concerning microservices, it's all about finding the right balance."
+
+Example of the scope of microservices: "Gilt, an online fashion retailer, ...today has over 450 microservices, each one running on multiple separate machines."
+
+(A lot of this chapter went straight into the "Strengths" of microservices section)
+
+Indication of microservice size: "How often have you deleted more than a hundred lines of code in a single day and not worried too much about it? With microservices often being of similar size, the barriers to rewriting  or removing services entirely are very low...When a codebase is just a few hundred lines long, it is difficult for people to become emotionally attached to it, and the cost of replacing it is pretty small."
+
+"There is a lack of good consensus on how to do SOA well. In my opinion, much of the industry has failed to look holistically enough at the problem and present a compelling alternative to the narrative set out by various vendors in this space...Many of the problems laid at the door of SOA are actually problems with things like communication protocols (e.g. SOAP), vendor middleware, a lack of guidance about service granularity, or the wrong guidance on picking places to split your system...Much of the conventional wisdom around SOA doesn't hlep you understand how to split something big into something small. It doesn't talk about how big is too big."
+
+"The microservice approach has emerged fro real-world use, taking our better understanding of systems and architecture to do SOA well."
