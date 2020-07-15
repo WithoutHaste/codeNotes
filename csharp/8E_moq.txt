@@ -299,6 +299,15 @@ controller.ControllerContext = new ControllerContext(context);
 //can now run a Controller Action and see what it does with the header
 </code>
 
+You cannot mock a System.Net.Http.HttpContent class
+But you can create a concrete class using of these subclasses
+!![HttpContent Concrete Classes](https://docs.microsoft.com/en-us/dotnet/api/system.net.http.httpcontent?view=netcore-3.1)
+Ex:
+<code>
+var myObject = new MyObject();
+var httpContent = JsonContent.Create(myObject);
+</code>
+
 #Patterns to avoid
 
 Class implements Interface.
