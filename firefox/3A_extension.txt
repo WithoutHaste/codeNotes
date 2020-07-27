@@ -6,7 +6,7 @@
 
 ## Local Testing
 
-Navigate to "about::debugging" in the browser.
+Navigate to "about:debugging" in the browser.
 
 Click "Load Temporary Add-On".
 
@@ -16,6 +16,9 @@ Select any file in the extension's directory.
 You may also need to:
 - Tools > Options > Extensions & Themes > Extensions > select this test extension ... Manage > Details > Allow to Run in Private Windows
 
+You cannot use console.log in your extension and view the results in the normal Console.
+Instead, you need to Inspect your extension: about:debugging > This Firefox > Inspect.
+
 ## Options
 
 To open the settings/options page for an extension:
@@ -24,3 +27,7 @@ To open the settings/options page for an extension:
 The options page cannot write to the console (at least, my tests of that aren't working).
 
 This page is hard to debug because errors aren't reported in the console.
+
+## Storage
+
+Note that browser.storage.local does not save to Local Storage.
