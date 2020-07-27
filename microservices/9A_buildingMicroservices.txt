@@ -54,3 +54,136 @@ Indication of microservice size: "How often have you deleted more than a hundred
 "Technically, it should be possible to create well-factored, independent modules within a single monolithic process. And yet we rarely see this happen. The modules themselves soon become tightly coupled with the rest of the code, surrendering one of their key benefits. Having a process boundary separation does enforce clean hygiene in this respect."
 
 "[Microservices are no silver bullet]...They have all the associated complexity of distributed systems...If you're coming from a monolithic system point of view, you'll have to get much better at handling deployment, testing, and monitoring to unlock the benefits we've covered so far."
+
+The Evolutionary Architect
+
+"Our industry is a young one. This is something we seem to forget, and yet we have only been creating programs that run on what we recognize as computers for around 70 years. Therefore, we are constantly looking to other professions in an attempt to explain what we do...We aren't medical doctors or engineers, but nor are we plumbers or electricians. Instead, we fall into some middle ground, which makes it hard for society to understand us, or for us to understand where we fit."
+
+"Perhaps the term 'architect' has done the most harm. The idea of someone who draws up detailed plans for others to interpret, and expects this to be carried out. The balance of part artist, part engineer, overseeing the creation of what is normally a singular vision, with all other viewpoints being subservient, except for the occasional objection from the structural engineer regarding the laws of physics."
+
+"In our industry, this view of the architect leads to some terrible practices...page after page of documentation, created with a view to inform the construction of the perfect system, without taking into account the fundamentally unknowable future. Utterly devoid of any understanding as to how hard it will be to implement, or whether or not it will actually work, let alone having any ability to change as we learn more."
+
+"Our requirements shift more rapidly than they do for people who design and build buildings - as do the tools and techniques at our disposal."
+
+Since software requirements are always changing, architects need to focus on designing a system that can change.
+
+Comparison of software architecture to city planning, where you can designate zoning rules but you don't specify specifically where or how each building is built.
+"Rather than worrying too much about what happens in one zone, the town planner will instead spend far more time working out how people and utilities move from one zone to another."
+
+"We cannot foresee everything that will happen, and so rather than plan for any eventuality, we should plan to allow for change by avoiding the urge to over-specify every last thing."
+
+zones => groups of services (see Domain Driven Design: large-scale structures)
+"As architects, we need to worry much less about what happens inside the zone than what happens between the zones."
+
+(aside) "I cannot emphasize how important it is for the architect to actually sit with the team! This is significantly more effective than having a call or just looking at her code...It should be a routine activity."
+
+"Making decisions in system design is all about trade-offs, and microservice architecture gives us lots of trade-offs to make! When picking a datastore, do we pick a platform that we have less experience with, but that gives us better scaling? Is it ok for us to have two different technology stacks in our system? What about three?"
+
+"Framing here can help, and a great way to help frame our decision making is to define a set of principles and practices that guide it, based on goals that we are trying to achieve."
+
+Strategic Goals: high level goals of the business.
+
+Principles: "Principles are rules you have made in order to align what you are doing to some larger goal, and will sometimes change."
+"For example, if one of your strategic goals as an organization is to decrease the time to market for new features, you may define a principle that says that delivery teams have full control over the lifecycle of their software to ship whenever they are ready, independently of any other team."
+Recommendation: have fewer than 10 principles - it can fit on a poster, people can remember them, they don't contradict each other
+!![Example: Heroku's 12 principles for using their platform](http://www.12factor.net)
+
+Constraint: something that is very hard, or impossible, to change.
+"Personally, I think there can be some value in keeping [Constraints and Principles] in the same list to encourage challenging constraints every now and then and see if they really are immovable!"
+
+Practices: "Our practices are how we ensure our principles are being carried out. They are a set of detailed, practical guidelines for performing tasks...Low-level enough that any developer can understand them."
+Ex: coding guidelines, use HTTP/RESTfor integration, use central logging
+"Practices should underpin our principles."
+
+Some standard things services should support:
+
+Monitoring: a system-wide view of the health of our services.
+"To make this as easy as possible, I would suggest ensuring that all services emit health and general monitoring-related metrics in the same way."
+
+Interfaces: use one (or very few) interface technologies. This makes is easier to integrate new consumers.
+"If you pick HTTP/REST, will you use verbs or nouns? How will you handle pagination of resources? How will you handle versioning of end points?"
+
+Architectural Safety: don't allow one bad service to take down the whole system.
+
+Exemplars: create sample, runnable code that exemplifies the practices you want the team to use.
+"Ideally, these would be real-world services you have that get things right, rather than isolated services that are just implemented to be perfect examples...By ensuring that your exemplars are actually being used, you ensure that all principles you have actually make sense."
+
+Tailored Service Template: create service templates that have all the standard stuff already setup.
+"You do have to be careful that creating the service template doesn't become the job of a central tools or architecture team who dictates how things should be done, albeit via code. Defining the practices you use should be a collective activity, so ideally your team(s) should take joint responsibility for updating this template."
+Ease of use should be the guiding force. Don't build up a framework monstrosity.
+Be careful of shared code, which is coupling. Some companies copy-paste the service template instead of using a shared library.
+
+Technical Debt: we can't always get everything done the way we want it immediately, so there is a balance in what we can complete now and what we have to put off until later. How you manage this debt varies from company to company.
+
+Exception Handling: (poorly chosen name - he means making exceptions to principles and practices) Keep track of these exceptions - if enough of the same type stack up, it indicates a change should be made to your practices.
+
+From COBIT (Control Objectives for Information and Related Technology)
+"Governance ensures that enterprise objectives are achieved by evaluating stakeholder needs, conditions, and options; setting direction through prioritization and decision making; and monitoring performance, compliance, and progress against agreed-on direction and objectives."
+
+"If one of the architect's jobs is ensuring there is a technical vision, then governance is about ensuring what we are building matches this vision, and evolving the vision if needed."
+
+Architects are responsible for:
+- Vision: ensure there are a set of principles derived from the business strategy
+- Empathy: ensure they are not making developers miserable; understand the impact of your decisions on your colleagues
+- Collaboration: help others grow, get their buy-in, spread the load of leadership
+- Adaptability: keep up-to-date with new technologies; change your vision as the situation changes
+- Autonomy: find the balance between standardization and letting teams decide
+- Governance: ensure the system matches the technical vision; make trade-off decisions
+
+"Normally, governance is a group activity...This group needs to be led by technologist, and to consist predominantly of people who are executing the work being governed. This group should also be responsible for tracking and managing technical risks."
+
+"The architect is responsible for making sure the [governance] group works, but the group as a whole is responsible for governance...This shares the load, and ensures that there is a higher level of buy-in...and that information flows freely from the teams into the group."
+
+What if the group disagrees with the architect?
+Author recommends siding with the group. "The group is often much wiser than the individual, and I've been proven wrong more than once! And imagine how disempowering it can be for a group to have been given space to come up with a decision, and then ultimately be ignored."
+"But sometimes I have overruled the group. But why, and when?" Comparison to bike riding - it's ok to let the kid fall down, but not to let them veer into traffic.
+
+"Much of the role of the technical leader is about helping grow them [the developers] - helping them understand the vision themselves - and ensuring that they can be active participants in shaping and implementing the vision."
+
+"With larger, monolithic systems, there are fewer opportunities for people to step up and own something. With microservices, on the other hand, we have multiple autonomous codebases that will have their own independent lifecycles. Helping people step up by having them take ownership of individual services before accepting more responsibility can be a great way to help them achieve their own career goals..."
+
+"I am a strong believer that great software comes from great people. If you worry only about the technology side of the equation, you're missing way more than half of the picture."
+
+"The worst reaction to all these forces that push us toward change is to become more rigid or fixed in our thinking."
+
+How to Model Services
+
+What makes a good service? Loose coupling between services and high cohesion within services.
+
+Loose Coupling: "A change to one service should not require a change to another...A loosely coupled service knows as little as it needs to about the services with which it collaborates...Chatty communication can lead to tight coupling."
+
+High Cohesion: "We want related behavior to sit together, and unrelated behavior to sit elsewhere...If we want to change behavior, we want to be able to change it in one place...Making changes in lots of different places is slower, and deploying lots of services at once is risky."
+
+Bounded Context: see Domain Driven Design
+A bounded context is like the encapsulation of an object. There are private data and operations inside the boundary. There is a public interface that other services can interact with.
+"A specific responsibility enforced by explicit boundaries."
+"These bounded contexts lend themselves extremely well to being compositional boundaries...In general, microservices should cleanly align to bounded contexts."
+
+Shared and Hidden Models:
+The internal model of a bounded context may well not be the external model it shares with other services.
+And models with the same name in different bounded contexts can mean very different things or subtly different things.
+"By thinking clearly about what models should be shared, and not sharing our internal representations, we avoid one of the potential pitfalls that can result in tight coupling."
+
+Modules and Services:
+"When starting out, keep a new system on the more monolithic side; getting service boundaries wrong can be costly..."
+I.e. start with Modules within a monolithic system, and gradually break them out into Services.
+
+Premature Decomposition: anecdote about a team needing to merge all their microservices back into a monolithic system due to unforeseen complications with their CI tool. Then they figured out better boundaries to break it apart on.
+- I'm not sure what the CI tool had to do with it.
+
+Business Capabilities: "Ask first 'what does this context do?' and then 'What data does it need to do that?'" Don't determine bounded contexts based on shared data - this is usually incorrect.
+"When modeled as services, these [business] capabilities become the key operations that will be exposed over the wire to other collaborators."
+From the single responsibility principle, also consider what forces/departments will cause a module/service to have to change.
+
+You may well end up with nested bounded contexts. Maybe the first level determines service boundaries, and the second level determines modules within a service.  Or the second level is also a set of services, but they are entirely hidden behind the first service.
+
+The decision of how and when to break out microservices will often depend on your organization. If a different team is in charge of it, it probably needs to be a separate service.
+
+The decision of how and when to break out microservices can also depend on automated test capabilities.
+
+Communication in Terms of Business Concepts: "If our systems are decomposed along the bounded contexts that represent our domain, the [business] changes we want to make are more likely to be isolated to one, single microservice boundary. This reduces the number of places we need to make the change, and allows us to deploy that change quickly."
+"The same terms and ideas that are shared between parts of your organization should be reflected in your interfaces."
+
+"It can be useful to look at what can go wrong when services are modeled incorrectly."
+Anecdote about a company that split their service by layers (front end, back end, data access) instead of vertical slices. And also did not abstract business use cases from the backend, they just spoke in low-level database terms everywhere.
+"Making decisions to model services boundaries along technical seams isn't always wrong (see performance issues)...However, it should be your secondary driver for finding these seams, not your primary one."

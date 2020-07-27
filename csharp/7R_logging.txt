@@ -1,0 +1,114 @@
+#Logging
+
+How to use Microsoft.Extensions.Logging.Abstractions.dll
+
+<code>
+using Microsoft.Extensions.Logging;
+
+public class MyClass
+{
+	public MyClass(ILogger<MyClass> logger) //dependency injection setup not included
+	{
+		logger.LogError("string", object, object);
+	}
+}
+</code>
+
+!![rsuster blog](https://blog.rsuter.com/logging-with-ilogger-recommendations-and-best-practices/)
+!![nblumhardt blog](https://nblumhardt.com/2016/08/serialized-data-structured-logging-concepts-in-net-6/)
+
+##Structured Logs
+
+aka Semantic Logs
+The fields and their placeholders are sent in separately. This allows the logging tool to display each field separately.
+
+(Testing is based on Seq logs application)
+
+<code>
+logger.LogWarning("The person {PersonId} could not be found.", personId);
+// Message: The person 5 could not be found.
+// MessageTemplate: The person {PersonId} could not be found.
+// PersonId: 5
+</code>
+The name of the placeholder has no relationship to the name of the object or property value. The values are applied to the placeholders in left-to-right order.
+The name of the placeholder is what Seq shows as the field name.
+
+Always use placeholders instead of string interpolation.
+
+Avoid using dots in placeholder names (ex: Device.Id) because some ILogger implementations (such as Serilog) do not support this.
+
+You should build up a list of constant log entry property (placeholder) names for your domain for consistent logging. This is usually set with scopes.
+
+Some object types will show up in Seq with their complete structure and data intact. (ex: Dictionary) This is due to custom handling in Serilog. Most object types will default to their ToString() value (which defaults to the fully qualified name of the class).
+
+##Structure-Capturing Operator
+
+"@" is the structure-capturing operator.
+Place @ before the placeholder name.
+<code>
+logger.LogError("Class.Method {@Request} {@Errors}", request, result.Errors);
+</code>
+
+Now all objects will be sent with their full structure and data, instead of some of them being sent as just their ToString() value.
+- watch out for circular references and deep structures
+
+Note that this does not work on anonymous objects.
+
+##Destructuring
+
+"Destructuring" is the step where an object is converted into a logged property.
+
+You can configure logger with custom destructuring logic.
+
+At the global level:
+<code>
+Log.Logger = new LoggerConfiguration()
+	.WriteTo.Console()
+	.Destructure.ByTransforming<UserData>(u => new { u.Id, u.Username })
+	.CreateLogger();
+</code>
+In this example, all property except Id and Username are ignored when a UserData object is logged. This can protect private data, and stop circular references.
+
+At the class level:
+<code>
+using Destructurama.Attributed;
+
+public class UserData
+{
+	public string Id { get; set; }
+	public string Username { get; set; }
+	[NotLogged]
+	public Address Address { get; set; }
+}
+
+...
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .Destructure.UsingAttributes()
+    .CreateLogger();
+</code>
+
+See Destructurama for more interesting plug-ins for Serilog.
+
+##Exceptions
+
+To log an exception, always pass the exception object as first argument:
+<code>
+logger.LogWarning(exception, "An exception occurred")
+</code>
+
+The formatting and storage is exception specific if you use the correct method overload.
+
+##Scopes
+
+Use scopes to transparently add custom properties to all logs in a given execution context.
+
+<code>
+using (logger.BeginScope(new Dictionary<string, object> { {"PersonId", 5 } }))
+{
+    logger.LogInformation("Hello");
+    logger.LogInformation("World");
+}
+</code>
+Now both log statements will be logged with an additional PersonId property.
