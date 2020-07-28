@@ -9,8 +9,9 @@ img1.ready().then(function() {
   // run if image has failed or does fail to load
 });
 
-Promise.all([img1.ready(), img2.ready()]).then(function() {
+Promise.all([img1.ready(), img2.ready()]).then(function(resultsArray) {
   // run if all are already loaded, or when they all become loaded
+  // resultsArray holds the results of each promise, in order
 }, function() {
   // run if one or more failed, or when one fails in the future
 });
