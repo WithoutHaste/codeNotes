@@ -177,3 +177,10 @@ Assert.True(context.Result.IsModelSet);
 var filterCriteria = Assert.IsType<MyModel>(context.Result.Model);
 Assert.NotNull(filterCriteria);
 </code>
+
+If you need an HttpResponseHeaders object for testing, you can get it by instantiating an HttpResponseMessage.
+If you need an HttpContent from an object, see these children of HttpContent:
+- ByteArrayContent, FormUrlEncodedContent, StringContent, MultipartContent, ReadOnlyMemoryContent, StreamContent, JsonContent
+<code>
+HttpContent example = JsonContent.Create(new MyObject());
+</code>
