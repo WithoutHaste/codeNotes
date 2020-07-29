@@ -25,6 +25,13 @@ db.getCollection('MyCollection').find({"myObject.myField":{"$exists": true}})
 </code>
 If any link in the path to the field does not exist, then the field does not exist.
 
+#Order By
+
+Order by age descending:
+<code>
+db.collection.find().sort( { age: -1 } )
+</code>
+
 #String Operations
 
 String minus last two characters:
