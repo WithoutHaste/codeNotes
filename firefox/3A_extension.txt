@@ -4,6 +4,8 @@
 
 !![First extension how-to](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension)
 
+!![various extension examples](https://github.com/mdn/webextensions-examples)
+
 ## Local Testing
 
 Navigate to "about:debugging" in the browser.
@@ -34,6 +36,15 @@ Note that browser.storage.local does not save to Local Storage.
 
 content_scripts are loaded into each webpage that is loaded and matches the specified url pattern.
 
+!![WebExtension APIs accessible in content_scripts](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts#WebExtension_APIs)
+content_scripts do not have access to all WebExtension APIs. For instance, they cannot access bookmarks.
+
 ## Background
 
 Background scripts are loaded when the extension is loaded.
+
+Background scripts can access all WebExtension APIs.
+
+To debug background scripts:
+- about:debugging > This Firefox > Inspect > Debugger > expand Sources to find the script
+- then click the boxy-icon and select "Show Split Console"
