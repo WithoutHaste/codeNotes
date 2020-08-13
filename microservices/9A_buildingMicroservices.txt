@@ -305,4 +305,37 @@ DRY and the perils of code reuse in a microservice world
 Client Libraries
 	"I've spoken to more than one team who has insisted that creating client libraries for your services is an essential part of creating services in the first place."
 	A danger is that business logic will end up in the client library, when it should have stayed in the service. This can happen when the same people code the service and the client library.
+	"If the client library approach is something you're thinking about, it can be important to separate out client code to handle the underlying transport protocol, which can deal with things like service discovery and failure, from things related to the destination service itself."
 	
+Access By Reference
+	"We need to embrace the idea that a microservice will encompass the lifecycle of our core domain entities, like the Customer...We should consider the customer service as being the source of truth for Customers."
+	Consider how long you can hold cached data before you need to refresh it.
+	"Whether you decide to pass around a memory [cache] of what an entity once looked like, make sure you also include a reference to the original resource so that the new state can be retrieved."
+	
+Versioning
+
+Defer It As Long As Possible
+	"The best way to reduce the impact of making breaking changes is to avoid making them in the first place."
+	"REST helps because changes to internal implementation detail are less likely to result in a change to the service interface." - Again, nothing in REST does this, it is still down to separating your API contracts from your internal models.
+	"Another key to deferring a breaking change is to encourage good behavior in your clients, and avoid them binding too tightly to your services in the first place."
+		Example: the client should only deserialize the fields they need, not everything by default.
+		Example: a client that can find a field, even when it moves around the data structure, will break less often.
+	Postel's Law (aka Robustness Principle): Be conservative in what you do, be liberal in what you accept from others.
+	
+Catching Breaking Changes Early
+	see Consumer-Driven Contracts
+	test early and often
+	
+see Semantic Versioning (Major.Minor.BugFix)
+	
+Coexist Different Endpoints
+	If you add a side-by-side new endpoint, then clients can gradually shift from the old to the new. Then you can remove the old one.
+	Expand and Contract Pattern: we expand the capabilities we offer, then contract once all clients are off the old version
+	
+Use Multiple Concurrent Service Versions
+	Run two versions of the service side-by-side and manage the traffic with routing/proxy/whatever
+	Downside - you have to support two codebases at once
+	
+User Interfaces
+
+
