@@ -187,3 +187,122 @@ Communication in Terms of Business Concepts: "If our systems are decomposed alon
 "It can be useful to look at what can go wrong when services are modeled incorrectly."
 Anecdote about a company that split their service by layers (front end, back end, data access) instead of vertical slices. And also did not abstract business use cases from the backend, they just spoke in low-level database terms everywhere.
 "Making decisions to model services boundaries along technical seams isn't always wrong (see performance issues)...However, it should be your secondary driver for finding these seams, not your primary one."
+
+Ch 4: Integration
+
+Avoid breaking changes - changes that force your consumers to change.
+
+Keep your APIs technology-agnostic - technology changes rapidly. Avoid integration technologies that dictate what tech stacks we can use to implement our microservices.
+
+Make you service simple for consumers - freedom on tech choice is good, but providing a client library can ease adoption (but they increase coupling).
+
+Hide internal implementation details - we don't want our consumers to be bound to our internal implementation (that turns more changes into breaking changes).
+
+Interfacing with customers
+
+Shared Database - consumers have direct access to the database
+	In short, do not do this. It is the tightest coupling possible.
+	Everyone is tied to the exact same model, and to one type of database.
+	There is no encapsulation of domain object behavior - each consumer spreads the behavior around.
+	
+Synchronous VS Asynchronous
+
+"Should communications be synchronous or asynchronous? This fundamental choice inevitably guides us toward certain implementation details."
+
+Synchronous: a call is made to a remote server, which blocks until the operation completes.
+	Easier to reason about.
+	Enables Request/Response communication.
+
+Asynchronous: the caller doesn't wait for the operation to complete before returning. The caller may not care if the operation ever happens at all.
+	Useful for long running jobs.
+	Provides low latency. Can keep a UI responsive even when the network is laggy.
+	But the technology is more complicated.
+	Additional work is required for monitoring/tracking that everything is happening correctly.
+	Enables Event-Based communication.
+	
+Request/Response: a client initiates a request and waits for a response.
+	This is usually done synchronously, but can be done asynchronously with callbacks.
+
+Event-Based: a client reports that something has happened, and listeners take action based on that event.
+	Business logic spreads out more evenly, rather than being centrally located. This can result in higher cohesion.
+	Highly decoupled.
+	
+Orchestration VS Choreography
+	Orchestration: a central system tells others when to run. See Request/Response.
+		"Simpler, and we get to know if things worked straight away."
+		"Tends to be brittle, with a higher cost of change."
+	Choreography: each system decides when to take action. See Event-Based.
+		"In general, I have found that systems that tend more towards the choreographed approach are more loosely coupled, and are more flexible and amenable to change."
+		"Each service is smart enough to understand it's role in the whole dance."
+
+Remote Procedure Call (RPC)
+	Provides Request/Response
+	"Refers to the technology of making a local call and having it execute on a remove service somewhere."
+	May rely on having an interface definition (see SOAP, Thrift, protocol buffers)
+		"The use of separate interface definitions can make it easier to generate client and server stubs for diff tech stacks." (See SOAP with WSDL)
+		"Other tech, like Java RMI, calls for a tighter coupling between the client and server, requiring that both use the same underlying technology."
+	The core characteristic is that a remove call looks like a local call.
+	Ease of use is a selling point.
+	Can become coupled to particular technology.
+	May hide that a call is remote too much - you need to know what calls will be significantly slower.
+	Some RPC solutions are very brittle. Changes to a Java RMI solution are always breaking changes.
+	
+REpresentational State Transfer (REST)	
+	Provides Request/Response
+	Usually used over HTTP
+	"How a resource is shown externally is completely decoupled from how it is stored internally." - This can be done as badly with REST and with any other architecture. And there is nothing inherent to RPC that makes the public contracts match internal models.
+	Uses HTTP verbs in standard ways - easier to learn a new interface.
+	HTTP is well supported with many tools.
+	Downside - HTTP is not the most efficient of formats
+	
+Hypermedia As The Engine Of Application State (HATEOAS)
+	An extension of REST
+	Resources return links to related resources and actions (state transitions). The links have unchanging semantic labels, which frees the links themselves to change without breaking the consumer.
+	"By following the links, the client gets to progressively discover the API, which can be a really handy capability when we are implementing new clients."
+	"Using these controls to decouple the client and server yields significant benefits over time that greatly offset the small increase in the time it takes to get these protocols up and running."
+	Downside - can be very chatty, as the client crawls through the network of links.
+	Downside - not well supported by tools yet - you'll have to roll your own servers and clients
+	
+JSON, XML, or other
+	JSON is very popular right now - succinct, but lacks semantic tags of XML
+		Hypertext Application Language (HAL) attempts to add hyperlinking to JSON
+	XML is supported by XPath, which allows you to find tags even when they have moved around the data structure - more resilient clients
+	
+Beware Too Much Convenience
+	for example, tools that standup a service quickly by serializing Domain models and sending them out as REST contracts are not good
+
+Asynchronous Event-Based Collaboration
+	Choose how services will emit events, and how subscribers will listen for them
+	"Traditionally, message brokers like RabbitMQ try to handle both problems."
+		Can also keep track of what messages a subscriber has already seen, and handle error queues.
+	"These systems are usually designed to be scalable and resilient, but that doesn't come for free. It can add complexity to the development process, because it is another system you may need to run to develop and test your services."
+	But once it is running, it can be a very effective solution.
+	There are also options like ATOM - but the subscribers have to manage their queues themselves.
+	
+Complexities of Asynchronous Architectures
+	"For example, when considering long-running async request/response, we have to think about what to do when the response comes back. Does it come back to the same node that initiated the request? If so, what if that node is down? If not, do I need to store information somewhere so I can react accordingly?"
+	How many times can subscribers attempt to process a message before they should all give up?
+	How to manage your error queue?
+	What if you have multiple versions of the same message type active at once?
+	
+Services as State Machines
+	"Our customer microservice owns all logic associated with behavior in this context. When a consumer wants to change a customer, it sends an appropriate request to the customer service...Our customer service controls all lifecycle events associated with the customer itself." (See Encapsulation)
+	"We want to avoid dumb, anemic services that are little more than CRUD wrappers."
+	
+Reactive Extensions (Rx)
+	"Mechanisms to compose the results of multiple calls together and run operations on them."
+	Works with asynchronous communication.
+	"At its heart, Rx inverts traditional flows. Rather than asking for some data, then performing operations on it, you observe the outcome of an operation (or set of operations) and react when something changes."
+	"They allow us to abstract out the details of how calls are made, and reason about things more easily."
+	
+DRY and the perils of code reuse in a microservice world
+	(see Martin about Single Responsibility meaning "responsible to a single individual/business unit" - one reason to change)
+	"DRY more accurately means that we want to avoid duplicating our system behavior and knowledge."
+	"When you want to change behavior, and that behavior is duplicated in many parts of your system, it is easy to forget everywhere you need to make a change, which can lead to bugs."
+	Shared libraries can be deceptively dangerous in microservices. It is tight coupling.
+	"My general rule: don't violate DRY within a microservice, but be relaxed about violating DRY across all services."
+	
+Client Libraries
+	"I've spoken to more than one team who has insisted that creating client libraries for your services is an essential part of creating services in the first place."
+	A danger is that business logic will end up in the client library, when it should have stayed in the service. This can happen when the same people code the service and the client library.
+	

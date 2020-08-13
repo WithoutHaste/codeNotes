@@ -1,0 +1,31 @@
+## Dependency Inversion
+
+Robert Martin's "Clean Architecture" speaks in depth about dependecy inversion.
+
+Ex:
+Instead of a RestEntryPoint having a reference to Mediator,
+The RestEntryPoint will provide an interface defining all the operations it will need
+Then Mediator implements the RestEntryPoint interface
+Thus the Mediator has a code reference to RestEntryPoint instead of the the other way around
+
+# Dependency Injection
+
+In C#, a class should be able to implement any number of interfaces, and the users of the interface should not care what else you are implementing.
+
+But with C#'s dependency injection library, the users of the concrete class are bound to provide any dependencies that the class requires. Now the class cannot implement just any interface. It has to be aware of what resources each user can provide.
+
+My mistake was putting the dependencies of different interfaces into one concrete constructor - of course that tied the users of the interfaces to dependencies they did not expect. If you must have one class implementing all these interfaces, then the dependencies should be passed in as method arguments. That means (with C#'s dependency injection model) that the users of the interface will list the dependencies in their own constructor.
+
+Or, divide interface implementation up by use-case, so that all the interface methods use the same dependencies.
+
+!![Stackoverflow workaround](https://stackoverflow.com/questions/10253169/dependency-injection-optional-parameters)
+You can have the constructor accept 0 or more candidates for a dependency
+<code>
+services.AddTransient<IWarehouseRepo, ActionRepository>();
+services.AddTransient<IWarehouseRepo, EventRepository>();
+services.AddTransient<IWarehouseRepo, AuditRepository>();
+...
+public WarehouseHandler(IEnumerable<IWarehouseRepo> repos)
+</code>
+The key here being, 0 is acceptable. Theoretically, this means you can have an optional dependency in the constructor.
+Note: This did not work for me. Possibly due to company-set infrastructure constraints?
