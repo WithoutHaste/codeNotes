@@ -12,7 +12,7 @@ HTML is a subset of XML. XML stands for Extensible Markup Language.  HTML is an 
 
 #Template Page
 
-A basic HTMl page template
+A basic HTML page template
 <code>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
