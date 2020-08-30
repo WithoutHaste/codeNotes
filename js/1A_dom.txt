@@ -54,7 +54,12 @@ document.getElementsByTagName('tag'); //array
 
 Create element
 <code>
-var element = document.createElement('div');
+var element = document.createElement('div'); //any tag name
+</code>
+
+Create text element
+<code>
+var element = document.createTextNode('plain text');
 </code>
 
 Loop through children:
