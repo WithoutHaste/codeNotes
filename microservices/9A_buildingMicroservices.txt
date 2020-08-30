@@ -337,5 +337,120 @@ Use Multiple Concurrent Service Versions
 	Downside - you have to support two codebases at once
 	
 User Interfaces
+	Terminal vs Web vs Mobile
+	consider data usage and battery usage
+	consider how to provide different UIs to Web and Mobile
+	API composition
+	UI fragment composition
+	Backends for frontends
 
+Integrating with 3rd party software
+	most companies need software that they do not have time to write and maintain themselves
+	"Build if it is unique to what you do, and can be considered a strategic asset; buy if your use of the tool isn't that special."
+	you will have little or no control of how 3rd party systems are written, supported, updated, or operated
+	you will have little ability to customize 3rd party tools
+	it's often a good idea to place a microservice between the 3rd party tool and the rest of your system, to handle all integration
+	Strangler Pattern: intercept messages to old system, decide if you want to re-route them to new system
+	
+Ch 5 Splitting the Monolith ================================
 
+"How do we handle the fact that we may already have a large number of codebases lying about that don't follow these patterns? How do we go about decomposing these monolithic applications without having to embark on a big-bang rewrite?"
+
+cohesion: keep things together that tend to change together
+
+seam: a portion of the code that can be treated in isolation and worked on without impacting the rest of the codebase
+"We want to identify seams that can become service boundaries."
+- bounded contexts make excellent seams
+- most programming languages provide namespace concepts that allow us to group similar code together - can indicate a seam
+
+"We should identify the high-level bounded contexts that we think exist in our organization...Then we want to try to understand what bounded contexts the monolith maps to."
+- create packages representing these contexts
+- move the existing code into them
+- left over code, that doesn't fit any context, will indicate more seams
+- you can do this to a small portion of the system, it does not have to be all at once
+
+"Our code should represent our organization, so our packages representing the bounded contexts in our organization should interact in the same way the real-life organizational groups in our domain interact."
+- ex: the warehouse code should have no dependency on the finance department code
+
+"I would strongly advise you to chop away at these systems. An incremental approach will help you learn about microservices as you go, and will also limit the impact of getting something wrong."
+- where to start, once you have your seams?
+- consider which seam will give you the most benefit when it is split into a microservice
+
+Considerations
+- pace of change: you know that Inventory Management will be changing rapidly soon
+- team structure: you have teams in different time zones - giving them different codebases to work on will help them be independent
+- security: one bounded context needs tighter security than the rest
+- technology: a team wants to write special algorithms in a specific language for one bounded context
+- tangled dependencies: how much unwinding will it take to move this bounded context out of the monolith?
+
+consider how entangled the different parts of your monolith are with one shared database
+find seams in the database as you find seams in the codebase
+you can start by dividing the database access code into different packages based on the bounded contexts
+- watch out for foreign key constraints that cross boundaries
+
+splitting the database will result in more database calls being made, since you can't all your data with a single JOIN
+"Typically concerns around performance are now raised. I have a fairly easy answer to this: how fast does your system need to be? And how fast is it now? If you can test its current performance and know what good performance looks like, then you should feel confident in making a change."
+"Also, we end up breaking transactional integrity when we move to two schemas..." This will take more thought about the design of the workflows.
+
+Shared Static Data
+recommendation to not store static (unchanging or very very rarely changing) data in a database - put it in a resource file instead
+- faster lookup times
+- self-documents that the data is stable
+Other options:
+- put the shared data behind it's own service
+- copy the shared data into each service that will need it
+Both of these are usually over-kill
+
+Shared Mutable Data
+this shared data probably needs its own service
+or the table is actually two distinct tables glues together, and it can be split with one piece going to each client service, with a foreign key between them
+
+Staging the Break
+- found the seams and separated code into different packages, still in the same monolith
+- found the database seams and separated those out, too
+- now you can pull one piece of code out into a microservice
+
+Transactional Boundaries
+transaction: these events either all happen together, or none of them happen
+- very useful for keeping data in a consistent state through complex changes
+what to do after dividing an operation into multiple transactions?
+- Try again later: retry each step of the operation until each has succeeded (see Eventual Consistency)
+- Abort entire operation: unwind the transactions that already succeeded (see Compensating Transaction)
+- Distributed transactions: a way to NOT split your transaction - can manage multiple normal transactions within one overarching transaction that can cross system boundaries
+
+Distributed Transactions
+	Two-Phase Commit: first the voting phase, where each transaction (participant or cohort) says if it thinks its local transaction can complete. if all answer yes, then they are all told to commit. if any say no, they are all told to rollback.
+	- vulnerable to outages, where the process is interrupted in the middle, or a cohort cannot respond
+	- what if a commit fails after the voting phase?
+	- pending transactions will hold locks on resources, which can lead to contention - consider how this affects scaling of systems
+	"The various algorithms are hard to get right, so I'd suggest you avoid trying to create your own...Do lots of research on this topic if this seems like the route you want to take..."
+	consider the cost of data cleanup vs the cost of catching every edge case
+	
+"All of these solutions add complexity...Distributed transactions are hard to get right and can actually inhibit scaling...Systems that eventually converge through compensating retry logic can be harder to reason about, and may need other compensating behavior to fix up inconsistencies in data."
+
+"If you do encounter state that really, really wants to be kept consistent, do everything you can to avoid splitting it up in the first place. Try really hard."
+"If you really need to go ahead with the split, think about moving from a purely technical view of the process and actually create a concrete concept to represent the transaction itself." (see Making Implicit Domain Models Explicit)
+
+Reporting with one data store
+	Even when all the data is already stored in one database (monolithic system), for performance issues, the reporting database is often separate.
+	Consider - should the main database and reporting database share the same schema? It makes it easy to mirror data, but you lose the efficiency of designing the reporting database for reporting use cases.
+Reporting with many data stores
+	"In splitting a service into smaller parts, we need to also potentially split up how and where data is stored...The audience of our reporting systems are users like any other, and we need to consider their needs."
+	You can pull the data together using API calls. This works only for small queries.
+	Caching data in the reporting database has the usual dangers - the data may be out of date. If you cache on the service side, consider that "the nature of reporting is often that we access the long tail of data. THis means that we may well request resources that no one else has requested before, resulting in a potentially expensive cache miss."
+	"Reporting systems also often rely on third-party tools that expect to retrieve data in a certain way, and here providing a SQL interface is the fastest way to ensure your reporting tool chain is as easy to integrate with as possible."
+	You may need to write APIs just for reporting purposes. (See Batch APIs) Also consider asynchronous batching: request a bunch of data, ping the system until your export is ready, pick up the file.
+Data Pump
+	Each service pushes data updates to reporting. 
+	Or "a standalone program that directly accesses the database of the service that is the source of data, and pumps it into a reporting database...We try to reduce the problems with coupling to the service's schema by having the same team that manages the service also manage the pump."
+Event Data Pump
+	You could update reporting with event listeners.  Danger here in coupling separate services.
+Maybe you don't need all that data in one place, anyway. Consider distributed reporting.
+
+"Small, incremental changes...allow us to better mitigate the cost of mistakes, but doesn't remove the chance of mistakes entirely."
+- small cost: moving code within a codebase
+- large cost: splitting a database
+- large cost: rolling back a database change
+Recommendation - think about and draw out your designs before you start. Consider the principles of object-oriented design, but at the service level.
+
+It's ok for a service to grow so large it needs to be split. That's a cycle. "The key is knowing it needs to be split before the split becomes too expensive."
