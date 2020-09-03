@@ -454,3 +454,36 @@ Maybe you don't need all that data in one place, anyway. Consider distributed re
 Recommendation - think about and draw out your designs before you start. Consider the principles of object-oriented design, but at the service level.
 
 It's ok for a service to grow so large it needs to be split. That's a cycle. "The key is knowing it needs to be split before the split becomes too expensive."
+
+Deployment ========
+
+Cycle Time: the time it takes to get one change through development all the way to production
+
+Continuous Integration (CI)
+	every time code is checked in, the server compiles it and runs tests to verify it is in a valid state
+	this requires that you do have a suite of automated regression tests
+	"The core goal is to keep everyone in sync with each other."
+	if any artifacts are created, they are only created once per version of the code - "This is to avoid doing the same thing over and over again, and so that we can confirm that the artifact we deployed is the one we tested."
+	the more frequently you merge changes together, the easier those merges will be
+	
+Microservices Plus CI
+1) you can have 1 repo with all the different services in it
+	(con) any checkin causes all the services to rebuild
+		this can take awhile - especially running all the regression tests
+		it is unclear how many of these services now need to be deployed
+	(pro) you can checkin changes to multiple services at one time
+	(con) if you break the build, the whole pipeline is dead
+	this is not a good long-term solution, but it can get a new project started
+2) you can have 1 repo with all the different services in it PLUS configure the CI tool to recognize different folders as different services
+	fixes several problems with the last approach
+	"On the one hand, my check-in/check-out process can be simpler as I have only one repository to worry about. On the other hand, it becomes very easy to get into the habit of checking in source code for multiple services at once, which can make it equally easy to slip into making changes that couple services together."
+3) 1 repo per service, with one CI build per repo
+
+Build Pipelines and Continuous Delivery
+	you can specify what order to run build steps in
+		ex: run the fast tests first, so if they fail we don't have to run the slow ones at all
+	"This build pipeline concept gives us a nice way of tracking the progress of our software as it clears each stage, helping give us insight into the quality of our software."
+	
+Continuous Delivery (CD)
+	"The approach whereby we get constant feedback on the production readiness of each and every check-in, and furthermore treat each and every check-in as a release candidate."
+	

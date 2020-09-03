@@ -157,9 +157,12 @@ public class CalculatorTests
 
 <code>
 Assert.Throws<ArgumentException>(() => profiles.GetSettingsForUserID(""));
+var exception = Assert.Throws<ArgumentException>(() => profiles.GetSettingsForUserID(""));
 
 await Assert.ThrowsAsync<ArgumentException>(async () => await MethodThatThrows());
 await Assert.ThrowsAsync<ArgumentException>(() => MethodThatThrows());
+
+MyType typedVariable = Assert.IsType<MyType>(generalVariable);
 </code>
 
 #Run Parallel or In Series
