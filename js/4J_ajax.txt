@@ -7,39 +7,47 @@
 //		type: 'post',
 //		url: 'google.com',
 //		data: { },
+//		isFormData: false, //defaults to false
 //		success: callback,
 //		error: callback
 // }
 async function ajax(options) {
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = onReadyStateChange;
-	xhr.open(options.type, options.url);
-	
-	if(
 
-	if (options.dataIsJson == null || options.dataIsJson == true) {
-		let formData = new FormData();
-		Object.entries(options.data).forEach(([key, value], index) => {
-console.log("formdata " + key + " " + value);
-			formData.append(key, value);
-		});
-console.log(formData);
-		xhr.send(formData);
-//			xhr.setRequestHeader("Content-type", "text/json");
-//			xhr.send(JSON.stringify(options.data));
+	if (options.type.toLowerCase() == "get") {
+		let queryString = buildQueryString(options.data);
+		xhr.open(options.type, options.url+"?"+queryString);
+		xhr.send();
 	}
 	else {
-		xhr.send(options.data);
+		xhr.open(options.type, options.url);
+		if (options.isFormData) {
+			xhr.send(options.data);
+		}
+		else {
+			let formData = new FormData();
+			Object.entries(options.data).forEach(([key, value], index) => {
+				formData.append(key, value);
+			});
+			xhr.send(formData);
+		}
+	}
+
+	function buildQueryString(data) {
+		let queryString = "";
+		Object.entries(data).forEach(([key, value], index) => {
+			queryString += encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&"
+		});
+		return queryString;
 	}
 
 	function onReadyStateChange() {
 		const DONE = 4; // readyState 4 means the request is done.
 		const OK = 200; // status 200 is a successful return.
 		if (xhr.readyState === DONE) {
-			if (xhr.status === OK) 
-				options.success(JSON.parse(xhr.response));
-			else 
-				options.error(xhr, xhr.status, xhr.response);
+			if (xhr.status === OK) options.success(JSON.parse(xhr.response));
+			else options.error(xhr, xhr.status, xhr.response);
 		}
 	}
 }
