@@ -483,7 +483,70 @@ Build Pipelines and Continuous Delivery
 	you can specify what order to run build steps in
 		ex: run the fast tests first, so if they fail we don't have to run the slow ones at all
 	"This build pipeline concept gives us a nice way of tracking the progress of our software as it clears each stage, helping give us insight into the quality of our software."
+	build pipelines can end with an automatic production deployment, after all the automated tests pass
+	some CD tools can handle manual steps, where the process waits until a user verifies that the step is complete (such as UAT user acceptance testing)
 	
 Continuous Delivery (CD)
 	"The approach whereby we get constant feedback on the production readiness of each and every check-in, and furthermore treat each and every check-in as a release candidate."
 	
+Artifacts and Environment
+	CD may not just move an artifact (like a JAR file) along the pipeline. it might need to setup the environment as well. see automated configuration management tools.
+	"One way to avoid the problems associated with technology-specific artifacts is to create artifacts that are native to the underlying operating system."
+		pros: the OS can handle a lot for you: installation, event logging, dependency installation/resolution
+		cons: it can be hard to publish to a format the OS understands
+		cons: extra difficult if you are deploying to multiple OS's
+	if you automatically setup environments as needed
+		cons: it can take a while to setup a fresh environment - you can save time by only installing the software that is missing, but then you risk configuration drift, where environments slower move out of sync
+	a next step option is to deploy an environment image, that already has everything setup on it
+		a virtual machine image
+		pros: always start with a fresh, up-to-date installation
+		pros: much faster to spin up an environment
+		pros: some configuration tools support a single configuration that can create images for multiple OS's
+		cons: building the initial image takes a long time
+		cons: the image can take up a lot of memory (or bandwidth when transferring on the network)
+		extension: you can build an image with your software already installed on it - this is a single deployment artifact
+	mutable server: you deploy from source control, then someone manually changes configs on the server
+	immutable server: no manual changes allowed - all changes must go through the build pipeline
+		build the whole complete image as an artifact - maybe even go to the extent of disabling SSH
+	
+	Our test and prod environments can vary greatly. "For example, our production environment for our service might consist of multiple load-balanced hosts spread across two data centers, whereas our test environment might just have everything running on a single host."
+		cons: situations commonly arise in production that are not being tested in test
+		"As you move from your laptop to build server to UAT environments all the way to production, you'll want to ensure that your environments are more and more production-like to catch any problems associated with these environment differences sooner."
+		"Sometimes the cost to reproduce production-like environments can be prohibitive, so you have to make compromises." This cost could be for third-part licenses, or it could be the deployment time slowing down your manual test loop.
+		
+Configuration
+	configuration should be limited to things that change from one environment to another
+	try not to use configuration to drastically change functionality
+	how to handle this with CD?
+		1) create one artifact per environment, with the configuration included
+		  - this breaks the pipeline, because the image tested is not the image deployed to production
+		  - it takes more time to build all these artifacts
+		  - how to build secrets into the images without having the secrets checked into source control?
+		2) manage configuration outside of the deployment images
+		
+How many services per host?
+	"host" means "a generic unit of isolation - namely, an operating system onto which I can install and run my services"
+	1) multiple services per host
+		- easier host management, because fewer hosts
+		- cheaper, because fewer hosts (even if they are virtual, this is cheaper)
+		- makes monitoring more difficult (ex: how to know which service is using the CPU?)
+		- services can affect each other (ex: using up OS resources)
+		- deployments can be harder (ex: services with different contradictory dependencies)
+		- limits deployment artifact strategy options (ex: cannot deploy a full image to the machine to update one service)
+	2) application containers
+		ex: IIS for .Net services
+		the container handles a lot of the issues mentioned in option (1)
+		the trade off is that all your services have to use the same technology (.Net in this example)
+		monitoring individual services can still be very difficult
+	3) single service per host
+		much more practical these days, when it is easy to spin up virtual environments on demand
+		strongly recommended that you not use microservices if you cannot deploy one service per host
+
+PaaS (Platform as a Service)
+	"Most of these platforms rely on taking a technology-specific artifact, such as a Java WAR file or Ruby gem, and automatically provisioning and running it for you...At the time of writing, most of the best, most polished PaaS solutions are hosted...It doesn't just handle running your service, it also supports services like databases in a very simple fashion."
+	when they work, things are good
+	when they don't work, you have limited options for getting into the system to fix it
+	
+Automation
+	you can handle a small number of machines manually, but you need automation to handle many microservices hosted in many environments and on many hosts per environment
+	"Picking technology that enables automation is highly important. This starts with the tools used to manage hosts. Can you write a line of code to launch a virtual machine, or shut one down? Can you deploy the software you have written automatically?"
