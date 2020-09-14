@@ -550,3 +550,87 @@ PaaS (Platform as a Service)
 Automation
 	you can handle a small number of machines manually, but you need automation to handle many microservices hosted in many environments and on many hosts per environment
 	"Picking technology that enables automation is highly important. This starts with the tools used to manage hosts. Can you write a line of code to launch a virtual machine, or shut one down? Can you deploy the software you have written automatically?"
+	
+Vagrant
+	provides a virtual cloud on your laptop, so you can run all the services at the same time easily
+	useful for dev and test
+	can be resource intensive
+	
+Docker
+	Docker apps are like Virtual Machine images
+	
+Deployment Interface
+	"Whatever underlying platform or artifacts you use, having a uniform interface to deploy a given service is vital. We'll want to trigger deployment of a microservice on demand in a variety of different situations, from deployments locally for dev and test to production deployment...We'll also want to keep our deployment mechanisms as similar as possible from dev to production, as the last thing we want is to find ourselves hitting problems in production because deployment uses a completely different process."
+	"...the most sensible way to trigger any deployment is via a single, parameterizable command-line call."
+	
+Testing ===================
+
+Types of Tests
+	from "Agile Testing" by Crispin and Gregory
+		Unit Testing: automated: did we build it right?: supports programming and is technology facing
+		Acceptance Testing: automated: did we build the right thing?: supports programming and is business facing
+		Exploratory Testing: manual: how can I break the system?: critiques the product and is business facing
+		Property Testing: tools: response time, scalability, performance, security...: critiques the product and is technology facing
+	recommends automating as much manual testing as possible, to support fast, frequent, and consistent testing
+	Test Pyramid from "Succeeding With Agile" by Cohn
+		unit tests: lots and lots of them: isolates errors, fast for devs to run as they develop
+		service tests (api, integration): some of them
+		UI tests (end-to-end): a few of them: verifies broad user functionality is working, gives confidence in the whole system
+
+Unit Tests
+	"typically test a single function or method call"
+	"on modern hardware you could expect to run many thousands of these in less than a minute"
+	"the primary goal of these tests is to give us very fast feedback about whether our functionality is good"
+	should catch most of your bugs
+	supports refactoring by verifying that all existing functionality still works the same
+	
+Service Tests (has many different names)
+	test the services without using the UI
+	test one service at a time - isolate where bugs are located
+	they are best when you can isolate them from the rest of the system by stubbing out their dependencies
+	"Our service test suite needs to launch stub services for any downstream collaborators, and configure the service under test to connect to the stub services."
+	
+End To End Tests
+	test the whole system together, including the UI
+	when these pass, you have a lot of confidence in the whole system
+	run a lot slower, so you can't test every possible path
+	"When broader-scoped tests like our service or end-to-end tests fail, we will try to write a fast unit test to catch the problem in the future."
+	large-scope tests are often flaky or brittle - they can require a lot of maintenance
+	
+Trade-offs
+	if a test suite is slow, people won't run it often
+	this can affect your entire development cycle - if a commit is slow because of these tests it is running, people will make fewer, larger commits - you don't want that
+	support fast feedback cycles by keeping all test suites running in a satisfactory amount of time
+	"A test suite that takes all day and often has breakages that have nothing to do with broken functionality are a disaster."
+	you must actively remove tests that are no longer needed
+	"It is hard to have a balanced conversation about the value something adds versus the burden it entails...Do you get blamed if you remove a tests? Maybe. But you'll certainly get blamed if a test you removed lets a bug through...[But] if the same feature is covered in 20 different tests, perhaps we can get rid of half of them,as those 20 tests take 10 minutes to run."
+	
+Stub Service
+	stub service: a service that responds with canned responses
+	see "Growing Object-Oriented Software, Guided by Tests" by Freeman and Pryce
+	see Mountebank - a project that stubs out services. "When it launches, you send it commands telling it what port to stub on, what protocol to handle, and what responses it should send when requests are sent."
+	
+Flaky or Brittle Tests
+	flaky: sometimes pass, sometimes fail, with no discernible difference between test runs
+	brittle: broken easily and often due to small code changes
+	when a dev knows or thinks a test is flaky, they'll keep running it instead of digging into what the problem might be; or they'll move forward in spite of the failing tests
+	"Martin Fowler advocates the approach that if you have flaky tests, you should track them down and if you can't immediately fix them, remove them from the suite so you can treat them...See if you can rewrite them to avoid testing code running on multiple threads...etc"
+	
+Who Writes Tests?
+	if one team owns the code under test, they should write the tests
+	if multiple teams own the code under test (likely for end-to-end-tests)
+		(1) don't just let everyone write tests - there will be missing tests, there will be duplicated tests, it will be messy
+		(2) don't just have a test team write the tests - the devs need to be involved in the test process, and to not become antagonistic to the people who are finding bugs; and devs should not sit idle waiting for someone else to write tests for their code
+		
+The Great Pile-Up
+	end-to-end tests are slow > something is broken > the pipeline halts until the problem is fixed > more changes have piled up waiting for end-to-end tests > it is more likely that another problem will turn up, and with all the changes, it will be harder to find the bug > loop
+	"A key driver to ensuring we can release our software frequently is based on the idea that we release small changes as soon as they are ready."
+	
+Metaversioning
+	this discusses deploying multiple services's changes at the same time
+	"By versioning together changes made to multiple services, we effectively embrace the idea that changing and deploying multiple services as once is acceptable...In doing so, we cede one of the main advantages of microservices: the ability to deploy one service by itself, independently of other services...All too often, the approach of accepting multiple services being deployed together drifts into a situation where services become coupled."
+
+Test Journeys, Not Stories
+	"[It is a trap] to add a new end-to-end test for every piece of functionality we add...The best way to counter this is to focus on a small number of core journeys to test for the whole system. Any functionality not in these core journeys needs to be covered in tests that analyze services in isolation from each other."
+	"These journeys need to be mutually agreed upon, and jointly owned...high-value interactions and very few in number."
+	"[few in number]: very low double digits even for complex systems"
