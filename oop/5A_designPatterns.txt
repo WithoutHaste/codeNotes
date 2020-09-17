@@ -205,6 +205,10 @@ Access the elements of an aggregate object sequentially, without exposing its un
 A mediator object encapsulates how a set of objects will interact.  A mediator has great control on how a program runs.
 
 Business objects do not communicate directly with each other. They communicate through the mediator only. The mediator is like an internal Adapter or an anti-corruption layer.
+- "It promotes loose coupling by keeping objects from referring to each other explicitly, and it allows their interaction to be varied independently."
+- "Client classes can use the mediator to send messages to other clients, and can receive messages from other clients via an event on the mediator class."
+
+So, like a message bus inside a single module.
 
 #Composite
 

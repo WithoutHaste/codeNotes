@@ -1,0 +1,149 @@
+# MediatR Library
+
+MediatR is a .Net library for the Mediator Pattern.
+- "MediatR is essentially a library that allows in process messaging – which in turn allows you to follow the Mediator Pattern."
+
+MediatR can be set to
+- request/response sends each message to just one handler
+- notification broadcasts messages to multiple handlers
+
+![Dot Net Core Tutorials](https://dotnetcoretutorials.com/2019/04/30/the-mediator-pattern-part-3-mediatr-library/)
+
+## Getting Started
+
+Install Nuget packages
+- MediatR
+- MediatR.Extensions.Microsoft.DependencyInjection //to use .Net IOC
+
+In Startup.cs
+<code>
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMediatR(Assembly.GetExecutingAssembly());
+}
+</code>
+This configuration causes MediatR to find all INotificationHandlers in the project and automatically registers them.
+
+Write some internal messages
+<code>
+//INotification is a MediatR class
+public class NotificationMessage : INotification
+{
+    public string NotifyText { get; set; }
+}
+</code>
+
+Write message handlers
+<code>
+public class Notifier1 : INotificationHandler<NotificationMessage>
+{
+    public Task Handle(NotificationMessage notification, CancellationToken cancellationToken)
+    {
+        Debug.WriteLine($"Debugging from Notifier 1. Message  : {notification.NotifyText} ");
+        return Task.CompletedTask;
+    }
+}
+
+public class Notifier2 : INotificationHandler<NotificationMessage>
+{
+    public Task Handle(NotificationMessage notification, CancellationToken cancellationToken)
+    {
+        Debug.WriteLine($"Debugging from Notifier 2. Message  : {notification.NotifyText} ");
+        return Task.CompletedTask;
+    }
+}
+</code>
+
+Abstract out that you are using MediatR so your whole code base is not dependent on it
+<code>
+public interface INotifierMediatorService
+{
+    void Notify(string notifyText);
+}
+
+public class NotifierMediatorService : INotifierMediatorService
+{
+    private readonly IMediator _mediator;
+
+    public NotifierMediatorService(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
+    public void Notify(string notifyText)
+    {
+        _mediator.Publish(new NotificationMessage { NotifyText = notifyText });
+    }
+}
+
+//and register this service in ConfigureServices
+services.AddTransient<INotifierMediatorService, NotifierMediatorService>();
+</code>
+
+Use MediatR to send internal messages
+<code>
+public class HomeController : ControllerBase
+{
+    private readonly INotifierMediatorService _notifierMediatorService;
+
+    public HomeController(INotifierMediatorService notifierMediatorService)
+    {
+        _notifierMediatorService = notifierMediatorService;
+    }
+
+    [HttpGet("")]
+    public ActionResult<string> NotifyAll()
+    {
+        _notifierMediatorService.Notify("This is a test notification");
+        return "Completed";
+    }
+}
+</code>
+
+## Behaviors
+
+![MediatR Behaviors](https://github.com/jbogard/MediatR/wiki/Behaviors)
+
+MediatR 3.0 Behaviors allow you to build your own pipeline directly inside of MediatR without resolving to using decorators around your handlers.
+
+A pipeline behavior is an implementation of IPipelineBehavior<TRequest, TResponse>. It represents a similar pattern to filters in ASP.NET MVC/Web API or pipeline behaviors in NServiceBus.
+
+The pipeline behaviors are only compatible with IRequestHandler<TRequest,TResponse> and can't be used with INotificationHandler<TRequest>.
+
+Pipeline behaviors must implement
+<code>
+Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next);
+</code>
+"request" is the request object passed through IMediator.Send.
+"next" is an async continuation for the next action in the behavior chain. Either await or return the "next" invocation in your Handle method.
+
+Ex
+<code>
+public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+{
+    private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
+
+    public LoggingBehavior(ILogger<LoggingBehavior<TRequest, TResponse>> logger)
+    {
+        _logger = logger;
+    }
+
+    public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+    {
+        _logger.LogInformation($"Handling {typeof(TRequest).Name}");
+        var response = await next();
+        _logger.LogInformation($"Handled {typeof(TResponse).Name}");
+
+        return response;
+    }
+}
+</code>
+"request" will be automatically passed into "next".
+
+Register the behaviors in the order you would like them to be called.
+<code>
+cfg.For(typeof(IPipelineBehavior<,>)).Add(typeof(OuterBehavior<,>));
+cfg.For(typeof(IPipelineBehavior<,>)).Add(typeof(InnerBehavior<,>));
+cfg.For(typeof(IPipelineBehavior<,>)).Add(typeof(ConstrainedBehavior<,>));
+</code>
+MediatR uses the MultiInstanceFactory delegate to resolve the IEnumerable<IPipelineBehavior<TRequest, TResponse>> for whatever closed types your request and responses are. For void/Task requests, the TResponse type will be Unit.
