@@ -634,3 +634,39 @@ Test Journeys, Not Stories
 	"[It is a trap] to add a new end-to-end test for every piece of functionality we add...The best way to counter this is to focus on a small number of core journeys to test for the whole system. Any functionality not in these core journeys needs to be covered in tests that analyze services in isolation from each other."
 	"These journeys need to be mutually agreed upon, and jointly owned...high-value interactions and very few in number."
 	"[few in number]: very low double digits even for complex systems"
+	
+Consumer Driven Contract
+	"We are defining the expectations of a consumer on a service...captured in code form as tests...If done right, these CDCs should be run as part of the CI build of the service/producer, ensuring it never gets deployed if it breaks one of these contracts."
+	these are API tests - run against a single service in isolation
+	"A good practice here is to have someone from the producer and consumer teams collaborate on creating the tests."
+	"[The CDCs] become the codification of a set of discussions about what a service API should look like...when they break, they become a trigger point to have conversations about how that API should evolve."
+	
+End to End Tests
+	"From speaking to people who have been implementing microservices at scale for a while now, I have learned that most of them over time remove the need entirely for end-to-end tests in favor of tools like CDCs and improved monitoring. But they do not necessarily throw those tests away. They end up using many of those end-to-end journey tests to monitor the production system using a technique called Semantic Monitoring."
+	"You can view running end-to-end tests prior to production deployment as training wheels...a useful safety net, where you are trading off cycle time for decreased risk."
+	
+Separating Deployment from Release
+	Regarding adding more and more tests to catch more cases "At a certain point we have to accept that we hit diminishing returns with this approach. With testing prior to deployment, we cannot reduce the change of failure to zero."
+	An alternative to testing before deployment "If we can deploy our software, and test it in situ prior to directing production loads against it, we can detect issues specific to a given environment...A common example of this is the Smoke Test Suite, a collection of tests designed to be run against newly deployed software to confirm that the deployment worked. These tests help you pick up any local environmental issues."
+	blue/green deployment: "We have two copies of our software deployed at a time, but only one version of it is receiving real requests." The new version is deployed, smoke tests are run against it, and then the production load is switch from the previous version to the new version. This also reduces production downtime because you just change where the traffic stream is directed after the new services are already running.
+	canary releasing: direct a little production traffic as the new deployment. If the results are satisfactory, gradually increase the load until no traffic is going to the old deployment. Some teams send a copy of the production traffic to the new deployment, instead of fully redirecting it.
+	"Using these approaches is a tacit acknowledgment that we cannot spot and catch all problems before we actually release our software."
+	
+Mean Time to Repair (MTTR) Over Mean Time Between Failures (MTBF)
+	"Sometimes expending the same effort into getting better at remediation of a release can be significantly more beneficial than adding more automated functional tests."
+	- could be as simple as good monitoring coupled with fast rollbacks
+	"Most organizations that I see spending time creating functional test suites often expend little to no effort at all on better monitoring or recovering from failure. So while they may reduce the number of defects that occur in the first place, they can't eliminate all of them, and are unprepared for dealing with them if they pop up in production."
+	definitely consider how costly a single error is to your particular business, some businesses are more forgiving than others
+	
+Cross-Functional Testing
+	nonfunctional requirements: latency, load, accessibility (to the disabled), security, etc. Anything that cannot be implemented like a normal feature.
+	cross-functional requirements is another term for nonfunctional requirements "It speaks more to the fact that these system behaviors really only emerge as the result of lots of cross-cutting work."
+	"Many, if not most, CFRs can really only be met in production." But you can still write lower-level non-prod tests that are helpful here
+		"For example, once you've found a performance bottleneck in an end-to-end load test, write a smaller-scoped test to help you catch the problem in the future."
+	Performance Tests: 
+		"When decomposing systems into smaller microservices, we increase the number of calls that will be made across network boundaries. Where previously an operation might have involved one database call, it may now involve three or four..."
+		"Tracking down sources of latency is especially important."
+		since these tests often involve simulating a lot of load on the system, and running multiple iterations, they can take a while to run
+		"It isn't always feasible to run them on every check-in. It is a common practice to run a subset every day, and a larger set every week."
+	
+	
