@@ -147,3 +147,7 @@ cfg.For(typeof(IPipelineBehavior<,>)).Add(typeof(InnerBehavior<,>));
 cfg.For(typeof(IPipelineBehavior<,>)).Add(typeof(ConstrainedBehavior<,>));
 </code>
 MediatR uses the MultiInstanceFactory delegate to resolve the IEnumerable<IPipelineBehavior<TRequest, TResponse>> for whatever closed types your request and responses are. For void/Task requests, the TResponse type will be Unit.
+
+All the behaviors together form one pipeline, in the order they were registered in. But that does not mean every request goes through every behavior. Each behavior defines the Request Data Type it expects. Each request will only be sent to the behaviors that accept that data type.
+
+Requests travel through the full behavior pipeline before they are handed to a single Handler. No matter what order things are registered in, the Handler is always last.
