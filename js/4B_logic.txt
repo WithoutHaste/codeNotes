@@ -61,7 +61,7 @@ For..Of iterates over "iterable collections". That's anything with a Symbol.iter
 It keeps calling Iterator.next() until 'done' is true.
 
 This does not work on objects.
-It works well on arrays, strings, and NodeLists.
+It works well on arrays, strings, NodeLists, and HTMLCollections.
 
 array:
 <code>
