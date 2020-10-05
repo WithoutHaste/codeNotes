@@ -669,4 +669,26 @@ Cross-Functional Testing
 		since these tests often involve simulating a lot of load on the system, and running multiple iterations, they can take a while to run
 		"It isn't always feasible to run them on every check-in. It is a common practice to run a subset every day, and a larger set every week."
 	
+Chapter 8 Monitoring ===============================
+
+"The answer here is pretty straightforward: monitor the small things, and use aggregation to see the bigger picture."
+
+Single Service, Single Server
+	"We'll need to monitor the host itself, CPU, memory...We'll want to know what they should be when things are healthy, so we can alert when they go out of bounds."
+	"We'll want to have access to the logs from the server itself...We can probably get by with just logging on to the host and using command line tools to scan the log."
+	"We might want to monitor the application itself. At a bare minimum, monitoring the response time of the service is a good idea."
+	
+Single Service, Multiple Servers
+	"We still want to monitor all the same things as before, but need to do so in such a way that we can isolate the problem."
+	"We still want to track the host-level metrics, and alert on them." But we also want to see them aggregated across all hosts.
+	We'll want all the logs available in one place.
+	We'll need to monitor the load balancer that is serving these Multiple Servers. And "we'll configure our load balancer to remove unhealthy nodes from our application."
+	
+Multiple Services, Multiple Servers
+	This requires "collection and central aggregation of as much as we can get our hands on, from logs to application metrics."
+	"It can be hard to know what 'good' looks like when we're looking at metrics for a more complex system...The secret to knowing when to panic and when to relax is to gather metrics about how your system behaves over a long-enough period of time that clear patterns emerge."
+	Aggregate per service, and aggregate for the whole system
+	some monitoring systems will save aggregates of old data (or samples), so you don't fill up your memory with old, detailed data
+	"Make sure you can get access to the raw data to provide your own reporting or dashboards if you need to."
+	"Another key benefit to understanding your trends is when it comes to capacity planning. Are we reaching our limit? How long until we need more hosts?"
 	
