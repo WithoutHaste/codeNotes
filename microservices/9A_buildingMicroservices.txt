@@ -692,3 +692,20 @@ Multiple Services, Multiple Servers
 	"Make sure you can get access to the raw data to provide your own reporting or dashboards if you need to."
 	"Another key benefit to understanding your trends is when it comes to capacity planning. Are we reaching our limit? How long until we need more hosts?"
 	
+Service Metrics
+	"I would strongly recommend having your services expose basic metrics themselves. At a bare minimum, for a web service you should probably expose metrics like response times and error rates - vital if your server isn't fronted by a web server that is doing this for you."
+	"For example, our accounts service may want to expose the number of times customers view their past orders, or your web shop might want to capture how much money has been made during the last day."
+	"There is an old adage that 80% of software features are never used...Wouldn't it be nice to know what they are?"
+	Knowing how customers use your system, you can improve it where it matters.
+	"We can never know what data will be useful...I tend to err toward exposing everything and relying on my metrics system to handle this later."
+	
+Synthetic Monitoring aka Semantic Monitoring
+	"What we actually want to track...is the system working? The more complex the interactions between the services, the further removed we are from actually answering that question."
+	"So what if our monitoring systems were programmed to act a bit like our users and could report back if something goes wrong?"
+	example from a banking/stocks system: generate fake requests and monitor how the system handles them. If the response time is too low, report that as an error.
+	- this is a Synthetic Transaction
+	
+Correlation Ids
+	Given one call to your system that generates many downstream effects, how do you correlate all those log messages together?
+	Generate a GUID when a call first enters you system, and pass it to all downstream calls.
+	
