@@ -1,0 +1,89 @@
+## Update
+
+<code>
+db.collection.updateOne()
+db.collection.updateMany()
+db.collection.update()
+</code>
+
+<code>
+db.runCommand(
+   {
+      update: <collection>,
+      updates: [
+         {
+           q: <query>,
+           u: <document or pipeline>,
+           upsert: <boolean>,
+           multi: <boolean>,
+           collation: <document>,
+           arrayFilters: <array>,
+           hint: <document|string>
+         },
+         ...
+      ],
+      ordered: <boolean>,
+      writeConcern: { <write concern> },
+      bypassDocumentValidation: <boolean>,
+      comment: <any>
+   }
+)
+</code>
+
+# Comment
+
+Optional.
+
+A user-provided comment to attach to this command. Once set, this comment appears alongside records of this command in the following locations:
+- mongod log messages
+- database profiler output
+- currentOp output
+
+# Ordered
+
+Optional. Defaults to true.
+
+True: when an update statement fails, return without performing the remaining update statements.
+False: when an update fails, continue with the remaining update statements, if any.
+
+# Updates
+
+An array of one or more update statements to perform on the named collection.
+
+## Update Statement
+
+<code>
+{
+	q: <query>,
+	u: <document or pipeline>,
+	upsert: <boolean>,
+	multi: <boolean>,
+	collation: <document>,
+	arrayFilters: <array>,
+	hint: <document|string>
+}
+</code>
+
+# q: query
+
+# u: modifiers
+
+Any of:
+- document containing update operator expressions
+- a replacement document
+- an aggregation pipeline (MongoDB 4.2 or later)
+
+# upsert
+
+True: if no documents match the query, perform an insert.
+
+# multi
+
+Defaults to false.
+
+True: update all documents that meet the query criteria.
+False: update only 1 document.
+
+# collation
+
+For string comparisons.
