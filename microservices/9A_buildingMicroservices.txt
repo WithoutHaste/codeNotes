@@ -708,4 +708,22 @@ Synthetic Monitoring aka Semantic Monitoring
 Correlation Ids
 	Given one call to your system that generates many downstream effects, how do you correlate all those log messages together?
 	Generate a GUID when a call first enters you system, and pass it to all downstream calls.
+	Correlation Ids are easier to add from the beginning of design then to insert later.
 	
+Cascading Failures
+	"Imagine a situation where the network connection between our music shop website and the catalog service goes down. The services themselves appear healthy, bu they can't talk to each other. If we just looked at the health of the individual service, we wouldn't know there is a problem."
+	"Therefore, monitoring the integration points between systems is key."
+	"Each service instance should track and expose the health of its downstream dependencies, from the database to other collaborating services."
+	
+Standardization
+	"One of the ongoing balancing acts you'll need to pull off is where to allow for decisions to be made narrowly for a single service versus where you need to standardize across your system...In my opinion, monitoring is one area where standardization is incredibly important."
+	"You should try to write your logs out in a standard format." Ex: using the same name for the same metric across systems.
+	"The key is making it easy to do the right thing."
+	
+Consider the Audience
+	"All this data we are gathering is for a purpose. More specifically, we are gathering all this data for different people to help them do their jobs; this data becomes a call to action."
+	"Consider the following: what do they need to know right now? what might they want to know later? how will they consume the data?...Alert on the things they need to know right now...Give them easy access to the data they need to know later...And spend time with them to know how they want to consume data."
+	
+The Future
+	"Historically, the idea that we can find out about key business metrics a day or two later was fine, as typically we were unable to react fast enough to this data to do anything about it anyway. Now, though, we operate in a world in which many of us can and do push out multiple releases per day."
+	"In such an environment, we need all our metrics at our fingertips to take the right action."
