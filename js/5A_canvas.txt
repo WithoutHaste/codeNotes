@@ -90,5 +90,6 @@ There is not built-in measurement for text height.
 
 <code>
 const imageElement = document.getElementById('myImage');
-context.drawImage(imageElement, x, y);
+context.drawImage(imageElement, x, y); //top-left corner
+context.drawImage(imageElement, x, y, width, height); //can resize image
 </code>
