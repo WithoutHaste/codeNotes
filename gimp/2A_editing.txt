@@ -1,0 +1,18 @@
+## Editing
+
+# Scaling
+
+Image menu > Scale Image
+
+# Transparent Background
+
+select the region with any select tool
+
+> Layer menu > Transparency > Add Alpha Channel
+- this may already be done
+
+> Edit menu > Clear
+- or click Delete
+
+You'll need to save as a PNG, or another format that supports transparent backgrounds
+- JPG does not support transparent backgrounds

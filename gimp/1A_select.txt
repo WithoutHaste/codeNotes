@@ -1,0 +1,11 @@
+## Select
+
+To de-select > Select menu > None
+
+# Magic Wand
+
+click once to select a region of similarly colored pixels
+
+# Lasso
+
+roughly draw the boundaries of a region

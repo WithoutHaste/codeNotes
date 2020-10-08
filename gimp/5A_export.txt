@@ -1,0 +1,3 @@
+## Export
+
+File menu > Export as > type in the file name with the extension you want > complete dialogs
