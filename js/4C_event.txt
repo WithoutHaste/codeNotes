@@ -58,6 +58,16 @@ Capturing: the outer-most element will run first, working inward.
 document.getElementById("myId").addEventListener("click", myEventHandler, useCapture:true);
 </code>
 
+Stop event propagation
+<code>
+event.stopPropagation();
+</code>
+
+Stop default action
+<code>
+event.preventDefault();
+</code>
+
 #Event List
 
 Events not listed elsewhere: 
