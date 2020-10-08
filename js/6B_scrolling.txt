@@ -1,5 +1,24 @@
 ##Scrolling
 
+#ScrollTo
+
+Scrolls page until element is visible.
+<code>
+element.scrollIntoView();
+</code>
+
+<code>
+element.scrollIntoView({ behavior:'auto' }); //jump to position
+element.scrollIntoView({ behavior:'smooth'}); //visibly scroll to position
+</code>
+
+<code>
+element.scrollIntoView({ inline:'center' }); //scroll element to horiztonal-center
+element.scrollIntoView({ block:'center' }); //scroll element to vertical-center
+</code>
+
+#Custom
+
 Examples are based on vertical scrolling.
 
 Event:
