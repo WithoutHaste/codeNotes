@@ -13,3 +13,20 @@ I am reduced to using grep/findstr to verify where an API call or message is bei
 This problem may indicate that the microservices have not been divided correctly. Reorganizing the division of tasks may mean that the microservices to not need to call each other, thereby removing the runtime coupling.
 
 I would only consider this a problem between domain-services.  It is ok for domain-services to be coupled to utility-services (such as a logging service), because utility-services should be very stable.
+
+#Message Bus
+
+Is message bus an anti-pattern?
+
+A message bus or event queue here refers to a system that you publish messages to, and that subscribers can read messages from.  And it is used with microservices to provide asynchronous reactions within your system.
+
+This is good for messages that can arrive out of order and can sometimes be dropped.
+
+This is bad for mission-critical messages.  And that's how I'm seeing it used at multiple companies.
+- What if the messages are processed out of order?
+  - Because one errored out and came back into the queue for a retry behind a later message
+  - Because multiple processes are picking up messages in parallel
+- What if a message errors out the maximum number of times?
+- Why is it so hard to just find out what messages have been sent and responded to?
+
+An earlier iteration of this idea was to add records to a database, queried by subscribers, and updated with responses. What was wrong with that approach? You have long-term records (and data storage is cheap) of exactly what happened in an easy-to-access location.
