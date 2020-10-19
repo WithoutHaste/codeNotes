@@ -727,3 +727,38 @@ Consider the Audience
 The Future
 	"Historically, the idea that we can find out about key business metrics a day or two later was fine, as typically we were unable to react fast enough to this data to do anything about it anyway. Now, though, we operate in a world in which many of us can and do push out multiple releases per day."
 	"In such an environment, we need all our metrics at our fingertips to take the right action."
+
+Chapter 9: Security ===========================================
+
+"We need to think about what protection our data needs while in transit from one point to another, and what protection it needs at rest."
+
+Authentication and Authorization
+	"Authentication is the process by which we confirm that a party is who she says she is." For example, by having them enter their username and password.
+	Principal: who or what has been authenticated
+	"Authorization is the mechanism by which we map from a principal to the action we are allowing her to do."
+	"When it comes to distributed systems...we don't want everyone to have to log in separately for different systems, using a different username and password for each....The aim is to have a single identity that we can authenticate once."
+	
+Common Single Sign-On Implementations (SSO)
+	ex: SAML, OpenID
+	"When a principal tries to access a resource, she is directed to authenticate with an Identity Provider"...Once the Identity Provider is satisfied that the principal has been authenticated, it gives information to the Service Provider, allowing it to decide whether to grant her access to the resource."
+	"This Identity Provider could be an externally hosted system..."
+	Okta is an Identity Provider that uses SAML
+	
+Single Sign-On Gateway
+	"Rather than having each service manage handshaking with your Identity Provider, you can use a Gateway to act as a proxy, sitting between your service and the outside world. The idea is that we can centralize the behavior for redirecting the user and perform the handshake in only one place."
+	"We still need to solve the problem of how the downstream service receives information about principals..."
+	ex: add principal info to HTTP headers
+	"Be careful...Gateway layers tend to take on more and more functionality, which itself can end up being a giant coupling point."
+	
+Fine-Grained Authorization
+	once a user is authenticated, what functionality can they actually access?
+	"These decisions need to be local to the microservice in question."
+	ex: the user is allowed to issue refunds, but only up to $200
+	"Favor coarse-grained roles, modeled around how your organization works. Going all the way back to the early chapters, remember that we are building software to match how our organization works."
+	
+Service-to-Service Authentication and Authorization
+	a principal can be a service, rather than a user
+	"Allow everything inside the perimeter: just assume that any calls to a service made from inside our perimeter are implicitly trusted."
+	- "Should an attacker penetrate your network, you will have little protection against a typical man-in-the-middle attack."
+	- "I worry that the implicit trust model is not a conscious decision, but more that people are unaware of the risks in the first place."
+	"HTTP(S) Basic Authentication: "
