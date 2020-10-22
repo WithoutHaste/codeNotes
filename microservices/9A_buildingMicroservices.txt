@@ -809,3 +809,5 @@ Defense in Depth
 	Operating System:
 	- "Start with only running services as OS users that have as few permissions as possible..."
 	- "Patch your software. Regularly. This needs to be automated..."
+	
+(Lengthy example of security concerns)
