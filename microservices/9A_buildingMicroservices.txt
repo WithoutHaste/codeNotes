@@ -727,3 +727,87 @@ Consider the Audience
 The Future
 	"Historically, the idea that we can find out about key business metrics a day or two later was fine, as typically we were unable to react fast enough to this data to do anything about it anyway. Now, though, we operate in a world in which many of us can and do push out multiple releases per day."
 	"In such an environment, we need all our metrics at our fingertips to take the right action."
+
+Chapter 9: Security ===========================================
+
+"We need to think about what protection our data needs while in transit from one point to another, and what protection it needs at rest."
+
+Authentication and Authorization
+	"Authentication is the process by which we confirm that a party is who she says she is." For example, by having them enter their username and password.
+	Principal: who or what has been authenticated
+	"Authorization is the mechanism by which we map from a principal to the action we are allowing her to do."
+	"When it comes to distributed systems...we don't want everyone to have to log in separately for different systems, using a different username and password for each....The aim is to have a single identity that we can authenticate once."
+	
+Common Single Sign-On Implementations (SSO)
+	ex: SAML, OpenID
+	"When a principal tries to access a resource, she is directed to authenticate with an Identity Provider"...Once the Identity Provider is satisfied that the principal has been authenticated, it gives information to the Service Provider, allowing it to decide whether to grant her access to the resource."
+	"This Identity Provider could be an externally hosted system..."
+	Okta is an Identity Provider that uses SAML
+	
+Single Sign-On Gateway
+	"Rather than having each service manage handshaking with your Identity Provider, you can use a Gateway to act as a proxy, sitting between your service and the outside world. The idea is that we can centralize the behavior for redirecting the user and perform the handshake in only one place."
+	"We still need to solve the problem of how the downstream service receives information about principals..."
+	ex: add principal info to HTTP headers
+	"Be careful...Gateway layers tend to take on more and more functionality, which itself can end up being a giant coupling point."
+	
+Fine-Grained Authorization
+	once a user is authenticated, what functionality can they actually access?
+	"These decisions need to be local to the microservice in question."
+	ex: the user is allowed to issue refunds, but only up to $200
+	"Favor coarse-grained roles, modeled around how your organization works. Going all the way back to the early chapters, remember that we are building software to match how our organization works."
+	
+Service-to-Service Authentication and Authorization
+	a principal can be a service, rather than a user
+1)	"Allow everything inside the perimeter: just assume that any calls to a service made from inside our perimeter are implicitly trusted."
+	- "Should an attacker penetrate your network, you will have little protection against a typical man-in-the-middle attack."
+	- "I worry that the implicit trust model is not a conscious decision, but more that people are unaware of the risks in the first place."
+2)	"HTTP(S) Basic Authentication: allows for a client to send a username and password in a standard HTTP header...This is an extremely well understood and well supported protocol."
+	- should be done over HTTPS, so the login info cannot be read by outsiders
+	- the server will need to manage SSL Certificates
+	- encrypted traffic cannot be cached, so this limits your caching strategies
+3)	"SAML or OpenID Connect: if you are already using [this] as your authentication and authorization scheme, you could just use that for service-to-service interactions, too."
+	- you'll need to carefully structure and manage user credentials so they can be revoked at a granular level
+4)	"Client Certificates: make use of TLS (Transport Layer Security)...Each client has an X.509 certificate installed that is used to establish a link between client and server. The server can verify the authenticity of the client certificate, providing strong guarantees that the client is valid."
+	- more and more certificates are hard to manage
+	- "With all the complexities around the certificates themselves, you can expect to spend a lot of time trying to diagnose why a service won't accept what you believe to be a completely valid certificate."
+	- "Consider the difficulty of revoking and reissuing certificates..."
+5)	"HMAC Over HTTP"
+	- an alternative to HTTPS: HMAC is a hash-based messaging code used to sign requests.
+	- "The body request along with a private key is hashed, and the resulting hash is sent along with the request. The server then uses its own copy of the private key and request body to re-create the hash. If it matches, it allows the request."
+	- requests can be cached...because they are in plain text where anyone can read them
+	- the private key is never revealed, but it does need to be shared between the client and server somehow
+	- hashing may have lower overhead than HTTPS
+	- "This is a pattern, not a standard, and thus there are divergent ways of implementing it...Be aware of the difficulty of getting this stuff right."
+6)	"API Keys: allow a service to identify who is making a call, and place limits on what they can do."
+	- "Some [internal] systems use a single API Key that is shared, and use an approach similar to HMAC...A more common approach is to use a public and private key pair."
+	- "Typically, you'll manage keys centrally...The gateway model is very popular in this space."
+	- "Compared to handling a SAML handshake, API key-baesd authentication is much simpler and more straightforward."
+	
+The Deputy Problem
+	The client makes a request to one service. That service makes a request to a second service. Should the second service just trust calls from inside the system?
+	"There is a typical vulnerability called the Confused Deputy Problem, which in the context of service-to-service communication refers to a situation where a malicious party can trick a deputy service into making calls to a downstream service on his behalf that he shouldn't be able to...For example, as a customer, when I log in to the online shopping system, I can see my account details. What if I could trick the online shopping UI into making a request for someone else's details, by making a call with my logged-in credentials?"
+	1) implicit trust
+	2) check if the caller (by pre-authenticated identity) is allowed to make this request
+	3) pass the full login information along
+	
+Securing Data at Rest
+	It's important to secure persisted data as well.
+	"The easiest way you can mess up data encryption is to try to implement your own encryption algorithms, or even try to implement someone else's...Whatever programming language you use, you'll have access to reviewed, regularly patched implementations of well-regarded encryption algorithms. Use those!"
+	"Subscribe to the mailing lists/advisory lists for the technology you choose to make sure you are aware of vulnerablities..."
+	Encrypt sensitive data
+	Salt and hash passwords
+	Where to store the encryption key? "One solution is to use a separate security appliance to encrypt and decrypt data. Another is to use a separate key vault that your service can access when it needs a key."
+	Consider what data can appear in log files
+	"Encrypt data when you first see it. Only decrypt on demand, and ensure that data is never stored anywhere."
+	You're backups need to be as secured as the main database. Make sure you know which encryption key applies to which backup.
+	
+Defense in Depth
+	Firewalls: network traffic restrictions, "looks outward to stop bad things from getting in"
+	Logging: "can help with detecting and recovering from [attacks]"
+	IDS: Intrusion Detection System: "monitor networks and hosts for suspicious behavior, reporting problems when it sees them...actively looks inside the perimeter for suspect behavior..."
+	Network Segregation: "you can put [microservices] into different network segments to further control how services talk to each other."
+	Operating System:
+	- "Start with only running services as OS users that have as few permissions as possible..."
+	- "Patch your software. Regularly. This needs to be automated..."
+	
+(Lengthy example of security concerns)

@@ -173,3 +173,10 @@ print(y) #[2, 3, 3, 6, 7, 9]
 z = sorted(x, key=lambda s:a[s]) #can specify sort key
 print(z) #[9, 1, 3, 3, 2, 7, 6]
 </code>
+
+#Object
+
+Return a list of string-names of all the methods and properties of an object
+<code>
+x = dir(myObject)
+</code>
