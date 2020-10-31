@@ -1,0 +1,32 @@
+##Key Vault
+
+Azure secrets manager
+"Azure Key Vault is a cloud service used to manage keys, secrets, and certificates."
+
+In Azure Portal, search for "Key Vault" to add one
+
+You cannot edit secrets from the Azure Portal; use the CLI instead.
+
+Once you create secrets, you can see the secret names in Azure Portal > your Key Vault > Secrets
+
+Grant your App Services access to the Key Vault.
+- Key Vault > Access Policies > Search for your web app by its name and add it the same way you grant users access
+
+#CLI
+
+https://docs.microsoft.com/en-us/cli/azure/keyvault?view=azure-cli-latest
+
+List all key vaults
+<code>
+az keyvault list
+</code>
+
+Add a secret
+<code>
+az keyvault secret set --vault-name "vault name" --name "secret name" --value "secret value"
+</code>
+
+View a secret
+<code>
+az keyvault secret show --vault-name "vault name" --name "secret name"
+</code>

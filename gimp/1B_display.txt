@@ -1,0 +1,7 @@
+##Display
+
+#Grid
+
+View menu > Show Grid > will display the grid on this image
+
+Image menu > Configure Grid > set the grid size for this image

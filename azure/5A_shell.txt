@@ -1,0 +1,9 @@
+##Azure Cloud Shell (CLI)
+
+https://shell.azure.com/ will run from the browser
+
+#Login
+
+<code>
+az login
+</code>

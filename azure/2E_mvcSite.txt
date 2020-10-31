@@ -1,0 +1,13 @@
+##MVC Site
+
+#Upload To Azure
+
+MVC Sites used to be published as "Web Sites" but are now published as "App Services".
+
+Assumes you already have the MVC Site and an Azure account.
+
+1) Create the new AppService on your Azure account OR use the Publish dialog to create it
+
+2) open the project in Visual Studio > right-click project in Solution Explorer > Publish
+- select "App Service"
+- for new Apps, set the App Name and select from existing Subscriptions, Resource Groups, and Hosting Plans

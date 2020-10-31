@@ -12,6 +12,18 @@ To create a SQL database hosted on Azure:
 4) Create
 5) Wait for the backend processes to set up your database
 
+#Firewall Access
+
+By default, an Azure database is not available publicly.
+
+To edit Azure Server Firewall rules
+- go to Azure Portal > go to the database > Set Server Firewall
+- OR open SSMS > try to connect to the Azure database > in the New Firewall Rule popup, log into Azure > use the popup to setup the Firewall rule
+
+It is recommended to only allow administrators this access
+
+To set database-specific firewall rules, you must first enable the server-level firewall access and then use T-SQL to setup the database rules.
+
 #Add User
 
 Log into the Azure database with SSMS.

@@ -34,3 +34,64 @@ public ActionResult MyAction()
 	string setting = ConfigurationManager.AppSettings["myKey"];
 }
 </code>
+
+#Debug vs Release
+
+Web.config hierarchies support transformations. This makes it easy to define a template configuration, and override parts of it (such as connection strings) when compiling as Debug or Release.
+
+Add to your project:
+- app.template.config
+- app.config (or Web.config)
+- app.debug.config
+- app.release.config
+
+Put all your configuration into app.template.config
+Put the mode-specific transformations into app.debug.config and app.release.config
+When you build, app.config will be overwritten with the appropriate settings
+
+Edit Project.csproj:
+<code lang="xml">
+<!-- add below the last PropertyGroup -->
+<PropertyGroup>
+  <ProjectConfigFileName>App.config</ProjectConfigFileName>
+</PropertyGroup>
+
+<!-- modify the ItemGroup that includes app.config files -->
+<ItemGroup>
+   <None Include="App.config" />
+   <None Include="App.Debug.config">
+     <DependentUpon>App.config</DependentUpon>
+   </None>
+   <None Include="App.Release.config">
+     <DependentUpon>App.config</DependentUpon>
+   </None>
+</ItemGroup>
+
+<!-- add below the last Import tag -->
+<!-- verify which version number you have installed -->
+<Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.targets" />
+
+<!-- add just before the end of Project tag -->
+<Target Name="BeforeBuild">
+    <TransformXml Source="Web.template.config" Transform="Web.$(Configuration).config" Destination="Web.config" />
+</Target>
+</code>
+
+Example of overriding a lower-level setting based on the tag name
+<code lang="xml">
+<connectionStrings>
+  <add name="MyDB" 
+	connectionString="Data Source=ReleaseSQLServer;Initial Catalog=MyReleaseDB;Integrated Security=True" 
+	xdt:Transform="SetAttributes" xdt:Locator="Match(name)"/>
+</connectionStrings>
+</code>
+
+Example of replacing a section of the config
+<code lang="xml">
+<customErrors 
+		defaultRedirect="GenericError.htm"
+        mode="RemoteOnly" 
+		xdt:Transform="Replace">
+    <error statusCode="500" redirect="InternalError.htm"/>
+</customErrors>
+</code>
