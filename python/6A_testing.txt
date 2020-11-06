@@ -189,3 +189,25 @@ class MyTests(unittest.TestCase):
 </code>
 Each iteration will be reported as a unique test, specifying the arguments used.
 Even if one iteration fails, all the iterations in the method will be run.
+
+#Pytest
+
+run all tests recursive-within directory
+<code>
+pytest path/folder
+</code>
+
+run all tests in file
+<code>
+pytest path/folder/file.py
+</code>
+
+run all tests that contain this string in the method name
+<code>
+pytest path/folder/file.py::this_string
+</code>
+
+run all tests that contain this string in the method name, with these parameters filled in
+<code>
+pytest path/folder/file.py::this_string[4]
+</code>
