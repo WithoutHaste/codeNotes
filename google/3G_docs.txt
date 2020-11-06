@@ -1,0 +1,8 @@
+##Docs
+
+#Smart Quotes
+
+Smart Quotes are when your normal " characters are replaced with “ and ”
+
+To turn this off
+Tools menu > Preferences > toggle-off Smart Quotes
