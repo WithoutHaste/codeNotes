@@ -69,7 +69,7 @@ Edit Project.csproj:
 
 <!-- add below the last Import tag -->
 <!-- verify which version number you have installed -->
-<Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.targets" />
+<Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v15.0\Web\Microsoft.Web.Publishing.targets" />
 
 <!-- add just before the end of Project tag -->
 <Target Name="BeforeBuild">

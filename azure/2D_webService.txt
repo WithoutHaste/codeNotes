@@ -124,3 +124,26 @@ If you already have your service ready to upload, you can do all the Quick Creat
 10) for User Credentials, the username format is "appName\userName"
 - enter User Credentials
 11) In Visual Studio > right-click on project > Publish
+
+Possible error: the publish succeeded but navigating to the page shows message "Your app service is up and running. Time to take the next step and deploy your code."
+- One recommendation was to go to Azure Portal > your App Service > Configuration > Default Documents > and make sure your default page in the list, above "hostingstart.html".  This did not work for me. But saving changes to Default Document caused the service to restart and it started working.
+- Another said "In my case the app was failing to start up due to an unhandled exception thrown in my startup code."
+
+#Connection Strings
+
+Azure Portal > your App Service > Configuration > Connection Strings
+
+These connection strings will override the ones in your Web.config, based on the connection string name.
+
+You can verify the connection string in the code with
+<code>
+using System.Configuration; //include reference in project
+
+return ConfigurationManager.ConnectionStrings["ConnectionStringName"].ConnectionString;
+</code>
+
+You'll need to give this service access through the database's firewall.
+- Get you App Service IP Address as Azure Portal > your App Service > Properties > Virutal IP Address
+- go to Azure Portal > SQL Server (not the database resource) > Security > Firewalls And Virtual Networks
+- add a firewall rule for the App Service IP Address > Save Changes
+It may take a few minutes for this change to take affect.

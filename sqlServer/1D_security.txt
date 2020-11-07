@@ -13,3 +13,24 @@ USER()
 SUSER_ID()
 HOST_NAME()
 </code>
+
+#New User
+
+Create a login at the server level
+<code>
+CREATE LOGIN my_login WITH PASSWORD = 'my_password' 
+</code>
+
+Create a user at the database level
+<code>
+CREATE USER my_user
+	FOR LOGIN my_login
+	WITH DEFAULT_SCHEMA = dbo
+GO
+
+EXEC sp_addrolemember 'db_datareader', 'my_user';
+</code>
+
+If you run into this error
+"The server principal "my_login" is not able to access the database "master" under the current security context. Cannot open user default database. Login failed."
+This means that you need to specify the default database in your connection string.
