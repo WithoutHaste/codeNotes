@@ -12,6 +12,10 @@ Once you create secrets, you can see the secret names in Azure Portal > your Key
 Grant your App Services access to the Key Vault.
 - Key Vault > Access Policies > Search for your web app by its name and add it the same way you grant users access
 
+#Alternatives
+
+If you just need to protect your connection strings, use Azure Portal > your App Service > Configuration > Connection Strings
+
 #CLI
 
 https://docs.microsoft.com/en-us/cli/azure/keyvault?view=azure-cli-latest
