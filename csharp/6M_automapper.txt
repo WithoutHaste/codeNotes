@@ -39,6 +39,23 @@ var mapper = new MyMapperProfile();
 return mapper.Map<SomeType>(response);
 </code>
 
+Ex usage:
+<code>
+var config = new MapperConfiguration(cfg => {
+    cfg.AddProfile<MyProfile>();
+    cfg.CreateMap<ModalA, ModelB>();
+});
+</code>
+
+Ex usage:
+<code>
+var config = new MapperConfiguration(cfg => {
+	cfg.CreateMap<ModelA, ModelB>();
+});
+IMapper iMapper = config.CreateMapper();
+var myModelB = iMapper.Map<ModelA, ModelB>(myModelA);
+</code>
+
 #Pros
 
 For 1-to-1 mappings where all the property names match perfectly, it saves you writing boiler plate code.
