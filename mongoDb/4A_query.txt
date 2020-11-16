@@ -32,6 +32,11 @@ Sort by age descending:
 db.collection.find().sort( { age: -1 } )
 </code>
 
+If you get an "exceeded memory limit" then add a limit to the number of results:
+<code>
+db.collection.find().sort( { age: -1 } ).limit(50)
+</code>
+
 #String Operations
 
 String minus last two characters:
