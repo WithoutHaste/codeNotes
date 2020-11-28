@@ -41,4 +41,7 @@ WITH DEFAULT_SCHEMA = dbo;
 -- must be in your database to alter ROLES for USER
 ALTER ROLE db_datareader ADD MEMBER [test]; 
 ALTER ROLE db_datawriter ADD MEMBER [test];
+
+--grant execute permission for specific stored procedures
+GRANT EXEC ON dbo.OBJECT_NAME TO [test];
 </code>

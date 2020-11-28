@@ -147,3 +147,30 @@ You'll need to give this service access through the database's firewall.
 - go to Azure Portal > SQL Server (not the database resource) > Security > Firewalls And Virtual Networks
 - add a firewall rule for the App Service IP Address > Save Changes
 It may take a few minutes for this change to take affect.
+
+#Domain Name
+
+I'm able to use WcfTestClient to connect to my Azure service, but my Azure site cannot connect to it. No help so far from Stackoverflow on how that can happen.
+![stackoverflow question](https://stackoverflow.com/questions/64733725/azure-wcf-service-is-reachable-with-wcftestclient-but-not-through-the-browser-o)
+So I'm setting up both service and site with a domain name.
+
+![azure domain name documentation](https://docs.microsoft.com/en-us/azure/app-service/app-service-web-tutorial-custom-domain)
+- Get a domain name
+- Have your Azure service(s) set up on a paid tier
+- Prove you own the domain and map the CNAME record so aliases resolve
+- Add CNAME domain as a Custom Domain on the Azure service
+- Map the A record so the ip address resolves
+- Add A domain as a Custom Domain on the Azure service
+- Wait an hour or two for all the DNS servers to get updated
+
+You can't map the same domain names (or aliases) to multiple services/sites. So I did the following:
+- CNAME "service.domainname.com" points to "domainname.com"
+- "service.domainname.com" is mapped to service
+- CNAME "www.domainname.com" points to "domainname.com"
+- "www.domainname.com" and "domainname.com" are mapped to site
+- A "@.domainname.com" points to the ip address of service/site (same ip address)
+
+It took most of a day for all the DNS records to get updated so this would all work
+
+This is a useful tool for checking what DNS servers have received your updates:
+![dns checker](https://www.whatsmydns.net/)
