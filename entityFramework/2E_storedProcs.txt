@@ -195,3 +195,8 @@ finally
 
 return result;
 </code>
+
+To have these objects managed by Entity Framework
+<code>
+.Translate<ShelfBookLink>(reader, "EntitySetName", MergeOptions.AppendOnly)
+</code>
