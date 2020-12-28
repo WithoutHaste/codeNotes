@@ -69,6 +69,7 @@ for(var i=0; i<element.children.length; i++)
 	var child = element.children[i];
 }
 </code>
+You cannot use Array function "foreach" on an HTMLCollection.
 
 Add child:
 <code>
