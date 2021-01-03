@@ -28,7 +28,7 @@ async function ajax(options) {
 		else {
 			let formData = new FormData();
 			Object.entries(options.data).forEach(([key, value], index) => {
-				formData.append(key, value);
+				buildFormData(formData, key, value);
 			});
 			xhr.send(formData);
 		}
@@ -40,6 +40,18 @@ async function ajax(options) {
 			queryString += encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&"
 		});
 		return queryString;
+	}
+	
+	function buildFormData(formData, key, value) {
+		let entries = Object.entries(value);
+		if (entries.length == 0 || typeof(value) == 'string') {
+			formData.append(key, value);
+		}
+		else {
+			entries.forEach(([sub_key, sub_value], index) => {
+				buildFormData(formData, key+'['+sub_key+']', sub_value);
+			});
+		}
 	}
 
 	function onReadyStateChange() {
