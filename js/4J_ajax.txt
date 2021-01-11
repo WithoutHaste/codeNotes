@@ -36,6 +36,8 @@ async function ajax(options) {
 
 	function buildQueryString(data) {
 		let queryString = "";
+		if(data == undefined)
+			return queryString;
 		Object.entries(data).forEach(([key, value], index) => {
 			queryString += encodeURIComponent(key) + "=" + encodeURIComponent(value) + "&"
 		});
