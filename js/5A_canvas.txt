@@ -11,6 +11,10 @@ JS
 <code>
 var canvas = document.getElementById('myCanvas');
 var context = canvas.getContext('2d');
+
+canvas.setAttribute('width', 400);
+canvas.setAttribute('height', 800);
+//do not use canvas.style.width or canvas.style.height - this will not work as expected
 </code>
 
 #Styles
@@ -84,7 +88,7 @@ context.fillText(elementId, 10, 10);
 var textWidth = context.measureText(text).width;
 </code>
 
-There is not built-in measurement for text height.
+There is no built-in measurement for text height.
 
 #Images
 
