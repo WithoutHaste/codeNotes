@@ -32,10 +32,13 @@ Sort by age descending:
 db.collection.find().sort( { age: -1 } )
 </code>
 
-If you get an "exceeded memory limit" then add a limit to the number of results:
+#Limit
+
+Return just the first X records.
 <code>
 db.collection.find().sort( { age: -1 } ).limit(50)
 </code>
+If sort gives you an "exceeded memory limit" then add a limit to the number of results.
 
 #String Operations
 
@@ -114,7 +117,19 @@ Group by:
 Start with the group by id, then add as many aggregations as you want.
 <code>
 db.getCollection('Customers').aggregate([
+    { $group: { _id: "$idField", arrayA: { $addToSet: { "fieldA":"$aValue", "fieldB":"$bValue" } } } }
+])
+</code>
+
+"addToSet" creates an array of unique values
+<code>
+db.getCollection('Customers').aggregate([
     { $group: { _id: "$idField", arrayA: { $addToSet: "$aField" }, arrayB: { $addToSet: "$bField" } } }
 ])
 </code>
-"addToSet" creates an array of unique values
+
+AddField:
+Add a new field to the documents
+<code>
+{ $addFields: { <newField>: <expression>, ... } }
+</code>
