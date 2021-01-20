@@ -1,0 +1,11 @@
+# Patterns
+
+## Differentiation
+
+(I don't know if there is an industry term for this.)
+
+When filling in mock or dummy data, make each field value as distinct from the others as possible. For example, set all integer values to different integers.
+
+Benefits:
+- easier for a human to visually scan the data
+- more likely to reveal errors such as mapping the wrong field
