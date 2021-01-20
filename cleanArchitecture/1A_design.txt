@@ -30,6 +30,6 @@ You've got a mess. Should you restart from scratch, or do gradual refactoring?
 If you made a mess once, you'll do again, because your habits haven't changed.
 Implied that going through refactoring will teach you better habits.
 
-From my own experience: 
+(From my own experience)
 We lost knowledge of many edge cases when we restarted a code base from scratch - those edge cases had to be rediscovered as bugs, gradually.
 We also grossly underestimated the time it would take to get a new, minimum product up and running.

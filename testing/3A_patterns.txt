@@ -1,6 +1,6 @@
-# Patterns
+##Patterns
 
-## Differentiation
+#Differentiation
 
 (I don't know if there is an industry term for this.)
 
