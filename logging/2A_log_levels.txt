@@ -1,0 +1,11 @@
+##Log Levels
+
+#What Level To Log At
+
+Error Level: things that require human intervention.
+
+Warning Level: things that went wrong, but do not require human intervention.
+
+Information Level: normal operations
+
+Debug Level: highly detailed logs for specific use cases that are currently under scrutiny

@@ -2,10 +2,41 @@
 
 #Differentiation
 
-(I don't know if there is an industry term for this.)
-
 When filling in mock or dummy data, make each field value as distinct from the others as possible. For example, set all integer values to different integers.
 
 Benefits:
 - easier for a human to visually scan the data
 - more likely to reveal errors such as mapping the wrong field
+
+#Common Initialization
+
+When writing a test suite, write a method that constructs a new, full, valid object.
+Let each test use this method to create its own instantiation of the object, and make just the edits needed to setup this test case.
+
+#Scenario Builder
+
+Create a ScenarioBuilder class for the test suite of one class.
+
+The ScenarioBuilder will contain methods for setting up the test cases and verifying the results. This makes it easy to put a business-legible label (the method name) on each unit of setup and verification code. This is especially useful when using mocks, which require repetitive setup and verification calls.
+
+Each test will instantiate its own ScenarioBuilder to keep the tests isolated from each other.
+
+Write the setup methods so you can use Method Chaining (i.e. have each setup method return the ScenarioBuilder itself). This makes the test cases easy to read.
+Ex:
+<code>
+public void Test_UseCase()
+{
+	var customerResponse = ...
+	var orderResponse = ...
+	var databaseResponse = ...
+	var scenarioBuilder = 
+		new ScenarioBuilder()
+		.WithCustomer(customerResponse)
+		.WithOrder(orderResponse)
+		.WithDBUpdate(databaseResponse)
+		
+	var result = scenarioBuilder.RunUseCase();
+	
+	scenarioBuilder.VerifyResult(result);
+}
+</code>
