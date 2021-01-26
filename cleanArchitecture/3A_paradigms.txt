@@ -13,7 +13,7 @@ The good uses of "goto" followed the patterns of sequencing, selection, and iter
 
 The "goto" statement was replaced with "if/then/else" and "do/while/until" constructs.
 
-Structured programming supports testability by limited programmers to creating provable functions.
+Structured programming supports testability by limiting programmers to creating provable functions.
 
 #Object-Oriented Programming
 
@@ -27,12 +27,14 @@ Martin discusses "What is the defining feature of object-oriented programming?"
 1) The combination of data and functions? No, because there is no intrinsic difference between Object.Function() and Function(Object).
 2) A way to model the real world? No, too vague to mean anything.
 3) Encapsulation, inheritance, and polymorphism?
-    3a) Encapsulation? No, C already had perfect encapsulation, which C++ and C# have strayed further from (due to technical compiler reasons). Many newer OO languages don't enforce strong encapsulation at all.
+	3a) Encapsulation? No, C already had perfect encapsulation, which C++ and C# have strayed further from (due to technical compiler reasons). Many newer OO languages don't enforce strong encapsulation at all.
 	3b) Inheritance? No, C could do inheritance manually already. (See technical explanation.) OO languages do make it easier to do this, though.
 	3C) Polymorphism? Polymorphism is an application of pointers to functions (the function call goes to a lookup table to see which function will actually be run). This was being done back in the 1940s manually, but OO languages formalize and automate the tricky bits, making it much easier and safer for the programmers.
 (His point seems to be that OO languages make several techniques easier and more disciplined than programming them all manually.)
 
-Why is polymorphism so important? Because it enables plug-in architectures. Example: in UNIX, writing to STDOUT could go anywhere depending on what device is currently set as STDOUT. These devices must all implement a standard interface, so everyone program writing to STDOUT uses the same command, but what actually happens depends on the device implementation.
+Martin settles on language/compiler enforced polymorphism as the core of Object-Oriented languages.
+
+Why is polymorphism so important? Because it enables plug-in architectures. Example: in UNIX, writing to STDOUT could go anywhere depending on what device is currently set as STDOUT. These devices must all implement a standard interface, so every program writing to STDOUT uses the same command, but what actually happens depends on the device implementation. A program calling "write" is not recompiled when you plug in a new STDOUT device.
 
 Device independence: your program doesn't know what device it is writing out to, because all the devices implement the same interface. So your program can work with any device that implements that interface. Your program is more reusable than one that is tightly tied to a particular device.
 
