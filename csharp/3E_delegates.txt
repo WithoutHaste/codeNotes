@@ -31,6 +31,26 @@ static void Square(int i, string s)
 }
 </code>
 
+Wrapper functions:
+<code>
+ErrorHandler(() => {
+    throw new Exception("error");
+});
+
+public static void ErrorHandler(Action code)
+{
+    try
+    {
+        code?.Invoke();
+    }
+    catch
+    {
+        Console.WriteLine("Error handling");
+        throw;
+    }
+}
+</code>
+
 #Func
 
 A func is a delegate that returns a value.
