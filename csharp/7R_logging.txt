@@ -1,4 +1,4 @@
-#Logging
+##Logging
 
 How to use Microsoft.Extensions.Logging.Abstractions.dll
 
@@ -17,7 +17,7 @@ public class MyClass
 !![rsuster blog](https://blog.rsuter.com/logging-with-ilogger-recommendations-and-best-practices/)
 !![nblumhardt blog](https://nblumhardt.com/2016/08/serialized-data-structured-logging-concepts-in-net-6/)
 
-##Structured Logs
+#Structured Logs
 
 aka Semantic Logs
 The fields and their placeholders are sent in separately. This allows the logging tool to display each field separately.
@@ -41,7 +41,7 @@ You should build up a list of constant log entry property (placeholder) names fo
 
 Some object types will show up in Seq with their complete structure and data intact. (ex: Dictionary) This is due to custom handling in Serilog. Most object types will default to their ToString() value (which defaults to the fully qualified name of the class).
 
-##Structure-Capturing Operator
+#Structure-Capturing Operator
 
 "@" is the structure-capturing operator.
 Place @ before the placeholder name.
@@ -54,7 +54,7 @@ Now all objects will be sent with their full structure and data, instead of some
 
 Note that this does not work on anonymous objects.
 
-##Destructuring
+#Destructuring
 
 "Destructuring" is the step where an object is converted into a logged property.
 
@@ -91,7 +91,7 @@ Log.Logger = new LoggerConfiguration()
 
 See Destructurama for more interesting plug-ins for Serilog.
 
-##Exceptions
+#Exceptions
 
 To log an exception, always pass the exception object as first argument:
 <code>
@@ -100,7 +100,7 @@ logger.LogWarning(exception, "An exception occurred")
 
 The formatting and storage is exception specific if you use the correct method overload.
 
-##Scopes
+#Scopes
 
 Use scopes to transparently add custom properties to all logs in a given execution context.
 

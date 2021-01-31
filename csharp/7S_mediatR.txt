@@ -1,4 +1,4 @@
-# MediatR Library
+## MediatR Library
 
 MediatR is a .Net library for the Mediator Pattern.
 - "MediatR is essentially a library that allows in process messaging – which in turn allows you to follow the Mediator Pattern."
@@ -9,7 +9,7 @@ MediatR can be set to
 
 ![Dot Net Core Tutorials](https://dotnetcoretutorials.com/2019/04/30/the-mediator-pattern-part-3-mediatr-library/)
 
-## Getting Started
+# Getting Started
 
 Install Nuget packages
 - MediatR
@@ -100,7 +100,7 @@ public class HomeController : ControllerBase
 }
 </code>
 
-## Behaviors
+# Behaviors
 
 ![MediatR Behaviors](https://github.com/jbogard/MediatR/wiki/Behaviors)
 
