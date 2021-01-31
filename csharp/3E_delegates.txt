@@ -37,11 +37,16 @@ ErrorHandler(() => {
     throw new Exception("error");
 });
 
-public static void ErrorHandler(Action code)
+public static void ErrorHandler(Action operation)
+{
+	ErrorHandler<int>(() => { operation(); return 0; });
+}
+
+public static T ErrorHandler<T>(Func<T> operation)
 {
     try
     {
-        code?.Invoke();
+        return operation.Invoke();
     }
     catch
     {
