@@ -1,4 +1,4 @@
-##Unit Testing
+##MSTest Testing
 
 General setup
 <code>
@@ -84,6 +84,24 @@ public void TestMethod()
 	//assign
 	//act
 	//exception expected instead of assert
+}
+</code>
+
+#DataTestMethod
+
+Run the same test with different inputs:
+<code>
+using Microsoft.VisualStudio.TestTools.UnitTesting; //from Microsoft.VisualStudio.TestPlatform.TestFramework.dll
+
+[DataTestMethod]
+[DataRow(-1)]
+[DataRow(0)]
+[DataRow(1)]
+public void MyTest(int value)
+{
+	var result = Operation(value);
+
+    Assert.IsFalse(result);
 }
 </code>
 
