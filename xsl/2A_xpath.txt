@@ -92,6 +92,7 @@ Predicates are conditions added to the end of selectors. They are always inside 
 [@lang='en'] = elements with a lang='en' attribute defined
 [price > 35] = element has a direct child called price, and its value is greater than 35
 [starts-with(.,'Ubuntu')] = element has inner text that starts with this string
+[text()='exact text'] = element has inner text that exactly matches this string
 
 Operators: + - * div = != < <= > >= or and mod
 
