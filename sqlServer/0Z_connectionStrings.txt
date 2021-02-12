@@ -1,0 +1,14 @@
+#Connection Strings
+
+![SQL Server Connection Strings](https://www.connectionstrings.com/sql-server/)
+
+##.Net Framework Data Provider for SQL Server
+
+<code>
+//Standard
+Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;
+Server=myServerAddress,port;Database=myDataBase;User Id=myUsername;Password=myPassword;
+
+//Trusted Connection
+Server=myServerAddress;Database=myDataBase;Trusted_Connection=True;
+</code>

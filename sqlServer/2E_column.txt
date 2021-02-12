@@ -1,5 +1,16 @@
 ##Column Constraints
 
+#NOCHECK
+
+WITH NOCHECK vs WITH CHECK are applicable to both the CHECK constraint type and the FOREIGN KEY constraint type.
+
+These arguments specify whether, when you re-enable a constraint, all existing data should now be checked against the constraint.
+
+To change the argument:
+<code>
+ALTER TABLE table_name CHECK CONSTRAINT constraint_name; 
+</code>
+
 #NOT NULL
 
 Column cannot contain a NULL value.
@@ -28,6 +39,16 @@ If the constraint is added on its own, it can reference any value in the current
 If the constraint is added in-line with its column, it can only reference that column.
 
 Naming convention: "CHK_TableName_ColumnName".
+
+To see an overview of all you CHECK type constraints:
+<code>
+SELECT 
+  name,
+  is_disabled,
+  is_not_trusted, /*enabled but WITH NOCHECK*/
+  definition
+FROM sys.check_constraints;
+</code>
 
 #DEFAULT
 
@@ -117,6 +138,11 @@ CREATE TABLE myTable (
 );
 </code>
 
+List all primary keys:
+<code>
+SELECT * FROM sys.key_constraints
+</code>
+
 #FOREIGN KEY
 
 Defines a relationship between two tables.
@@ -143,6 +169,17 @@ CREATE TABLE secondTable (
 	fkId INT,
 	CONSTRAINT FK_secondTable_firstTable FOREIGN KEY (fkId) REFERENCES firstTable (Id)
 );
+</code>
+
+List all foreign keys:
+<code>
+SELECT * FROM sys.foreign_keys
+</code>
+
+Re-enable a foreign key constraint AND force it to CHECK all values now:
+<code>
+ALTER TABLE table_name
+WITH CHECK CHECK CONSTRAINT constraint_name
 </code>
 
 #SPARSE
