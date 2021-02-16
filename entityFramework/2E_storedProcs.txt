@@ -147,8 +147,23 @@ public class MyContext : DbContext
 		return Database.SqlQuery<MyOutput>("exec MyStoredProcedure @id", idParameter).ToList<MyOutput>();
 	}
 }
+</code>
 
-Something to watch out for: mapping these results to an existing Entity type will work, but that entity's navigation properties will default to null.
+Note that mapping these results to an existing Entity type will work, but that entity's navigation properties will default to null.
+
+#ExecuteCommand
+
+Execute sql without expecting data back:
+<code>
+public class MyContext : DbContext
+{
+	public void MyMethod(int? id)
+	{
+		SqlParameter idParameter = new SqlParameter("Id", (object)id ?? DBNull.Value);
+
+		return Database.ExecuteSqlCommand("exec MyStoredProcedure @id", idParameter);
+	}
+}
 </code>
 
 #Multiple Result Sets
