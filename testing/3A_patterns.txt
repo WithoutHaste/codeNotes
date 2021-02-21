@@ -1,6 +1,6 @@
 ##Patterns
 
-#Differentiation
+#Value Differentiation
 
 When filling in mock or dummy data, make each field value as distinct from the others as possible. For example, set all integer values to different integers.
 
@@ -40,3 +40,11 @@ public void Test_UseCase()
 	scenarioBuilder.VerifyResult(result);
 }
 </code>
+
+# Test-per-Case vs Test-per-Setup
+
+A consideration for slower tests.
+
+Test-per-Case: One test per use case. This isolates the errors.
+
+Test-per-Setup: One test per setup (or initialize), then performs several different use case tests. This saves time when the setup is slow.

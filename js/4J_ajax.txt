@@ -17,7 +17,10 @@ async function ajax(options) {
 
 	if (options.type.toLowerCase() == "get") {
 		let queryString = buildQueryString(options.data);
-		xhr.open(options.type, options.url+"?"+queryString);
+		let url = options.url;
+		if (queryString.length > 0)
+			url += "?" + queryString;
+		xhr.open(options.type, url);
 		xhr.send();
 	}
 	else {
