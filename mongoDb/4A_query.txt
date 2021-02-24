@@ -21,9 +21,14 @@ db.getCollection('MyCollection').find({"myField": UUID("12345678-1234-1234-1234-
 
 Where field exists:
 <code>
-db.getCollection('MyCollection').find({"myObject.myField":{"$exists": true}})
+db.getCollection('MyCollection').find({"myObject.myField":{$exists: true}})
 </code>
 If any link in the path to the field does not exist, then the field does not exist.
+
+And
+<code>
+db.getCollection('MyCollection').find({$and: [{"myFieldA": "A"}, {"myFieldB": "B"}])
+</code>
 
 #Sort
 
