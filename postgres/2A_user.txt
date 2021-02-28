@@ -1,0 +1,13 @@
+## Users
+
+# Create
+
+<code>
+CREATE USER <user_name> WITH
+  LOGIN
+  NOSUPERUSER
+  INHERIT
+  NOCREATEDB
+  NOCREATEROLE
+  NOREPLICATION;
+</code>

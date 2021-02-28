@@ -1,0 +1,37 @@
+## Migrate from MSSQL
+
+![End Point blog](https://www.endpoint.com/blog/2019/01/23/migrate-from-sql-server-to-postgresql)
+
+# Schema Migration
+
+(1)
+Export full database schema from MSSQL with "Generate Scripts".
+- "Types of data to export" = "Schema Only"
+
+(2)
+Convert schema to Postgres
+- "sqlserver2pgsql" is one tool for this
+
+<code>
+git clone https://github.com/dalibo/sqlserver2pgsql.git
+cd sqlserver2pgsql
+perl sqlserver2pgsql.pl -f {mssql_file.sql} -b run_first.sql -a run_second.sql -u schema_unsure.sql
+</code>
+run_first.sql will contain table definitions.
+run_second.sql will contain constraint definitions.
+Review schema_unsure.sql for anything to handle manually.
+
+(3)
+Load postgres schemas into empty database.
+
+<code>
+psql -U {user_name} -p 5432 -h localhost -d {database_name} -f run_first.sql
+
+psql -U {user_name} -p 5432 -h localhost -d {database_name} -f run_second.sql
+</code>
+
+# Data Migration
+
+Pentaho Data Integration (PDI) community edition is one tool for this. It will establish a connection to the source and destination databases and handle all data transfer and data type conversions.
+
+(continue from article)
