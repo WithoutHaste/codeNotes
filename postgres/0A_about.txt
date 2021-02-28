@@ -1,0 +1,5 @@
+## About
+
+"Postgres" is the service.
+
+"psql" is the command-line client.
