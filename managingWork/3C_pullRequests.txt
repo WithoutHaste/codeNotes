@@ -1,0 +1,10 @@
+##Pull Requests / Peer Review
+
+Split up work such that each PR is small and focused. This makes the review easier to complete.
+
+This is especially important when refactoring. Refactoring PRs are vulnerable to falling into merge-update-review cycles.
+1) You finish the refactor and post the PR.
+2) Before the PR is approved, other devs check changes into Master.
+3) You merge the changes into your branch, and have to integrate your refactors into those changes.
+4) You have to run all tests again, and the PR needs to be re-reviewed.
+Back to step (2)
