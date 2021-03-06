@@ -1,0 +1,56 @@
+##Keyboard
+
+"a" => alif ا
+"b" => ba ب
+"t" => ta ت
+"z" => tha ث
+"j" => jeem ج
+"h" => hha ح
+"K" => kha خ
+"d" => dal د
+"D" => thal ذ
+"r" => ra ر
+"z" => zay ز
+"s" => seen س
+"S" => sheen ش
+"c" => saad ص
+"C" => daad ض
+"p" => toh ط
+"P" => thoh ظ
+"'" => ayn ع
+"g" => ghayn غ
+"f" => fa ف
+"q" => qaf ق
+"k" => kaf ك
+"l" => lam ل
+"m" => meem م
+"n" => noon ن
+"H" => ha ه
+"w" => wow و
+"y" => ya ي
+
+"x" => ? ء
+"T" => ? ة
+"F" => ? ڤ
+"G" => ? ڠ
+"J" => ? چ
+"N" => ? ڽ
+"O" => ? ئ
+"V" => ? ۏ
+"W" => ? ؤ
+"X" => ? ڬ
+"Y" => ? ى
+
+#Diacritical Marks
+
+"u" => dhomma ﺎُ
+"uu" => dhammatan ﺎٌ
+"U" => inverted dhomma ﺎٗ
+"e" => fathha ﺎَ
+"ee" => fathatan ﺎً
+"i" => kasra ﺎِ
+"ii" => kasratan ﺎٍ
+"o" => sukun ﺎْ
+"v" => shadda ﺎّ
+"<" => hazma above ﺎٔ
+">" => hazma below ﺎٕ
