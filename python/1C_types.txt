@@ -477,3 +477,30 @@ Collections have a maximum size.
 import sys
 print(sys.maxsize)
 </code>
+
+#DateTime
+
+<code>
+import datetime
+
+datetime_string = "Jun 28 2018 7:40AM"
+datetime_parsed = datetime.datetime.strptime(datetime_string, "%b %d %Y %I:%M%p")
+
+datetime_string = "2018-06-29 08:15:27.243860"
+datetime_parsed = datetime.datetime.strptime(datetime_string, "%Y-%m-%d %H:%M:%S.%f")
+
+print('Date:', datetime_parsed.date())
+print('Time:', datetime_parsed.time())
+print('Date-time:', datetime_parsed)
+
+print('My format:', datetime_parsed.strftime("%Y-%m-%d"))
+</code>
+
+%Y year in 4 digits
+%m month
+%d day of month
+%H hour in 24 hour cycle
+%M minutes
+%S seconds
+%f microseconds
+![full datetime documentation](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior)

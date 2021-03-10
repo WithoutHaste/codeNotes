@@ -126,15 +126,53 @@ db.getCollection('Customers').aggregate([
 ])
 </code>
 
+A group with a multi-part key
+<code>
+db.getCollection('Customers').aggregate([
+    { $group: { _id: { a: "$a", b: "$b" } } }
+])
+</code>
+
 "addToSet" creates an array of unique values
 <code>
 db.getCollection('Customers').aggregate([
     { $group: { _id: "$idField", arrayA: { $addToSet: "$aField" }, arrayB: { $addToSet: "$bField" } } }
 ])
 </code>
+And don't look for a DISTINCT operation in aggregate pipelines, there isn't one, group by is the only option.
 
 AddField:
 Add a new field to the documents
 <code>
 { $addFields: { <newField>: <expression>, ... } }
+</code>
+
+Project to filter an array:
+<code>
+db.getCollection('MyCollection').aggregate([
+{
+	"$project" : {
+		"field_to_keep_as_is": 1,
+		"my_filtered_array" : {
+			"$filter" : {
+				"input" : "$my_array",
+				"as" : "my_array", /*defaults to "this"*/
+				"cond" : {
+					/*$eq: ["$$my_array.some_field", "some_value" ]*/ /*if you want to check for a value*/
+					$not: ["$$my_array.field_that_might_not_exist"] /*$exists doesn't work in here*/
+				}
+			}
+		}
+	}
+}
+]);
+</code>
+
+Unwind, to break an array into individual objects
+<code>
+db.getCollection('MyCollection').aggregate([
+{
+	$unwind: "$my_array"
+}
+]);
 </code>
