@@ -1,0 +1,28 @@
+##Navigation
+
+Print current location (Print Working Directory)
+<code>
+pwd
+</code>
+
+Jump to root dir
+<code>
+cd /
+</code>
+
+Jump to your home dir
+<code>
+cd
+OR
+cd ~
+</code>
+
+Up one level
+<code>
+cd ..
+</code>
+
+Back up once in location history
+<code>
+cd -
+</code>

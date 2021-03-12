@@ -1,0 +1,17 @@
+##Basics
+
+What kernel is running?
+<code>
+uname -srm
+</code>
+Outputs kernel name, kernel version, and hardware type.
+
+What distribution is running?
+<code>
+cat /etc/os-release
+</code>
+
+What version of apache is installed?
+<code>
+apache2 -v
+</code>

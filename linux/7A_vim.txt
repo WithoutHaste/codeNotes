@@ -1,0 +1,53 @@
+##vim
+
+A shell text editor.
+
+Open a file with vim
+<code>
+vim FILENAME
+</code>
+
+#Mode Commands
+
+i = enter Insert mode
+Escape = exit Insert mode
+
+(in Normal mode)
+w = write/save file to current filename
+w FILENAME = write/save file to FILENAME
+q = quit vim
+q! = quit even with unsaved changes
+wq! = write then quit
+
+#Movement Commands
+
+(in Insert or Normal mode)
+
+h = move left
+j = move down
+k = move up
+l = move right
+
+0 = move to beginning of line
+$ = move to end of line
+gg = move to beginning of file
+G = move to end of file
+
+w = move forward one word
+b = move back one word
+
+`. = move to last edit
+
+#Edit Commands
+
+(in Insert mode)
+
+u = undo last edit
+Ctrl-r = redo last edit
+
+dw = delete a word
+dd = delete a line
+d0 = delete to beginning of line
+d$ = delete to end of line
+dgg = delete to beginning of file
+dG = delete to end of file

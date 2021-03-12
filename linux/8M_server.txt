@@ -1,0 +1,61 @@
+## Server
+
+# Virtual Hosting
+
+Virtual hosting is hosting multiple domain names from one IP address. Apache's virtual host directs requests to different folders, based on the domain name.
+
+Apache's top-level directory for websites is "/var/www"
+Create subdirectories here for each domain name. Include a "public_html" directory nested in each one.
+
+Set the ownership on the "public_html" directory to the user who owns that website.
+<code>
+sudo chown -R USER:GROUP /var/www/example.com/public_html
+</code>
+
+Make sure the new directories are reable by all users. This may already be set correctly.
+<code>
+sudo chmod -R 755 /var/www
+</code>
+
+Upload an html file to the public_html directory for testing.
+
+Make a copy of "/etc/apache2/sites-available/000-default.conf" for each domain name.
+<code>
+sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/example.com.conf
+</code>
+Edit the file with this template
+<code>
+<VirtualHost *:80>
+	ServerAdmin admin@example.com
+	ServerName example.com
+	ServerAlias www.example.com
+	DocumentRoot /var/www/example.com/public_html
+	ErrorLog ${APACHE_LOG_DIR}/error.log
+	CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+</code>
+
+Enable the virtual hosts
+<code>
+sudo a2ensite example.com.conf
+</code>
+
+Restart Apache for the changes to take effect
+<code>
+sudo service apache2 restart
+</code>
+
+To test this setup, you can hard-code your local computer's host file. (This is not referring to the linux server, but to the computer you will test with.)
+- Linux
+  - edit "/etc/hosts" to include a line like "111.111.111.111 example.com"
+- Windows
+  - edit "c:\windows\system32\drivers\etc\hosts" to include a line like "111.111.111.111 example.com"
+  
+# Directory Browsing
+
+Directory browsing is when the web user can view the list of files in a directory on your server.
+
+To disable directory browsing for all sites hosted on the server:
+- open "/etc/apache2/apache2.conf"
+- change line "Options Indexes FollowSymLinks" to "Options FollowSymLinks"
+- restart apache2 service for changes to take effect

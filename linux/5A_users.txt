@@ -1,0 +1,92 @@
+##Users
+
+#About
+
+Users are identified by a unique username and a unique id (UID). A UID is a positive integer.
+
+#New User
+
+Create a new user
+<code>
+useradd USERNAME
+useradd [OPTIONS] USERNAME
+</code>
+
+User options start with the defaults in "/etc/default/useradd". [OPTIONS] specified in the useradd command will override the defaults.
+
+See also "/etc/login.defs" for password-related settings.
+
+Adding a user will update "/etc/passwd", "/etc/shadow", "/etc/group", and "/etc/gshadow".
+
+Create user's home directory at "/home/USERNAME"
+<code>
+useradd -m USERNAME
+useradd --create-home USERNAME
+</code>
+The home dir will be initialized with files copied from "/etc/skel".
+
+Specify a different home directory
+<code>
+useradd -m -d /SOME/PATH USERNAME
+useradd --create-home --home /SOME/PATH USERNAME
+</code>
+
+Specify the user's UID
+<code>
+useradd -u 123 USERNAME
+useradd --uid 123 USERNAME
+</code>
+By default, the next available UID will be used.
+
+Specify the user's group
+<code>
+useradd -g 123 USERNAME
+useradd --gid 123 USERNAME
+</code>
+By default, a new group will be created with the same name as the user.
+
+Add a comment or description
+<code>
+useradd -c "a b c" USERNAME
+useradd --comment "a b c" USERNAME
+</code>
+Comments are saved in "/etc/passwd".
+
+#Edit Users
+
+Set the new user's password
+<code>
+passwd USERNAME
+</code>
+Enter the password when prompted.
+
+Change user's home directory
+<code>
+usermod -d /SOME/PATH USERNAME
+</code>
+
+#Query Users
+
+<code>
+id USERNAME      #display UID, GID, and groups
+id -u USERNAME   #display UID
+id -gn USERNAME  #display GID
+</code>
+
+#chown
+
+chown changes the ownership/permissions on a file/directory.
+
+View current permissions
+<code>
+ls -l
+</code>
+
+<code>
+chown [OPTIONS] USER[:GROUP] FILE_OR_DIRECTORY
+</code>
+
+Recursively change ownership, starting from this point and going down
+<code>
+chown -R USER[:GROUP] FILE_OR_DIRECTORY
+</code>
