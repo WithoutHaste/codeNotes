@@ -1,0 +1,60 @@
+##sqlcmd
+
+Command line tool for MS Sql Server.
+
+Connect to server's MSSQL as Admin:
+<code>
+sqlcmd -S 127.0.0.1 -U SA
+</code>
+
+List all databases
+<code>
+select name from sys.databases;
+go
+</code>
+
+#Configuration
+
+Allow remote connections
+<code>
+EXEC sys.sp_configure N'remote access', N'1'
+GO
+RECONFIGURE WITH OVERRIDE
+GO
+</code>
+
+#Backups
+
+Create a full backup of database "demodb"
+<code>
+sqlcmd -S localhost -U SA -Q "BACKUP DATABASE [demodb] TO DISK = N'/var/opt/mssql/data/demodb.bak' WITH NOFORMAT, NOINIT, NAME = 'demodb-full', SKIP, NOREWIND, NOUNLOAD, STATS = 10"
+</code>
+
+Backup the transaction log
+<code>
+sqlcmd -S localhost -U SA -Q "BACKUP LOG [demodb] TO DISK = N'/var/opt/mssql/data/demodb_LogBackup.bak' WITH NOFORMAT, NOINIT, NAME = N'demodb_LogBackup', NOSKIP, NOREWIND, NOUNLOAD, STATS = 5"
+</code>
+
+#Restore
+
+Make a backup on Windows and restore on Linux as a way to move an entire database:
+<code>
+RESTORE DATABASE YourDB FROM DISK = '/var/opt/mssql/backup/YourDB.bak' WITH MOVE 'YourDB' TO '/var/opt/mssql/data/YourDB.mdf', MOVE 'YourDB_Log' TO '/var/opt/mssql/data/YourDB_Log.ldf', FILE = 1, NOUNLOAD, REPLACE, STATS = 5
+GO
+</code>
+
+Restore from backup
+<code>
+sqlcmd -S localhost -U SA -Q "RESTORE DATABASE [demodb] FROM DISK = N'/var/opt/mssql/data/demodb.bak' WITH FILE = 1, NOUNLOAD, REPLACE, STATS = 5"
+</code>
+
+Restore from backup while allowing for additional restores of log file backups
+<code>
+sqlcmd -S localhost -U SA -Q "RESTORE DATABASE [demodb] FROM DISK = N'/var/opt/mssql/data/demodb.bak' WITH FILE = 1, NOUNLOAD, REPLACE, NORECOVERY, STATS = 5"
+
+//restore from transaction log
+sqlcmd -S localhost -U SA -Q "RESTORE LOG demodb FROM DISK = N'/var/opt/mssql/data/demodb_LogBackup.bak'"
+
+//run after all restores to complete the process
+RESTORE DATABASE demodb
+</code>

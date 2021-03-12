@@ -54,6 +54,11 @@ Backup schema:
 1) Right-click on database > Tasks > Generate Scripts
 2) fill in the forms and save the backup
 
+#Restore
+
+When restoring, if you get error "the backup set holds a backup of a database other than the existing database"
+- in Restore dialog > Options > check "Overwrite the existing database (WITH REPLACE)"
+
 #Generate Scripts
 
 To generate a full "create database" script:

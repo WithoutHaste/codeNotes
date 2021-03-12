@@ -1,8 +1,8 @@
-#Connection Strings
+##Connection Strings
 
 ![SQL Server Connection Strings](https://www.connectionstrings.com/sql-server/)
 
-##.Net Framework Data Provider for SQL Server
+#.Net Framework Data Provider for SQL Server
 
 <code>
 //Standard

@@ -1,5 +1,10 @@
 ##Basics
 
+Read documentation (manual) for a program
+<code>
+man PROGRAM
+</code>
+
 What kernel is running?
 <code>
 uname -srm
@@ -14,4 +19,22 @@ cat /etc/os-release
 What version of apache is installed?
 <code>
 apache2 -v
+</code>
+
+How much disk space is used/free?
+<code>
+df
+df -h  #human readable
+</code>
+
+How to install new updates for everything?
+<code>
+apt-get update
+apt-get -y update  #assume "yes" to all questions
+</code>
+If you do kernel updates, "reboot" after to pick up the changes.
+
+What is the status of MS Sql Server?
+<code>
+systemctl status mssql-server.service
 </code>
