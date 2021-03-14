@@ -86,11 +86,11 @@ element.parentNode.insertBefore(childElement, element.nextSibling);
 
 Navigate:
 <code>
-var nextSiblingNode = element.nextSibling(); //could be an element, or text, or comment
-var nextSiblingElement = element.nextElementSibling(); //just elements
+var nextSiblingNode = element.nextSibling; //could be an element, or text, or comment
+var nextSiblingElement = element.nextElementSibling; //just elements
 
-var previousSiblingNode = element.previousSibling();
-var previousSiblingElement = element.previousElementSibling();
+var previousSiblingNode = element.previousSibling;
+var previousSiblingElement = element.previousElementSibling;
 </code>
 
 #Window
