@@ -1,0 +1,100 @@
+##appsettings.json
+
+.Net Core uses appsettings.json instead of Web.Config with ConfigurationManager. .Net Core allows you to read settings from many sources, but this is going to focus on the standard appsettings file.
+
+Make sure appsettings.json is set to "Copy to Output Directory".
+
+Use appsettings.json for prod settings.
+Use appsettings.Development.json to override prod settings with development values.
+
+#With Startup
+
+Default Program class will setup configuration
+<code>
+public static IWebHostBuilder CreateWebHostBuilder(string[] args) {
+	return WebHost
+		.CreateDefaultBuilder(args) //this line sets up configuration
+		.UseStartup<Startup>();
+}
+</code>
+Use dependency injection to access configuration
+<code>
+public ClassConstructor(IConfiguration configRoot)
+{
+}
+</code>
+
+#Without Startup
+
+Access appsettings without a Startup() method
+<code>
+public static IConfiguration GetConfig()
+{
+    var builder = new ConfigurationBuilder()
+        .SetBasePath(System.AppContext.BaseDirectory)
+        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+
+    return builder.Build();
+}
+</code>
+
+#Accessing Settings
+
+Sample json and lookup commands
+<code lang="json">
+{
+	"fieldA": "textA",
+	"fieldB": {
+		"fieldB1": "textB1"
+	}
+}
+</code>
+<code>
+var settings = configRoot; //from Startup example
+var settings = ConfigurationHelper.GetConfig(); //from without Startup example
+Assert.AreEqual("textA", settings["fieldA"]);
+Assert.AreEqual("textB1", settings["fieldB:fieldB1"]);
+</code>
+
+#Options Pattern
+
+You can bind a section of settings to strongly-typed objects.
+
+<code lang="json">
+{
+	"Connection": {
+		"Database": "db_connection_string",
+		"Timeout": 30
+	}
+}
+</code>
+<code>
+public class ConnectionOptions
+{
+	public string Database { get; set; }
+	public int Timeout { get; set; }
+}
+</code>
+
+Manual binding
+<code>
+var connectionOptions = new ConnectionOptions();
+Configuration.GetSection("Connection").Bind(connectionOptions);
+</code>
+
+Dependency Injection binding
+<code>
+//in Startup.cs
+public void ConfigureServices(IServiceCollection services)
+{
+    services.Configure<ConnectionOptions>(Configuration.GetSection("Connection"));
+    services.AddMvc();
+}
+//Dependency Injection
+public ClassConstructor(IOptions<ConnectionOptions> options)
+{
+	ConnectionOptions settings = options.Value;
+}
+</code>
+
+Note that Entity Framework Core DbContext(connectionStringName) will look for appsettings section "ConnectionStrings" with a field named that same as the connectionStringName value.
