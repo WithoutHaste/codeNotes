@@ -1,0 +1,27 @@
+##Common Terms
+
+Brainstorming common terminology that can be used when naming a class:
+
+[verb forms] - a lot of business logic is process (verbs) rather than records (nouns) - use verbs for process classes
+
+Node - in a network, or in a tree - a unit of a data structure
+
+Record - a database record, or a very general term
+
+LifeCycle - process management
+
+Policy - a business policy raised to first-class level
+
+Rule - a business rule raised to first-class level, a rule is a sub-unit of a policy
+
+Process
+
+Flow
+
+Agent
+
+Mediator - manages (brings together) work from many other code elements - contains little logic of its own
+
+Client - manages communication with another service or module
+
+
