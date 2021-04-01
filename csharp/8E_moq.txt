@@ -229,6 +229,16 @@ Method was called at least once:
 mock.Verify(i => i.Method("parameter"), Times.AtLeastOnce());
 </code>
 
+Method was called with any value of type:
+<code>
+mock.Verify(i => i.Method(It.IsAny<string>()));
+</code>
+
+Method was called with particular property in value:
+<code>
+mock.Verify(i => i.Method(It.Is<MyObject>(x => x.MyProperty == "value")));
+</code>
+
 Property was got:
 <code>
 mock.VerifyGet(i => i.Property1);
