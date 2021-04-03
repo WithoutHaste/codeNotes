@@ -15,9 +15,9 @@ The defaults will be overridden by the .editorconfig file in the root directory 
 
 Ex:
 <code lang="ini">
-# Prefer method-like constructs to have an expression body
-csharp_style_expression_bodied_methods = true:error
-csharp_style_expression_bodied_constructors = true:error
-csharp_style_expression_bodied_operators = true:error
+ # Prefer method-like constructs to have an expression body
+ csharp_style_expression_bodied_methods = true:error
+ csharp_style_expression_bodied_constructors = true:error
+ csharp_style_expression_bodied_operators = true:error
 </code>
 This will underline block bodies in red (because "error") with the suggestion to refactor them to expression bodies.
