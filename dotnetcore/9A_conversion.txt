@@ -1,0 +1,27 @@
+##Converting from Framework to Core
+
+Notes to self about conversion process
+- start with "upgrade-assistant path.csproj"
+
+Web API netcoreapp2.1
+- can reference netstandard2.0 libraries, but not netstandard2.1
+
+Microsoft.EntityFrameworkCore
+- .Net Framework or .Net Standard only
+- EntityFrameworkCore version 2.1.14 (netstandard2.0)
+EntityFrameworkCore 2.1.14 limits EntityFrameworkCore.Relational to 2.1.14
+- and that does not contain extension method `DbSet<T>.FromRawSql` which I need for stored proc calls
+- looks like just calling it `FromSql` instead fixes it
+
+.Net Core vs .Net Standard
+- https://docs.microsoft.com/en-us/archive/msdn-magazine/2017/september/net-standard-demystifying-net-core-and-net-standard
+```
+Here’s how .NET Core and .NET Standard fit into this:
+
+* .NET Core: This is the latest .NET implementation. It’s open source and available for multiple OSes. With .NET Core, you can build cross-platform console apps and ASP.NET Core Web applications and cloud services.
+
+* .NET Standard: This is the set of fundamental APIs (commonly referred to as base class library or BCL) that all .NET implementations must implement. By targeting .NET Standard, you can build libraries that you can share across all your .NET apps, no matter on which .NET implementation or OS they run.
+```
+
+having issues
+- try clearing NuGet caches

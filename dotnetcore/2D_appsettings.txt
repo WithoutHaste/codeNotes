@@ -98,3 +98,20 @@ public ClassConstructor(IOptions<ConnectionOptions> options)
 </code>
 
 Note that Entity Framework Core DbContext(connectionStringName) will look for appsettings section "ConnectionStrings" with a field named that same as the connectionStringName value.
+Or set it explicitly
+<code>
+using Microsoft.EntityFrameworkCore; //with Microsoft.EntityFrameworkCore.dll and Microsoft.EntityFrameworkCore.SqlServer.dll installed
+
+public void ConfigureServices(IServiceCollection services)
+{
+	services.AddDbContext<MyDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("NamesDatabase")));
+} 
+</code>
+With appsettings.json
+<code lang="json">
+{
+  "ConnectionStrings": {
+    "NamesDatabase": "Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=NameDatabase;Integrated Security=True;"
+  }
+}
+</code>

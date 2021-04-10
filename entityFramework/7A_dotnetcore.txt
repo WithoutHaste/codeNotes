@@ -1,0 +1,105 @@
+##.Net Core
+
+#Configuration
+
+<code>
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Names.Domain.Entities;
+
+namespace Names.DataAccess.EntityFramework.Configurations
+{
+	public class NameConfiguration : IEntityTypeConfiguration<NameRecord>
+	{
+		public void Configure(EntityTypeBuilder<NameRecord> builder)
+		{
+			builder.HasMany(name => name.AsNickNames).WithOne(nickname => nickname.NickName).OnDelete(DeleteBehavior.NoAction);
+		}
+	}
+}
+</code>
+
+<code>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Names.Domain.Entities;
+using Names.DataAccess.EntityFramework.Configurations;
+
+namespace Names.DataAccess.EntityFramework
+{
+	internal class NamesContext : BaseContext<NamesContext>
+	{
+		public DbSet<NameRecord> Names { get; set; }
+
+		public NamesContext() : base("name=NameDatabase")
+		{
+		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.ApplyConfiguration<NameRecord>(new NameConfiguration());
+		}
+	}
+}
+</code>
+
+#SQL
+
+Include NuGet package Microsoft.EntityFrameworkCore.Relational.  It includes these extension methods.
+<code>
+using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Names.Domain.Entities;
+using Names.DataAccess.EntityFramework.Configurations;
+
+namespace Names.DataAccess.EntityFramework
+{
+	internal class NamesContext : BaseContext<NamesContext>
+	{
+		public DbSet<NameRecord> Names { get; set; }
+		public DbSet<SourceRecord> Sources { get; set; }
+
+		//just for stored proc results
+		public DbSet<NameWithDetailResult> NameWithDetailResults { get; set; }
+
+		public NamesContext() : base("name=NameDatabase")
+		{
+		}
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			modelBuilder.ApplyConfiguration<NameRecord>(new NameConfiguration());
+			modelBuilder.ApplyConfiguration<SourceRecord>(new SourceConfiguration());
+			base.OnModelCreating(modelBuilder);
+		}
+
+		public List<NameWithDetailResult> GetNamesByOrigin(string origin)
+		{
+			SqlParameter originParameter = new SqlParameter("Origin", (object)origin ?? DBNull.Value);
+
+			return NameWithDetailResults.FromSqlRaw("exec GetNamesByOrigin @Origin", originParameter).ToList();
+			//or for EntityFrameworkCore.Relational v2.1.14
+			return NameWithDetailResults.FromSql("exec GetNamesByOrigin @Origin", originParameter).ToList();
+		}
+	}
+}
+</code>
+
+#Explicit Eager Loading
+
+Entity Framework before Core
+<code>
+return context.NickNames.Include("FullName").Include("NickName").ToList();
+</code>
+
+Entity Framework Core
+<code>
+using Microsoft.EntityFrameworkCore;
+
+return context.NickNames.Include(nn => nn.FullName).Include(nn => nn.NickName).ToList();
+</code>
