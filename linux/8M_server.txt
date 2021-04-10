@@ -103,7 +103,7 @@ sudo a2enmod ssl
 sudo service apache2 restart
 </code>
 
-TODO LATER continue in https://odan.github.io/2018/07/17/aspnet-core-2-ubuntu-setup.html from "Configure SSL"
+!! TODO LATER continue in https://odan.github.io/2018/07/17/aspnet-core-2-ubuntu-setup.html from "Configure SSL"
 
 Configure nginx as reverse proxy, to forward certain urls to local services
 - leave "/etc/nginx/sites-available/default" alone
@@ -221,17 +221,23 @@ Init supervisor conf file
 sudo vim /etc/supervisor/conf.d/{my_app}.conf
 </code>
 <code>
-[program:dotnettest]
+[program:{process_name}]
 command=/usr/bin/dotnet /var/aspnetcore/{my_app}/{my_app}.dll --urls "http://*:5000"
 directory=/var/aspnetcore/{my_app}
 autostart=true
 autorestart=true
 stderr_logfile=/var/log/{my_app}.err.log
 stdout_logfile=/var/log/{my_app}.out.log
-environment=ASPNETCORE_ENVIRONMENT=Production
+environment=ASPNETCORE_ENVIRONMENT=Production,CONNECTIONSTRINGS__DEFAULT="{connection_string}"
 user={app_user}
 stopsignal=INT
 </code>
+Note that "environment" is used to set environment variables for this application.
+<code>
+environment=KEYA=valA,KEYB=valB
+</code>
+The values can optionally be enclosed in double quotes ("")
+
 Start Supervisor
 <code>
 sudo service supervisor start
@@ -245,6 +251,30 @@ sudo tail -f /var/log/{my_app}.out.log
 ?? supervisor log says it is running as root because no user was specified, but i did specify user ??
 
 !! it works! I can reach the web api from another computer on port 5000 !
+
+ok, the service part stopped working after rebooting the server
+stay calm
+the port 80 static html parts are still working
+- the Supervisor app is in a start/die loop on "address 5000 already in use"
+
+Install Net Tools to see what is using that port
+<code>
+sudo apt install net-tools
+
+netstat -ltnp | grep :5000
+</code>
+It says "tcp6" which made me think of the nginx configuration that included ip4 and ip6
+- manually stopped nginx
+- confirmed service is now reachable from another computer on port 5000
+- removing the port 5000 config from nginx
+- restarted nginx, confirmed 5000 service is still available externally
+- trying a reboot again
+- hmm, now port 80 sites AND 5000 service are having trouble
+  - shit I can't connect to my server
+  - oh shit
+  - ok, nobody panic, I manually turned it off and on again and everything is working
+- trying system reboot again
+  - everything is still working
 
 # Directory Browsing
 

@@ -115,3 +115,18 @@ With appsettings.json
   }
 }
 </code>
+
+# Including Settings from Environment Variables
+
+For production, settings like connection strings will be set as an Environment Variable instead of being hard-coded and version controlled.
+
+<code>
+var builder = new ConfigurationBuilder()
+    .SetBasePath(basePath)
+    .AddJsonFile("appsettings.json")
+    .AddJsonFile($"appsettings.{environmentName}.json", true)
+    .AddEnvironmentVariables(); #this seems to be auto-configured in netcoreapp3.1
+</code>
+
+Environment variable names use a double underscore (__) instead of colon (:).
+Ex: "ConnectionStrings__Defaul=X" instead of the appsettings.json "ConnectionStrings { Default="X" }".

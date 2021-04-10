@@ -38,3 +38,8 @@ What is the status of MS Sql Server?
 <code>
 systemctl status mssql-server.service
 </code>
+
+Reboot server
+<code>
+sudo reboot
+</code>

@@ -5,6 +5,8 @@ Command line tool for MS Sql Server.
 Connect to server's MSSQL as Admin:
 <code>
 sqlcmd -S 127.0.0.1 -U SA
+
+sqlcmd -S localhost -U {username} -P {password}
 </code>
 
 List all databases
