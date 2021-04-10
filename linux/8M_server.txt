@@ -49,8 +49,203 @@ To test this setup, you can hard-code your local computer's host file. (This is 
 - Linux
   - edit "/etc/hosts" to include a line like "111.111.111.111 example.com"
 - Windows
+  - run notepad as Administrator to open file
   - edit "c:\windows\system32\drivers\etc\hosts" to include a line like "111.111.111.111 example.com"
-  
+
+# ASP.Net Core Hosting
+
+(1)
+One-time setup: register Microsoft key and feed
+<code>
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.asc.gpg
+sudo mv microsoft.asc.gpg /etc/apt/trusted.gpg.d/
+wget -q https://packages.microsoft.com/config/ubuntu/18.04/prod.list 
+sudo mv prod.list /etc/apt/sources.list.d/microsoft-prod.list
+sudo chown root:root /etc/apt/trusted.gpg.d/microsoft.asc.gpg
+sudo chown root:root /etc/apt/sources.list.d/microsoft-prod.list
+</code>
+Install .Net Core runtime
+<code>
+sudo apt-get install apt-transport-https
+sudo apt-get update
+sudo apt-get install aspnetcore-runtime-2.1
+</code>
+That's it. You do not need the SDK on a production server.
+Verify installation
+<code>
+dotnet --info
+dotnet --list-sdks
+dotnet --list-runtimes
+</code>
+
+(2)
+Deploy the app:
+- run a Release build
+- copy the build files (found in /bin) to the appropriate folder on the server
+- run the app with
+<code>
+donet My_App.dll
+</code>
+- navigate to the app in browser on the local server machine at "http://{server_address}:{port}"
+
+(3)
+One-time setup: reverse proxy
+- recommended for security of dynamic web apps
+- required for HTTPS
+3.1) Install Apache2 (already done with general server setup)
+3.2) Enable Apache2 modules
+<code>
+sudo a2enmod rewrite
+sudo a2enmod proxy
+sudo a2enmod proxy_http
+sudo a2enmod headers
+sudo a2enmod ssl
+sudo service apache2 restart
+</code>
+
+TODO LATER continue in https://odan.github.io/2018/07/17/aspnet-core-2-ubuntu-setup.html from "Configure SSL"
+
+Configure nginx as reverse proxy, to forward certain urls to local services
+- leave "/etc/nginx/sites-available/default" alone
+- add a conf file for this service
+<code>
+sudo vim /etc/nginx/sites-available/api.{my_app}.com.conf
+</code>
+With contents
+<code lang="json">
+server {
+    listen        5000;
+    server_name   api.{my_app}.com;
+    root /var/www/{my_app}.com/public_html;
+    location / {
+        proxy_pass         http://localhost:5000;
+        proxy_http_version 1.1;
+        proxy_set_header   Upgrade $http_upgrade;
+        proxy_set_header   Connection keep-alive;
+        proxy_set_header   Host $host;
+        proxy_cache_bypass $http_upgrade;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header   X-Forwarded-Proto $scheme;
+    }
+}
+</code>
+Verify setup is ok
+<code>
+sudo nginx -t
+</code>
+Start or restart nginx to pick up changes
+<code>
+sudo service nginx start
+sudo service nginx restart
+</code>
+If you make a conf file per port/website, then add a symlink from "/etc/nginx/sites-enabled" to each file in "/etc/nginx/sites-available". One conf file per port.
+If you are also running Apache2 for port 80, make sure nginx is not listening for port 80.
+
+!! but now when i start "dotnet my_app.dll" i get Kestral error port already in use !!
+- stopped nginx - verified dotnet dll can start again
+- maybe I just need to configure proxy in apache2
+<code lang="xml">
+<VirtualHost *:80>
+        # The ServerName directive sets the request scheme, hostname and port that
+        # the server uses to identify itself. This is used when creating
+        # redirection URLs. In the context of virtual hosts, the ServerName
+        # specifies what hostname must appear in the request's Host: header to
+        # match this virtual host. For the default virtual host (this file) this
+        # value is not decisive as it is used as a last resort host regardless.
+        # However, you must set it for any further virtual host explicitly.
+        #ServerName www.example.com
+
+        ServerAdmin abound@namesabound.com
+        ServerName namesabound.com
+        ServerAlias www.namesabound.com
+        DocumentRoot /var/www/namesabound.com/public_html
+
+        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+        # error, crit, alert, emerg.
+        # It is also possible to configure the loglevel for particular
+        # modules, e.g.
+        #LogLevel info ssl:warn
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        # For most configuration files from conf-available/, which are
+        # enabled or disabled at a global level, it is possible to
+        # include a line for only one particular virtual host. For example the
+        # following line enables the CGI configuration for this host only
+        # after it has been globally disabled with "a2disconf".
+        #Include conf-available/serve-cgi-bin.conf
+</VirtualHost>
+<VirtualHost *:5000>
+    ProxyPreserveHost On
+    ProxyPass / http://127.0.0.1:5000/
+    ProxyPassReverse / http://127.0.0.1:5000/
+    ErrorLog /var/log/apache2/namesabound-error.log
+    CustomLog /var/log/apache2/namesabound-access.log common
+</VirtualHost>
+</code>
+
+Verify apache2 config is ok
+<code>
+sudo apachectl configtest
+</code>
+Restart apache2 service
+<code>
+sudo service apache2 restart
+</code>
+
+https://hbhhathorn.medium.com/install-an-asp-net-core-web-api-on-linux-ubuntu-18-04-and-host-with-nginx-and-ssl-2ed9df7371fb
+
+https://webdock.io/en/docs/how-guides/shared-hosting-multiple-websites/how-configure-nginx-to-serve-multiple-websites-single-vps
+
+https://odan.github.io/2018/07/17/aspnet-core-2-ubuntu-setup.html
+
+(4)
+Setup the app to run and be monitored in the background
+Install Supervisor
+<code>
+sudo apt-get install supervisor
+</code>
+Initialize folder "/var/aspnetcore" for all .Net Core apps
+<code>
+sudo mkdir /var/aspnetcore/{my_app}
+</code>
+Grant access to the user for this site
+<code>
+sudo chown -R {user}:{group} /var/aspnetcore/{my_app}
+</code>
+Copy your build (/bin) files into this directory.
+
+Init supervisor conf file
+<code>
+sudo vim /etc/supervisor/conf.d/{my_app}.conf
+</code>
+<code>
+[program:dotnettest]
+command=/usr/bin/dotnet /var/aspnetcore/{my_app}/{my_app}.dll --urls "http://*:5000"
+directory=/var/aspnetcore/{my_app}
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/{my_app}.err.log
+stdout_logfile=/var/log/{my_app}.out.log
+environment=ASPNETCORE_ENVIRONMENT=Production
+user={app_user}
+stopsignal=INT
+</code>
+Start Supervisor
+<code>
+sudo service supervisor start
+</code>
+Watch Supervisor logs to see app startup
+<code>
+sudo tail -f /var/log/supervisor/supervisord.log
+sudo tail -f /var/log/{my_app}.out.log 
+</code>
+
+?? supervisor log says it is running as root because no user was specified, but i did specify user ??
+
+!! it works! I can reach the web api from another computer on port 5000 !
+
 # Directory Browsing
 
 Directory browsing is when the web user can view the list of files in a directory on your server.

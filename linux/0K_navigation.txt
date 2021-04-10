@@ -26,3 +26,8 @@ Back up once in location history
 <code>
 cd -
 </code>
+
+Locate an executable
+<code>
+whereis dotnet
+</code>

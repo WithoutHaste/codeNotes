@@ -25,3 +25,8 @@ Here’s how .NET Core and .NET Standard fit into this:
 
 having issues
 - try clearing NuGet caches
+
+Web API netcoreapp3.1
+- can reference netstandard2.1 libraries
+  - EntityFrameworkCore libraries 3.0.3
+- my app is finally running on Ubuntu
