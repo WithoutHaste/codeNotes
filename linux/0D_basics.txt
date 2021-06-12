@@ -43,3 +43,8 @@ Reboot server
 <code>
 sudo reboot
 </code>
+
+What is installed?
+<code>
+apt list --installed
+</code>

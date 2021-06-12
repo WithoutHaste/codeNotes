@@ -51,7 +51,7 @@ Include NuGet package Microsoft.EntityFrameworkCore.Relational.  It includes the
 <code>
 using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient; //replaces System.Data.SqlClient;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Names.Domain.Entities;
@@ -80,15 +80,126 @@ namespace Names.DataAccess.EntityFramework
 
 		public List<NameWithDetailResult> GetNamesByOrigin(string origin)
 		{
-			SqlParameter originParameter = new SqlParameter("Origin", (object)origin ?? DBNull.Value);
+			SqlParameter originParameter = new SqlParameter("@Origin", (object)origin ?? DBNull.Value);
 
+			//for EntityFrameworkCore.Relational v3.0.3
 			return NameWithDetailResults.FromSqlRaw("exec GetNamesByOrigin @Origin", originParameter).ToList();
-			//or for EntityFrameworkCore.Relational v2.1.14
+			//for EntityFrameworkCore.Relational v2.1.14
 			return NameWithDetailResults.FromSql("exec GetNamesByOrigin @Origin", originParameter).ToList();
 		}
 	}
 }
 </code>
+
+Returning multiple result sets from sql query
+(This is a mess. There doesn't seem to be an automatic conversion to entity type.)
+<code>
+using System;
+using Microsoft.Data.SqlClient;
+
+public class SomeClass
+{
+	public async Task<ShelvesAndBooksResult> GetShelvesAndBooks(long userId)
+	{
+		SqlCommand command = new SqlCommand(
+			"exec dbo.spGetShelvesAndBooks @userId", 
+			Database.GetDbConnection() as SqlConnection
+		);
+		command.Parameters.AddWithValue("@userId", userId);
+
+		List<Shelf> shelves = new List<Shelf>();
+		List<FlatBook> flatBooks = new List<FlatBook>();
+		List<ShelfBookLink> links = new List<ShelfBookLink>();
+
+		using (SqlDataReader reader = await command.ExecuteReaderAsync())
+		{
+			while (await reader.ReadAsync())
+			{
+				shelves.Add(new Shelf()
+				{
+					Id = reader.GetInt64(0),
+					fkUserId = reader.GetInt64(1),
+					Label = reader.GetNullableString(2),
+					IsPrivate = reader.GetBoolean(3),
+					CreatedDateTime = reader.GetDateTime(4),
+					DisplayOrder = reader.GetInt32(5)
+				});
+			}
+			await reader.NextResultAsync();
+			while (await reader.ReadAsync())
+			{
+				flatBooks.Add(new FlatBook()
+				{
+					BookId = reader.GetInt64(0),
+					Title = reader.GetString(1),
+					PublicationYear = reader.GetNullableInt32(2),
+					AuthorIdA = reader.GetNullableInt64(3),
+					AuthorFirstNameA = reader.GetNullableString(4),
+					AuthorLastNameA = reader.GetNullableString(5),
+					AuthorVariantDescriptionA = reader.GetNullableString(6),
+					AuthorIdB = reader.GetNullableInt64(7),
+					AuthorFirstNameB = reader.GetNullableString(8),
+					AuthorLastNameB = reader.GetNullableString(9),
+					AuthorVariantDescriptionB = reader.GetNullableString(10),
+					HasMoreAuthors = reader.GetBoolean(11),
+					CountSortBy = reader.GetInt64(12),
+					IsInLibrary = reader.GetBoolean(13),
+					Rating = (Rating?)reader.GetNullableInt32(14),
+					AddedToLibraryDateTime = reader.GetNullableDateTime(15)
+				});
+			}
+			await reader.NextResultAsync();
+			while (await reader.ReadAsync())
+			{
+				links.Add(new ShelfBookLink()
+				{
+					fkShelfId = reader.GetInt64(0),
+					fkBookId = reader.GetInt64(1)
+				});
+			}
+		}
+
+		return new ShelvesAndBooksResult()
+		{
+			Shelves = shelves.ToArray(),
+			Books = flatBooks.ToArray(),
+			Links = links.ToArray()
+		};
+	}
+}
+
+public static class SqlDataReaderExtensions
+{
+	public static string GetNullableString(this SqlDataReader reader, int columnIndex)
+	{
+		if (reader.IsDBNull(columnIndex))
+			return null;
+		return reader.GetString(columnIndex);
+	}
+
+	public static int? GetNullableInt32(this SqlDataReader reader, int columnIndex)
+	{
+		if (reader.IsDBNull(columnIndex))
+			return null;
+		return reader.GetInt32(columnIndex);
+	}
+
+	public static long? GetNullableInt64(this SqlDataReader reader, int columnIndex)
+	{
+		if (reader.IsDBNull(columnIndex))
+			return null;
+		return reader.GetInt64(columnIndex);
+	}
+
+	public static DateTime? GetNullableDateTime(this SqlDataReader reader, int columnIndex)
+	{
+		if (reader.IsDBNull(columnIndex))
+			return null;
+		return reader.GetDateTime(columnIndex);
+	}
+}
+</code>
+Note: Database connection string may need "MultipleActiveResultSets=True" added.
 
 #Explicit Eager Loading
 

@@ -1,0 +1,3 @@
+#Keyboard Shortcuts
+
+Shift+Del = Permanent delete skipping recycle bin

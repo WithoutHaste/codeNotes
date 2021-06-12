@@ -9,7 +9,7 @@ Create subdirectories here for each domain name. Include a "public_html" directo
 
 Set the ownership on the "public_html" directory to the user who owns that website.
 <code>
-sudo chown -R USER:GROUP /var/www/example.com/public_html
+sudo chown -R {user}:{group} /var/www/example.com/public_html
 </code>
 
 Make sure the new directories are reable by all users. This may already be set correctly.
@@ -35,7 +35,7 @@ Edit the file with this template
 </VirtualHost>
 </code>
 
-Enable the virtual hosts
+Enable the virtual hosts (creates symlinks with sites-enabled)
 <code>
 sudo a2ensite example.com.conf
 </code>
@@ -43,6 +43,13 @@ sudo a2ensite example.com.conf
 Restart Apache for the changes to take effect
 <code>
 sudo service apache2 restart
+ #or
+sudo systemctl reload apache2
+</code>
+
+Disable the virtual host
+<code>
+sudo a2dissite example.com.conf
 </code>
 
 To test this setup, you can hard-code your local computer's host file. (This is not referring to the linux server, but to the computer you will test with.)
@@ -275,6 +282,36 @@ It says "tcp6" which made me think of the nginx configuration that included ip4 
   - ok, nobody panic, I manually turned it off and on again and everything is working
 - trying system reboot again
   - everything is still working
+  
+# Apache2 as Reverse Proxy to Supervisor
+
+Supervisor hosts locally only
+Example /etc/supervisor/conf.d/{sitename}.conf
+<code>
+[program:{sitename}]
+command=/usr/bin/dotnet /var/aspnetcore/{sitename}/{program}.dll --urls "http://127.0.0.1:5100"
+directory=/var/aspnetcore/{sitename}
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/{sitename}.err.log
+stdout_logfile=/var/log/{sitename}.out.log
+environment=ASPNETCORE_ENVIRONMENT=Production
+user=abound
+stopsignal=INT
+</code>
+
+Apache2 listens on port 80
+Example /etc/apache2/sites-available/{sitename}.conf
+<code>
+<VirtualHost *:80>
+    ServerName {domainname}
+    ProxyPreserveHost On
+    ProxyPass / http://127.0.0.1:5100/
+    ProxyPassReverse / http://127.0.0.1:5100/
+    ErrorLog /var/log/apache2/{sitename}-error.log
+    CustomLog /var/log/apache2/{sitename}-access.log common
+</VirtualHost>
+</code>
 
 # Directory Browsing
 
@@ -284,3 +321,30 @@ To disable directory browsing for all sites hosted on the server:
 - open "/etc/apache2/apache2.conf"
 - change line "Options Indexes FollowSymLinks" to "Options FollowSymLinks"
 - restart apache2 service for changes to take effect
+
+# SSL Certificate
+
+Instructions for Ubuntu + Apache2
+
+1) Generate a Private Key file and CSR (Certificate Signing Request)
+- command prompt: sudo openssl req -new -newkey rsa:2048 -nodes -keyout {name}.key -out {name}.csr
+
+Place these files in a location that only Root can access.
+
+The {name}.key file is the private key file.
+The {name}.csr file is the certificate signing request. This is used to order an SSL Certificate from a signing authority, and to encrypt messages that only the private key can decrypt.
+
+When asked for the Common Name, enter the fully qualified Domain Name.
+Ex: google.com
+Ex: *.google.com to include all subdomains
+
+Country Code list: https://www.digicert.com/kb/ssl-certificate-country-codes.htm
+
+**instructions paused, looking at certbot option
+
+# Certbot
+
+https://certbot.eff.org/
+
+easy generation and installation of certificates, with auto-renewal
+

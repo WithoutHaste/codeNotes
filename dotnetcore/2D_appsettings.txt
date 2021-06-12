@@ -28,6 +28,10 @@ public ClassConstructor(IConfiguration configRoot)
 
 Access appsettings without a Startup() method
 <code>
+using Microsoft.Extensions.Configuration;
+//also install Microsoft.Extensions.Configuration.Json
+//also install Microsoft.Extensions.Configuration.FileExtensions
+
 public static IConfiguration GetConfig()
 {
     var builder = new ConfigurationBuilder()
@@ -91,6 +95,7 @@ public void ConfigureServices(IServiceCollection services)
     services.AddMvc();
 }
 //Dependency Injection
+using Microsoft.Extensions.Options;
 public ClassConstructor(IOptions<ConnectionOptions> options)
 {
 	ConnectionOptions settings = options.Value;
