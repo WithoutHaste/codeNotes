@@ -19,6 +19,8 @@ public static IWebHostBuilder CreateWebHostBuilder(string[] args) {
 </code>
 Use dependency injection to access configuration
 <code>
+using Microsoft.Extensions.Configuration; //from Microsoft.Extensions.Configuration.Abstractions.dll
+
 public ClassConstructor(IConfiguration configRoot)
 {
 }
