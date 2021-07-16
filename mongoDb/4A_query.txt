@@ -168,6 +168,24 @@ db.getCollection('MyCollection').aggregate([
 ]);
 </code>
 
+Simplify an array
+<code>
+db.getCollection('poc_agencies').aggregate([
+    { $project: {  
+            "array_of_strings": {
+                $reduce: {
+                    input: "$input_array_of_objects",
+                    initialValue: [],
+                    in: { $concatArrays: [ "$$value", ["$$this.keep_just_this_field"] ] }
+                }
+            }
+        } 
+    }
+]);
+</code>
+- $$value refers to the current accumulated value
+- $$this refers to the next array element being operated on
+
 Unwind, to break an array into individual objects
 <code>
 db.getCollection('MyCollection').aggregate([
@@ -176,3 +194,26 @@ db.getCollection('MyCollection').aggregate([
 }
 ]);
 </code>
+
+Flatten a recursive lookup
+<code>
+db.getCollection('agencies').aggregate([
+    { $graphLookup: {
+            from: 'agencies', //name of the collection to search
+            startWith: '$_id', //field name to start with, probably same as connectionFromField but with a $ symbol
+            connectFromField: '_id', //this field in parent
+            connectToField: 'parentAgencyId', //connects to this field in child
+            as: 'descendantAgencyIds', //put all the results into an array named this
+            maxDepth: 100 //stop recursive lookup at this depth, to avoid infinite loops
+        } 
+    }
+])
+</code>
+
+Overwrite an entire collection with the results of this pipeline
+<code>
+db.getCollection('input_collection_name').aggregate([
+    { $out : { db: "database_name", coll: "output_collection_name" } }
+])
+</code>
+$out must be the last step in the pipeline

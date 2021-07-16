@@ -27,3 +27,20 @@ One type per Collection:
   
 Many suggestions online says don't nest data more than 1 level deep. But that probably depends on how variable the structure is and how precise of a programmer you are.
 - Ex: Don't have a array of objects which also contain arrays. At least, not when you'll want to search by those value.
+
+#Collection-Level Operations
+
+remove all documents from collection
+<code>
+db.collection_name.remove({});
+</code>
+
+insert multiple documents into collection
+<code>
+var allDocs=
+[
+	{ "_id":"1" },
+	{ "_id":"2", "parentDocId":"1" },
+];
+db.collection_name.insert(allDocs);
+</code>
