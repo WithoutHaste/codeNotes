@@ -1,0 +1,71 @@
+##Google Sheets
+
+#Terminology
+
+"Sheet" I think refers to both a single Google Sheet document (can contain multiple tabs) and a single tab in a document.
+
+#Reference another sheet
+
+(Where "Sheet" means another tab in the same document)
+
+Set this cell to the value of "Sheet1" cell "A1"
+<code>
+=Sheet1!A1
+</code>
+
+Refer to a sheet that has spaces in the name
+<code>
+='Name Name'!A1
+</code>
+
+#Unique
+
+<code>
+=unique({Sheet1!B2:B900;D3:D900})
+</code>
+Get all the unique values from param1 range, display them in param2 range.
+
+#Lookup
+
+<code>
+=ArrayFormula(iferror(vlookup(D2:D900,'From AAT Mongo B'!A2:C900,3,0),0))
+</code>
+
+VLOOKUP
+- First param: the keys to search for.
+- Second param: the range to search through. The first column in this range will be searched for the key from First Param.
+- Third param: the index in the Second Param range that holds the value you want to display. The index starts at 1 for the first column in the Second Param range.
+- Fourth param: TRUE or 1 if the first column of Second Param range is sorted.
+
+#Matches
+
+Check that two values match
+<code>
+=A2=B2
+</code>
+
+Display "" for a match and "ERROR" for not a match.
+<code>
+=IF(A2=B2,"","ERROR")
+</code>
+
+#Logical Expressions
+
+<code>
+AND(a,b,c)
+IF(AND(A2=B2,A2<>C2))
+</code>
+
+#Table Join
+
+Note: I haven't actually gotten this working yet
+
+The range of data making up each table must have the same number of columns in each.
+- You get error "array literal was missing values for one or more rows" if the number of columns does not match.
+
+<code>
+=QUERY({'From DE/Insurity'!A2:B;'From AAT Mongo B'!A1:C},"Select INS_A_NAME, INS_P_CODE, EXT_A_NAME, MONGO_P_CODE, MONGO_A_ID where INS_P_CODE = MONGO_P_CODE and INS_A_NAME <> EXT_A_NAME",1)
+</code>
+- First param is the range of data for each table.  Just provide the first cell with a column header and the final column letter.
+- Second param is the query. Use the same column headers as the tables have.
+- Third param, I'm not sure what it is.
