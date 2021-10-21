@@ -146,6 +146,13 @@ public static decimal ComputeSalesTax(Address location, decimal salePrice) =>
 	salePrice * location.State.SalesTax;
 </code>
 
+<code>
+if(record.Customer is { Employed:true }) {
+	//if record.Customer.Employed == true
+	//can be used for checking multiple properties at once
+}
+</code>
+
 #C# 8 Tuple Pattern
 
 You can use tuples to pass multiple variables into one switch statement.
