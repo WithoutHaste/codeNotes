@@ -45,6 +45,13 @@ db.collection.find().sort( { age: -1 } ).limit(50)
 </code>
 If sort gives you an "exceeded memory limit" then add a limit to the number of results.
 
+#Distinct
+
+<code>
+db.getCollection('customers').distinct('firstName')
+</code>
+Returns all the distinct values of the field "firstName" from collection "customers".
+
 #String Operations
 
 String minus last two characters:
@@ -56,6 +63,13 @@ Last two characters of string:
 <code>
 myField: { $substr: [ "$originField", { $subtract: [ { $strLenCP: "$originField" }, 2 ] }, -1 ] }
 </code>
+
+String contains
+<code>
+db.getCollection('customers').find({fullName: { $regex: '.*Steve.*' } })
+db.getCollection('customers').find({fullName: { $regex: /.*Steve.*/ } })
+</code>
+Capitalization matters
 
 #Aggregate
 
