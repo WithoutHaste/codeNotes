@@ -1,5 +1,10 @@
 ##Array
 
+Init an array
+<code>
+$a = array();
+</code>
+
 Print full array:
 <code>
 print_r($myArray);
@@ -11,6 +16,13 @@ An associative array can be called a hash or a dictionary in other languages. Ea
 <code>
 $array = array( "key1"=>"value1", "key2"=>"value2" );
 $value1 = $array["key1"];
+</code>
+
+contains key
+<code>
+if (array_key_exists('key', $search_array)) {
+    //operation
+}
 </code>
 
 #Operations
@@ -51,6 +63,12 @@ function cmp($a, $b) {
 }
 usort($arr, "cmp");
 </code>
+
+map: apply a function to each element and return an array of the results
+<code>
+$output_array = array_map('function_name', $input_array);
+</code>
+specify the function name by the first string parameter
 
 explode = split a string into an array of string, based on the delimiter
 <code>
