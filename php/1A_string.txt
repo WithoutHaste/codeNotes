@@ -36,6 +36,11 @@ $chars = str_split($string); //H e l l o W o r l d
 $chars = str_split($string, 3); //Hel loW orl d
 </code>
 
+implode
+<code>
+$string = implode(",", $array);
+</code>
+
 strtoupper = convert entire string to upper-case
 <code>
 $upperCase = strtoupper($string);
