@@ -1,0 +1,8 @@
+##Amazon Cloudfront
+
+Cloudfront is a Content Delivery Networks (CDN)
+
+ex of a CDN: cache a copy of data physically close to a city so that users there can access it quickly
+
+uses edge locations around the world to be close to users
+- edge locations are different than regions

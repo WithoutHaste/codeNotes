@@ -1,0 +1,27 @@
+##Amazon Elastic Compute Cloud (EC2)
+
+for computations
+
+compute-as-a-service model
+
+can share host server with other instances (virtual machines)
+- multitenancy
+- hypervisor manages the server running multiple instances
+- instances are secure and separate from each other
+
+vertically scaling an instance
+- take more or less resources (memory, cpus)
+
+instance types
+- each type in grouped under an instance family, and is optimized for different tasks
+- families
+  - general purpose: balanced resources, ok for web services and small/medium databases
+  - compute optimized: intensive computing, ok for gaming servers, an intensely used web services, and batch processing
+  - memory optimized: for processing large datasets in memory
+  - accelerated computing: hardware accelerators, ok for graphics, data pattern matching, floating point calculations
+  - storage optimized: for high sequential read/write access to large datasets, ok for distributed file systems, data warehousing, and OLTP (online transaction processing)
+
+auto-scaling of instances
+- scale up: add more power/resources to the existing instances
+- scale out: add more instances
+- set min and max capacity, plus desired capacity (the amount to use by default)

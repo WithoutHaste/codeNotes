@@ -1,0 +1,34 @@
+##Amazon Virtual Private Cloud (VPC)
+
+your own private network within AWS
+- define your ip range
+- can define what traffic can enter the VPC
+
+internet gateway (IGW): an access point for public traffic to enter your VPC
+- (this is not automatic)
+
+virtual private gateway: an access point for private traffic (encrypted internet traffic) to enter you VPC
+- (this is not automatic)
+- make a VPN connection between a private network and your VPC
+
+AWS direct connect:
+- a dedicated private connection (not shared with normal internet traffic)
+- a dedicated fiber connection (wire) between your data center and an AWS data center
+
+gateways are configured to be "traffic in" or "traffic out"
+
+subnets: used to control access to the gateways
+- public subnets have access to the internet gateways
+- has a Network ACL
+
+network access control lists (Network ACL)
+- define which packets are allowed to cross the boundary? in either direction
+- stateless: checks every single packet
+- allows all in and out traffic by default
+
+security groups
+- ECS instance level access security
+  - what traffic is allowed to access a particular ECS instance?
+  - by default, no incoming traffic is accepted and all outgoing traffic is allowed
+- stateful: has some memory for what to allow in
+  - will allow the responses to outgoing packets back in

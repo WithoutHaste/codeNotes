@@ -1,0 +1,11 @@
+##Amazon Route 53
+
+aws route 53: a domain name service (DNS): a DNS translates website names into ip addresses
+- runs in edge locations
+- can also register domain names
+
+routing policies
+- latency-based routing
+- geolocation dns: routing is based on where the user is located
+- geoproximity routing
+- weighted round robin

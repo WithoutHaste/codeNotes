@@ -1,0 +1,51 @@
+##Databases
+
+#Amazon Relational Database Services (RDS)
+
+supports: mysql, postgresql, oracle, microsoft sql server, and others
+
+"lift-and-shift" migration: copies your local database to the cloud
+- Amazon Database Migration Service (DMS)
+  - homogeneous: from a database type to a matching type (such as between relationship databases)
+  - heterogeneous: use schema conversion tool to get from one db to a new schema type
+
+build for business analytics
+
+for realtime read/write functionality
+  
+#Amazon Aurora
+
+a database solution with mysql or postgres
+- with data replication
+- and continuous backups
+
+for realtime read/write functionality
+  
+#Amazon DynamoDB
+
+a serverless database
+- you don't need to manage the infrastructure
+- create tables of items and attributes
+- millisecond response time
+- a nosql database, a nonrelational database
+  - so can only handle simple queries against one table at a time
+  
+for realtime read/write functionality
+  
+#Amazon Redshift
+
+data warehouse
+- for historical analytics and querying multiple databases
+  - historical data refers to data that is set (no longer being edited)
+
+#Amazon DocumentDB
+
+for content management
+
+#Amazon Neptune
+
+a graph database, like for social networks
+
+#Amazon Quantum Ledger Database (QLDB)
+
+100% immutability, to data can be removed from the audits

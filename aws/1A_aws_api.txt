@@ -1,0 +1,17 @@
+##AWS APIs
+
+all AWS services have APIs for you to use to manage everything
+
+options for interacting with AWS (these all use AWS APIs)
+- AWS Management Console (browser based)
+- AWS Command Line Interface (CLI)
+- AWS Software Development Kit (SDKs)
+- other tools are available
+  - AWS Elastic Beanstalk (for EC2 environments)
+  - AWS Cloudformation (has broader support)
+    - use JSON or YML config files (cloudformation templates) to declare the setup you want
+	- update a template and AWS will handle the API calls for all the setup
+
+#Cloudtrail
+
+aws api logs

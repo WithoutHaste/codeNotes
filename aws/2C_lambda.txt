@@ -1,0 +1,5 @@
+##AWS Lambda
+
+a function with a trigger
+- one instance per trigger that occurs
+- runtime limited to 15 minutes

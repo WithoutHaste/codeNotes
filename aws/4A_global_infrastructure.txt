@@ -1,0 +1,25 @@
+##AWS Global Infrastructure
+
+#About
+
+Amazon has data centers located all over the world
+- they are organized into regions
+- this is helpful for providing high availability, because a disaster in one region does not block processing in other regions
+- regions are built to be geographically close to high-demand population centers
+- the regions are interconnected
+- users can decide which region to run their services out of
+  - you data is only stored and handled in the region(s) you specify (for security)
+- the AWS features available vary between regions
+- pricing varies between regions
+
+availability zone (AZ "ay-zed"): one or more discrete data center
+- reach region is made up of one or more availability zones
+- a single EC2 instance will only run in one data center
+  - run multiple instances so they can run in multiple data centers, and even in multiple availability zones
+- the geographically distributed availability zones provide high availability
+
+#AWS Outposts
+
+Amazon will install a little data center inside your building
+- Amazon will manage this data center
+- make use of AWS infrastructure and services in your on-premises data center

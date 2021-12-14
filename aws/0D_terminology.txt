@@ -1,0 +1,3 @@
+##Terminology
+
+Cloud Computing: on-demand delivery of IT resources, managed over the internet

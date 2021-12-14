@@ -1,0 +1,54 @@
+##Storage
+
+block level storage
+- for files
+- updates just the pieces of storage that have been edited
+- ex: your harddrive
+
+instance store volumes
+- physical storage attached to the server your EC2 instance is running on
+- this data is deleted if you stop your instance (because when it is restated, it will likely be on a different server)
+- so it is for ephemeral data
+
+#Amazon Elastic Block Store (EBS)
+
+attach EBS volumes to your EC2 instance
+- this data persists when your EC2 instance stops and restarts
+- allows incremental backups (snapshots)
+- sized up to 16 Terabytes
+
+an availability zone resource
+
+#Amazon Simple Storage Service (S3)
+
+data is stored as objects in buckets
+- unlimited storage
+- max object size is 5 Terabytes
+- can version objects (save previous versions)
+- create multiple buckets
+- security for who can access objects
+
+tiers
+- S3 standard: high durability, data stored in at least three facilities at a time
+- S3 static web hosting: for static web pages hosted from an S3 bucket
+- S3 infrequent access (S3 Standard-IA): for backups and disaster recovery
+- S3 glacier: for long term archives, can lock "vaults" to stop edits
+
+lifecycle policies
+- can move data between tiers automatically
+
+optimized for write once, read many
+
+every object automatically has a url
+
+object storage: each object is a complete file, each update will cause the entire object to be saved as a whole
+
+#Amazon Elastic File System (EFS)
+
+a managed Linux file system
+
+multiple EC2 instances can access it at once
+
+automatically scales to give you more storage
+
+a regional resource

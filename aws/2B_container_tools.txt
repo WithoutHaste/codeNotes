@@ -1,0 +1,41 @@
+##Container Orchestration Tools
+
+uses Docker containers
+- the container includes the code, any dependencies, and configuration
+- containers are isolated from each other similar to a virtual machine
+
+cluster: a collection of containers
+
+these can run on EC2, but don't have to
+- Amazon Elastic Container Service (ECS)
+- Amazon Elastic Kubernetes Service (EKS)
+- you can host these on Fargate instead
+
+#Elastic Load Balancing (ELB)
+
+load balancer: directing/routing traffic among the available instances of a service
+
+Elstastic Load Balancer
+- AWS's flavor of load balancer that you can turn on
+- a managed service
+- a regional service
+- cost of one ELB does not change when the number of servers it is balancing between changes
+
+#Amazon Simple Queue Service (SQS)
+
+AWS messaging and queuing system
+
+payload: the data contained in a message
+
+queue: holds messages until they are processed
+
+#Amazon Simple Notification Service (SNS)
+
+sends out messages
+- can send a message to a specific place
+- or publish a message and have subscribers
+
+#Serverless Compute Options
+
+serverless: you cannot see or access the infrastructure (provisioning, scaling, maintenance is all handled by AWS)
+- your code runs on servers, but you don't need to provision or manage them

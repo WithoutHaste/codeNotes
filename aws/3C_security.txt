@@ -1,0 +1,40 @@
+##Security
+
+shared responsibility model: AWS manages security "of" the cloud, customer manages the security "in" the cloud
+
+aws responsible
+- physical layer
+- network layer
+- hypervisor layer
+
+customer
+- operating system (when on EC2, when not serverless)
+- applications
+- data
+
+AWS root account user: the user will complete access to your whole system
+- do not use this often, create other users with granular access
+
+multifactor authentication (MFA)
+- requires a randomized token to login
+
+#AWS Identity and Access Management (AWS IAM)
+
+create new users
+- by default, they have no permissions
+- create an IAM policy and associate it to a user to grant them access
+  - IAM policy: a json document that lists the api calls the user can make
+  - can also use groups to connect users and policies
+  - can use roles to give temporary permissions for an amount of time
+    - an identity will assume a role, and ignore all its normal permissions for a time
+
+least privileged principle: give users minimal access to what they need
+
+#AWS Organizations
+
+manage multiple AWS accounts, separate resources
+- centralized management
+- consolidated billing
+- hierarchical groupings of accounts
+  - organize into OU (Organizational Units)
+- service and api action access control
