@@ -1,3 +1,17 @@
-##Cloudwatch
+##CloudWatch
 
-find out more about custom metrics and cloudwatch alarms and cloudwatch dasboards
+TODO find out more about custom metrics and cloudwatch alarms and cloudwatch dasboards
+
+#Logs Insights
+
+CloudWatch > Logs Insights
+
+query example
+<code>
+fields @timestamp, @message
+| sort @timestamp desc
+| filter @message ~= "provisioning"
+</code>
+get fields:timestamp and message
+sort: by timestamp descending
+where: message includes the text "provisioning"
