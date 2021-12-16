@@ -1,6 +1,9 @@
 ##Math
 
-#Rand
+square root
+<code>
+$x = sqrt(36);
+</code>
 
 Rand will return a random integer, with the min and max inclusive.
 <code>
