@@ -371,3 +371,9 @@ git cherry-pick <hashcode>
 </code>
 This is not a rebase - it does not move or change that <hashcode> commit.
 Git is smart enough that it will not, later, try to apply this commit a second time, even during a merge.
+
+View a list of all the 'refs'
+This will include all the 'head' refs at the top of the list
+<code>
+git show-ref
+</code>
