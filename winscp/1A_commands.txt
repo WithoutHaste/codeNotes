@@ -1,0 +1,40 @@
+##Commands
+
+cd - change directory, like on linux
+<code>
+cd /a/b/c
+</code>
+
+put
+<code>
+put .\local_a\local_b\*.txt
+</code>
+uploads from local to current folder on remote
+
+get
+<code>
+get ./remote_a/*.txt .\local_a\local_b\
+</code>
+downloads from remote to local
+
+#Synchronize
+
+synchronize 
+<code>
+synchronize remote .\local_a\
+</code>
+upload from local to remote
+- new files
+- updated files
+
+<code>
+synchronize local ./remote_a/
+</code>
+download from remote to local
+- new files
+- updated files
+
+Only synchronize files that match this pattern
+<code>
+synchronize remote .\local_a\ -filemask=*.txt
+</code>

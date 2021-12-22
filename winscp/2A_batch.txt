@@ -1,0 +1,17 @@
+##Batch
+
+Example of running winscp commands from batch file
+<code>
+@echo off
+echo Starting WinSCP
+set /p USERNAME= Enter username:
+set /p PASSWORD= Enter password:
+
+"C:\Program Files (x86)\WinSCP\winscp" /ini=nul /command ^
+ "open sftp://%USERNAME%:%PASSWORD%@111.222.333.444/ -hostkey=""insert_hostkey"" " ^
+ "cd /var/www/selected_folder" ^
+ "put .\folder\*.txt" ^
+ "exit"
+echo WinSCP finished
+</code>
+This example opens winscp, logs into the remote server, moves folder location on the remote server, and updates files from local to remote

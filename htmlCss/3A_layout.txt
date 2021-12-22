@@ -21,3 +21,12 @@ You can nest Absolute elements, each will be relative to its own parent.
 		top: 1em;
 	}
 </code>
+
+If you want elements below "container" to show up below it, you need to set a width and height on the "container".
+<code>
+	#container {
+		position: relative;
+		width: 400px;
+		height: 600px; /*enough height to container childA and childB*/
+	}
+</code>
