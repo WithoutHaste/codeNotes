@@ -103,5 +103,6 @@ context.drawImage(imageElement, x, y, width, height); //can resize image
 
 Use a canvas as an image source
 <code>
-image.src = canvas.toDataURL();
+image.style.src = canvas.toDataURL();
+div.style.backgroundImage = "url('" + canvas.toDataURL() + "')";
 </code>
