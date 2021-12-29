@@ -17,6 +17,11 @@ element.scrollIntoView({ inline:'center' }); //scroll element to horiztonal-cent
 element.scrollIntoView({ block:'center' }); //scroll element to vertical-center
 </code>
 
+example
+<code>
+document.querySelector('#footer').scrollIntoView({ behavior: 'smooth' });
+</code>
+
 #Custom
 
 Examples are based on vertical scrolling.
