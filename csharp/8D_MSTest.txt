@@ -105,59 +105,6 @@ public void MyTest(int value)
 }
 </code>
 
-#Private
-
-You can unit test private methods using the PrivateObject.
-<code>
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-public class Apple
-{
-	public Apple()
-	{
-	}
-	
-	private int Count()
-	{
-		return 5;
-	}
-}
-
-[TestClass]
-public class TestClass
-{
-	[TestMethod]
-	public void TestMethod()
-	{
-		Apple apple = new Apple();
-		PrivateObject privateApple = new PrivateObject(apple);
-		
-		int result = privateApple.Invoke("Count");
-		
-		Assert.AreEqual(5, result);
-	}
-}
-</code>
-
-#Internal
-
-You can unit test internal classes by marking the original assembly as friendly to the test assembly.
-
-Add this to either the Properties/AssemblyInfo.cs file or to a code file in the assembly.
-<code>
-using System.Runtime.CompilerServices;
-[assembly:InternalsVisibleTo("NameOfFriendAssembly")]
-</code>
-
-Marking multiple assemblies as friendly:
-<code>
-using System.Runtime.CompilerServices;
-[assembly:InternalsVisibleTo("NameOfFriendAssemblyA")]
-[assembly:InternalsVisibleTo("NameOfFriendAssemblyB")]
-//or
-[assembly:InternalsVisibleTo("NameOfFriendAssemblyA"), InternalsVisibleTo("NameOfFriendAssemblyB")]
-</code>
-
 #Scripts
 
 Tricky unit test setups I've had to figure out.
