@@ -1,3 +1,10 @@
+##Constants
+
+end of line character(s)
+<code>
+$output = str_replace(PHP_EOL, "<br/>", $input);
+</code>
+
 ##Magic Constants
 
 Magic constants are provided automatically by the php engine, provided the correct extensions are installed.

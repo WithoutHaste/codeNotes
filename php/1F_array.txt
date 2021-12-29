@@ -25,11 +25,26 @@ if (array_key_exists('key', $search_array)) {
 }
 </code>
 
+append
+<code>
+$array[$key] = $value;
+$array += array($key=>$value);
+</code>
+note that neither update is made in-place
+if this array was already an element in a parent array, the parent array will still see the old version of the array
+
 #Operations
 
-push = add new element to the end of an array
+add to array
 <code>
-array_push($array, $element);
+array_push($array, $element); //add to the end
+aray_unshift($array, $element); //add to the beginning
+</code>
+
+remove from array
+<code>
+$element = array_pop($array); //get from the end
+$element = aray_shift($array); //get from the beginning
 </code>
 
 count = array length

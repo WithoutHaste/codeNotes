@@ -41,6 +41,11 @@ implode
 $string = implode(",", $array);
 </code>
 
+replace
+<code>
+$output = str_replace("old", "new", $input);
+</code>
+
 strtoupper = convert entire string to upper-case
 <code>
 $upperCase = strtoupper($string);
@@ -59,4 +64,11 @@ $asciiCode = ord($char);
 chr = convert an ascii code (integer) to a character
 <code>
 $char = chr($asciiCode);
+</code>
+
+convert string to integer
+<code>
+if(ctype_digit($string)) {
+	return intval($string);
+}
 </code>

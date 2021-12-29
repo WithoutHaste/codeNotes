@@ -55,6 +55,14 @@ Use . (period) for string concatenation.
 echo "Hey, " . $username;
 </code>
 
+#Print
+
+Print outputs to standard-out.
+<code>
+print("text");
+print_r($full_array);
+</code>
+
 #Variables
 
 All variable names must start with a "$" (dollar sign).
