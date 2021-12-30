@@ -56,6 +56,19 @@ replace
 $output = str_replace("old", "new", "input string");
 </code>
 
+replace the first instance of "old"
+<code>
+function replace_first_instance($old, $new, $text)
+{
+	$i = strpos($text, $old);
+	if ($i !== false) {
+		$text = substr_replace($text, $new, $i, strlen($old));
+	}
+	return $text;
+}
+</code>
+to replace the last instance, use "strrpos" instead of "strpos"
+
 ord = convert a character to its ascii code (integer)
 <code>
 $asciiCode = ord($char);
