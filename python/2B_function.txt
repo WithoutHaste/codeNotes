@@ -115,6 +115,44 @@ funcB(x)
 print(x) #[1, 2, 3, "a"]
 </code>
 
+# Strict Signatures
+
+Use strict signatures to enforce usage standards for how to pass arguments to methods. This can protect callers from breaking changes as the argument list of a function changes over time.
+- For instance, any parameters that are likely to be removed later, or to be reordered for the legibility of the function signature, can be marked as "keyword passing only" so that calling code is not broken by changes to the function.
+- "positional passing only" parameters should be completely solid arguments that are central to the use case of the function, and the function call should be legible without seeing their argument names.
+- Can ensure all calls to the function are formatted consistently.
+
+Force all callers to use positional passing for the parameters left of the "/"
+<code>
+def funcA(paramA, paramB, /, paramC, paramD):
+	something
+	
+# ways to all the function	
+funcA("a", "b", "c", "d")
+funcA("a", "b", "c", paramD="d")
+funcA("a", "b", paramC="c", paramD="d")
+</code>
+
+Force all callers to use keyword passing for the parameters right of the "*"
+<code>
+def funcA(paramA, paramB, *, paramC, paramD):
+	something
+	
+# ways to all the function	
+funcA("a", "b", paramC="c", paramD="d")
+funcA("a", paramB="b", paramC="c", paramD="d")
+funcA(paramA="a", paramB="b", paramC="c", paramD="d")
+</code>
+
+Doing both at once
+<code>
+def funcA(paramA, paramB, /, *, paramC, paramD):
+	something
+
+# ways to all the function	
+funcA("a", "b", paramC="c", paramD="d")
+</code>
+
 #*args **kwargs
 
 args is a tuple containing an undefined number of function arguments.
