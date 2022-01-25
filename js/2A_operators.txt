@@ -79,6 +79,8 @@ if(a && b) {} //a AND b
 if(a || b) {} //a OR b
 
 if(!a) {} //NOT a
+
+if(!!a) {} //convert non-boolean to closest boolean value, search terms "double bang" "truthy"
 </code>
 
 #Type
