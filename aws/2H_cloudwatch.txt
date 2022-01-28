@@ -15,3 +15,16 @@ fields @timestamp, @message
 get fields:timestamp and message
 sort: by timestamp descending
 where: message includes the text "provisioning"
+
+fields can be parsed with regex
+each * part will be output as a new named field
+<code>
+# with @message format 'stuff stuff,"@l":"Debug",stuff stuff'
+
+fields @timestamp, @message
+| parse @message '*"@l":"*"*' as message_before, loggingType, message_after
+| filter loggingType = "Error"
+| display loggingType, message_after #or comment out this line to see full messages as normal
+| sort @timestamp desc
+| limit 20
+</code>
