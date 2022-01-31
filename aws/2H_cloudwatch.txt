@@ -28,3 +28,17 @@ fields @timestamp, @message
 | sort @timestamp desc
 | limit 20
 </code>
+another way to get this filtering is
+<code>
+fields @timestamp as Timestamp, @@l as LogLevel, ServiceName, @@m
+| filter LogLevel == "Error"
+| sort @timestamp desc
+| limit 20
+</code>
+or more specifically for current job
+<code>
+fields @timestamp as Timestamp, @@l as LogLevel, ServiceName, @@m
+| filter LogLevel != "Error" and LogLevel != "Verbose" and LogLevel != "Debug"  and not isblank(LogLevel)
+| sort @timestamp desc
+| limit 20
+</code>
