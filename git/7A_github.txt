@@ -3,3 +3,24 @@
 #PR: Files Changes
 
 To collapse all file details at once: Alt + mouse-click-to-collapse-one-file-details
+
+#Search
+
+You can search all repos in one organization at a time.
+- go to the organization's page, such as "github.com/Org"
+- type into the "search or jump to" prompt
+- the default search "org:Org" will auto fill
+
+Search for text in files
+<code>
+org:Org mytext
+</code>
+You cannot search for these characters . , : ; / \ ` ' " = * ! ? # $ & + ^ | ~ < > ( ) { } [ ] @
+
+Search by file extension
+<code>
+org:Org extension:csproj
+org:Org extension:csproj mytext
+</code>
+
+I haven't found a sort option by repo, so the results can be really mixed up.
