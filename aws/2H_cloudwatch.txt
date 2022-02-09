@@ -42,3 +42,9 @@ fields @timestamp as Timestamp, @@l as LogLevel, ServiceName, @@m
 | sort @timestamp desc
 | limit 20
 </code>
+
+useful fields
+<code>
+| filter StatusCode ~= '5'
+</code>
+looking for 5xx response codes
