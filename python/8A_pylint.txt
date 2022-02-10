@@ -1,0 +1,19 @@
+## PyLint
+
+# Enable
+
+PyLint will only run on *.py files in a folder that contains an __init__.py file.
+
+# Disable Warnings
+
+The {warning-type} will be printed at the end of each PyLint warning in the report, such as (invalid-name) or (consider-using-set-comprehension).
+
+to disable a warning type for a whole file, place these at the top of the file
+<code>
+# pylint: disable={warning-type}
+</code>
+
+to disable a warning on one statement, place this at the end of the lin
+<code>
+x = my_function()  # pylint: disable={warning-type}
+</code>
