@@ -74,3 +74,8 @@ Options:
 	animation: fadeLoop 1s infinite;
 }
 </code>
+
+hold at end of animation
+<code>
+animation-fill-mode: forwards;
+</code>

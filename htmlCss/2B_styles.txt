@@ -133,3 +133,14 @@ Hide element
 		display: none;
 	}
 </code>
+
+#Backgrounds
+
+<code>
+div {
+	background-image: url(path/to/image.jpg);
+	background-size: 325px;    /*resize the background image before tiling*/
+	background-repeat: repeat; /*tiling*/
+}
+</code>
+background images will fill the space, they will not alter the size of the space
