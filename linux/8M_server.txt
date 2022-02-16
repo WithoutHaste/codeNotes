@@ -91,7 +91,7 @@ Deploy the app:
 - copy the build files (found in /bin) to the appropriate folder on the server
 - run the app with
 <code>
-donet My_App.dll
+dotnet My_App.dll
 </code>
 - navigate to the app in browser on the local server machine at "http://{server_address}:{port}"
 
