@@ -28,6 +28,24 @@ public class MyClass
 }
 </code>
 
+One way to have different settings for Debug vs Release:
+1. Add to the project a configuration-specific file (*.csproj file)
+<code lang="xml">
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="App.Debug.config" />
+    <None Include="App.Release.config" />
+  </ItemGroup>
+</code>
+2. Add an event at compilation time to copy the right config file over "App.config" (*.csproj file)
+<code lang="xml">
+  <!-- copy the correct config file into the correct location before compilation occurs -->
+  <Target Name="SetAppConfig" BeforeTargets="Compile">
+    <Copy SourceFiles="App.Debug.config" DestinationFiles="App.config" OverwriteReadOnlyFiles="true" Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' " />
+    <Copy SourceFiles="App.Release.config" DestinationFiles="App.config" OverwriteReadOnlyFiles="true" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' " />
+  </Target>
+</code>
+
 #Add Reference
 
 If you need to add a library reference in a config, do this:
