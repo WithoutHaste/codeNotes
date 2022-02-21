@@ -1,0 +1,12 @@
+##Network
+
+#Download
+
+<code>
+using System.Net;
+
+using(WebClient webClient = new WebClient())
+{
+	webClient.DownloadFile("http://mysite.com/myfile.txt", @"c:\myfile.txt");
+}
+</code>

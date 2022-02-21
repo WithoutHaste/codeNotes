@@ -27,3 +27,22 @@ using(StreamWriter writer = new StreamWriter(filename))
 	writer.WriteLine("Y");
 }
 </code>
+
+# Operating System Separator
+
+Windows vs Linux use different path or directory separators.
+<code>
+using System.IO;
+
+var path = "folder" + Path.DirectorySeparatorChar + "filename.txt";
+</code>
+
+# Parts of File Name
+
+get file extension
+<code>
+using System.IO;
+
+string extension = Path.GetExtension("folder/file.txt");
+</code>
+
