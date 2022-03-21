@@ -1,0 +1,12 @@
+##Makerspace
+
+(specific instructions for local makerspace)
+
+#Laser Printer
+
+- open Adobe Illustrator file > File > Print
+  - media size: custom
+  - orientation: not autorotate
+  - click Print
+this will send the job to the Epilogue Dashboard
+- print from there to the machine

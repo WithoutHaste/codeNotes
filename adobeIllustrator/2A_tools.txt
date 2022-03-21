@@ -1,0 +1,15 @@
+##Tools
+
+#Select (Black Cursor)
+
+resize
+- hold shift while dragging to resize proportionally
+- hold shift+alt to resize proportionally plus stay centered
+
+rotate
+
+move whole object around
+
+#Direct Select (White Cursor)
+
+reshape: edit individual anchor points

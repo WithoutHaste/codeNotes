@@ -1,0 +1,18 @@
+##How To
+
+#Cut Out Shapes
+
+- Pathfinder panel
+  - cut A out of B, or vice versa
+  - join A and B
+  
+to cut letters out, first convert the text to objects
+
+#Image to Outline
+
+- paste raster image onto page
+- select the image
+- Object menu > Image Trace > Make
+- Image Trace panel > tweak options
+- Properties panel > Expand
+now you can work with the vector shapes
