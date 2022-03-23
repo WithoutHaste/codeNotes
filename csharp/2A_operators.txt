@@ -1,5 +1,22 @@
 ##Operators
 
+#Logical
+
+&& || !
+
+Short-Circuit Evaluation: Logical expressions are short-circuited, meaning evaluation will stop as soon as it has a definitive answer.
+
+For example, this expression will not throw a null reference exception because evaluation ends before that error would be triggered:
+<code>
+Object x = null;
+bool y = false;
+if(y && x.Property) {
+  //do something
+}
+</code>
+
+Note that expressions passed to libraries do not always short-circuit. I've just found the IMongoQueryable from the MongoDb library does not short-circuit, likely because the entire expression is being converted into a different query language.
+
 #Prefix and Postfix Incrementors
 
 <code>
