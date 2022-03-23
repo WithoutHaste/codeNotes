@@ -8,7 +8,7 @@ CloudWatch > Logs Insights
 
 query example
 <code>
-fields @timestamp, @message
+fields @timestamp, StatusCode, @message
 | sort @timestamp desc
 | filter @message ~= "provisioning"
 </code>
@@ -48,3 +48,10 @@ useful fields
 | filter StatusCode ~= '5'
 </code>
 looking for 5xx response codes
+
+trying to find error responses
+<code>
+fields @timestamp, StatusCode, @message
+| sort @timestamp desc
+| filter not isblank(StatusCode)
+</code>
