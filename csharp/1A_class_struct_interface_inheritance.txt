@@ -127,6 +127,7 @@ public class LedLight : IBlinkingLight, ITimerLight, ILight
 #Structs
 
 Structs define value-types (saved in Stack Memory).
+...If a struct is stored as a property in a class, it will be stored on the heap with the rest of the object.
 Structs cannot define explicit parameterless constructors.
 Structs cannot define default field values.
 Struct field/properties do not have to be immutable, but that is a common use case.
@@ -166,6 +167,40 @@ public readonly double Distance => Math.Sqrt(X * X + Y * Y);
 The compiler will assume that all auto-generated Get accessors are readonly.
 
 The compiler enforces the rule that readonly members do not alter state.
+
+#Records
+
+(available in C# 9, which means you need .NET 6 or later)
+
+A reference type.
+Use value-based equality (unlike classes).
+
+To support value-based comparisons, a record will automatically generate these methods for you: Object.Equals(Object), Equals(T recordType), Object.GetHashCode(), ==, !=, System.IEquatable<T>, Object.ToString()
+
+<code>
+public record Widget {
+	public string Name { get; set; }
+}
+</code>
+
+Optional: be clear that this is a reference type
+<code>
+public record class Widget {
+	public string Name { get; set; }
+}
+</code>
+
+#Record Structs
+
+(available in C# 10)
+
+Records as a value type.
+
+<code>
+public record struct Widget {
+	public string Name { get; set; }
+}
+</code>
 
 ##Inheritance
 
