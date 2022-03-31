@@ -105,3 +105,32 @@ Or you can generate each new one with a new unique id such as
 <code>
 optionsBuilder.UseInMemoryDatabase(Guid.NewGuid().ToString());
 </code>
+
+To test lazy vs eager loading, such as the use of Include statements, add this to your in-memory DbContext:
+<code>
+/// <summary>
+/// The Entity Framework in-memory implementation defaults to eager loading everything,
+/// which makes is impossible to unit test Include statements.
+/// This effectively turns off eager loading
+/// Source: https://stackoverflow.com/questions/52740665/how-to-disable-eager-loading-when-using-inmemorydatabase
+///     I came to the conclusion that the problem is really because the code-under-test is reading from the ChangeTracker 
+///     where the test code has already assembled the object graph. Armed with that knowledge, I took my DbContext 
+///     and overrode the SaveChanges method as shown below.
+///     By detaching every object in the ChangeTracker it forces the code-under-test to go back to the database instead 
+///     of pulling the existing object graph from the ChangeTracker.
+/// </summary>
+public override int SaveChanges()
+{
+	var affectedRows = base.SaveChanges();
+
+	if (Database.ProviderName == "Microsoft.EntityFrameworkCore.InMemory")
+	{
+		ChangeTracker.Entries()
+			.Where(e => e.Entity != null)
+			.ToList()
+			.ForEach(e => e.State = EntityState.Detached);
+	}
+
+	return affectedRows;
+}
+</code>
