@@ -96,6 +96,34 @@ MyEvent?.Invoke(this, new EventArgs());
 //otherwise, invoke the event
 </code>
 
+#Null Forgiving (!)
+
+As of C# 8.0
+
+Declares to the compiler that a reference type value is definitely not null, so that you aren't given warnings about it.
+
+In this example, "p" is a possibly-null value.  The call to "Name" specifies that "p" is for-sure not null by that time.
+<code>
+Person? p = Find("John");
+if (IsValid(p))
+{
+	Console.WriteLine($"Found {p!.Name}");
+
+	Console.WriteLine($"Found {p.Value.Name}"); //instead of this
+}
+</code>
+
+Another option here is
+<code>
+Person? p = Find("John");
+if (IsValid(p))
+{
+	Console.WriteLine($"Found {p.Name}");
+}
+
+public static bool IsValid([NotNullWhen(true)] Person? person) => person is not null && person.Name is not null;
+</code>
+
 #Is
 
 Return true if object is of the specified type:
