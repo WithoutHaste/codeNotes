@@ -57,6 +57,7 @@ const text = "abc 123 def";
 const regex = new RegExp("(\w{3}) (\d{3})");
 const matches = text.match(regex); //array ["abc 123", "abc", "123"] which is the full match then each () capture group
 </code>
+returns null if there are no matches
 
 #Instantiation
 
