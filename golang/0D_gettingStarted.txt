@@ -1,0 +1,46 @@
+## Getting Started
+
+# Hello World
+
+<code>
+package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello world")
+}
+</code>
+
+# File Extensions
+
+Go files have the extension ".go"
+
+# Online
+
+Online editor to practice Go in:
+https://go.dev/play/
+
+# Locally
+
+Install Go:
+- Download Go from https://go.dev/
+  - try to use the default installation location, to avoid integration issues later
+- Open Command Prompt
+  - verify installation worked by running "go version"
+  
+Install an IDE:
+- Visual Studio Code is recommended by the walkthrough I'm watching
+- Install Go plugin
+  - Extensions (left-hand nav pane) > search for Go > install the Go Plugin
+  - click Ctrl+Shift+P to open Command Window > search for "Go: Install/Update Tools" > select all the suggested tools > run this to install the tools
+  
+If the tool starts acting up, run "Go: Install/Update Tools" again as a first step.
+
+Start an application
+- Visual Studio Code > new file
+- Save file as "main.go"
+- type in the Hello World program
+- run it with command prompt > "go run main.go"
+  - program is compiled and executed
+

@@ -1,0 +1,9 @@
+## Main
+
+Every program needs an entry point (aka starting point). That is the "main" function.
+<code>
+func main() {
+}
+</code>
+
+You need a "main" package, and it needs to contain a "main" function.  The filename is "main.go".

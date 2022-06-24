@@ -1,0 +1,34 @@
+## About
+
+# Language Name
+
+Go and Golang are the same language.
+
+The language is most correctly called Go.
+
+# Language Features
+
+Statically typed
+
+Compiles to machine code
+
+# History
+
+Developed by engineers at Google
+
+Aimed to:
+- compile fast
+- compile fully to machine code, so it will run fast
+- be strongly typed
+- be concurrent by default (built-in thread management)
+- use garbage collection (aimed to pause as little as possible)
+- be simple (syntax, maintencance, etc)
+
+Designed to be good at:
+- general purpose, many applications
+- web services (deliver data)
+- web applications (deliver webpages)
+
+Turned out to also be good for:
+- task automation (syntax as light as some scripting languages)
+- machine learning (syntax light enough to compete with python)

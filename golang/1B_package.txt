@@ -1,0 +1,6 @@
+## Packages
+
+The package declaration is at the top of a code file.
+<code>
+package main
+</code>

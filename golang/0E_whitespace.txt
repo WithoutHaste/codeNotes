@@ -1,0 +1,16 @@
+## Spacing
+
+Go is formatted with tabs and line breaks.
+
+The tabs are not required, but they are highly recommended.
+
+The line breaks are required if you don't end your lines with semicolons.
+The compiler does automatically add the endline semicolons.
+The recommended style seems to be to not write the semicolons yourself.
+
+The javascript-like curly braces is required.
+<code>
+func abc() {
+}
+</code>
+

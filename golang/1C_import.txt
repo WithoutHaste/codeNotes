@@ -1,0 +1,17 @@
+## Import
+
+Import functionality from libraries so you can use them in your code.
+<code>
+import "fmt"
+</code>
+"fmt" package comes from the standard library
+
+Multiple imports are separated by a line break
+<code>
+import (
+	"fmt"
+	"os"
+)
+</code>
+
+You'll get a compile-time error if you import a package without using it.

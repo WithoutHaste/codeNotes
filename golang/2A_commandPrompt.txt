@@ -1,0 +1,36 @@
+## Command Prompt (CLI)
+
+list out all options
+<code>
+go
+</code>
+
+print the version number
+<code>
+go version
+</code>
+
+display documentation from a package (based on the comments)
+<code>
+go doc {qualified name}
+go doc json.Decoder
+go doc json.Decoder.Decode
+</code>
+
+compile and run the selected file
+<code>
+go run {main filename}
+go run main.go
+go run {module name}
+</code>
+the compiled code is stored in a temp location, it is not left in the current folder
+
+initialize a module with a "go.mod" file
+<code>
+go mod init {name of module}
+</code>
+if you want the module to retrieve files from git
+<code>
+go mod init github.com/pluralsight/webservice
+</code>
+

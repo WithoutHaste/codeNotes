@@ -1,0 +1,15 @@
+## Comments
+
+Single line
+<code>
+// comments
+// comments
+</code>
+
+Multiline
+<code>
+/*
+comments
+comments
+*/
+</code>
