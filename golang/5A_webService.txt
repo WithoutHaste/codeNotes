@@ -1,0 +1,89 @@
+## Web Service
+
+small working example of a web service
+
+<code>
+//golangPractice/main.go
+package main
+
+import (
+	"golangPractice/controllers"
+	"net/http"
+)
+
+func main() {
+	controllers.RegisterControllers()
+	http.ListenAndServe(":3000", nil) //port 3000
+}
+
+//run and navigate to localhost:3000/users to test it
+</code>
+
+<code>
+//golangPractice/models/user.go
+package models
+
+type User struct {
+	ID        int
+	FirstName string
+	LastName  string
+}
+
+var (
+	users  []*User
+	nextID = 1
+)
+
+func GetUsers() []*User {
+	return users
+}
+
+func AddUser(user User) (User, error) {
+	user.ID = nextID
+	nextID++
+	users = append(users, &user)
+	return user, nil
+}
+
+</code>
+
+<code>
+//golangPractice/controllers/front.go
+package controllers
+
+import "net/http"
+
+func RegisterControllers() {
+	uc := newUserController()
+	http.Handle("/users", *uc)
+	http.Handle("/users/", *uc) //includes routes with more stuff past "users"
+}
+
+//see front controller / back controller pattern
+</code>
+
+<code>
+//golangPractice/controllers/user.go
+
+package controllers
+
+import (
+	"net/http"
+	"regexp"
+)
+
+type UserController struct {
+	userIDPattern *regexp.Regexp
+}
+
+//implements an interface, so RegisterControllers can use it
+func (uc UserController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("you've reached the users controller"))
+}
+
+func newUserController() *UserController {
+	return &UserController{
+		userIDPattern: regexp.MustCompile(`^/users/(\d+)/?`),
+	}
+}
+</code>

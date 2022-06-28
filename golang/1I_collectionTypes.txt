@@ -111,3 +111,44 @@ y := widget{ID:1,
 	}
 </code>
 
+Structs can be empty, when you just been a type to bind methods to
+<code>
+type EmptyStruct struct {}
+</code>
+
+You can immediately take the address of a new struct instance
+<code>
+func foo() *MyType {
+	return &MyType {
+		myField: 1,
+	}
+}
+</code
+
+# Tuples
+
+Tuples are fixed-sized, ordered collections that allow multiple data types.
+
+Returning and assigning a tuple
+<code>
+func main() {
+	a, b, c := foo()
+}
+
+func foo() (string, int, int) {
+	return "Bob", 1, 15
+}
+</code>
+You can only pass tuples, you cannot instantiate a tuple variable nor assign the whole tuple to one variable.
+
+Write-Only Variable: Underscore
+<code>
+func main() {
+	a, _, _ := foo() //when we don't need the other returned values
+}
+
+func foo() (string, int, int) {
+	return "Bob", 1, 15
+}
+</code>
+

@@ -1,0 +1,8 @@
+##Capitalization Norms
+
+StructName
+
+FunctionName - public outside the module
+functionName - private to the module
+
+variableName

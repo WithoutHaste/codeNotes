@@ -1,0 +1,66 @@
+## Functions
+
+# Basic
+
+Basic syntax
+<code>
+func functionName() {
+}
+</code>
+
+Calling a function
+<code>
+func main() {
+	i := 1
+	foo(i, 5);
+}
+
+func foo(index int, retryCount int) {
+	fmt.Println("foo", index, retryCount)
+}
+</code>
+Parameters are what is in the function declaration.
+Arguments are passed when you call a function.
+
+Parameters of the same type can be implied
+<code>
+func foo(index, retryCount, other int) {
+}
+</code>
+
+Returning a value
+<code>
+func foo() bool {
+	return true
+}
+</code>
+
+Functions can be passed as parameters
+<code>
+
+</code>
+
+# Method
+
+Bind functions to types to turn them into Methods. This adds behavior to the type.
+<code>
+func (paramName MyType) MethodName() {
+	fmt.Println(paramName)
+}
+</code>
+
+# Constructor
+
+For initializing data.
+Looks like a Factory pattern function, used by convention in Go programs.
+
+Create a new instance of the type and return a pointer to it
+<code>
+func NewMyType() *MyType {
+	return &MyType {
+		myField: 1,
+	}
+}
+</code>
+The "New" prefix is convention, it is not required.
+Convention is also to return pointers, not structs.

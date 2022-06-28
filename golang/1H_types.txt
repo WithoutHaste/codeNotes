@@ -1,5 +1,11 @@
 ## Types
 
+# Default values
+
+nil - pointers, errors
+0 - integers, other number types
+empty string - string
+
 # Primitives
 
 These are Value Types.  The variable's memory slot holds the value directly.
@@ -110,10 +116,39 @@ const (
 You can specify multiple Constant Blocks.
 Iota resets for each Constant Block.
 
+# Error
+
+Error is a pointer data type, and is a built-in interface type.
+The type is called "error" so don't use that as a variable name.
+
+Standard usage is for a function to return a tuple of (success, failure)
+<code>
+success, err := os.Open("my_file.txt")
+if err != nil {
+	log.Fatal(err)
+}
+</code>
+The idea is that the caller can decide if they can handle the error or not.
+
+Example function using this pattern
+<code>
+import "errors"
+
+func divide(x int, y int) (int, error) {
+	if y == 0 {
+		return -1, errors.New("Cannot divide by 0")
+	}
+	return x/y, nil
+}
+</code>
+
 # Casting
 
 <code>
 var x int = 1
 fmt.Println(float32(x) + 2.5)
+
+var s string = "abc"
+fmt.Println([]byte(s))
 <code>
 
