@@ -12,6 +12,8 @@ Statically typed
 
 Compiles to machine code
 
+Post-OOP: neither Object Oriented nor Functional, but has similarities to both
+
 # History
 
 Developed by engineers at Google

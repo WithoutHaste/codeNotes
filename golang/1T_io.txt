@@ -1,0 +1,13 @@
+## I/O
+
+# fmt.Println
+
+<code>
+fmt.Println("abc") //outputs abc
+
+x := 3
+fmt.Println(x) //outputs 3
+
+a, b := 1, 2
+fmt.Println(a, b) //outputs 1 2
+</code>

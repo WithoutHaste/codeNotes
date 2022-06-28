@@ -1,5 +1,9 @@
 ## Modules
 
+A project space.
+
+A module contains packages.
+
 A space to organize your project.  Replacing the "Workspace".
 - Make a folder to house your source code.
 - Add a "go.mod" file to this folder.

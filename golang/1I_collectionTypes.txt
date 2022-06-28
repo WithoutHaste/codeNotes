@@ -1,0 +1,113 @@
+## Collection Types
+
+# Arrays
+
+Arrays are fixed-sized, indexed, and all the elements have the same type.
+Array sizes must be Constant at compile-time. See Slices if the length is determined at run-time.
+
+<code>
+var x [3]int //holds 3 integers
+x[0] = 15
+x[1] = 25
+x[2] = 35
+fmt.Println(x) //outputs [15 25 35]
+fmt.Println(x[0]) //outputs 15
+</code>
+
+<code>
+x := [3]int{15, 25, 35}
+fmt.Println(x) //outputs [15 25 35]
+</code>
+
+Array of pointers
+<code>
+x := [3]*MyStruct
+</code>
+
+# Slices
+
+Slices are dynamically-sized, indexed, and all the elements have the same type.
+Slices are built on top of underlying Arrays.
+
+Slice syntax is [start:end].
+
+<code>
+x := [3]int{15, 25, 35} //Array
+y := x[:] //Slice
+fmt.Println(y) //outputs [15 25 35]
+</code>
+The slice points to the array, so editing x will update y.
+
+<code>
+y := []int{15, 25, 35} //Slice initialized with underlying Array
+</code>
+
+Append an element
+<code>
+y := []int{15, 25, 35}
+y = append(y, 45)
+y = append(y, 55, 65)
+</code>
+The underlying array changes are handled automatically. It will allocate memory for new arrays as needed.
+
+Working with the indexes
+<code>
+y := []int{15, 25, 35}
+a = y[:] //the whole thing
+b = y[1:] //1st index through the end
+d = y[1:2] //just index 1, index 2 is not included
+e = y[:3] //since the last index specified is not included, using the array length is valid
+</code>
+Does not support negative indexes.
+
+# Maps
+
+Maps are a collection of key/value pairs.
+
+<code>
+x := map[string]int{"a":1} //string is the Key type, int is the Value type
+x["a"] = 2
+fmt.Println(x["a"]) //outputs 2
+</code>
+
+Delete
+<code>
+x := map[string]int{"a":1, "b":2}
+delete(x, "a")
+fmt.Println(x) //outputs map[b:2]
+</code>
+
+# Structs
+
+Structs are a collection of multiple types of data (fields).
+(The lesson I'm watching does call it a Collection type)
+
+Structs can be defined within a function, or at the package level.
+
+Define the struct type, then create an instance of it.
+<code>
+type widget struct {
+	ID int
+	FirstName string
+	LastName string
+}
+var x widget
+fmt.Println(x) //outputs {0 } //int defaulted to 0, strings defaulted to empty
+
+x.ID = 1
+x.FirstName = "Bob"
+x.LastName = "Smith"
+fmt.Println(x) //outputs {1 Bob Smith }
+fmt.Println(x.LastName) //outputs Smith
+</code>
+
+Shorter initialization syntax
+<code>
+x := widget{ID:1, FirstName:"Bob", LastName:"Smith"}
+
+y := widget{ID:1, 
+	FirstName:"Bob", 
+	LastName:"Smith", //this lines needs a comma or the closing curly brace
+	}
+</code>
+

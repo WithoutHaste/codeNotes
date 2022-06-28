@@ -1,0 +1,26 @@
+## Variables
+
+# Declaration
+
+<code>
+var x int
+x = 1
+</code>
+
+Expliciti Syntax, Explicitly Types
+<code>
+var x int = 1
+</code>
+
+Implicit Initialization Syntax, Implicitly Typed
+<code>
+x := "bob" //a string
+</code>
+You can only use this assignment operator to declare the variable
+
+Multiple Assignments
+<code>
+x, y := 4, "smith"
+</code>
+
+Local variables must be used, or you will get a compiler error.

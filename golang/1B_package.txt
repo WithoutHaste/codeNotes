@@ -4,3 +4,28 @@ The package declaration is at the top of a code file.
 <code>
 package main
 </code>
+
+Putting files in a directory is sufficient to declare a package (other than main).
+Folder name must match the package name.
+  
+Example of importing a package from your own module
+<code>
+//golangPractice/models/widget.go
+package models
+
+type Widget struct {
+	ID        int
+}
+
+
+//golangPractice/main.go
+package main
+
+import (
+	"golangPractice/models"
+)
+
+func main() {
+	x := models.Widget
+}
+</code>

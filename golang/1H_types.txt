@@ -1,0 +1,119 @@
+## Types
+
+# Primitives
+
+These are Value Types.  The variable's memory slot holds the value directly.
+
+bool //true, false
+int
+string //"double quotes"
+
+float32 (32 bits)
+float64 (64 bits)
+
+complex64
+complex128
+<code>
+x := complex(3, 4) //3+4i
+</code>
+
+# Pointers
+
+Pointer variables hold the memory address of the value.
+
+Pointers are declared with an asterisk(*) before the primitive type.
+<code>
+var p *string
+fmt.Println(p) //outputs "<nil>" for empty
+</code>
+
+<code>
+var p *string = new(string) //initialize the memory
+*p = "apple" //can only set the value after initializing the memory
+fmt.Println(p) //outputs the memory address, not the primitive value
+fmt.Println(*p) //outputs "apple"
+</code>
+
+<code>
+x := "apple"
+p := &x //set pointer p to the address of x
+</code>
+in this example, editing primitive x will change the value p dereferences to
+
+Golang does not allow Pointer Arithmetic.
+
+Pointer Operator:       the asterisk in:  var p *string
+Dereferencing Operator: the asterisk in:  *p = "apple" AND fmt.Println(*p)
+Address Of Operator:    the ampersand in: p := &x
+
+# Constants
+
+Constant values cannot change after they are initialized.
+Constant values must be initialized when they are declared.
+Constant values must be able to be determined at compile time.
+
+<code>
+const x = 1
+const y int = 2
+</code>
+
+The expression on the right-side of a constant assignment is a Constant Expression.
+
+# Constant Blocks
+
+Constants can be declared at the package level
+(You can also have Variable Blocks using var)
+
+<code>
+package main
+
+import "fmt"
+
+const pi = 3.14
+
+func main() {
+}
+</code>
+
+Constant Block
+<code>
+const (
+	pi = 3.14
+	x = "apple"
+)
+</code>
+
+Iota: starting from 0 and incrementing by 1 each time it is called
+<code>
+package main
+
+import "fmt"
+
+const (
+	a = iota
+	b = iota
+)
+
+func main() {
+	fmt.Println(a, b) //outputs 0 1
+}
+</code>
+
+Unspecified constant expressions default to the same as the previous line
+<code>
+const (
+	a = iota + 6 //set to 6
+	b            //set to 7
+)
+</code>
+
+You can specify multiple Constant Blocks.
+Iota resets for each Constant Block.
+
+# Casting
+
+<code>
+var x int = 1
+fmt.Println(float32(x) + 2.5)
+<code>
+
