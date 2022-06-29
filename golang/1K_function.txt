@@ -64,3 +64,26 @@ func NewMyType() *MyType {
 </code>
 The "New" prefix is convention, it is not required.
 Convention is also to return pointers, not structs.
+
+# Variadic
+
+A variadic function can be called with any number of trailing arguments.
+<code>
+fmt.Println(1, 2, 3, 4, 5, 6, 7, 8) //etc
+</code>
+
+Declaration
+<code>
+func sum(numbers ...int) int { //accepts any number of integer arguments
+	total := 0
+	for _, n := range numbers {
+		total += n
+	}
+	return total
+}
+</code>
+
+# Overloading
+
+Overloading here means multiple functions with the same name and different parameter lists.
+Golang does not support function or method overloading.

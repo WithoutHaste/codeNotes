@@ -1,5 +1,23 @@
 ## Collection Types
 
+# General Use
+
+Length
+<code>
+x := []int{1, 2, 3}
+y := len(x)
+</code>
+
+Is this an array or a slice?
+<code>
+import "reflect"
+
+var a = [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+var b = a[:]
+fmt.Println(reflect.TypeOf(a)) //outputs [8]int so it is an array
+fmt.Println(reflect.TypeOf(b)) //outputs []int so it is a slice
+</code>
+
 # Arrays
 
 Arrays are fixed-sized, indexed, and all the elements have the same type.
@@ -19,6 +37,11 @@ x := [3]int{15, 25, 35}
 fmt.Println(x) //outputs [15 25 35]
 </code>
 
+Array with length set to however many elements it starts with
+<code>
+x := [...]int{1,2,3,4,5,6,7,8}
+</code>
+
 Array of pointers
 <code>
 x := [3]*MyStruct
@@ -35,6 +58,12 @@ Slice syntax is [start:end].
 x := [3]int{15, 25, 35} //Array
 y := x[:] //Slice
 fmt.Println(y) //outputs [15 25 35]
+</code>
+<code>
+y := make([]int, 5) //Slice of length 5
+</code>
+<code>
+y := make([]int, 0, 5) //Slice of length 0 and capacity 5
 </code>
 The slice points to the array, so editing x will update y.
 
@@ -59,6 +88,20 @@ d = y[1:2] //just index 1, index 2 is not included
 e = y[:3] //since the last index specified is not included, using the array length is valid
 </code>
 Does not support negative indexes.
+
+Append
+<code>
+x := []int{1, 2, 3}
+y := []int{4, 5}
+println(append(x, 4))
+println(append(x, 4, 5))
+println(append(x, y...))
+</code>
+
+Copy - copy from source to destination, return the number of elements copied
+<code>
+
+</code>
 
 # Maps
 

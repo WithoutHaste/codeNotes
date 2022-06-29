@@ -68,8 +68,11 @@ func RegisterControllers() {
 package controllers
 
 import (
+	"encoding/json"
+	"golangPractice/models"
 	"net/http"
 	"regexp"
+	"strconv"
 )
 
 type UserController struct {
@@ -78,7 +81,125 @@ type UserController struct {
 
 //implements an interface, so RegisterControllers can use it
 func (uc UserController) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("you've reached the users controller"))
+	if r.URL.Path == "/users" {
+		switch r.Method {
+		case http.MethodGet:
+			uc.getAll(w, r)
+		case http.MethodPost:
+			uc.post(w, r)
+		default:
+			w.WriteHeader(http.StatusNotImplemented)
+		}
+	} else {
+		matches := uc.userIDPattern.FindStringSubmatch(r.URL.Path)
+		if len(matches) == 0 {
+			w.WriteHeader(http.StatusNotFound)
+		}
+		id, err := strconv.Atoi(matches[1])
+		if err != nil {
+			w.WriteHeader(http.StatusNotFound)
+		}
+		switch r.Method {
+		case http.MethodGet:
+			uc.get(id, w)
+		case http.MethodPut:
+			uc.put(id, w, r)
+		case http.MethodDelete:
+			uc.delete(id, w)
+		default:
+			w.WriteHeader(http.StatusNotImplemented)
+		}
+	}
+}
+
+func (uc *UserController) getAll(w http.ResponseWriter, r *http.Request) {
+	encodeUsersAsJson(models.GetUsers(), w)
+}
+
+func (uc *UserController) get(id int, w http.ResponseWriter) {
+	user, err := models.GetUserByID(id)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	encodeUserAsJson(user, w)
+}
+
+func (uc *UserController) post(w http.ResponseWriter, r *http.Request) {
+	user, err := uc.parseRequest(r)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("cannot parse User object"))
+		return
+	}
+	user, err = models.AddUser(user)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	encodeUserAsJson(user, w)
+}
+
+func (uc *UserController) put(id int, w http.ResponseWriter, r *http.Request) {
+	user, err := uc.parseRequest(r)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("cannot parse User object"))
+		return
+	}
+	if id != user.ID {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte("user id does not match url id"))
+		return
+	}
+	user, err = models.UpdateUser(user)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	encodeUserAsJson(user, w)
+}
+
+func (uc *UserController) delete(id int, w http.ResponseWriter) {
+	err := models.RemoveUserById(id)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
+	}
+	w.WriteHeader(http.StatusOK)
+}
+
+func (uc *UserController) parseRequest(r *http.Request) (models.User, error) {
+	decode := json.NewDecoder(r.Body)
+	var user models.User
+	err := decode.Decode(&user)
+	if err != nil {
+		return models.User{}, err
+	}
+	return user, nil
+}
+
+//the lesson had a generic handler for all json, using interface{}, but it wasn't compiling for me
+func encodeUsersAsJson(data []*models.User, w http.ResponseWriter) {
+	js, err := json.Marshal(data)
+	writeJsonResponse(js, err, w)
+}
+
+func encodeUserAsJson(data models.User, w http.ResponseWriter) {
+	js, err := json.Marshal(data)
+	writeJsonResponse(js, err, w)
+}
+
+func writeJsonResponse(js []byte, err error, w http.ResponseWriter) {
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
 }
 
 func newUserController() *UserController {

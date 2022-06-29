@@ -1,0 +1,42 @@
+##Operators
+
+# Logical
+
+&&
+||
+!
+
+# Comparison
+
+==
+!=
+<
+<=
+>
+>=
+
+# Assignment
+
+:=
+=
++=
+-=
+
+# Increment, Decrement
+
+++
+--
+
+Note that these form statements, not expressions.
+So i++ is valid as an entire statement, but x := i++ is not valid.
+
+# Spread ...
+
+Convert a collection into a series of arguments.
+
+<code>
+users = append(users[:i], users[i+1:]...) //remove one element from a slice
+
+numbers := []int{1, 2, 3}
+fmt.Println(numbers...)
+</code>

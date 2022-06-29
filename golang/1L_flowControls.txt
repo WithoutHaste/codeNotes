@@ -1,0 +1,142 @@
+##Flow Controls
+
+#For
+
+Loop till condition
+<code>
+var i int //defaults to 0
+for i < 5 {
+	i++ //increment operation
+}
+</code>
+
+Loop till condition with post clause
+<code>
+for i := 0; i < 5; i++ { //i only exists within the scope of the loop
+}
+</code>
+<code>
+var i int //i exists outside the loop
+for ; i < 5; i++ {
+}
+</code>
+
+Infinite loop, explicit
+<code>
+for {
+}
+</code>
+
+Loop over collections
+<code>
+x := []int{1, 2, 3}
+for i, v := range x { //i is index, v is value
+	println(i, v)
+}
+</code>
+<code>
+x := []int{1, 2, 3}
+for i := range x { //i is index, value is ignored - useful for maps
+	println(i)
+}
+</code>
+<code>
+x := []int{1, 2, 3}
+for _, v := range x { //index is ignored, v is value
+	println(v)
+}
+</code>
+
+Break out of loop early
+<code>
+var i int
+for i < 5 {
+	break
+}
+</code>
+
+Continue with next iteration of the loop
+<code>
+var i int
+for i < 5 {
+	i++
+	continue
+	println(i) //this line is never run
+}
+</code>
+
+#If Else
+
+<code>
+if i < 5 {
+}
+if x == y {
+}
+if 1 != 2 {
+}
+</code>
+
+<code>
+if x == y {
+} else {
+}
+</code>
+
+<code>
+if x == y {
+} else if x < 5 {
+} else { //final else statement is not required
+}
+</code>
+
+#Switch
+
+The tabbing looks weird to me, but it is the convention.
+
+<code>
+x := "b"
+switch x {
+case "a":
+	println("found a")
+case "b":
+	println("found b")
+case "c":
+	println("found c")
+}
+</code>
+Each case statement has an implicit break - so cases do not fall through to the next one.
+
+Explicit fallthrough
+<code>
+switch x {
+case "a":
+	println("found a")
+	fallthrough
+case "b":
+	println("found b")
+}
+</code>
+
+Default case
+<code>
+switch x {
+case "a":
+	println("found a")
+case "b":
+	println("found b")
+default:
+	println("found default")
+}
+</code>
+
+#Panic
+
+Similar to exceptions in other languages - the program does not know how to proceed from an error.
+
+<code>
+panic("Database connection failed")
+</code>
+This will be output to stdout with a stack trace
+Code execution stops at a panic
+
+TODO lookup how to recover from panics

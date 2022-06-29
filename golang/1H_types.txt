@@ -136,11 +136,28 @@ import "errors"
 
 func divide(x int, y int) (int, error) {
 	if y == 0 {
-		return -1, errors.New("Cannot divide by 0")
+		return -1, errors.New("cannot divide by 0")
 	}
 	return x/y, nil
 }
 </code>
+
+Message formatting
+<code>
+return User{}, fmt.Errorf("user with id '%v' not found", id)
+</code>
+
+# Interface
+
+<code>
+type myInterface interface {
+	function1() int
+	function2() float64
+}
+</code>
+
+Interfaces are used implicitly.
+You do not declare that a type is implementing an interface, you just implement it and the compiler recognizes it.
 
 # Casting
 
@@ -151,4 +168,11 @@ fmt.Println(float32(x) + 2.5)
 var s string = "abc"
 fmt.Println([]byte(s))
 <code>
+
+# Converting
+
+String to integer
+<code>
+i := strconv.Atoi("15")
+</code>
 
