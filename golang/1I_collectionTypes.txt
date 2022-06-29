@@ -166,7 +166,20 @@ func foo() *MyType {
 		myField: 1,
 	}
 }
-</code
+</code>
+
+define a struct for one-time use
+<code>
+scenarios := []struct {
+	inputA int
+	inputB int
+	expect int
+}{
+	{ inputA:1, inputB:2, expect:3 },
+	{ inputA:-1, inputB:2, expect:1 },
+	{ inputA:0, inputB:2, expect:2 },
+}
+</code>
 
 # Tuples
 

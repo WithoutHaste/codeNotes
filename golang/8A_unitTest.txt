@@ -1,0 +1,133 @@
+##Unit Tests
+
+#Tests
+
+Verify behavior.
+Go does not use Assertions, just normal comparison logic.
+By default, tests run sequentially.
+
+File name: main.go and main_test.go
+Location: in the same folder
+Package: white box testing: main and main (get access to internals of the package)
+Package: black box testing: main and main_test
+
+Black box testing is considered best practice here.
+
+<code>
+package main_test
+
+import "testing"
+
+func TestAddition(t *testing.T) {
+	got := 2 + 2
+	expected := 4
+	if got != expected {
+		t.Errorf("expected '%v', got '%v'", expected, got)
+	}
+}
+</code>
+The "Test" prefix on the function name is required by the test runner. So "Test" and then an upper-case letter.
+Test functions must accept just a *testing.T parameter.
+
+Visual Studio Code lets you run a test right in the IDE.
+You can also run them all from the CLI with "go test".
+
+See package testing/quick for black-box testing.
+See package testing/io for reader/writer testing.
+See package net/http/httptest for request/response testing, and for local end-to-end tests.
+
+Outside of the standard libraries, see Testify, Ginkgo, GoConvey, httpexpect, gomock, and go-sqlmock.
+
+Test files are not included in production executables.
+
+Immediate failures - current test exits immediately
+<code>
+t.FailNow()
+
+t.Fatal(args ...interface{})
+
+t.Fatalf(format string, args ...interface{})
+</code>
+
+Non-Immediate failures - test has failed and continues to run
+<code>
+t.Fail()
+
+t.Error(args ...interface{})
+
+t.Errorf(format string, args ...interface{})
+</code>
+
+Table-Driven Test
+<code>
+func TestAdditionTableDriven(t *testing.T) {
+	scenarios := []struct {
+		inputA int
+		inputB int
+		expect int
+	}{
+		{ inputA:1, inputB:2, expect:3 },
+		{ inputA:-1, inputB:2, expect:1 },
+		{ inputA:0, inputB:2, expect:2 },
+	}
+	for _, scenario := range scenarios {
+		got := scenario.inputA + scenario.inputB
+		if got != scenario.expect {
+			e.Errorf("input a '%v' b '%v', expected '%v', got '%v'", scenario.inputA, scenario.inputB, scenario.expected, got)
+		}
+	}
+}
+</code>
+
+Write out a message without failing: see testing.T.Log and Logf.
+Mark a function as not-a-test: see testing.T.Helper.
+Skip a test: see testing.T.Skip, Skipf, and SkipNow.
+Use callback functions to run sub-test suites: see testing.T.Run.
+Mark tests that can be run in parallel: see testing.T.Parallel.
+
+#Benchmark Tests
+
+Verify performance.
+
+<code>
+package main_test
+
+func BenchmarkFoo(b *testing.B) {
+
+}
+</code>
+Be default, the timer runs the whole time the test is running. To control that, see b.StartTime, b.StopTimer, and b.ResetTimer.
+
+b.N = number of seconds to keeping running the test for
+b.RunParallel can run another function in parallel, such as a Test that stresses the system
+
+Run these with "go test -bench"
+
+For profiling:
+"go test -benchmen"
+"go test -trace {filename}"
+"go test -{type}profile {filename}"
+
+#Example Tests
+
+For documentation.
+Examples will be executed (to confirm they are runnable) and will be included in "go doc" documentation.
+
+<code>
+package main_test
+
+import "module/foo"
+
+func ExampleFoo() {
+	foo.Bar()
+	// Output: foo bar
+}
+</code>
+
+Naming conventions:
+- ExampleFuncName
+- ExampleFuncName_second
+- ExampleFuncName_third
+- ExampleTypeName
+- ExampleTypeName_MethodName
+- Example //for the whole package

@@ -1,8 +1,6 @@
 ##Capitalization Norms
 
-StructName
+Uses camel-case, such as MyWidget.
 
-FunctionName - public outside the module
-functionName - private to the module
-
-variableName
+Start with a capital letter for anything published/exported/accessible outside the module.
+Start with a lowercase letter for anything internal to the module.
