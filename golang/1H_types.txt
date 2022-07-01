@@ -23,6 +23,12 @@ complex128
 x := complex(3, 4) //3+4i
 </code>
 
+String formatting
+<code>
+func ToString(sv SemanticVersion) string {
+	return fmt.Sprintf("%d.%d.%d", sv.major, sv.minor, sv.patch)
+}</code>
+
 # Pointers
 
 Pointer variables hold the memory address of the value.
@@ -146,6 +152,8 @@ Message formatting
 <code>
 return User{}, fmt.Errorf("user with id '%v' not found", id)
 </code>
+
+Errors can be used to return "I am done" sort of information, such as when you are looping through a file and hit "end of file". You expect to hit the end of the file on every usage, so it is more informative than an error.  Success/Failure becomes Continue/Stop.
 
 # Interface
 

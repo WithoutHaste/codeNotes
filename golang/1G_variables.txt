@@ -23,4 +23,11 @@ Multiple Assignments
 x, y := 4, "smith"
 </code>
 
+Implied types
+<code>
+type MyType struct {
+	a, b, c int //all three variables are ints
+}
+</code>
+
 Local variables must be used, or you will get a compiler error.

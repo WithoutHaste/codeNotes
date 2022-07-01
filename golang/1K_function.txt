@@ -27,6 +27,7 @@ Parameters of the same type can be implied
 func foo(index, retryCount, other int) {
 }
 </code>
+When a parameter type is not explicit, it is assumed to be the same as the next parameter with an explicit type.
 
 Returning a value
 <code>
@@ -35,17 +36,98 @@ func foo() bool {
 }
 </code>
 
-Functions can be passed as parameters
+See Tuples for returning multiple values
 <code>
+a, b := func()
 
+func foo() bool, int {
+	return true, 5
+}
 </code>
+
+Functions are first-class citizens - they can be treated as variables
+<code>
+x := foo //function stored as a variable
+println(x(1, 2)) //invoke the function later
+println(runner(x))//pass it as an argument
+
+func sum(a int, b int) int {
+	return a + b
+}
+
+func runner(f func(int, int) int) {
+	f(1, 2)
+}
+<code>
+<code>
+var f func() int //variable of type func accepting no arguments and returning an int
+f := foo
+f()
+
+func foo() int {
+	return 4
+}
+</code>
+
+# Return Multiple Values (Tuples)
+
+Returning and assigning a tuple
+<code>
+func main() {
+	a, b, c := foo()
+}
+
+func foo() (string, int, int) {
+	return "Bob", 1, 15
+}
+</code>
+You can only pass tuples, you cannot instantiate a tuple variable nor assign the whole tuple to one variable.
+
+See "Error" for conventional Go pattern for returning multiple values.
+
+# Named Return Variables
+
+<code>
+func divide(a, b int) (answer int, err error) {
+	if b == 0 {
+		err = errors.New("cannot divide by zero")
+		return
+	}
+	answer = a / b
+	return
+}
+</code>
+The empty "return" will return the current values of the named return variables
+
+# Public/Private
+
+Functions that start with a captial letter are Public outside a package.
+
+Functions that start with a lowercase letter are Private within a package.
+
+This is the convention the compiler understands.
 
 # Method
 
 Bind functions to types to turn them into Methods. This adds behavior to the type.
+Methods can access and edit private fields on a type.
+
+Value Receiver: The methods works with a copy of the value.
 <code>
+myType.MethodName()
+
 func (paramName MyType) MethodName() {
 	fmt.Println(paramName)
+}
+</code>
+That first thing after the "func" keyword is the "method receiver".
+
+Pointer Receiver: Pass in structs/etc as pointers, so that when you modify the object it is not modifying a copy of the object.
+<code>
+myType.MethodName() //note that the call is made in the same way
+
+func (paramName *MyType) MethodName() {
+	paramName.field++
 }
 </code>
 
@@ -74,7 +156,7 @@ fmt.Println(1, 2, 3, 4, 5, 6, 7, 8) //etc
 
 Declaration
 <code>
-func sum(numbers ...int) int { //accepts any number of integer arguments
+func sum(numbers ...int) int { //accepts any number of integer arguments, as an array
 	total := 0
 	for _, n := range numbers {
 		total += n
@@ -83,7 +165,139 @@ func sum(numbers ...int) int { //accepts any number of integer arguments
 }
 </code>
 
+The variadic parameter must be the last parameter.
+
 # Overloading
 
 Overloading here means multiple functions with the same name and different parameter lists.
 Golang does not support function or method overloading.
+
+Note that method names do not conflict with function names, and method names only conflict when attached to the same type.
+
+# Anonymous
+
+Anonymous functions can accept arguments and return values, or not.
+
+Run immediately
+<code>
+func foo() {
+	func() { //anonymous function definition
+		println("running")
+	}() //this last () tells it to run/invoke the function
+}
+</code>
+
+Store as a variable and invoke later
+<code>
+func foo() {
+	f := func() {
+		println("running")
+	}
+	f()
+}
+</code>
+
+Return a function
+<code>
+addExpression := mathExpression()
+println(addExpression(2, 3))
+
+func mathExpression() func(int, int) int {
+	return func(a int, b int) int {
+		return a + b
+	}
+}
+</code>
+Function "mathExpression" returns a func that accepts two int arguments and returns an int.
+
+# Maintaining State
+
+AKA Stateful Functions
+
+<code>
+generator := idGenerator()
+println(generator()) //outputs 1
+println(generator()) //outputs 2
+
+func idGenerator() func() int {
+	id := 0 //the state of outer variables will be preserved
+	return func() int {
+		id += 1
+		return id
+	}
+}
+</code>
+Each instance from calling "idGenerator()" creates a separate instance of the closure.
+
+Sometimes state is shared when you don't mean it to be.  All these closures end up operating on the final value of "i":
+<code>
+var funcs []func() int
+for i := 0; i < 5; i++ {
+	funcs = append(funcs, func() int {
+		return i * 10
+	})
+}
+for _, f := range funcs {
+	println(f()) //outputs a lot of 50s
+}
+</code>
+You need to create a new copy of "i", like this:
+<code>
+var funcs []func() int
+for i := 0; i < 5; i++ {
+	cleanI := i
+	funcs = append(funcs, func() int {
+		return cleanI * 10
+	})
+}
+for _, f := range funcs {
+	println(f()) //outputs 0 10 20 30 40
+}
+</code>
+
+# Defer
+
+Ensure a function is invoked later.
+Usually used for cleanup, such as closing a database connection, even when an error has occurred.
+
+The deferred function will be run at the end of the enclosing function.
+<code>
+package main
+
+import (
+	"fmt"
+	"os"
+)
+
+func main() {
+	f := createFile("filename")
+	defer closeFile(f)
+	writeFile(f) //even if an error occurs during writing, the file will still be closed
+}
+
+func createFile(p string) *os.File {
+	fmt.Println("creating")
+	f, err := os.Create(p)
+	if err != nil {
+		panic(err)
+	}
+	return f
+}
+
+func writeFile(f *os.File) {
+	fmt.Println("writing")
+	fmt.Fprintln(f, "data")
+}
+
+func closeFile(f *os.File) {
+	fmt.Println("closing")
+	err := f.Close()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "error: %v\n", err)
+		os.Exit(1)
+	}
+}
+</code>
+Defers are pushed onto a stack.  When there are multiple defers in the same function, the last one deferred will run first.
+
+Defers will still be run when a Panic occurs.

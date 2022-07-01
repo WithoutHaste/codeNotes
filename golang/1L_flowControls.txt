@@ -89,6 +89,17 @@ if x == y {
 }
 </code>
 
+If Assignment Scope
+<code>
+x := getValue()
+if x == 0 {
+}
+
+if x := getValue(); x == 0 {
+}
+</code>
+Both of these examples are valid. The second one does not clutter the current function scope with variable "x".
+
 #Switch
 
 The tabbing looks weird to me, but it is the convention.
@@ -129,7 +140,7 @@ default:
 }
 </code>
 
-#Panic
+#Panic/Recover
 
 Similar to exceptions in other languages - the program does not know how to proceed from an error.
 
@@ -139,4 +150,14 @@ panic("Database connection failed")
 This will be output to stdout with a stack trace
 Code execution stops at a panic
 
-TODO lookup how to recover from panics
+When the function F calls panic, execution of F stops, any deferred functions in F are executed normally, and then F returns to its caller. To the caller, F then behaves like a call to panic. The process continues up the stack until all functions in the current goroutine have returned, at which point the program crashes.
+
+Recover is a built-in function that regains control of a panicking goroutine. It is only used within "defer" functions.
+<code>
+defer func() {
+	_ = dbConnection.Close() //try to cleanup normally
+	if r:= recover(); r != nil { //check if a panic is occurring
+		println("recovered from panic", r) //print what was passed into the panic
+	}
+}
+</code>

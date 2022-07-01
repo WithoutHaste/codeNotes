@@ -30,6 +30,18 @@
 Note that these form statements, not expressions.
 So i++ is valid as an entire statement, but x := i++ is not valid.
 
+# Blank Identifier _
+
+AKA Write-Only Variable
+
+Accept a value that you do not use - avoid compiler errors
+<code>
+a, _ := returnMultipleValues()
+
+for _, v := range myCollection {
+}
+</code>
+
 # Spread ...
 
 Convert a collection into a series of arguments.

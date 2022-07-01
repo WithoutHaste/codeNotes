@@ -180,31 +180,3 @@ scenarios := []struct {
 	{ inputA:0, inputB:2, expect:2 },
 }
 </code>
-
-# Tuples
-
-Tuples are fixed-sized, ordered collections that allow multiple data types.
-
-Returning and assigning a tuple
-<code>
-func main() {
-	a, b, c := foo()
-}
-
-func foo() (string, int, int) {
-	return "Bob", 1, 15
-}
-</code>
-You can only pass tuples, you cannot instantiate a tuple variable nor assign the whole tuple to one variable.
-
-Write-Only Variable: Underscore
-<code>
-func main() {
-	a, _, _ := foo() //when we don't need the other returned values
-}
-
-func foo() (string, int, int) {
-	return "Bob", 1, 15
-}
-</code>
-
