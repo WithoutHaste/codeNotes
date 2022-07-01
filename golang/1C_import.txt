@@ -5,7 +5,6 @@ Import functionality from libraries so you can use them in your code.
 import "fmt"
 import "os"
 </code>
-"fmt" package comes from the standard library
 
 Import Block
 <code>
@@ -15,4 +14,43 @@ import (
 )
 </code>
 
-You'll get a compile-time error if you import a package without using it.
+All uses of a library require the qualified name:
+<code>
+import "fmt"
+import "net/http"
+
+func main() {
+	fmt.Println("abc")
+	http.ListenAndServe(":8080", nil)
+}
+</code>
+
+Alias to resolve naming conflicts
+<code>
+import (
+	"encoding/json"
+	myjson "myproject/x/json"
+)
+
+func main() {
+	json.Marshal(...)
+	myjson.Foo()
+}
+</code>
+
+Import a package just for the init functions:
+<code>
+import (
+	"fmt"
+	_ "somepackage"
+)
+</code>
+Otherwise you'll get a compile-time error for importing a package without using it.
+
+Relative imports: navigating the directory structure with . and ..
+- Not valid in workspaces or modules.
+- Intended for rapid prototyping.
+- Probably don't need this, since modules have been invented.
+
+Vendor directories: managing multiple versions of the same library.
+- Apply to workspaces only (not to modules).

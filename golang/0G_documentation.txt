@@ -1,0 +1,61 @@
+##Documentation
+
+#Basic
+
+Comments on packages and public members are automatically included in the module documentation.
+
+Run "go doc {qualified name}" to test your documentation.
+
+# Comments
+
+Single line
+<code>
+// comments
+// comments
+</code>
+
+Multiline
+<code>
+/*
+comments
+comments
+*/
+</code>
+
+#Style
+
+Use complete sentences.
+Start the first sentence with the element's name (or an article, then the name).
+Write the first sentence as a "short description" of the element.
+
+#Package
+
+You can include documentation throughout your code files.
+<code>
+// license comments
+// license comments
+// license comments
+
+// Package {name} {intent}
+// doc comments
+// doc comments
+package foo
+</code>
+
+You can also include a "doc.go" to hold all the documentation for a directory/package. Use this for long package comments.
+<code>
+// license comments
+// license comments
+// license comments
+
+/*
+	Package {name} {intent}
+	doc comments
+	doc comments
+*/
+package foo
+</code>
+
+#Members
+
+You can add comments/documentation to any member (variable, type, function, method).

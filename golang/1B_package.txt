@@ -1,13 +1,63 @@
 ## Packages
 
+# Basic
+
+Organize source code into manageable units.
+
+A package includes all source files in one directory, with the exception of subdirectories (which form their own packages).
+- Putting files in a directory is sufficient to declare a package (other than main).
+- Folder name must match the package name.
+
+Package Elements:
+- Package declaration
+- Documentation
+- Imports
+- Var and Const Blocks
+- Types and Interfaces
+- Functions
+
+Everything declared in a package is accessible withing the package.
+
 The package declaration is at the top of a code file.
 <code>
 package main
 </code>
-
-Putting files in a directory is sufficient to declare a package (other than main).
-Folder name must match the package name.
   
+# Package Types
+
+Library Package:
+- Designed to be consumed by other packages
+- Package name must match the directory name
+- Should provide a focused set of related features
+
+Main Package:
+- Defines an application entry point
+- Contains a "main" function
+- Package name must be "main", and does not need to match the directory name
+- Can be in any directory
+- Should focus on application setup and initialization
+
+# Naming Conventions
+
+All Lowercase
+No Underscores
+Short
+Clear
+Nouns
+Abbreviate Judiciously (see Clear)
+Don't Lockdown Generic Names (such as user, action, event)
+
+Avoid multi-word package names, but just concat the words together if you must.
+
+With package.element names, avoid stutter (like http.HTTPServer, json.JSONEncoder). The package name is required for all usages of its elements, so take advantage of that when naming the elements.
+
+# Import
+
+Import process
+1. Import packages this one depends on
+2. Initialize package-level variables 
+3. Run init functions
+
 Example of importing a package from your own module
 <code>
 //golangPractice/models/widget.go
@@ -16,7 +66,6 @@ package models
 type Widget struct {
 	ID        int
 }
-
 
 //golangPractice/main.go
 package main
@@ -29,3 +78,31 @@ func main() {
 	x := models.Widget
 }
 </code>
+
+# Internal
+
+The directory name "internal" is a special case - these packages will not be made available outside of your module.
+
+When a package is under an "internal" directory, it can only be imported by packages that share the immediate ancestor of the internal directory.
+- Ex: "/a/b/c/internal/d/e/f" can only be imported by packages under "/a/b/c"
+
+# Design
+
+Provide a clear solution to a problem.
+- Single Responsibility
+- Cohesive API
+
+Focus on the consumer.
+- Simple to use
+- Minimize API surface
+- Encapsulate changes (enable non-breaking changes)
+
+Maximize reusability.
+- Reduce dependencies
+- Minimize scope
+
+Interface strategies
+- Concrete type arguments are great for accepting configuration
+- Interface type arguments are great for defining behavior
+- Concrete return types are great for returning data
+- Follow the convention of returning Errors, avoid using Panics

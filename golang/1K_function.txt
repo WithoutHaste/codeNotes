@@ -147,6 +147,24 @@ func NewMyType() *MyType {
 The "New" prefix is convention, it is not required.
 Convention is also to return pointers, not structs.
 
+# Init
+
+Init functions will initialize application state when it starts up. It is recommened to use this only when absolutely necessary.
+
+The init function is defined in a package block.
+It will be run exactly once, even if the package is imported multiple times.
+
+<code>
+func init() {
+}
+</code>
+
+You can define multiple (at least 2) init functions in one file. They will be run in the order they are defined in.
+
+Warning: there is no promise on what order init functions from separate files will be called in.
+
+You cannot explicitly call an init function within your application.
+
 # Variadic
 
 A variadic function can be called with any number of trailing arguments.

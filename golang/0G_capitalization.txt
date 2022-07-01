@@ -1,6 +1,0 @@
-##Capitalization Norms
-
-Uses camel-case, such as MyWidget.
-
-Start with a capital letter for anything published/exported/accessible outside the module.
-Start with a lowercase letter for anything internal to the module.

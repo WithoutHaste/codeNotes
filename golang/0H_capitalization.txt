@@ -1,0 +1,11 @@
+##Capitalization
+
+Uses camel-case, such as MyWidget.
+
+Start with a capital letter
+- Public Scope
+- available to all package consumers
+
+Start with a lowercase letter
+- Package Scope
+- available within the package
