@@ -50,13 +50,13 @@ using MyNamespace.Utility;
 AddInts(5, 7);
 </code>
 
-C# 10 Global Usings
+C# 10 (.Net 6) Global Usings
 <code>
 global using System;
 </code>
 This applies to the entire project.
 
-C# 10 Implicit Usings
+C# 10 (.Net 6) Implicit Usings
 <code lang="xml">
 	<PropertyGroup>
 		<!-- Other properties like OutputType and TargetFramework -->

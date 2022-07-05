@@ -22,7 +22,7 @@ Fully qualified names must be unique within a program.
 
 You cannot declare a namespace within a class, interface, or struct.
 
-C# 10 File-scoped namespaces
+C# 10 (.Net 6) File-scoped namespaces
 <code>
 namespace A.B.C;
 
