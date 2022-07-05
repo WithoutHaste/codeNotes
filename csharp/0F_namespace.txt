@@ -22,6 +22,16 @@ Fully qualified names must be unique within a program.
 
 You cannot declare a namespace within a class, interface, or struct.
 
+C# 10 File-scoped namespaces
+<code>
+namespace A.B.C;
+
+public class MyClass 
+{
+}
+</code>
+One allowed per file. Must be above all type declarations.
+
 #Naming Convention
 
 The conventional organization of a project is for the namespaces to correspond to the file structure.

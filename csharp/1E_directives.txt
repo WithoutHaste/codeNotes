@@ -50,6 +50,27 @@ using MyNamespace.Utility;
 AddInts(5, 7);
 </code>
 
+C# 10 Global Usings
+<code>
+global using System;
+</code>
+This applies to the entire project.
+
+C# 10 Implicit Usings
+<code lang="xml">
+	<PropertyGroup>
+		<!-- Other properties like OutputType and TargetFramework -->
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+	<ItemGroup>
+		<!-- Remove a specific using that was added implicitly -->
+		<Using Remove="System.Threading.Tasks" />
+		<!-- Another way to add a global using -->
+		<Using Include="System.Threading.Tasks" />
+	</ItemGroup>
+</code>
+Implicitly add common global using directives to the project.
+
 #if endif
 
 A code block is only compiled if the specified symbol is (or is not) defined.
