@@ -167,6 +167,13 @@ type myInterface interface {
 Interfaces are used implicitly.
 You do not declare that a type is implementing an interface, you just implement it and the compiler recognizes it.
 
+I think this tests if a variable currently typed as one interface can be cast to another interface
+<code>
+asInterfaceB, is := asIntefaceA.(InterfaceB)
+if !is:
+	//return error
+</code>
+
 # Casting
 
 <code>

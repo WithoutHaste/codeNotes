@@ -78,3 +78,7 @@ option "-bench" to include benchmark tests in the run
 option "-bench -benchtime 10s" to include benchmark tests and set the time for them to run
 see "go help testflag" for all options
 
+<code>
+go test -run=nope ./...
+</code>
+I think the "-run=" accepts regex, so this is just a piece of text that isn't matching anything
