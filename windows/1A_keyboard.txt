@@ -1,3 +1,6 @@
 #Keyboard Shortcuts
 
 Shift+Del = Permanent delete skipping recycle bin
+
+Ctrl+V = paste
+Ctrl+Shift+V = paste just the text without any styling
