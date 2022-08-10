@@ -27,6 +27,26 @@ for {
 }
 </code>
 
+Break out of loop early
+<code>
+var i int
+for i < 5 {
+	break
+}
+</code>
+
+Continue with next iteration of the loop
+<code>
+var i int
+for i < 5 {
+	i++
+	continue
+	println(i) //this line is never run
+}
+</code>
+
+#For Range
+
 Loop over collections
 <code>
 x := []int{1, 2, 3}
@@ -47,23 +67,7 @@ for _, v := range x { //index is ignored, v is value
 }
 </code>
 
-Break out of loop early
-<code>
-var i int
-for i < 5 {
-	break
-}
-</code>
-
-Continue with next iteration of the loop
-<code>
-var i int
-for i < 5 {
-	i++
-	continue
-	println(i) //this line is never run
-}
-</code>
+Note that the "value" is a copy - editing it will not update the original value.
 
 #If Else
 

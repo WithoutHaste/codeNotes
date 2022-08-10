@@ -112,6 +112,8 @@ This is the convention the compiler understands.
 Bind functions to types to turn them into Methods. This adds behavior to the type.
 Methods can access and edit private fields on a type.
 
+You can only define a method on types that are declared in your package.
+
 Value Receiver: The methods works with a copy of the value.
 <code>
 myType.MethodName()
