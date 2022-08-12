@@ -1,0 +1,18 @@
+##RegExp
+
+working example
+<code>
+package main
+
+import (
+	"fmt"
+	"regexp"
+)
+
+func main() {
+	r, _ := regexp.Compile("\"effective\":\"([0-9]{4}-[0-9]{2}-[0-9]{2})\"")
+	input := "abc \"effective\":\"2021-07-01\" def"
+	fmt.Println(r.FindString(input)) //full text match
+	fmt.Println(r.FindStringSubmatch(input)[1]) //capture group match
+}
+</code>
