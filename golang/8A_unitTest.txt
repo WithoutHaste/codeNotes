@@ -131,3 +131,7 @@ Naming conventions:
 - ExampleTypeName
 - ExampleTypeName_MethodName
 - Example //for the whole package
+
+# Errata
+
+Don't have non-test files referencing public values in test files. The compiler will tell you the values are not available, due to the order of compilation. (Plus, why would did we try to do that at all?)
