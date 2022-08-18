@@ -30,6 +30,16 @@ And
 db.getCollection('MyCollection').find({$and: [{"myFieldA": "A"}, {"myFieldB": "B"}])
 </code>
 
+Array is at least 1-element long
+<code>
+db.getCollection.find({'myArray.1': {$exists: true}})
+</code>
+
+Array is exactly 2-elements long
+<code>
+db.getCollection.find({'myArray': {$size: 2}})
+</code>
+
 #Sort
 
 Sort by age descending:
