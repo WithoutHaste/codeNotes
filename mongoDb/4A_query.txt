@@ -32,8 +32,9 @@ db.getCollection('MyCollection').find({$and: [{"myFieldA": "A"}, {"myFieldB": "B
 
 Array is at least 1-element long
 <code>
-db.getCollection.find({'myArray.1': {$exists: true}})
+db.getCollection.find({'myArray.0': {$exists: true}})
 </code>
+(indexing starts at 0)
 
 Array is exactly 2-elements long
 <code>
