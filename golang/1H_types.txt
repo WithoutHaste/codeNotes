@@ -186,6 +186,14 @@ type bbb interface {
 }
 </code>
 
+# Type Alias
+
+<code>
+type MyString string
+</code>
+Enables segregation of attached methods.
+Enables attaching methods to types from other packages.
+
 # Casting
 
 <code>
