@@ -103,6 +103,13 @@ Copy - copy from source to destination, return the number of elements copied
 
 </code>
 
+Sort - sorts the slice in place
+<code>
+sort.Slice(mySlice, func(indexA, indexB int) bool {
+	return mySlice[indexA].Field < mySlice[indexB].Field
+})
+</code>
+
 # Maps
 
 Maps are a collection of key/value pairs.
