@@ -127,7 +127,7 @@ Force all callers to use positional passing for the parameters left of the "/"
 def funcA(paramA, paramB, /, paramC, paramD):
 	something
 	
-# ways to all the function	
+ # ways to all the function	
 funcA("a", "b", "c", "d")
 funcA("a", "b", "c", paramD="d")
 funcA("a", "b", paramC="c", paramD="d")
@@ -138,7 +138,7 @@ Force all callers to use keyword passing for the parameters right of the "*"
 def funcA(paramA, paramB, *, paramC, paramD):
 	something
 	
-# ways to all the function	
+ # ways to all the function	
 funcA("a", "b", paramC="c", paramD="d")
 funcA("a", paramB="b", paramC="c", paramD="d")
 funcA(paramA="a", paramB="b", paramC="c", paramD="d")
@@ -149,7 +149,7 @@ Doing both at once
 def funcA(paramA, paramB, /, *, paramC, paramD):
 	something
 
-# ways to all the function	
+ # ways to all the function	
 funcA("a", "b", paramC="c", paramD="d")
 </code>
 
