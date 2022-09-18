@@ -27,7 +27,8 @@ String formatting
 <code>
 func ToString(sv SemanticVersion) string {
 	return fmt.Sprintf("%d.%d.%d", sv.major, sv.minor, sv.patch)
-}</code>
+}
+</code>
 
 # Pointers
 
