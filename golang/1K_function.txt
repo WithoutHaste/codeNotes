@@ -58,7 +58,7 @@ func sum(a int, b int) int {
 func runner(f func(int, int) int) {
 	f(1, 2)
 }
-<code>
+</code>
 <code>
 var f func() int //variable of type func accepting no arguments and returning an int
 f := foo
