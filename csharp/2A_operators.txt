@@ -60,6 +60,8 @@ ref var r = ref (array != null ? ref array[0] : ref otherArray[0]);
 
 #Null Coalesce (??)
 
+aka null-coalescing
+
 <code>
 x = y ?? 0;
 //if y is null, 0 is set instead
@@ -68,6 +70,20 @@ x = y ?? 0;
 <code>
 x = y ?? z ?? 0;
 //chain it
+</code>
+
+# Null-Coalescing Assignment (??=)
+
+(in C# 8)
+
+Only updates the variable value if it is currently null
+<code>
+widget.field ??= "smith";
+// is the same as
+if(widget.field == nul;)
+{
+	widget.field = "smith";
+}
 </code>
 
 #Null Conditional (?)
