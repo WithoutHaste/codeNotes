@@ -1,5 +1,11 @@
 ## Import
 
+# Direction
+
+I think that in Go, we aren't supposed to import from higher up in our own folder structure, only from lower down.
+
+# Import
+
 Import functionality from libraries so you can use them in your code.
 <code>
 import "fmt"
