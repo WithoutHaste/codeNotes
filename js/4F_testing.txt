@@ -14,12 +14,12 @@ Template for results page:
 			<meta charset="utf-8">
 			<meta name="viewport" content="width=device-width">
 			<title>QUnit Example</title>
-			<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.6.1.css">
+			<link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.19.3.css">
 		</head>
 		<body>
 			<div id="qunit"></div>
 			<div id="qunit-fixture"></div>
-			<script src="https://code.jquery.com/qunit/qunit-2.6.1.js"></script>
+			<script src="https://code.jquery.com/qunit/qunit-2.19.3.js"></script>
 			<script src="MyTests.js"></script>
 			<script src="MyJavascript.js"></script>
 		</body>
@@ -51,6 +51,8 @@ QUnit.test("Title of Test", function( assert ) {
 	assert.notOk(boolean, "Boolean False Message" );
 	
 	assert.equal(actual-value, expected-value, "Values Match Message" );
+	
+	assert.propContains(actual-object, expected-object, "props found in expected match those in actual" );
 	
 	assert.throws(function-that-throws-exception, expected-exception-type, "Expected Exception Thrown Message" );
 });
