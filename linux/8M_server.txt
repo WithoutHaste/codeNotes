@@ -249,6 +249,10 @@ Start Supervisor
 <code>
 sudo service supervisor start
 </code>
+Restart Supervisor
+<code>
+sudo supervisorctl reload
+</code>
 Watch Supervisor logs to see app startup
 <code>
 sudo tail -f /var/log/supervisor/supervisord.log
