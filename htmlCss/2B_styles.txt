@@ -50,6 +50,26 @@ Any descendants
 .classA div { }
 </code>
 
+Pseudo-elements:
+style a part of an element
+<code>
+p::first-letter
+p::first-line
+</code>
+
+Pseudo-classes:
+style an element based on its state
+<code>
+a:hover
+a:hover:after
+button:hover
+span:before
+</code>
+inline example
+<code>
+<a style='hover:text-decoration:none;'></a>
+</code>
+
 Attribute exists
 <code>
 [data-category]
