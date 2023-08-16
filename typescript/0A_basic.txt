@@ -1,3 +1,7 @@
 ##About
 
 TypeScript compiles into JavaScript.
+
+TypeScript includes all of JavaScript, plus:
+- static type checking
+(todo fill in more)
