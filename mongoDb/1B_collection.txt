@@ -30,10 +30,12 @@ Many suggestions online says don't nest data more than 1 level deep. But that pr
 
 #Collection-Level Operations
 
-remove all documents from collection
+count the documents
+you can enter any "find" query into the method
 <code>
-db.collection_name.remove({});
+db.getCollection("name").countDocuments({"field":"value"});
 </code>
+the raw integer result is printed at the end of the console output
 
 insert multiple documents into collection
 <code>
@@ -43,4 +45,9 @@ var allDocs=
 	{ "_id":"2", "parentDocId":"1" },
 ];
 db.collection_name.insert(allDocs);
+</code>
+
+remove all documents from collection
+<code>
+db.collection_name.remove({});
 </code>
