@@ -1,0 +1,28 @@
+##Tasks
+
+When a Task object is instantiated, it is a "hot" Task, meaning it is already running. You do not need to await a Task to start it running.
+
+Any method using "await" must be declared "async".
+Only async methods can call async methods.
+
+<code>
+using System.Threading.Tasks;
+
+public async Task<bool> IsValid()
+{
+	return await service.IsValid();
+}
+</code>
+
+Run multiple tasks in parallel
+<code>
+var resultA = await service.A();
+var resultB = await service.B();
+
+var taskA = service.A();
+var taskB = service.B();
+
+await Task.WhenAll(taskA, taskB);
+var resultA = taskA.Result;
+var resultB = taskB.Result;
+</code>

@@ -4,6 +4,12 @@
 
 32-bit integer.
 
+Accepted integer literal formats:
+<code>
+var a = 13;
+var b = 1_000_000; //1,000,000
+</code>
+
 #Long
 
 64-bit integer.
