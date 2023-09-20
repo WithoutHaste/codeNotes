@@ -3,7 +3,6 @@
 When a Task object is instantiated, it is a "hot" Task, meaning it is already running. You do not need to await a Task to start it running.
 
 Any method using "await" must be declared "async".
-Only async methods can call async methods.
 
 <code>
 using System.Threading.Tasks;
