@@ -1,0 +1,396 @@
+##Service-level Tests
+
+(not a recognized level of testing, but all that nomenclature is mixed up anyway)
+
+Here, service tests means unit tests built up to cover end-to-end within a single service.  So it uses real implementations for all dependency injection, up to the service boundary.
+
+Not sure how much of this is specific to the architecture I pulled it from, and how much is general to C#.
+
+Framework:
+<code>
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Moq;
+
+public class MockLoggerFactory
+{
+	private readonly ConcurrentDictionary<Type, Mock<ILogger>> _loggers = new ConcurrentDictionary<Type, Mock<ILogger>>();
+	
+	public IEnumerable<(Type Type, Mock<ILogger> Logger)> Loggers = _loggers.Select(kv => (kv.Key, kv.Value));
+	
+	public Mock<ILogger>? GetMockLogger<T>() => GetMockLogger(typeof(T));
+	
+	public Mock<ILogger>? GetMockLogger(Type type) => _loggers.TryGetValue(type, out var mock) ? mock : null;
+	
+	public ILogger GetOrCreateLogger<T>() => _loggers.GetOrAdd(typeof(T), t => new Mock<ILogger>()).Object;
+	
+	public static void Add(IServiceCollection services, ServiceLifetime lifetime = ServiceLifetime.Scoped)
+	{
+		services.Add(new ServiceDescriptor(
+			typeof(MockLoggerFactory),
+			typeof(MockLoggerFactory),
+			lifetime));
+		services.Add(new ServiceDescriptor(
+			typeof(ILogger<>),
+			typeof(MockLogger()),
+			lifetime));
+	}
+	
+	private class MockLogger<T> : ILogger<T>
+	{
+		private readonly ILogger _logger;
+		
+		public MockLogger(MockLoggerFactory factory) => _logger = factory.GetOrCreateLogger<T>();
+		
+		public void Log<TState>(
+			LogLevel logLevel,
+			EventId eventId,
+			TState state,
+			Exception? exception,
+			Func<TState, Exception?, string> formatter) =>
+			_logger.Log(logLevel, eventId, state, exception, formatter);
+			
+		public bool IsEnabled(LogLevel logLevel) => _logger.IsEnabled(logLevel);
+		
+		public IDisposable BeingScope<TState>(TState state) => _logger.BeingScope(state);
+	}
+}
+</code>
+
+Framework:
+<code>
+using System;
+using Autofac.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
+
+public static class AutofacExtensions
+{
+	private static readonly AutofacServiceProviderFactory _factory = new AutofacServiceProviderFactory();
+	
+	public static IServiceProvider BuildAutofacServiceProvider(this IServiceCollection services) =>
+		_factory.CreateServiceProvider(_factory.CreateBuilder(services));
+}
+</code>
+
+Framework:
+<code>
+using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Moq;
+
+public static class ServiceMockExtensions
+{
+	public static IServiceCollection MockSingleton<T>(this IServiceCollection services, Mock<T>? mock = null) where T : class
+	{
+		mock ??= new Mock<T>();
+		return services.AddSingleton(mock).AddSingleton(s => mock.Object);
+	}
+	
+	public static IServiceCollection MockScoped<T>(this IServiceCollection services) where T : class
+	{
+		return services.AddScoped((IServiceProvider s) => new Mock<T>()).AddScoped((IServiceProvider s) => s.GetRequiredService<Mock<T>>().Object);
+	}
+	
+	public static IServiceCollection MockScopedOptions<T>(this IServiceCollection services, Func<T> factory) where T : class, new()
+	{
+		Mock<IOptions<T>> mock = new Mock<IOptions<T>>();
+		mock.Setup((IOptions<T> s) => s.Value).Returns(factory);
+		return services.AddSingleton((IServiceProvider s) => mock).AddScoped((IServiceProvider s) => mock.Object).AddScoped((IServiceProvider s) => s.GetRequiredService<IOptions<T>>().Value);
+	}
+}
+</code>
+
+Framework:
+<code>
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+public static class HostStartupExtensions
+{
+	public static IServiceCollection WithSettings<TSettings>(this IServiceCollection serviceCollection, IConfiguration configuration) where TSettings : BaseSettings<TSettings>
+	{
+		return serviceCollection.Configure(delegate (TSettings instance)
+		{
+			configuration.GetSection(BaseSettings<TSettings>.Name).Bind(instance);
+		});
+	}
+}
+</code>
+
+Framework:
+<code>
+using System;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
+
+public static class ServiceProviderExtensions
+{
+	public static Mock<T> GetMock<T>(this IServiceProvider services) where T : class
+	{
+		return services.GetRequiredService<Mock<T>>();
+	}
+	
+	public static T CreateInstance<T>(this IServiceProvider services)
+	{
+		return ActivatorUtilities.CreateInstance<T>(services, Array.Empty<object>());
+	}
+}
+</code>
+
+Framework:
+<code>
+using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Net.Http.Headers;
+using Moq;
+using NodaTime;
+using NodaTime.Extensions;
+
+public class StartupFixtures<TStartup> where TStartup : IStartup
+{
+	public IStartup Startup { get; }
+	
+	public IServiceProvider ApplicationServices { get; }
+	
+	public StartupFixtures(Action<IServiceCollection> mockServices, IConfiguration? config = null)
+	{
+		config ??= new ConfigurationBuilder()
+			.AddInMemoryCollection(new Dictionary<string, string>())
+			.Build();
+		var hostingEnv = new Mock<IWebHostEnvironment>();
+		hostingEnv
+			.Setup(m => m.EnvironmentName)
+			.Returns("Development");
+		Startup = (TStartup)Activator.CreateInstance(
+			typeof(TStartup),
+			config,
+			hostingEnv.Object,
+			new NullLoggerFactory()
+			}!;
+		if(typeof(TStartup).GetProperty("UnderTest", typeof(bool)) is { CanWrite:true } prop)
+		{
+			prop.SetValue(Startup, true);
+		}
+		var services = new ServiceCollection();
+		services.MockSingleton(hostingEnv);
+		services.AddSingleton(SystemClock.Instance.InUtc());
+		services.AddSingleton(config);
+		Startup.ConfigureServices(services);
+		services.AddScope<HttpContext>(svc =>
+		{
+			var context = new DefaultHttpContext();
+			context.Request.Headers[HeaderNames.Authorization] = "foo";
+			return context;
+		});
+		MockLoggerFactory.Add(services);
+		mockServices(services);
+		ApplicationServices = services.BuildAutofacServiceProvider();
+	}
+	
+	public IServiceScope CreateScope() => ApplicationServices.CreateScope();
+}
+</code>
+
+Framework:
+<code>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using NServiceBus; //for events
+using NServiceBus.UniformSession;
+//using lots of local libraries
+using StatsdClient; //for DataDog
+
+public class StartupFixtures : StartupFixtures<Server.Startup>
+{
+	public StartupFixtures(IConfiguration config = null) : base(MockServices, config) {}
+
+	//first runs real Startup config setup, then this MockServices, then the test-level mockReplacement
+	public StartupFixtures(Action<IServiceCollection> mockReplacement, IConfiguration config = null) : base(s =>
+	{
+		MockServices(s);
+		mockReplacement(s);
+	}, config) {}
+	
+	private static void MockServices(IServiceCollection services)
+	{
+		//override real Startup with default mocks for everything at the service bourdary
+		//sample lines
+		services.MockScoped<IZInterface>();
+		services.AddSingleton<IMessageSession>();
+		services.AddSingleton<IUniformSession>();
+	}
+}
+</code>
+
+Locally defined IStartup, just the gist of it
+<code>
+using System.Net;
+using System.Net.Sockets;
+using System.Reflection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+//using lots more local infrastructure
+public abstract class BaseStartup : IStartup
+{
+	protected IConfiguration Configuration { get; }
+	protected IWebHostEnvironment HostingEnvironment { get; }
+	protected ILoggerFactory LoggerFactory { get; }
+	
+	//lots of specifics omitted
+}
+
+using System.Reflection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+//using lots more local infrastructure
+public class Startup : BaseStartup
+{
+	public Startup(
+		IConfiguration configuration,
+		IWebHostEnvironment hostingEnvironment,
+		ILoggerFactory loggerFactory)
+		: base(configuration, hostingEnvironment, loggerFactory, SERVICE_NAME)
+		{
+		}
+		
+	public override void ConfigureServices(IServiceCollection services)
+	{
+		//setup dependency injection - a sampling of commands
+		services.WithSettings<XSettings>(Configuration); //options/settings imported
+		services.AddScoped<IYInterface, YServices>(); //setup dependency injection of local services
+	}
+}
+</code>
+
+Framework:
+<code>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Moq;
+using Xunit;
+
+public static class MockLoggingExtensions
+{
+	public static void VerifyNoOtherLogs(this IServiceProvider services)
+	{
+		MockLoggerFactory requiredService = services.GetRequiredService<MockLoggerFactory>();
+		foreach(var logger in requiredService.Loggers)
+		{
+			logger.Logger.VerifyNoOtherCalls();
+		}
+	}
+
+	//Auto-verify logs of all levels you don't care about
+	//Then verify that no log levels you do care about have been missed
+	public static void VerifyNoOtherLogs(this IServiceProvider services, params LogLevel[] logLevels)
+	{
+		LogLevel[] loglLevels2 = logLevels;
+		LogLevel[] source = (LogLevel[])Enum.GetValues(typeof(LogLevel));
+		IEnumerable<LogLevel> enumerable = source.Where((LogLevel x) => !logLevels2.Contains(x));
+		MockLoggerFactory requiredServices = services.GetRequiredService<MockLoggerFactory>();
+		foreach(var logger in requiredService.Loggers)
+		{
+			foreach(LogLevel logLevel in enumerable)
+			{
+				int count = logger.Logger.Invocations.Where((IInvocation invocation) => invocation.Arguments.First().ToString() == logLevel.ToString()).Count();
+				logger.Logger.VerifyLog(logLevel, count);
+			}
+			logger.Logger.VerifyNoOtherCalls();
+		}
+	}
+}
+</code>
+
+Service Tests
+<code>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Moq;
+using NodaTime;
+using NServiceBus;
+using NServiceBus.UniformSession;
+using Xunit;
+
+public class ServiceTests
+{
+	private readonly StartupFixtures _fixtures;
+	private readonly Mock<IMessageSession> _messageBus;
+	private readonly Mock<IUniformSession> _uniformMessageBus;
+	private readonly Mock<IOptions<XSettings>> _mockXSettings = new();
+	
+	public ServiceTests()
+	{
+		_fixtures = new StartupFixture(s =>
+		{
+			s.MockScopedOptions(() => _mockXSettings.Object.Value);
+			s.AddScoped<ConcreteClass>(); //something that was not auto-included in service setup
+		});
+		_messageBus = _fixtures.ApplicationServices.GetMock<IMessageSession>();
+		_uniformMessageBus = _fixtures.ApplicationServices.GetMock<IUniformSession>();
+	}
+	
+	private async Task RunTest(Func<IServiceProvider, XController, Task> controllerMethod)
+	{
+		using var scope = _fixtures.CreateScope();
+		var services = scope.ServiceProvider;
+		var controller = services.CreateInstance<XController>();
+		await controllerMethod(services, controller);
+		
+		_messageBus.VerifyNoOtherCalls();
+		_uniformMessageBus.VerifyNoOtherCalls();
+		_messageBus.Invocations.Clear();
+		_uniformMessageBus.Invocations.Clear();
+	}
+
+	[Fact]
+	public async Task ActualTest()
+	{
+		await RunTest(async (services, controller) =>
+		{
+			services.SetupMocksForThisTest...
+		
+			var response = await controller.XEndpoint(xArguments);
+			
+			//assert something
+		});
+	}
+}
+</code>
