@@ -4,6 +4,13 @@ The python file extension is *.py
 
 To execute (assuming Python is in your PATH variable) run "python myFile.py" from the console.
 
-Python is interpreted, not compiled.
+Python is interpreted, not compiled. (Although it can be compiled.)
+Python has garbage collection.
+Python is dynamically typed. (The type of a variable can change during runtime, and type checking occurs at runtime.)
+Python supports both functional and object-oriented programming paradigms.
 
-(todo: look up detailed list of differences between 2 and 3)
+These notes focus on Python 3, not Python 2.
+
+Goals of the language:
+- "there is only one way to do each thing"
+- "focuses on simplicity"

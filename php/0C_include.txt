@@ -1,0 +1,13 @@
+## Include
+
+Include text of another file in this one, to use functions/etc.
+
+Note that relative paths are relative to the place you run "php" from.
+
+<code>
+include("filename.php");
+include("../filename.php");
+include("/absolute/system/path/filename.php");
+</code>
+
+Includes are transitive, meaning that if A.php includes B.php, and B.php includes C.php, then elements of C can be used by A.

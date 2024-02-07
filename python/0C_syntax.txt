@@ -21,6 +21,7 @@ x=1; y=4; u=7;
 
 #Blocks
 
+Significant Whitespace - whitespace characters matter to the syntax.
 Python uses indents to define coding blocks, instead of braces.
 <code>
 x = 0;

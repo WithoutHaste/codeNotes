@@ -504,3 +504,30 @@ print('My format:', datetime_parsed.strftime("%Y-%m-%d"))
 %S seconds
 %f microseconds
 ![full datetime documentation](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior)
+
+#Duck Typing
+
+"if it looks like a duck and quacks like a duck..."
+
+Because Python is dynamically typed, you can do this:
+<code>
+class Duck:
+	def quack(self):
+		print "Quack!"
+	
+class Goose:
+	def quack(self):
+		print "I am also a duck :)"
+		
+def make_some_noise(animal):
+	animal.quack();
+	
+make_some_noise(Duck()); //prints Quack!
+make_some_noise(Goose()); //prints I am also a duck :)
+</code>
+These classes are not explicitly related to each other, but can be used interchangeably as long as they implement the same method names.
+
+#Optional Type
+
+aka Typing Hints
+You can specify which type a method/function parameter expects.

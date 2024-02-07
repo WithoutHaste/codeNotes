@@ -1,0 +1,37 @@
+## Namespacing
+
+ignore all this, haven't gotten it working anyway
+
+<code>
+	<?php namespace Widget;
+	
+		class Dongle { 
+			static function doThing() {
+				echo 'did it';
+			}  
+		}
+	?>
+	
+	<?php namespace MyProject\Utils;
+	
+		function sum(a, b) {
+			return a + b;
+		}
+	?>
+
+	<?php
+	
+		use Widget as W;
+		use MyProject\Utils; //defaults to "use MyProject\Utils as Utils;"
+	
+		\W\Dongle::doThing(); //referencing a method in a class
+		$result = Utils\sum(1, 2); //referencing a function
+	?>
+
+	<?php
+	
+		use function MyProject\Utils\sum;
+	
+		$result = sum(1, 2); //referencing a function
+	?>
+</code>

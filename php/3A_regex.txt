@@ -1,9 +1,54 @@
 ##Regular Expressions
 
+Get 0 or 1 for if there is at least one match in the string
+<code>
+$result = preg_match('/(foo)(bar)(baz)/', 'foobarbaz');
+</code>
+
+Get details of matches within string
 <code>
 $matches = ""
-preg_match_all('/(foo)(bar)(baz)/', 'foobarbaz', $matches);
+preg_match('/a(.*)d/', 'abcd', $matches);
 print_r($matches);
+
+//$matches is set to an array
+//first element is the full substring that matched the pattern
+//then each substring inside parentheses in the regex is returned
+/*
+Array
+(
+    [0] => abcd
+    [1] => bc
+)
+*/
+</code>
+
+Get number of times a match is found in the string
+<code>
+echo preg_match_all('/(foo)(bar)(baz)/', 'foobarbaz');
+</code>
+
+Get details of matches within string
+<code>
+$matches = ""
+preg_match_all('/a(.*)d/', 'abcd', $matches);
+print_r($matches);
+
+//$matches is set to an array
+//first element is the full substring that matched the pattern
+//then each substring inside parentheses in the regex is returned
+/*
+Array
+(
+    [0] => Array( [0] => abcd )
+    [1] => Array( [0] => bc )
+)
+*/
+</code>
+
+Replace matches with new substring
+<code>
+$result = preg_replace('/search_text/i', 'replacement_text', 'original_text');
 </code>
 
 #Modifiers
@@ -16,3 +61,23 @@ print_r($matches);
 "//U" quantifiers will not be greedy, unless they are immediately followed by a ?
 
 "//sU" can match across new-lines, but will take the shortest matches possible - what you think of as "multi-line" behavior
+
+"\" use backslash to escape special characters, so they are treated as normal characters
+
+#Character Classes
+
+"\d" matches any digit character
+"\w" matches any ASCII character (latin alphabet, digits, underscore)
+"\s" matches any whitespace character (space, tab, new line, carriage return, etc)
+
+"\D" is the inverse set of "\d"
+"\W" is the inverse set of "\w"
+"\S" is the inverse set of "\s"
+
+"[abc]" for creating a custom character class (replace "abc" with whatever), matches a single char from the classes
+
+#Anchors
+
+"^" means beginning of line (this character is called "circumflex")
+"$" means end of line
+
