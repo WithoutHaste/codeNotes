@@ -1,5 +1,10 @@
 ##Command Line
 
+#Interactive Shell
+
+Run "python" in a command prompt to start the interactive shell.
+You can type and run python one line at a time.
+
 #Arguments
 
 To access command line arguments:
@@ -16,4 +21,19 @@ To access command line arguments:
 	import sys
 	
 	sys.exit()
+</code>
+
+#PIP
+
+use PIP to install python packages so they can be imported into your script
+
+verify PIP is installed (it comes with Python)
+<code>
+//in terminal
+pip3 --version
+</code>
+
+download and install package "requests"
+<code>
+pip3 requests
 </code>

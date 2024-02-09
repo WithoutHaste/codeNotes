@@ -1,6 +1,7 @@
 ##Types
 
 Python is loosely typed: it will automatically determine the variable type based on the value, and the type can change.
+Type is inferred from the assigned value.
 
 Everything in Python is an object, each with an identity, type, and value.
 Some objects are mutable (value can be changed), some are immutable (value cannot be changed).
@@ -98,7 +99,7 @@ any(iterable) #returns True if any elements are True
 enumerate(iterable) #returns a list of tuples as (index, value)
 
 filter(myFilter, iterable) #returns a list of the elements that passed the filter
-#the filter is a function that accepts one element and returns True or False
+ #the filter is a function that accepts one element and returns True or False
 
 myIter = iter(collection) #returns an iterable object for the collection
 a = next(myIter) #first value
@@ -107,7 +108,7 @@ b = next(myIter) #second value
 len(collection) #returns the number of elements in the collection
 
 map(myMap, iterable) #applies a function to each element of a collection and returns a list of the results
-#the map is a function that accepts one element and returns any value
+ #the map is a function that accepts one element and returns any value
 
 reversed(iterable) #returns new collection in the reversed order
 sorted(iterable)   #returns new collection in the sorted order
@@ -116,7 +117,6 @@ zip(iterableA, iterableB, ...) #returns a list of tuples made up of one element 
 a = ["A","B","C"]
 b = [1,2,3]
 c = zip(a, b) #equals [("A",1),("B",2),("C",3)]
-
 </code>
 
 #Sequence Types
@@ -157,6 +157,8 @@ String escape characters:
 \" double quote
 
 #String, List, Tuple
+
+concat strings with + operator
 
 Operators:
 <code>
