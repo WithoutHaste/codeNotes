@@ -14,3 +14,8 @@ These notes focus on Python 3, not Python 2.
 Goals of the language:
 - "there is only one way to do each thing"
 - "focuses on simplicity"
+
+the "eval" method will parse what is passed in as Python and run it
+<code>
+eval("2+2") #returns 4
+</code>

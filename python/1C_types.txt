@@ -7,6 +7,7 @@ Everything in Python is an object, each with an identity, type, and value.
 Some objects are mutable (value can be changed), some are immutable (value cannot be changed).
 
 The types generally called "primitives" are all immutable objects in Python: integer, string, boolean, etc.
+Some built-in classes are str, int, list, dict.
 
 Collections and user-defined types are all mutable objects: list, set, dictionary, etc.
 
@@ -31,6 +32,18 @@ Sets have length, but not indexes.
 
 Dict: an unordered collection of key/value pairs
 can contain different data types
+
+#Instantiate
+
+<code>
+x = "hello"
+ #or
+x = str("hello")
+
+y = 5
+ #or
+y = int(5)
+</code>
 
 #Get Type
 
@@ -246,6 +259,29 @@ print(s[0:5:3]) #"ad"
 
 print(s[::-1]) #"gfedcba" #reverses the sequence
 print(s[4:1:-2]) #"ec"
+</code>
+
+#String
+
+<code>
+s = "hello"
+s = s.upper() #to uppercase
+s = s.strip() #strip leading and trailing whitespace
+s = s.lstrip()
+s = s.rstrip()
+</code>
+
+"F String" or Formatted String
+<code>
+name = "Jane"
+title = "Engineer"
+text = f"name: {name} title: {title}"
+</code>
+
+Implied Line Continuation
+<code>
+text = f"name: {name} "
+	f"title: {title}"
 </code>
 
 #Numbers

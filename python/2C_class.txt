@@ -1,6 +1,16 @@
 ##Class
 
+#Basics
+
+Objects are instantiated from Classes.
+Objects use internal Dictionaries to store their data.
+
+By convention, methods and variables that start with a double underscore (__) should be treated as private.
+
 <code>
+class MyEmpty:
+	pass
+
 class MyClass:
 	def __init__(self, inputA):
 		self.varA = inputA
@@ -14,11 +24,41 @@ print(x.varA) #5
 x.funcA() #"hey"
 </code>
 
-#Variables
+#Dunder Methods
 
-Instance variables
-	no privacy option
-	naming convention is __var__ to indicate the variable should be treated as private
+Dunder Methods aka Special Methods aka Magic Methods
+the build in methods that start and end with double underscore (__)
+such as __init__
+
+Dunder Methods are meant to be invoked implicitly, not explicitly.
+
+Built-in method __new__ is always run before __init__. It allocates memory and passes the object to __init__(self).
+
+<code>
+class MyClass:
+	# this is called when you run "print(myClassInstance)" or "str(myClassInstance)"
+	def __str__(self):
+		return "string"
+		
+	# this is like __str__ but intended for developers only instead of something end users see
+	# this is called when you run just the variable name in the Interactive Shell
+	def __repr__(self):
+		return "string"
+		# example: for a date, returning "datetime.date(2022, 11, 6)" which tells you how to instantiate the object
+		# it is convention to return a value that can be passed to "eval()" and result in a new object
+</code>
+
+#Attributes
+
+All classes also have available these attributes:
+<code>
+print(x.__class__) #outputs <class '__main__.MyClass'>
+print(a.__dict__) #outputs {'varA': 5}
+</code>
+
+Instance attributes
+- no privacy option
+- naming convention is __var__ to indicate the variable should be treated as private
 <code>
 class MyClass:
 	def __init__(self):
@@ -32,11 +72,11 @@ x.print() #"3"
 print(x.instance_variable) #"3"
 </code>
 
-Class variables (aka Static variables)
-	no privacy option
-	value can change
-	editing a class variable affects all instances of the class
-	class_var and self.class_var are different variables
+Class attributes (aka Static variables)
+- no privacy option
+- value can change
+- editing a class variable affects all instances of the class
+- class_var and self.class_var are different variables
 <code>
 class MyClass:
 	class_variable = 4;
@@ -53,6 +93,26 @@ MyClass.class_variable = 5
 x.print() #"5 3"
 </code>
 
+You can assign class attributes within the class, and outside the class.
+You can access all attributes of a class instance.
+<code>
+class A(object):
+	pass
+
+a = A()
+a.x = 10
+a.y = "string"
+print(a.__dict__) #outputs {'x': 10, 'y':'string'}
+</code>
+
+Listing all the public attributes of a class (not an instance of a class):
+<code>
+import random
+cls = "random" # name of the class as a string
+all_attributes = [x for x in dir(eval(cls)) if not x.startswith("__") and callable(eval(cls + "." + x))]
+print(all_attributes)
+</code>
+
 #Method Types
 
 (In Python 3)
@@ -66,7 +126,7 @@ Static methods cannot modify the class nor instance state. They are primarily us
 
 <code>
 class MyClass:
-	#this is an instance method
+	#this is an Instance Method
 	def methodA(self):
 		return ("instance method called", self)
 	
@@ -78,10 +138,9 @@ class MyClass:
 	def methodC():
 		return "static method called"
 		
- #calling the methods
 x = MyClass()
+
 x.methodA()
- #or
 MyClass.methodA(x) #x.methodA() really means this
 
 x.methodB()
@@ -91,7 +150,7 @@ x.methodC()
 MyClass.methodC()
 </code>
 
-Note that calling the default parameters "self" and "cls" is a convention, you an call them anything.
+Note that calling the default parameters "self" and "cls" is a convention, you an call them anything, but stick with the convention.
 
 Example of using classmethod for the factory pattern
 <code>
@@ -110,9 +169,10 @@ x = Person("Bob", 49)
 y = Person.fromBirthYear("Jane", 1978)
 </code>
 
-#Overloading Operators
+#Overriding Operators
 
-This topic is called operator overloading in general.  Python specifically calls it magic methods.
+This topic is called operator overloading in C#. I called it "override" here because there is no overloading in Python.
+Python calls this magic methods.
 
 These methods are not invoke explicitly, they are invoked during object instantiation or through a mathematical or logical operation.
 
@@ -217,28 +277,6 @@ class C(object):
 	@x.deleter
 	def x(self):
 		del self._x
-</code>
-
-#Attributes
-
-You can assign class attributes within the class, and outside the class.
-You can access all attributes of a class instance.
-<code>
-class A(object):
-	pass
-
-a = A()
-a.x = 10
-a.y = "string"
-print(a.__dict__) #outputs {'x': 10, 'y':'string'}
-</code>
-
-Listing all the public attributes of a class (not an instance of a class):
-<code>
-import random
-cls = "random" # name of the class as a string
-all_attributes = [x for x in dir(eval(cls)) if not x.startswith("__") and callable(eval(cls + "." + x))]
-print(all_attributes)
 </code>
 
 #Slots
