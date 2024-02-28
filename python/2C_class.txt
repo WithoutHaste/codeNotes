@@ -5,8 +5,6 @@
 Objects are instantiated from Classes.
 Objects use internal Dictionaries to store their data.
 
-By convention, methods and variables that start with a double underscore (__) should be treated as private.
-
 <code>
 class MyEmpty:
 	pass
@@ -32,6 +30,8 @@ such as __init__
 
 Dunder Methods are meant to be invoked implicitly, not explicitly.
 
+By convention, methods and variables that start with a double underscore (__) should be treated as private.
+
 Built-in method __new__ is always run before __init__. It allocates memory and passes the object to __init__(self).
 
 <code>
@@ -47,6 +47,47 @@ class MyClass:
 		# example: for a date, returning "datetime.date(2022, 11, 6)" which tells you how to instantiate the object
 		# it is convention to return a value that can be passed to "eval()" and result in a new object
 </code>
+
++ __add__
+* __mul__
+- __sub__
+% __mod__
+/ __truediv__
+// __floordiv__
+** __pow__(self, power)
+abs(x) __abs__
+-x __neg__
++x __pos__
+< __lt__
+<= __le__
+== __eq__
+!= __ne__
+> __gt__
+>= __ge__
+<< __lshift__
+>> __rshift__
+and __and__
+or __or__
+xor __xor__
+not __invert__
+[index] __getitem__(self, index)
+in __contains__(self, value)
+len __len__
+str __str__
+__iter__
+__getitem__
+__getslice__
+__setitem__
+__setslice__
+__setitem__
+__delitem__
+__delslice__
+__delitem__
+int(x) __int__
+long(x) __long__
+float(x) __float__
+complex(x) __complex__
+divmod(x, y) __divmod__
 
 #Attributes
 
@@ -113,6 +154,105 @@ all_attributes = [x for x in dir(eval(cls)) if not x.startswith("__") and callab
 print(all_attributes)
 </code>
 
+Python does not have access modifiers Public or Private, all attributes are public.
+By convention, developers should treat attributes that start with an underscore as private (_example).
+
+To mimic encapsulation (which python does not actually enforce), write your own getters and setters for each "private" attribute.
+This is as close as python gets to supporting Properties.
+
+<code>
+class Person:
+	def __init__(self, name, birthDate):
+		self._name = name
+		self._birthDate = birthDate
+	
+	def get_name(self):
+		return self._name
+		
+	def set_name(self, name):
+		self._name = name
+		
+	def get_age(self):
+		return calculate_age(self._birthDate)
+</code>
+This is considered sufficient protection within Python programming.
+
+Name Mangling: put two underscores at the start of an attribute name, and Python will raise a runtime error if the attribute is accessed from outside the class.
+<code>
+class Person:
+	def __init__(self, birthDate):
+		self.__birthDate = birthDate
+	
+	def get_age(self):
+		return calculate_age(self.__birthDate)
+
+person = Person('1990-01-01')
+print(person.__birthDate) #raises an AttributeError
+</code>
+This is because the actual attribute name, when it is declared with two underscores, is automatically set to "_Person__birthDate" (prefixed with an underscore and the class name).
+This altered name IS still publicly available, once you know what it is.
+<code>
+person = Person('1990-01-01')
+print(person._Person__birthDate) #prints the birth date
+</code>
+
+#Properties
+
+"@property" is a "class decorator" using the "descriptor protocol"
+
+<code>
+class Person:
+	def __init__(self, name):
+		self.name = name #this uses the property name setter
+		
+	@property
+	# this is the getter
+	def name(self):
+		return self._name
+
+	@name.setter
+	# this is the setter
+	def name(self, name):
+		self._name = name
+
+	@name.deleter
+	# this is the deleter (less common)
+	def name(self, name):
+		del self._name
+		
+person = Person('bob')
+print(person.name) #properties can be accessed without parentheses
+</code>
+
+This allows you to update an attribute that started out public (person.name was directly accessing the attribute) and is now being made "private" (updated to person._name). The change will be backwards compatible, provided the property returns the same data type as the original attribute.
+
+Note that the name of the property does not have to correlate to the name of the "private" attribute. There is no automatic magic linking them based on their names. It is, of course, best practice to give them correlated names.
+
+In order to make a read-only property, simply do not implement the setter.
+In order to make a write-only property, you must still implement the getter and setter. In the getter, raise an error.
+
+Computed properties are properties that return a computed value, such as returning "annual salary" based on attribute "hourly wage".
+
+#Slots
+
+To stop users from assigning whatever attributes they want to a class, you must define slots.
+<code>
+class A(object):
+	__slots__ = ['x'] #this line here
+
+	def __init__(self, x):
+		self.x = x
+		
+a = A(10)
+a.x = 20
+a.y = "string" #AttributeError: 'A' object has no attribute 'y'
+</code>
+
+With slots, you define the full list of attributes for the object once, and no new attributes can be added by anyone.
+
+Attribute __dict__ is not available when you use slots.
+If you define __dict__ manually, it will not be automatically filled.
+
 #Method Types
 
 (In Python 3)
@@ -168,136 +308,6 @@ class Person:
 x = Person("Bob", 49)
 y = Person.fromBirthYear("Jane", 1978)
 </code>
-
-#Overriding Operators
-
-This topic is called operator overloading in C#. I called it "override" here because there is no overloading in Python.
-Python calls this magic methods.
-
-These methods are not invoke explicitly, they are invoked during object instantiation or through a mathematical or logical operation.
-
-<code>
-class MyClass:
-	def __init__(self, x):
-		self.x = x
-		
-	#overload + operator
-	def __add__(self, other):
-		return MyClass(self.x + other.x)
-</code>
-
-+ __add__
-* __mul__
-- __sub__
-% __mod__
-/ __truediv__
-// __floordiv__
-** __pow__(self, power)
-abs(x) __abs__
--x __neg__
-+x __pos__
-< __lt__
-<= __le__
-== __eq__
-!= __ne__
-> __gt__
->= __ge__
-<< __lshift__
->> __rshift__
-and __and__
-or __or__
-xor __xor__
-not __invert__
-[index] __getitem__(self, index)
-in __contains__(self, value)
-len __len__
-str __str__
-__iter__
-__getitem__
-__getslice__
-__setitem__
-__setslice__
-__setitem__
-__delitem__
-__delslice__
-__delitem__
-int(x) __int__
-long(x) __long__
-float(x) __float__
-complex(x) __complex__
-divmod(x, y) __divmod__
-
-#Property
-
-By convention, you are not supposed to manually access a variable that starts with an underscore, but that is not enforced by Python. The closest thing to a private variable in Python is to create a closure.
-
-This is the recommended way to make class properties in Python.
-
-<code>
-class MyClass(object):
-	def __init__(self):
-		print("init")
-		self._x = None
-
-	def getx(self):
-		print("get")
-		return self._x
-	def setx(self, value):
-		print("set")
-		self._x = value
-	def delx(self):
-		print("delete")
-		del self._x
-	x = property(getx, setx, delx, "I'm the 'x' property.")
-
-a = MyClass()
-a.x = 5
-print(a.x)
-print(a._x) #does not trigger the getx method
-a._x = 6 #does not trigger the setx method
-print(a.x)
-print(a._x) #does not trigger the getx method
-</code>
-
-This is the same thing, using decorators.
-
-<code>
-class C(object):
-	def __init__(self):
-		self._x = None
-
-	@property
-	def x(self):
-		return self._x
-
-	@x.setter
-	def x(self, value):
-		self._x = value
-
-	@x.deleter
-	def x(self):
-		del self._x
-</code>
-
-#Slots
-
-To stop users from assigning whatever attributes they want to a class, you must define slots.
-<code>
-class A(object):
-	__slots__ = ['x'] #this line here
-
-	def __init__(self, x):
-		self.x = x
-		
-a = A(10)
-a.x = 20
-a.y = "string" #AttributeError: 'A' object has no attribute 'y'
-</code>
-
-With slots, you define the full list of attributes for the object once, and no new attributes can be added by anyone.
-
-Attribute __dict__ is not available when you use slots.
-If you define __dict__ manually, it will not be automatically filled.
 
 #Inheritance
 
