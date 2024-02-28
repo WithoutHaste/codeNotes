@@ -111,6 +111,7 @@ class MyClass:
 x = MyClass()
 x.print() #"3"
 print(x.instance_variable) #"3"
+print(hasattr(x, "instance_variable")) #"True"
 </code>
 
 Class attributes (aka Static variables)
@@ -235,7 +236,11 @@ Computed properties are properties that return a computed value, such as returni
 
 #Slots
 
-To stop users from assigning whatever attributes they want to a class, you must define slots.
+Slots are used to decrease memory allocation and to increase data access speeds.
+
+This also results in users not being able to add more attributes to an instance. All possible attributes must be listed when "slots" is declared.
+With slots, you define the full list of attributes for the object once, and no new attributes can be added by anyone.
+
 <code>
 class A(object):
 	__slots__ = ['x'] #this line here
@@ -248,10 +253,25 @@ a.x = 20
 a.y = "string" #AttributeError: 'A' object has no attribute 'y'
 </code>
 
-With slots, you define the full list of attributes for the object once, and no new attributes can be added by anyone.
-
-Attribute __dict__ is not available when you use slots.
+Attribute __dict__ is not available when you use slots.  Print __slots__ instead to inspect the attributes.
 If you define __dict__ manually, it will not be automatically filled.
+
+Slots with inheritance:
+<code>
+class Person:
+	__slots__ = ("name", "birthDate")
+	
+	def __init__(self, name, birthDate):
+		self.name = name
+		self.birthDate = birthDate
+
+class Employee(Person):
+	__slots__ = ("hiredDate") #this adds another attribute to theh inherited attributes
+	
+	def __init__(self, name, birthDate, hiredDate):
+		super().__init__(name, birthDate)
+		self.hiredDate = hiredDate
+</code>
 
 #Method Types
 
@@ -315,6 +335,13 @@ Classes can inherit from multiple classes.
 
 Method overriding: subclass methods override superclass methods of the same name.
 
+By default, all classes implicitly inherit from "object" class.
+
+Synonyms:
+Subclass inherits from Superclass OR
+Derived Class inherits from Base Class OR
+Child class inherits from Parent Class
+
 Basic inheritance:
 <code>
 class Person:
@@ -329,6 +356,34 @@ class Employee(Person):
 		Person.__init__(self, firstName, lastName) #call base constructor
 		self.id = id
 </code>
+
+Inspecting class relationships with built-in methods:
+<code>
+bob = Person('bob', 'smith')
+if isinstance(bob, Person):
+	print("bob is an instance of the Person class")
+if issubclass(Employee, Person):
+	print("Employee class is a subclass of the Person class")
+</code>
+
+You can access superclass methods from the subclass:
+<code>
+class Employee:
+	def __init__(self, salary):
+		self.salary = salary;
+		
+	def get_a_raise(self, percent):
+		self.salary += self.salary * (percent/100)
+
+class BonusEmployee(Employee):
+	def get_a_raise(self, percent, bonus):
+		super().get_a_raise(percent) #runs the superclass method first
+		self.salary += bonus         #then runs specialized code
+</code>
+Calling "super().get_a_raise(percent)" here using MRO to determine what method to call. (This is preferred.)
+Calling "Employee.get_a_raise(self, percent)" instead would lock in which inherited method to call.
+
+Multiple Inheritance is supported in python.
 
 Diamond inheritance: the first class inherited from takes priority over later classes in the inheritance list.
 <code>
@@ -359,7 +414,14 @@ e.id(); # outputs C
 
 Diamond inheritance in Python 3: 
 - a subclass that overrides a superclass method takes priority over a subclass listed earlier in the inheritance list that does not override the superclass method.
-- The "Method Resolution Order" (MRO) is depth-first (later generation classes first) then left-to-right as the classes are ordered in the inheritance list. (MRO is also called C3 superclass linearisation.)
+- The "Method Resolution Order" (MRO) is depth-first (later generation classes first) then left-to-right as the classes are ordered in the inheritance list. (MRO is also called C3 Superclass Linearisation.)
+
+You can view the MRO of a particular class:
+<code>
+print(MyClass.__mro__)
+</code>
+
+MRO example:
 <code>
  #C.id takes priority even when B is earlier in the inheritance list 
  #because it is closer to D and E in the inheritance tree than A is.
@@ -449,6 +511,17 @@ class D(B,C):
 
 d = D();
 d.id(); # outputs D C A A
+</code>
+
+#Mixin Class
+
+Mixin classes are not enforced by python, they are a naming convention.
+Adding the "Mixin" suffix to a class name indicates that the class is intended to be used in multiple inheritance to add a little boilerplate functionality to many classes.
+Example: to adding logging methods, or reflection (self-inspection) methods, or some other set of utilities.
+
+<code>
+class ReflectionMixin:
+	#methods here for commonly used reflection utilities
 </code>
 
 #Metaclass

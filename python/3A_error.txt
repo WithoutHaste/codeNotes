@@ -17,6 +17,7 @@ except TypeError as e:
 except:
 	print("some other error")
 </code>
+Note that "except" will catch even subclasses of the stated exception class. For example "except ArithmeticError" will catch subclass "FloatingPointError". View the Exception Hierarchy to make use of this.
 
 #Raise Error
 
