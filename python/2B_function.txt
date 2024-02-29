@@ -239,6 +239,16 @@ Python 3.5.2 and higher: type hinting for function signatures.
 		print(callback([], "a", 1)
 </code>
 
+When any type is acceptable
+<code>
+from typing import Any
+
+def myFunction(param: Any):
+	pass
+</code>
+
+You can install (with pip) and use mypy to verify a python file is being consistent to the type hints.
+
 #Type Aliasing
 
 Python 3.5 and higher. Related to type hinting.
@@ -279,3 +289,87 @@ UserId = NewType('UserId', int)
 </code>
 
 Note that using UserId in an operation will return an int.
+
+#Generators
+
+Generator functions are used to gradually access a large data set without loading the whole thing into memory at one time.
+Or to generator an infinite sequence.
+Or for a function that needs to maintain an internal state, but it is so small you don't want to create a class for it.
+
+Generator functions return a Lazy Iterator.
+A lazy iterator is an object you can loop over with the list syntax.
+
+Generator Function to read a large file
+<code>
+def file_reader(file_name):
+	for row in open(file_name, "r"):
+		yield row
+		
+reader = file_reader("name.txt")
+for line in reader:
+	print(line)
+</code>
+
+Generator Comprehension or Generator Expression
+<code>
+reader = (row for row in open("name.txt"))
+</code>
+Note that list comprehensions are surrounded by [] while generator comprehensions are surrounded by ().
+A list comprehension can be faster to evaluate, assuming the result fits in memory.
+
+generating an infinite sequence
+<code>
+def infinite():
+	n = 0
+	while True:
+		yield n #the function will pause here until you call for the next item
+		n += 1
+
+infinite_generator = infinite()
+print(next(infinite_generator)) #0
+print(next(infinite_generator)) #1
+print(next(infinite_generator)) #2
+</code>
+
+If you try to get a next value past the end of the generator's iteration, you'll get a StopIteration error.
+
+Coroutine: You can send a value back to the generator
+<code>
+def gen():
+	n = 0
+	while True:
+		n = (yield n)
+		n += 1
+
+g = gen()
+print(next(g)) #0
+g.send(5)
+print(next(g)) #6
+</code>
+
+Tell a generator to stop
+<code>
+g = gen()
+for i in gen:
+	if i > 100:
+		gen.close()
+</code>
+
+There also a .throw() command.
+
+Example of using generators to build a data pipeline
+Given a very large csv file:
+<code>
+line_gen = (line for line in open("big_file.csv"))
+column_gen = (line.rstrip().split(",") for line in line_gen)
+column_names = next(column_gen) #first line is the column names
+data_dict_gen = (dict(zip(column_names, fields)) for fields in column_gen) #create a dict for one line of data using the column names as keys
+
+ #if you want the dollar amount raised in round "a"
+funding = (
+	int(data["raised_amount"])
+	for data in data_dict_gen
+	if data["round"] == "a"
+)
+funding_total = sum(funding)
+</code>

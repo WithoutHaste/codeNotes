@@ -114,7 +114,7 @@ print(x.instance_variable) #"3"
 print(hasattr(x, "instance_variable")) #"True"
 </code>
 
-Class attributes (aka Static variables)
+Class attributes (called Static variables in C#)
 - no privacy option
 - value can change
 - editing a class variable affects all instances of the class
@@ -134,6 +134,20 @@ x.print() #"4 3"
 MyClass.class_variable = 5
 x.print() #"5 3"
 </code>
+
+Attribute Lookup Chain: an object instance will search its own __dict__ for an attribute, then it will look in its class' __dict__
+<code>
+class MyClass:
+	x = 4;
+
+	def __init__(self):
+		self.y = 3;
+
+myInstance = MyClass()
+print(MyClass.x) #4
+print(myInstance.x) #4
+</code>
+This is actually how methods are found, as well. The class instance is searched first, then the class is searched.
 
 You can assign class attributes within the class, and outside the class.
 You can access all attributes of a class instance.
@@ -275,6 +289,10 @@ class Employee(Person):
 
 #Method Types
 
+Note that methods in a class are technically attributes. You can see them listed in the __dict__ of the class.
+They are of type "function".
+Example: you can run a method with "MyClass.__dict__['my_method'](myClassInstance, parameter)"
+
 (In Python 3)
 
 Instance methods can modify the current instance, through "self".
@@ -283,10 +301,11 @@ Instance methods can modify the current class, through "self.__class__".
 Class methods can modify class state, affecting all instances of the class, through "cls".
 
 Static methods cannot modify the class nor instance state. They are primarily used to namespace a method.
+Static methods are pretty much defunct since Class methods were added to Python.
 
 <code>
 class MyClass:
-	#this is an Instance Method
+	#this is an Instance Method or Instance Function
 	def methodA(self):
 		return ("instance method called", self)
 	
@@ -327,6 +346,14 @@ class Person:
 		
 x = Person("Bob", 49)
 y = Person.fromBirthYear("Jane", 1978)
+</code>
+
+Factory Function aka Alternative Constructor: a class or static method that builds and returns a new instance of the class
+<code>
+class MyClass:
+	@classmethod
+	def builder(cls, param):
+		return cls(param, constant) #use "cls" to instantiate a new instance instead of hardcoding the class name here
 </code>
 
 #Inheritance
@@ -511,6 +538,27 @@ class D(B,C):
 
 d = D();
 d.id(); # outputs D C A A
+</code>
+
+#Composition
+
+Composition refers to instances of objects that set attributes equal to other instances of objects.
+Inheritance makes an "is a" relationship.
+Composition makes a "has a" relationship.
+
+<code>
+class Schedule:
+	def __init__(self, wakeUpTime, sleepTime):
+		self.wakeUpTime = wakeUpTime
+		self.sleepTime = sleepTime
+
+class Person:
+	def __init__(self, birthDate, schedule):
+		self.birthDate = birthDate
+		self.schedule = schedule #this is the composition part
+		
+schedule = Schedule(8, 10)
+person = Person('2000-1-1', schedule)
 </code>
 
 #Mixin Class
@@ -720,3 +768,48 @@ class A(MyAbstractClass):
 a = A(10)
 a.do_something() #outputs abstract do something
 </code>
+
+#Data Class
+
+When a class is just a data container, where the __init__ method just sets attributes equal to parameters of the same name, and the attributes are all public, then you could make a Data Class instead.
+
+<code>
+from dataclasses import dataclass
+
+@dataclass
+class MyClass:
+	myString: str #btw this is a Type Hint
+	myInt: int
+	myOtherString: str
+</code>
+This will define a class that expects 3 parameters on initialization, and sets them to these attributes.
+
+You can still define methods in data classes
+<code>
+from dataclasses import dataclass
+
+@dataclass
+class MyClass:
+	myString: str
+	
+	def myMethod(self):
+		return 0
+</code>
+
+Python 3.10+
+you tell that data class you want slots like this
+<code>
+from dataclasses import dataclass
+
+@dataclass(slots=True)
+class MyClass:
+	myString: str
+</code>
+
+#Descriptors
+
+todo
+
+#Class Decorators
+
+todo

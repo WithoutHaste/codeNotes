@@ -1,0 +1,8 @@
+##Meta or Analysis
+
+get the size of an in-memory object
+<code>
+import sys
+
+size = sys.getsizeof(myVariable)
+</code>

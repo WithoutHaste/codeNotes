@@ -11,6 +11,12 @@ Some built-in classes are str, int, list, dict.
 
 Collections and user-defined types are all mutable objects: list, set, dictionary, etc.
 
+#Memory Allocation
+
+Everything is an object in python.
+When Python interprets a function definition, it allocates memory for this new object, even if the function is never called.
+When Python interprets a class definition, it allocates memory for this new object, even if no instances of the class are ever created.
+
 #Definitions
 
 Integer: a whole number
