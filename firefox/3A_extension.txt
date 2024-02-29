@@ -1,12 +1,12 @@
-# Extensions
+## Extensions
 
-## Getting Started
+# Getting Started
 
 !![First extension how-to](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Your_first_WebExtension)
 
 !![various extension examples](https://github.com/mdn/webextensions-examples)
 
-## Local Testing
+# Local Testing
 
 Navigate to "about:debugging" in the browser.
 
@@ -20,7 +20,7 @@ You may also need to:
 
 Content scripts (injected into web pages) can be debugged with the normal developer tools.
 
-## Options
+# Options
 
 To open the settings/options page for an extension:
 - Tools > Options > Extensions & Themes > Extensions > select this test extension ... Options
@@ -28,18 +28,18 @@ To open the settings/options page for an extension:
 To use the Console and Inspector to debug the extension Options page:
 - about:debugging > This Firefox > Inspect
 
-## Storage
+# Storage
 
 Note that browser.storage.local does not save to Local Storage.
 
-## Content_Scripts
+# Content_Scripts
 
 content_scripts are loaded into each webpage that is loaded and matches the specified url pattern.
 
 !![WebExtension APIs accessible in content_scripts](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts#WebExtension_APIs)
 content_scripts do not have access to all WebExtension APIs. For instance, they cannot access bookmarks.
 
-## Background
+# Background
 
 Background scripts are loaded when the extension is loaded.
 
