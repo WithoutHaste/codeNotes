@@ -213,6 +213,8 @@ print(person._Person__birthDate) #prints the birth date
 
 #Properties
 
+Properties is one way to do Managed Attributes
+
 "@property" is a "class decorator" using the "descriptor protocol"
 
 <code>
@@ -540,6 +542,15 @@ d = D();
 d.id(); # outputs D C A A
 </code>
 
+Base vs Bases
+<code>
+print(myInstance.__dict__["attr"])
+print(type(myInstance).__dict__["attr"])
+print(type(myInstance).__base__.__dict__["attr"]) #goes to base/super class, the first one in the __bases__ list
+
+print(type(myInstance).__bases__) #full list of base classes given in subclass definition
+</code>
+
 #Composition
 
 Composition refers to instances of objects that set attributes equal to other instances of objects.
@@ -808,8 +819,239 @@ class MyClass:
 
 #Descriptors
 
-todo
+A descriptor is a Python object that implements at least one of the methods in the descriptor protocol.
+Descriptors run special behavior (binding behavior) when they are accessed as attributes of another object.
+
+Descriptors are instantiated just once per class. (All instances of the class share one instance of the descriptor)
+
+Uses for descriptors: lazy loading, logging, validation, code reuse. But can be very illegible, code maintainers would need to be well versed in the system's architecture, because you are inventing your own syntax sugar / magic.
+
+Descriptor Protocol
+<code>
+__get__(self, obj, type=None) -> object
+__set__(self, obj, value) -> None
+__delete__(self, obj) -> None
+__set_name__(self, owner, name) #added in Python 3.6
+<code>
+A non-data descriptor implements just __get__.
+A data descriptor implements __set__ or __delete__. Data descriptors have precedence during the lookup process.
+Here, "self" is the instance of the descriptor object.
+Here, "obj" is the instance of the object the descriptor is attached to.
+Here, "type" is the type of the object the descriptor is attached to.
+Here, "name" is the name of the attribute that this descriptor was assigned as instantiation.
+
+A bit of a convoluted example for pre-python 3.6:
+<code>
+class MyDescriptor():
+    def __init__(self, name):
+        self.name = name #this would be handled in __set_name__ once that method was added in Python 3.6
+
+    def __get__(self, obj, type=None) -> object:
+        return obj.__dict__.get(self.name) or 0 #set instance attribute
+
+    def __set__(self, obj, value) -> None:
+        obj.__dict__[self.name] = value #get instance attribute
+
+class MyClass():
+    number = MyDescriptor("number") #set class attribute
+	
+myInstance = MyClass() #stores the descriptor in type(myInstance).__dict__["number"]
+myInstance.number = 5 #stores "5" in myInstance.__dict__["number"]
+print(myInstance.number) #prints "5"
+</code>
+
+Example
+<code>
+class Verbose_attribute():
+    def __get__(self, obj, type=None) -> object:
+        print("accessing get")
+        return 42
+		
+    def __set__(self, obj, value) -> None:
+        print("accessing set")
+        raise AttributeError("Cannot change the value")
+
+class Foo():
+    attribute1 = Verbose_attribute() #descriptor will be accessed as an attribute of another object
+
+my_foo_object = Foo()
+x = my_foo_object.attribute1 #prints "accessing get"
+print(x) #prints "42"
+</code>
+
+Example of descriptor set with decorator, also an example of lazy loading taking advantage of the attribute lookup chain:
+<code>
+import time
+
+class LazyProperty:
+	def __init__(self, function):
+		self.function = function
+		self.name = function.__name__
+
+	#just "get" is defined, so this is a non-data descriptor, which shows up later in the attribute lookup chain
+	def __get__(self, obj, type=None) -> object:
+		obj.__dict__[self.name] = self.function(obj)
+		return obj.__dict__[self.name]
+
+class DeepThought:
+	@LazyProperty
+	def meaning_of_life(self):
+		time.sleep(3)
+		return 42
+
+my_instance = DeepThought()
+print(my_instance.__dict__) #at this point, the instance has no __dict__ values
+print(my_instance.meaning_of_life) #this runs class's meaning_of_life method and stores the result in the instance's __dict__
+print(my_instance.__dict__) #now the instance has __dict__["meaning_of_life"] set
+print(my_instance.meaning_of_life) #lookup chain finds instance.__dict["meaning_of_life"] and does not progress to class's __dict__
+</code>
+Result: the slow "meaning_of_life" method is only run once per instance of DeepThought.
+
+Example of descriptor for code reuse and ?possibly? memory allocation reduction
+<code>
+class UpperCaseProperty:
+	def __set_name__(self, owner, name):
+		self.name = name
+	def __get__(self, obj, type=None) -> object:
+		return obj.__dict__.get(self.name) or ""
+	def __set__(self, obj, value) -> None:
+		obj.__dict__[self.name] = value.upper()
+		
+class Person:
+	last_name = UpperCaseProperty()
+	
+	def __init__(self, first):
+		self.first_name = first
+		
+p = Person('bob')
+p.last_name = 'smith'
+p2 = Person('jane')
+p2.last_name = 'doe'
+print(p.first_name) #bob
+print(p.last_name) #SMITH
+print(p2.first_name) #jane
+print(p2.last_name) #DOE
+</code>
+It certainly feels clunky to need to define the special properties partly at the class level, and only set them implicitly at the instance level. This is not very legible.
+
+Example: directory size utility
+<code>
+import os
+
+class DirectorySize:
+    def __get__(self, obj, objtype=None):
+        return len(os.listdir(obj.dirname))
+
+class Directory:
+    size = DirectorySize()
+    def __init__(self, dirname):
+        self.dirname = dirname
+
+s = Directory('songs')
+g = Directory('games')
+print(s.size) #outputs size of "songs" directory
+print(g.size) #outputs size of "games" directory
+</code>
+
+Properties are an example of descriptors.
+Properties are syntactic sugar.
+<code>
+"""
+With properties
+"""
+class Foo():
+    @property
+    def attribute1(self) -> object:
+        print("accessing get")
+        return 42
+
+    @attribute1.setter
+    def attribute1(self, value) -> None:
+        print("accessing set")
+        raise AttributeError("Cannot change the value")
+
+"""
+With plain descriptors
+"""
+class Foo():
+    def getter(self) -> object:
+        print("accessing get")
+        return 42
+
+    def setter(self, value) -> None:
+        print("accessing set")
+        raise AttributeError("Cannot change the value")
+
+    attribute1 = property(getter, setter)
+	
+	#full property signature
+	#property(fget=None, fset=None, fdel=None, doc=None) -> object
+	#property returns an object that implements the descriptor protocol
+</code>
+
+Methods are also syntactic sugar over functions/attributes/descriptors.
+obj.method(*args) can be called as method(obj, *args) because of a _get_ descriptor. Methods are non-data descriptors.
+<code>
+import types
+
+class Function(object):
+    def __get__(self, obj, objtype=None):
+        if obj is None:
+            return self
+        return types.MethodType(self, obj)
+</code>
+
+#Attribute Lookup Chain
+
+(Methods are also attributes of objects)
+
+The full attribute lookup chain for attribute "Name":
+- the result returned from the __get__ method of the data descriptor named Name
+- the value of your object’s __dict__["Name"]
+- the result returned from the __get__ method of the non-data descriptor named Name
+- the value of your object type’s __dict__["Name"]
+- the value of your object parent type’s __dict__["Name"]
+- then the previous step is repeated for all the parent’s types in the method resolution order of your object
+- then an AttributeError exception.
 
 #Class Decorators
 
-todo
+Very similar to Function Decorators; the decorator function will receive a class object instead of a function object.
+
+Decorating a class does not decorate its methods.
+
+Example
+<code>
+class Counter:
+	def __init__(self, start=0):
+		self.count = start
+	def __call__(self): #executed when you "call" an instance of the class
+		self.count += 1
+		print(f"Current count is {self.count}")
+		
+x = Counter()
+x() #outputs "Current count is 1"
+x() #outputs "Current count is 2"
+</code>
+
+Example of a class decorator being applied to a function:
+<code>
+import functools
+
+class CountCalls:
+	def __init__(self, func):
+		functools.update_wrapper(self, func)
+		self.func = func
+		self.num_calls = 0
+	def __call__(self, *args, **kwargs):
+		self.num_calls += 1
+		print(f"Call {self.num_calls} of {self.func.__name__}()")
+		return self.func(*args, **kwargs)
+		
+@CountCalls
+def hello():
+	print("hello")
+	
+hello()
+print(hello.num_calls)
+</code>

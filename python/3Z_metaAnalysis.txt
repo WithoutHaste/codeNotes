@@ -1,5 +1,7 @@
 ##Meta or Analysis
 
+Looks like "reflection" is called "introspection" in Python.
+
 get the size of an in-memory object
 <code>
 import sys

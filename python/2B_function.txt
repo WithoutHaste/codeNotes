@@ -115,7 +115,7 @@ funcB(x)
 print(x) #[1, 2, 3, "a"]
 </code>
 
-# Strict Signatures
+#Strict Signatures
 
 Use strict signatures to enforce usage standards for how to pass arguments to methods. This can protect callers from breaking changes as the argument list of a function changes over time.
 - For instance, any parameters that are likely to be removed later, or to be reordered for the legibility of the function signature, can be marked as "keyword passing only" so that calling code is not broken by changes to the function.
@@ -182,9 +182,12 @@ You cannot enter keyword arguments into the *args tuple, and you cannot enter no
 
 #Closures
 
+aka Inner Functions
+
 Functions can be defined within in functions in Python, like in Javascript.
 
 The inner function has access to the outer function's local variables and parameters, even after the outer function has completed.
+The inner function is not defined until the outer function is run.
 
 See Javascript notes about closures.
 
@@ -373,3 +376,178 @@ funding = (
 )
 funding_total = sum(funding)
 </code>
+
+#Function Decorators
+
+A decorator function takes in another function and can run code before and after running the passed-in function.
+So a decorator is a function wrapper.
+
+Use cases: logging, timers, metrics, try-again loops, rate limiting, authorization, caching, ...
+
+Example
+<code>
+def i_am_wrapper(func):
+	def inner():
+		print('start')
+		func()
+		print('end')
+	return inner
+
+def i_am_wrapped():
+	print('wrapped')
+
+i_am_wrapper(i_am_wrapped)() #outputs the three statements
+</code>
+The same thing with the decorator syntax
+<code>
+def i_am_wrapper(func):
+	def inner():
+		print('start')
+		func()
+		print('end')
+	return inner
+
+@i_am_wrapper
+def i_am_wrapped():
+	print('wrapped')
+
+i_am_wrapped() #outputs the three statements
+</code>
+
+Nested Decorators
+You can put more than one decorator on a function, they will nest
+<code>
+def wrapper_a(func):
+	def inner():
+		print('start A')
+		func()
+		print('end A')
+	return inner
+
+def wrapper_b(func):
+	def inner():
+		print('start B')
+		func()
+		print('end B')
+	return inner
+
+@wrapper_a
+@wrapper_b
+def i_am_wrapped():
+	print('wrapped')
+
+i_am_wrapped() #outputs start A, start B, wrapped, end B, end A
+</code>
+
+To pass through a variable number of parameters:
+<code>
+def wrapper_a(func):
+	def inner(*args, **kwargs):
+		print('start A')
+		func(*args, **kwargs)
+		print('end A')
+	return inner
+
+@wrapper_a
+def i_am_wrapped(text):
+	print('wrapped: ' + text)
+</code>
+
+To pass through a returned value:
+<code>
+def wrapper_a(func):
+	def inner(*args, **kwargs):
+		print('start A')
+		result = func(*args, **kwargs)
+		print('end A')
+		return result
+	return inner
+
+@wrapper_a
+def i_am_wrapped(text):
+	print('wrapped: ' + text)
+	return "done"
+	
+print(i_am_wrapper('yo'))
+</code>
+
+A decorated function is actually set to the wrapper function that is returned from the decorator.
+So looking at __name__ on the function will not give the data you expect.
+To provide the expected data:
+<code>
+import functools
+
+def wrapper_a(func):
+	@functools.wraps(func)
+	def inner(*args, **kwargs):
+		return = func(*args, **kwargs)
+	return inner
+</code>
+
+Decorators with arguments - requires another layer of function
+<code>
+def repeat(times):
+	def repeat_func(func):
+		def inner():
+			for _ in range(times):
+				func()
+		return inner
+	return repeat_func
+
+@repeat(times=4)
+def hello():
+	print("hello")
+</code>
+(Ugh, why isn't the syntax just "repeat(func, times)"?)
+
+Decorators with optional arguments
+<code>
+def repeat(_func=None, *, times=1):
+	def decorator(func):
+		def inner():
+			for _ in range(times):
+				func()
+		return inner
+	if _func is None:
+		return decorator
+	return decorator(_func)
+
+@repeat(times=4)
+def hello():
+	print("hello")
+
+@repeat
+def goodbye():
+	print("goodbye")
+</code>
+
+Example: debugging help
+<code>
+import functools
+
+def debug(func):
+	"""Print the function signature and return value"""
+	@functools.wraps(func)
+	def wrapper_debug(*args, **kwargs):
+		args_repr = [repr(a) for a in args]
+		kwargs_repr = [f"{k}={repr(v)}" for k, v in kwargs.items()]
+		signature = ", ".join(args_repr + kwargs_repr)
+		print(f"Calling {func.__name__}({signature})")
+		value = func(*args, **kwargs)
+		print(f"{func.__name__}() returned {repr(value)}")
+		return value
+	return wrapper_debug
+</code>
+
+Example: register a function and then return it as-is
+<code>
+PLUGINS = dict()
+
+def register(func):
+	"""Register a function as a plug-in"""
+	PLUGINS[func.__name__] = func
+	return func
+</code>
+
+Because this is creating Closures, you can maintain state within the decorator function.
+Ex: keep a count of how many times the decorated function has been called.
