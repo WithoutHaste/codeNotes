@@ -130,7 +130,9 @@ publisher classes raise events to alert subscriber classes
 
 such as + ++ - * / ?: new
 
-#Index
+#Indexer
+
+aka Smart Array
 
 allows a class to be indexed like an array
 resembles a Property
@@ -142,7 +144,7 @@ public int this[int i]
 }
 </code>
 
-Indexes can accept a variaty of parameters. You can overload indexors by using different parameter lists in the same object.
+Indexes can accept a variety of parameters. You can overload indexers by using different parameter lists in the same object.
 
 <code>
 public class MyClass<T>
@@ -430,7 +432,7 @@ Accessible to the current assembly, only by the containing class and derived cla
 
 A class that cannot be instantiated, it can only be derived from.
 
-Classes are either abstract or concrete. (Concrete classes do have a special keyword, they just lack the abstract keyword.)
+Classes are either abstract or concrete. (Concrete classes don't have a special keyword, they just lack the abstract keyword.)
 
 #abstract method
 
