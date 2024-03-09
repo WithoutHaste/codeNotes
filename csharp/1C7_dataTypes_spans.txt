@@ -1,0 +1,32 @@
+##Spans
+
+C# 7.2 and above.
+
+Span<T> is in the System namespace.
+Span<T> is a value type.
+An instance of Span<T> is stored as a contiguous piece of memory.
+
+Span<T> is indexed just like an array.
+
+<code>
+//can cast from array to span
+var arr = new byte[10];
+Span<byte> bytes = arr;
+
+//can slice a span
+Span<byte> slicedBytes = bytes.Slice(start: 5, length: 2);
+</code>
+
+Specify the span should be allocated to the stack:
+<code>
+Span<byte> bytes = stackalloc byte[2];
+</code>
+
+Can be declared readonly
+which helps when working with immutable strings without making new copies in memory
+<code>
+string str = "hello, world";
+string worldString = str.Substring(startIndex: 7, length: 5); // Allocates
+ReadOnlySpan<char> worldSpan = str.AsSpan().Slice(start: 7, length: 5); // No allocation
+Assert.Equal('w', worldSpan[0]);
+</code>

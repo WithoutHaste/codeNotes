@@ -24,11 +24,11 @@ Interfaces can be declared within a class.
 (.Net 8)
 
 Interfaces can define default implementations of their methods.
-These default can be overriden by the child class.
+These default can be overridden by the implementing class.
 
 The intent is that API authors can add more methods to an in-use interface without forcing all users to immediately update their code.
 
-Note that Classes that inherit from Interfaces with default implementations DO NOT inherit the implementations.
+Note that Classes that implement from Interfaces with default implementations DO NOT inherit the implementations.
 Thus, the allowance for inheriting from multiple Interfaces continues.
 What happens is that the consumer may cast their instance of the Class to the Interface type to access the default implementation.
 And there is no compilation error that the new method has not been implemented in the inheriting Class.
@@ -88,7 +88,7 @@ You cannot call back to the default implementation, the way you could call back 
 Interfaces can also now include Static Members to better support this new use case.
 Interfaces can also now include Access Modifiers to better support this new user case.
 
-Example of providing a default implemenation with settings to make it more widely useful:
+Example of providing a default implementation with settings to make it more widely useful:
 <code>
 private static TimeSpan length = new TimeSpan(365 * 2, 0,0,0); // two years
 private static int orderCount = 10;
@@ -148,6 +148,32 @@ public readonly struct Point
 }
 </code>
 
+Ref Structs are allocated to stack memory, never to heap memory
+Limits:
+- cannot be used as the element type of an array
+- cannot be used as a field type in a class or non-ref struct
+- cannot implement interfaces
+- cannot be boxed to System.ValueType or System.Object
+- cannot be a type argument
+- cannot be captured by a lambda or local function (function nested in another member)
+- cannot be used in an async method, but can be used by synchronous methods that return Task or Task<Result>
+- cannot be used in iterators
+<code>
+public ref struct MyStruct
+{
+	public bool IsValid;
+    public Span<int> Inputs; //Span<T> can be used within a ref struct
+    public Span<int> Outputs;
+}
+</code>
+
+Ref structs can be declared readonly
+<code>
+public readonly ref struct MyStruct
+{
+}
+</code>
+
 (.Net 8)
 
 Mark methods as readonly if they do not modify the state of the struct.
@@ -167,6 +193,47 @@ public readonly double Distance => Math.Sqrt(X * X + Y * Y);
 The compiler will assume that all auto-generated Get accessors are readonly.
 
 The compiler enforces the rule that readonly members do not alter state.
+
+(.Net 10)
+
+Non-Destructive Mutation
+<code>
+public readonly struct MyStruct
+{
+    public double X { get; set; }
+    public double Y { get; set; }
+}
+
+public static void Main()
+{
+    var a = new MyStruct() { X = 1, Y = 2 };
+    var b = a with { X = 3 }; //creates a copy with X=3, Y=2
+    var c = b with { X = 4, Y = 5 }; //creates a copy with X=4, Y=5
+}
+</code>
+
+Record Struct
+record structs cannot also be ref structs
+
+
+(.Net 11)
+
+Structs can include ref fields.
+Ref fields can have value Null even if they are value types like Int.
+<code>
+public ref struct MyStruct
+{
+	private ref int number;
+	public int GetNumber()
+	{
+		if (System.Runtime.CompilerServices.Unsafe.IsNullRef(ref number)) //check for null value
+		{
+			throw new InvalidOperationException("The number ref field is not initialized.");
+		}
+		return number;
+	}
+}
+</code>
 
 #Records
 

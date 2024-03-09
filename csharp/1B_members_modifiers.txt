@@ -22,12 +22,26 @@ You can reference these implicit private fields, like "public int Age { get => _
 
 As of C# 7, property accessors can be expression bodied:
 <code>
-private strin name;
+private string name;
 public string Name
 {
 	get => name;
 	set => name = value.ToUpperCase();
 }
+</code>
+
+(.Net 9)
+
+Init Only Setters
+For properties (and indexers) that are set only during initialization, and cannot be modified after that.
+<code>
+public class MyClass
+{
+	public int X { get; init; } //get accessor and init accessor
+    public int Y { get; init; }
+}
+
+var myInstance = new MyClass() { X = 1, Y = 2 }; //X and Y are readonly after this
 </code>
 
 #Method
@@ -239,6 +253,69 @@ class A
 	public int Y { get; set; }
 	
 	public A(int x, int y) => (X, Y) = (x, y);
+}
+</code>
+
+#Primary Constructor
+
+(.Net 12)
+
+Any parameters in the primary constructor are automatically in-scope for the whole type.
+A primary constructor indicates that these parameters are necessary for any instance of the type.
+
+(class, record class) The implicit parameterless constructor isn't emitted when a primary constructor is present.
+(struct, record struct) The implicit parameterless constructor is always emitted, and always initializes all fields, including primary constructor parameters, to the 0-bit pattern.
+
+If there is a primary constructor, its parameter list is defined in the class declaration line.
+Primary constructors are synthesized from this syntax.
+<code>
+public class NamedItem(string name)
+{
+	public string Name => name;
+}
+</code>
+
+Any explicitly written constructor must use the "this(...)" initializer syntax to invoke the primary constructor. Even an explicit parameterless constructor must invoke the primary constructor.
+
+Calling a parent class's primary constructor
+<code>
+public class Widget(string name, int count) : NamedItem(name)
+{
+	public Widget() : this("N/A", 1) {}
+
+	public int Count => count;
+}
+</code>
+
+Add attributes to the primary constructor
+<code>
+[method: MyAttribute]
+public class MyClass(string name)
+{
+}
+</code>
+
+Add attribute to a positional parameter.
+Add xml comments to a positional parameter.
+<code>
+/// <summary>
+/// Person record type
+/// </summary>
+/// <param name="FirstName">First Name</param>
+/// <param name="LastName">Last Name</param>
+public record Person(
+	[property: JsonPropertyName("firstName")] string FirstName, 
+    [property: JsonPropertyName("lastName")] string LastName
+	);
+</code>
+
+If you don't want to use the auto-generated Property based on the Positional Parameter,
+then you can define your own Property that matches the naming convention, 
+and is initialized to the Positional Parameter value.
+<code>
+public record Person(string FirstName, string LastName, string Id)
+{
+	internal string Id { get; init; } = Id;
 }
 </code>
 
@@ -555,4 +632,78 @@ unsafe
 }
 </code>
 
-	
+#record
+
+(.Net 9)
+
+record modifier can be added to a reference type
+
+While records can be mutable, they're primarily intended for supporting immutable data models.
+Benefits
+- Concise syntax for creating a reference type with immutable properties
+- Built-in value equality, concise syntax for non-destructive mutation, formatting for display
+- Support for inheritance hierarchies
+
+Reference Type
+<code>
+record class... //synonym to clarify a reference type
+//can be simplified to just "record"
+public record Person(string FirstName, string LastName);
+
+public record Person
+{
+	public required string FirstName { get; set; }
+	public required string LastName { get; set; }
+};
+</code>
+
+Value Type
+<code>
+record struct... //define a value type with similar functionality
+
+public readonly record struct Point(double X, double Y, double Z);
+
+public record struct Point
+{
+	public double X { get; init; }
+	public double Y { get; init; }
+	public double Z { get; init; }
+}
+</code>
+
+Positional properties are immutable in a record class and a readonly record struct. They're mutable in a record struct.
+
+When you declare a primary constructor on a record, the compiler generates public properties for the primary constructor parameters.
+The primary constructor parameters to a record are referred to as positional parameters.
+The compiler creates positional properties that mirror the primary constructor or positional parameters.
+
+Example of that concise syntax
+<code>
+public record Person(string FirstName, string LastName);
+
+public static void Main()
+{
+	Person person = new("Jane", "Smith"); //this is Positional Syntax For Property Definition
+	Console.WriteLine(person); // "Person { FirstName = Jane, LastName = Smith }"
+}
+</code>
+
+#required
+
+(.Net 11)
+
+required can modify a Field or Property
+required members must be initialized when the object is initialized
+- they can be initialized to Null if Null is an allowed value for that member
+
+required cannot be applied to Interface members
+but it can be used in class, struct, record class, and record struct
+
+required members must be at least as visible as their containing type
+
+derived types that override a required member must keep it required
+
+Derived types can add the required modifier when overriding a property.
+- This surprises me because it would break the Liskov Substitution principle - a derived type could require more properties be initialized than the base type...but if the base type has constructors with fewer params than the derived type then the derived type would already have default initialization for the extra fields in place...so ok this should be ok
+
+A type with any required members may not be used as a type argument when the type parameter includes the "new()" constraint. The compiler can't enforce that all required members are initialized in the generic code.
