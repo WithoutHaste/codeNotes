@@ -1,0 +1,43 @@
+##Lambdas
+
+aka Lambda Expressions
+
+Lambdas create anonymous functions (unnamed functions).
+Any lambda expression can be converted to a delegate type.
+
+"=>" is the Lambda Declaration Operator
+
+Expression Lambda
+<code>
+//syntax: (input_parameters) => an_expression;
+Func<int, int> square = x => x * x; //the "return" statement is implied
+Console.WriteLine(square(5)); //"25"
+</code>
+
+Statement Lambda
+<code>
+//syntax: (input_parameters) => { multiple_statements }
+Func<int, int> square = x => { return x * x; }
+Console.WriteLine(square(5)); //"25"
+</code>
+
+Example of using lambdas in LINQ's method-based syntax
+<code>
+int[] numbers = { 2, 3, 4, 5 };
+var squaredNumbers = numbers.Select(x => x * x);
+</code>
+
+the input parameter list requires parentheses () if there is more than one parameter
+<code>
+Func<int, int, int> sum = (x, y) => x + y;
+</code>
+
+if parameter types cannot be inferred, then be explicit
+<code>
+Func<int, int, int> sum = (int x, int y) => x + y;
+</code>
+
+(C# 12) You can give default values in a lambda parameter list
+<code>
+var increment = (int x, int i=1) => x + i;
+</code>

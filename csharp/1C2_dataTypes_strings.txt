@@ -32,6 +32,28 @@ vertical tab \v
 
 Verbatim string literals can span multiple lines.
 
+#Raw string literals
+
+(C# 11) 
+can contain arbitrary text, including whitespace, new lines, embedded quotes, and other special characters without requiring escape sequences
+<code>
+string longMessage = """
+    Line 1.
+		Line 2.
+	"quoted line" and more
+	""";
+</code>
+The endline after the opening """ and the endline before the ending """ are not included.
+Whitespace to the left of the ending """ is removed from all lines.
+
+Raw string literal combined with string interpolation
+<code>
+var location = $$"""
+	You are at {{{Longitude}}, {{Latitude}}}
+	""";
+</code>
+Multiple $ characters denote how many consecutive braces start and end the interpolation.
+
 #String Interning
 
 All string literals in your code are compiled into one distinct list to be referenced at runtime, so creating a string literal within a loop will not result in 1000 strings being created - each iteration will reference the same immutable string.

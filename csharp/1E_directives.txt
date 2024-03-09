@@ -71,6 +71,12 @@ C# 10 (.Net 6) Implicit Usings
 </code>
 Implicitly add common global using directives to the project.
 
+(C# 12) You can alias any Type
+<code>
+//alias a tuple
+using Point = (int x, int y);
+</code>
+
 #if endif
 
 A code block is only compiled if the specified symbol is (or is not) defined.

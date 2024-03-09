@@ -238,6 +238,10 @@ public Object MyMethod(List<int> list = default)
 }
 </code>
 
+#Spread
+
+The spread operator is ".."
+
 #Operator Overloading
 
 You can overload any operator.

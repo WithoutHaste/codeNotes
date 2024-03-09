@@ -108,6 +108,8 @@ item = 24; //just this copy of the value is modified, the matrix is not affected
 </code>
 "ref locals" cannot be used with async methods.
 
+#Ref Readonly
+
 As of C# 7.2, you can explicitly return a readonly reference.
 <code>
 public static ref readonly Object MyMethod()
@@ -116,6 +118,10 @@ public static ref readonly Object MyMethod()
 }
 </code>
 The returned object cannot be edited by the caller.
+
+As of C# 12, you can specify "ref readonly" parameters.
+A "ref readonly" parameter is passed by reference but will not be edited inside the method
+These have the same behavior as "in" parameters but allow you to update existing APIs that have "ref" parameters to be "ref readonly" without breaking the API contract.
 
 #In
 

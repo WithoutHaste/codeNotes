@@ -194,8 +194,7 @@ The compiler will assume that all auto-generated Get accessors are readonly.
 
 The compiler enforces the rule that readonly members do not alter state.
 
-(.Net 10)
-
+(C# 10)
 Non-Destructive Mutation
 <code>
 public readonly struct MyStruct
@@ -215,9 +214,7 @@ public static void Main()
 Record Struct
 record structs cannot also be ref structs
 
-
-(.Net 11)
-
+(C# 11)
 Structs can include ref fields.
 Ref fields can have value Null even if they are value types like Int.
 <code>
@@ -232,6 +229,27 @@ public ref struct MyStruct
 		}
 		return number;
 	}
+}
+</code>
+
+(C# 11)
+The compiler will ensure that all fields of a struct type are initialized to their default value as part of executing a constructor.
+
+(C# 12)
+Inline Arrays aka Fixed Sized Buffers
+- a structure that contains a contiguous block of N elements of the same type
+- a safe-code equivalent of the fixed buffer declaration
+- a struct that contains a single field and does not specify an explicit layout
+- can usually be accessed like an array to read and write
+- can use the range and index operators
+
+This is an advanced language feature, intended for high-performance scenarios where an inline, contiguous block of elements is faster than other alternative data structures.
+
+<code>
+[System.Runtime.CompilerServices.InlineArray(10)]
+public struct CharBuffer
+{
+	private char _firstElement; //cannot be a pointer type, can be a reference or value type
 }
 </code>
 

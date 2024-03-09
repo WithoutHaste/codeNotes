@@ -82,3 +82,30 @@ if(Double.IsPositiveInfinity(x))
 {
 }
 </code>
+
+#Collection Expressions
+
+(C# 12)
+
+Collection Expressions are a terse syntax for collection initialization
+<code>
+int[] myArray = [1, 2, 3];
+List<string> myList = ["a", "b", "c"];
+Span<char> mySpan  = ['a', 'b', 'c'];
+int[][] myJaggedArray = [[1, 2, 3], [4, 5, 6]];
+
+int[] row0 = [1, 2, 3];
+int[] row1 = [4, 5, 6];
+int[][] myJaggedArray2 = [row0, row1];
+</code>
+
+The spread operator (..) in a collection expression replaces its argument with the elements from that collection.
+<code>
+int[] row0 = [1, 2, 3];
+int[] row1 = [4, 5, 6];
+int[] single = [.. row0, .. row1];
+foreach (var element in single)
+{
+    Console.Write($"{element}, ");
+} //outputs "1, 2, 3, 4, 5, 6"
+</code>
