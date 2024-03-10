@@ -1,0 +1,17 @@
+##Class
+
+Classes define reference-types.
+Classes can contain any type of member.
+Classes can define the implementation of any type of member.
+Classes that are not abstract nor static can be instantiated.
+
+<code>
+public class MyClass
+{
+	//fields
+	//properties
+	//methods
+}
+</code>
+
+See "Members" below for what can be included in a class.

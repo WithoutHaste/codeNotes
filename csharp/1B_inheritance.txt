@@ -1,0 +1,79 @@
+##Inheritance
+
+#Classes
+
+C# only allows a class to inherit from a single other class.
+This avoids ambiguous cases like loops in the inheritance tree, when class D derives from B and C, with B and C both deriving from A.
+
+If class B derives from class A, note that casting a B object to type A does not block usage of the B-specific functionality. It can always be cast back to type B.
+
+<code>
+class MyClass
+{
+	private List<string> list = new List<string>();
+	
+	public IEnumerable<string> MyStrings
+	{
+		//casting to IEnumerable does not protect your list from editing
+		get { return list; }
+	}
+}
+</code>
+
+#Method Overriding
+
+Overriding instance methods:
+<code>
+class A
+{
+	public virtual void MyMethod()
+	{
+	}
+}
+
+class B : A
+{
+	public override void MyMethod()
+	{
+	}
+}
+</code>
+
+Overriding static methods:
+<code>
+class A
+{
+	public static void MyMethod()
+	{
+	}
+}
+
+class B : A
+{
+	public static new void MyMethod()
+	{
+	}
+}
+</code>
+
+#Interfaces
+
+A class can implement from any number of interfaces, because they are just a list of member signatures.
+
+Interfaces can also inherit from interfaces.
+
+Explicit Interface Implementation:
+When a class implements more than one interface with members of the same name, you can explicitly state which member is from which interface.
+<code>
+string IEmployee.Name
+{
+	get { return _name; }
+}
+</code>
+Explicit interface implementations cannot be declared public, and they can only be called when the object is cast to that interface type.
+It can differentiate between properties, between methods, or between a property and method with a shared name.
+
+#Structs
+
+Structs cannot inherit from classes or structs.
+Structs can implement interfaces.

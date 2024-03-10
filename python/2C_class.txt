@@ -832,7 +832,7 @@ __get__(self, obj, type=None) -> object
 __set__(self, obj, value) -> None
 __delete__(self, obj) -> None
 __set_name__(self, owner, name) #added in Python 3.6
-<code>
+</code>
 A non-data descriptor implements just __get__.
 A data descriptor implements __set__ or __delete__. Data descriptors have precedence during the lookup process.
 Here, "self" is the instance of the descriptor object.

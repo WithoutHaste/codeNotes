@@ -1,5 +1,7 @@
 ##Parameters
 
+Parameters are the things in the method signature between parentheses.
+
 #Params
 
 You can specify one 'params' parameter, and it must be the last parameter in the list. A 'params' parameter is always a Collection<T>. When calling the method, you can include any number of type T arguments.

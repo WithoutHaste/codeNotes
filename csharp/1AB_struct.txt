@@ -1,0 +1,139 @@
+##Struct
+
+Structs define value-types (saved in Stack Memory).
+...If a struct is stored as a property in a class, it will be stored on the heap with the rest of the object.
+Structs cannot define explicit parameterless constructors.
+Structs cannot define default field values.
+Struct field/properties do not have to be immutable, but that is a common use case.
+
+You cannot set a custom default value for a struct. The default is always "all fields/properties set to their default values".
+
+(.Net 4.6)
+
+Structs can now define explicit parameterless constructors.
+
+(.Net 7.2)
+
+Structs can now be declared readonly. This is now an immutable data type.
+<code>
+public readonly struct Point
+{
+	//...
+}
+</code>
+
+(C# 11)
+The compiler will ensure that all fields of a struct type are initialized to their default value as part of executing a constructor.
+
+#Ref Struct
+
+Ref Structs are allocated to stack memory, never to heap memory
+Limits:
+- cannot be used as the element type of an array
+- cannot be used as a field type in a class or non-ref struct
+- cannot implement interfaces
+- cannot be boxed to System.ValueType or System.Object
+- cannot be a type argument
+- cannot be captured by a lambda or local function (function nested in another member)
+- cannot be used in an async method, but can be used by synchronous methods that return Task or Task<Result>
+- cannot be used in iterators
+<code>
+public ref struct MyStruct
+{
+	public bool IsValid;
+    public Span<int> Inputs; //Span<T> can be used within a ref struct
+    public Span<int> Outputs;
+}
+</code>
+
+Ref structs can be declared readonly
+<code>
+public readonly ref struct MyStruct
+{
+}
+</code>
+
+#Readonly
+
+(C# 8)
+Mark methods as readonly if they do not modify the state of the struct.
+<code>
+public readonly override string ToString()
+{
+	return $"({X}, {Y}) is {Distance} from the origin";
+}
+</code>
+You'll get a compiler warning if a readonly method accesses a non-readonly method or property accessor.
+
+Mark properties as readonly if they never change state.
+The compiler does not assume that Get accessors do not change state, so not having a Set accessor is insufficient.
+<code>
+public readonly double Distance => Math.Sqrt(X * X + Y * Y);
+</code>
+The compiler will assume that all auto-generated Get accessors are readonly.
+
+The compiler enforces the rule that readonly members do not alter state.
+
+#Non-Destructive Mutation
+
+(C# 10)
+<code>
+public readonly struct MyStruct
+{
+    public double X { get; set; }
+    public double Y { get; set; }
+}
+
+public static void Main()
+{
+    var a = new MyStruct() { X = 1, Y = 2 };
+    var b = a with { X = 3 }; //creates a copy with X=3, Y=2
+    var c = b with { X = 4, Y = 5 }; //creates a copy with X=4, Y=5
+}
+</code>
+
+#Record Struct
+
+(C# 10)
+Record Struct
+record structs cannot also be ref structs
+
+#Ref Fields
+
+(C# 11)
+Structs can include ref fields.
+Ref fields can have value Null even if they are value types like Int.
+<code>
+public ref struct MyStruct
+{
+	private ref int number;
+	public int GetNumber()
+	{
+		if (System.Runtime.CompilerServices.Unsafe.IsNullRef(ref number)) //check for null value
+		{
+			throw new InvalidOperationException("The number ref field is not initialized.");
+		}
+		return number;
+	}
+}
+</code>
+
+#Inline Array
+
+(C# 12)
+Inline Arrays aka Fixed Sized Buffers
+- a structure that contains a contiguous block of N elements of the same type
+- a safe-code equivalent of the fixed buffer declaration
+- a struct that contains a single field and does not specify an explicit layout
+- can usually be accessed like an array to read and write
+- can use the range and index operators
+
+This is an advanced language feature, intended for high-performance scenarios where an inline, contiguous block of elements is faster than other alternative data structures.
+
+<code>
+[System.Runtime.CompilerServices.InlineArray(10)]
+public struct CharBuffer
+{
+	private char _firstElement; //cannot be a pointer type, can be a reference or value type
+}
+</code>

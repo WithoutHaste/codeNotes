@@ -1,0 +1,211 @@
+##Access Modifiers
+
+Access modifiers can be used on members and types (classes, structs, interfaces).
+
+#public
+
+Accessible to the current assembly and any assembly referencing it
+
+#private
+
+Accessible to the same class or struct.
+One instance of the class will have access to private members of another instance of the same class.
+
+#protected
+
+Accessible to the same class or struct, and to any class directly derived from this one.
+
+Only accessible to other classes when referrenced through a derived type.
+<code>
+class A 
+{ 
+	protected int x = 5; 
+}
+
+class B : A 
+{ 
+	public B() 
+	{ 
+		x = 6; //valid
+	} 
+}
+
+class C
+{
+	public static void Main()
+	{
+		A a = new A();
+		B b = new B();
+		
+		a.x = 10; //INVALID
+		b.x = 10; //valid
+	}
+}
+</code>
+
+#internal
+
+Accessible to the current assembly only
+
+#protected internal
+
+Accessible to the current assembly, and to any class directly derived from this one in another assembly
+
+#private protected
+
+(.Net 7.2)
+
+Accessible to the current assembly, only by the containing class and derived classes
+
+##Other Modifiers
+
+#abstract class
+
+A class that cannot be instantiated, it can only be derived from.
+
+Classes are either abstract or concrete. (Concrete classes don't have a special keyword, they just lack the abstract keyword.)
+
+#abstract method
+
+A method signature with no implementation that must be defined in the derived class
+Only valid in abstract classes
+
+#sealed class
+
+Class cannot be inherited from
+
+#new
+
+Explicitly hides a member inherited from a base class, when that member was not virtual
+
+#override
+
+Defines a new implementation of an inherited virtual member
+
+#virtual
+
+Marks that a member may be overriden in a derived class
+
+#static member
+
+A member that belongs to the type instead of to an instance of the type
+
+#static class
+
+A class that cannot be instantiated, but whose static members can be accessed
+All members of the class must also be static
+The class is implicitly sealed
+
+#const
+
+immutable values known at compile time
+only built-in types (primitives + Objects) can be declared as Constants
+constants are implicitly also static
+constant values can only be set when they are declared
+	
+#readonly
+
+A field that can only be set (once) in a Constructor or where the field is declared
+This field cannot be set in a derived class
+
+#extern
+
+A method that is implemented externally, such as in another assembly
+
+#partial
+
+Allows the definition of a class, struct, or interface to be spread across several files
+
+#implicit
+
+Declare an implicit user-defined type conversion.
+<code>
+class MyType
+{
+	private string term;
+	private string description;
+	
+	public static implicit operator string(MyType a)
+	{
+		return a.ToString();
+	}
+	
+	public override string ToString()
+	{
+		return term + ": " + description;
+	}
+}
+</code>
+
+#explicit
+
+Declare an explicit user-defined type conversion. (You cannot define both an implicit and explicit conversion between the same two types)
+<code>
+class MyType
+{
+	private string term;
+	private string description;
+	
+	public static explicit operator string(MyType a)
+	{
+		return a.ToString();
+	}
+	
+	public override string ToString()
+	{
+		return term + ": " + description;
+	}
+}
+</code>
+
+#unsafe
+
+Any block of code that uses pointers must be marked unsafe.
+
+Unsafe code is unverifiable code.
+Strong typing cannot be verified by the CLR when using pointer arithmetic.
+It is the programmers job to ensure they do not introduce security risks or pointer errors.
+
+Well written pointer operations can increase application performance.
+
+The assembly will need to be compiled with the "-unsafe" option.
+
+You can use unsafe on a Type declaration or a Member.
+
+Marking a method:
+<code>
+unsafe static void MyMethod()
+{
+}
+</code>
+
+Marking a block of code:
+<code>
+unsafe
+{
+}
+</code>
+
+#record
+
+See "Record" section above.
+
+#required
+
+(.Net 11)
+
+required can modify a Field or Property
+required members must be initialized when the object is initialized
+- they can be initialized to Null if Null is an allowed value for that member
+
+required cannot be applied to Interface members
+but it can be used in class, struct, record class, and record struct
+
+required members must be at least as visible as their containing type
+
+derived types that override a required member must keep it required
+
+Derived types can add the required modifier when overriding a property.
+- This surprises me because it would break the Liskov Substitution principle - a derived type could require more properties be initialized than the base type...but if the base type has constructors with fewer params than the derived type then the derived type would already have default initialization for the extra fields in place...so ok this should be ok
+
+A type with any required members may not be used as a type argument when the type parameter includes the "new()" constraint. The compiler can't enforce that all required members are initialized in the generic code.

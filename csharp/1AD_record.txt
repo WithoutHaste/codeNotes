@@ -1,0 +1,89 @@
+##Record
+
+(C# 9)
+
+record modifier can be added to a reference type
+
+While records can be mutable, they're primarily intended for supporting immutable data models.
+Benefits
+- Concise syntax for creating a reference type with immutable properties
+- Built-in value equality, concise syntax for non-destructive mutation, formatting for display
+- Support for inheritance hierarchies
+
+Reference Type
+<code>
+record class... //synonym to clarify a reference type
+//can be simplified to just "record"
+public record Person(string FirstName, string LastName);
+
+public record Person
+{
+	public required string FirstName { get; set; }
+	public required string LastName { get; set; }
+};
+</code>
+
+Value Type
+<code>
+record struct... //define a value type with similar functionality
+
+public readonly record struct Point(double X, double Y, double Z);
+
+public record struct Point
+{
+	public double X { get; init; }
+	public double Y { get; init; }
+	public double Z { get; init; }
+}
+</code>
+
+Positional properties are immutable in a record class and a readonly record struct. They're mutable in a record struct.
+
+When you declare a primary constructor on a record, the compiler generates public properties for the primary constructor parameters.
+The primary constructor parameters to a record are referred to as positional parameters.
+The compiler creates positional properties that mirror the primary constructor or positional parameters.
+
+Example of that concise syntax
+<code>
+public record Person(string FirstName, string LastName);
+
+public static void Main()
+{
+	Person person = new("Jane", "Smith"); //this is Positional Syntax For Property Definition
+	Console.WriteLine(person); // "Person { FirstName = Jane, LastName = Smith }"
+}
+</code>
+
+#Record Class
+
+(available in C# 9, which means you need .NET 6 or later)
+
+A reference type.
+Use value-based equality (unlike classes).
+
+To support value-based comparisons, a record will automatically generate these methods for you: Object.Equals(Object), Equals(T recordType), Object.GetHashCode(), ==, !=, System.IEquatable<T>, Object.ToString()
+
+<code>
+public record Widget {
+	public string Name { get; set; }
+}
+</code>
+
+Optional: be clear that this is a reference type
+<code>
+public record class Widget {
+	public string Name { get; set; }
+}
+</code>
+
+#Record Struct
+
+(available in C# 10)
+
+Records as a value type.
+
+<code>
+public record struct Widget {
+	public string Name { get; set; }
+}
+</code>

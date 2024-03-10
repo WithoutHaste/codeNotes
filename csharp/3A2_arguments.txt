@@ -1,5 +1,7 @@
 ##Arguments
 
+Arguments are passed into a method when it is invoked. They are the other side of parameters.
+
 #Named Arguments
 
 You can name a specific argument to:

@@ -1,0 +1,35 @@
+##C# 6.0 One-Liners
+	
+#Auto Property Initializers
+
+Succinct read-only property initialization.
+
+As of C# 6.0 (.Net Framework 4.6)
+
+<code>
+public string Name { get; } = "Steven";
+
+public DateTime Timestamp { get; } = new DateTime();
+
+public int Id { get; } = NextId();
+</code>
+
+#Expression Bodied Methods
+
+Succinct one-line methods.
+
+As of C# 6.0 (.Net Framework 4.6)
+
+<code>
+Public override string ToString() => string.Format("{0} {1}", X, Y);
+</code>
+
+#Expression Bodied Properties
+
+Succinct one-line read-only properties.
+
+As of C# 6.0 (.Net Framework 4.6)
+
+<code>
+Public int Area => Width * Height;
+</code>

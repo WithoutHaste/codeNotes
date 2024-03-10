@@ -16,8 +16,6 @@ class MyClass
 }
 </code>
 
-Also called "Roman style" by some blog.
-
 #1TBS
 
 The standard for Javascript.
@@ -30,5 +28,3 @@ class MyClass {
 	}
 }
 </code>
-
-Also called "Egyptian style" by some blog.
