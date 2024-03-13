@@ -1,0 +1,66 @@
+##Network
+
+#Troubleshooting
+
+(linux is not recognizing LAN connection)
+
+list connections
+<code>
+ifconfig
+</code>
+should at least see a "lo" for local host
+may also see "eth0" for ethernet connection
+
+list PCI devices
+<code>
+lspci
+</code>
+lists all devices, such as VGA Controller, Audio, Ethernet, USB, SATA, PCI Bridge, etc
+(I'm seeing the two expected ethernet controllers listed)
+
+list hardware, filtering for network
+<code>
+sudo lshw -c network
+</code>
+(I'm seeing "*-network DISABLED" at the top)
+look at the configuration line to see what driver is needed
+(I need e1000e 3.2.6-k or r8169
+
+list drivers
+<code>
+lsmod | sort
+</code>
+see if the driver listed in lshw is also here
+(I see both drivers I could use listed here)
+
+seems that "ifconfig" has been deprecated
+and "ip" is recommended instead
+
+list connections
+<code>
+ip link
+</code>
+(now I see "lo" local connection plus my two ethernet options, both say "state DOWN")
+
+enable a DOWN connection
+<code>
+sudo ip link set <LINKID> up 
+</code>
+(YESSSSSS, I can now see this connection listed under "ifconfig" and router connection has lit up)
+(but I don't see an "inet" line for it, with the ip address)
+
+(still seems to not be connected to the internet, for instance cannot install new package)
+
+(rebooting)
+(ethernet connection is DOWN again after reboot, so set it to UP again)
+("ip addr" shows "LOWER_UP" which blog says means the other end of the connection exists)
+
+check that ethernet card is working
+<code>
+ethtool <LINKID>
+ #example: ethtool eth0
+</code>
+(dislays "Link detected: yes" so that is working)
+
+TODO try rebooting the router
+
