@@ -1,0 +1,6 @@
+##Whitespace
+
+<code>
+x + y #the same as x+y (addition)
+x +y #the same as x(+y) where x is a method being invoked
+</code>

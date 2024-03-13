@@ -1,0 +1,56 @@
+##Basics
+
+Ruby: a programming language
+
+Rails: a Ruby framework used for web development
+"Ruby on Rails"
+
+Gems: Ruby add-ons (called libraries in other languages)
+
+Ruby files use *.rb extension
+
+Ruby is object-oriented and can also be used for functional programming
+
+#Comments
+
+single line comments
+hash aka sharp aka pound (#) is used to comment out a line
+<code>
+ # single line comment
+ puts 'hi' # more comments
+</code>
+
+block comments aka multiline comments
+<code>
+=begin
+comment line
+comment line
+=end
+
+=begin
+escape character `=being
+=end
+</code>
+
+#End Of Line
+
+a statement can be ended with a semicolon (;) or end-line
+
+if a line ends with an operator (+ - \, for example) then the statement will be continued onto the next line
+
+#Hello World
+
+file: hello_world.rb
+<code>
+puts 'Hello world'
+</code>
+
+#Naming Conventions
+
+Identifiers are names of variables, constants, methods
+Identifiers are case sensitive
+
+snake case: my_variable_name, my_variable_name_2
+
+local variable names start with a lowercase letter or _
+

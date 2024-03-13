@@ -1,0 +1,49 @@
+##String
+
+single quoted strings are literals
+- '1\n2' does not include an end line
+
+double quoted strings interpret escaped characters (backslash notation)
+- "1\n2" prints 1, then end line, then 2
+
+#Formatted
+
+<code>
+x = 5
+y = "bob"
+message = "x: %d, y: %s" % [x, y]
+</code>
+format specifiers:
+- %s is for strings
+- %d is for whole numbers
+  - %04d pads the number to four digits, filling in with leading 0s
+- %f is for floating point numbers
+  - %0.2f means two decimal places (rounds)
+- %x converts a decimal to hexadecimal
+
+left or right justify strings to a number of characters
+<code>
+a = "apple"
+b = a.ljust(10)
+c = a.rjust(10)
+</code>
+
+#Here Document
+
+build a multiline string
+specify the custom terminator after "<<"
+<code>
+print <<MYEND
+	text text
+	text text
+MYEND
+</code>
+
+#Conversions
+
+number to string
+<code>
+n = 3
+s = n.to_s
+</code>
+

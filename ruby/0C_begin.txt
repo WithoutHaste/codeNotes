@@ -1,0 +1,18 @@
+##BEGIN
+
+declares code to run first in the program
+does not have to be first in the file
+<code>
+BEGIN {
+	#code
+}
+</code>
+
+##END
+
+declares code to run last when the program is closing
+<code>
+END {
+	#code
+}
+</code>

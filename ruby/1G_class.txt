@@ -1,0 +1,49 @@
+##Class
+
+"data members" include characteristics and methods
+
+<code>
+class Person
+	#characteristics
+	@@lucky_number = 3
+	@@name = 'jane'
+	#methods
+	def say_hello()
+		print 'hello'
+	end
+end
+</code>
+
+create an instance of a class (create an object)
+<code>
+class Person
+	#initialize is run on object creation
+	def initialize()
+	end
+end
+
+jane = Person.new
+</code>
+the "new" method is automatically available on all classes
+
+method invocations only require parentheses when there are arguments
+<code>
+class Person
+	def initialize(name, lucky_number)
+		@name = name
+		@lucky_number = lucky_number
+	end
+	def display()
+		puts "name: %s, lucky: %d" % [@name, @lucky_number]
+	end
+end
+
+jane = Person.new('jane', 3)
+jane.display
+</code>
+
+#Root Class
+
+all classes inherit from the class "Class"
+
+

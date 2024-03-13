@@ -1,0 +1,9 @@
+##Variable
+
+local variables: defined in a method, scope is limited to the method
+
+instance variables: scope is limited to an instance/object, use prefix @ to use the variable
+
+class variables: shared across all instances of a class, use prefix @@ to use the variable
+
+global variables: scope is the entire program, use prefix $ to use the variable

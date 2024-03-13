@@ -1,0 +1,25 @@
+##IO
+
+#Output
+
+puts
+- outputs text
+- includes an implicit end line at the end
+<code>
+puts 'text'
+puts "text"
+</code>
+
+print
+- outputs text
+- does not include an implicit end line
+<code>
+print 'text'
+print "text"
+</code>
+
+output a variable
+<code>
+puts @my_instance_variable
+puts "label: %d" % [@my_instance_variable]
+</code>

@@ -1,0 +1,42 @@
+##Command Prompt
+
+Verify if Ruby is installed on your system
+<code>
+ruby -v
+</code>
+
+To run a Ruby file
+<code>
+ruby my_file.rb
+</code>
+
+#irb
+
+irb means Interactive Ruby
+run an interactive Ruby shell in command prompt
+<code>
+irb #open the shell
+</code>
+"quit" or "exit" will close the shell
+
+#One-Liner
+
+you can run single lines of Ruby from command prompt
+<code>
+ruby -e "puts 'Hello world'"
+</code>
+"-e" means evaluate
+
+#Installation: Windows
+
+Installing Ruby on Windows
+!![Ruby's documentation](https://www.ruby-lang.org/en/documentation/installation/#winget)
+<code>
+ winget search RubyInstallerTeam.Ruby #this displays the list of available packages
+ 
+ winget install {package-id}
+ #example
+ winget install RubyInstallerTeam.RubyWithDevKit.3.2
+</code>
+Then restart your command prompt so the updated environment variables are picked up.
+You can now run *.rb files directly without saying "ruby" first.

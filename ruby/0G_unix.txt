@@ -1,0 +1,17 @@
+##Unix
+
+making a Ruby file an executable
+- make the *.rb file executable (chmod +x my_file.rb)
+- include the shebang line in the file
+<code>
+ #!/usr/bin/ruby
+ 
+ puts 'hello world'
+</code>
+now you can run the file without saying "ruby" first
+<code>
+./my_file.rb
+</code>
+
+"shebang" refers to the "sharp-bang" symbols (#!) that start the line
+this tells unix what program to use to run the file
