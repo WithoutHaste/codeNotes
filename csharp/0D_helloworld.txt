@@ -1,0 +1,31 @@
+##Hello, World
+
+<code>
+using System;
+
+static class Exercise01
+{
+	static void Main(string[] args)
+	{
+		Console.WriteLine("Hello, World");
+	}
+}
+</code>
+
+This can be compiled and run from the command line.
+Locate your csc.exe file (example location C:\Windows\Microsoft.Net\Framework\{version}\csc.exe or \bin\csc.exe)
+<code>
+ #in command prompt
+ #[csc location] [output exe or dll] [name of exe] [file(s) to compile]
+{full path to csc.exe} /t:exe /out:my_program.exe my_program.cs
+</code>
+
+The to run
+<code>
+my_program.exe
+</code>
+
+once you have unit tests setup, you can run them from command prompt
+<code>
+dotnet test
+</code>
