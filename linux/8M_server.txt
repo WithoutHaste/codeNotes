@@ -352,3 +352,48 @@ https://certbot.eff.org/
 
 easy generation and installation of certificates, with auto-renewal
 
+# New Hard Drive
+
+mostly followed this
+!![Installing A New Hard Drive](https://help.ubuntu.com/community/InstallingANewHardDrive)
+
+to get a list of the devices
+<code>
+sudo lshw -C disk
+</code>
+"-C disk" will filter by the description, if you don't see your disk then look without the filter as well
+this will give you the "/dev/{device}" label
+
+command line to partition disk
+<code>
+sudo parted /dev/{device}
+</code>
+follow the rest of the instructions from the webpage for this part
+
+then command line formatting
+<code>
+sudo mkfs -t ext4 /dev/{device}
+<code>
+
+find the uuid of the device, which is more consistent after reboots than the "/dev/{device}" name
+<code>
+sudo blkid
+</code>
+
+create a mount point
+add a directory under "/media" with a name of your choice
+<code>
+sudo mkdir /media/{name}
+</code>
+
+configure the drive to be mounted on each server startup
+<code>
+sudo vim /etc/fstab
+</code>
+and add a line like
+<code>
+/dev/disk/by-uuid/{uuid} /media/{name} ext4 defaults 0 2
+</code>
+the "2" here tells it to run a disk check on each server start, you can set to "0" to skip that
+
+reboot server
