@@ -29,3 +29,9 @@ once you have unit tests setup, you can run them from command prompt
 <code>
 dotnet test
 </code>
+
+basic i/o
+<code>
+Console.WriteLine("Enter a number: ");
+var input = Console.ReadLine(); //get what the user entered
+</code>

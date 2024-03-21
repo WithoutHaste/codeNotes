@@ -28,7 +28,7 @@ using(StreamWriter writer = new StreamWriter(filename))
 }
 </code>
 
-# Operating System Separator
+#Operating System Separator
 
 Windows vs Linux use different path or directory separators.
 <code>
@@ -37,7 +37,7 @@ using System.IO;
 var path = "folder" + Path.DirectorySeparatorChar + "filename.txt";
 </code>
 
-# Parts of File Name
+#Parts of File Name
 
 get file extension
 <code>

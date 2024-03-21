@@ -83,6 +83,15 @@ if(Double.IsPositiveInfinity(x))
 }
 </code>
 
+#Random
+
+<code>
+using System;
+
+var random = new Random();
+var r = random.Next(min, max+1); //include min and max as options
+</code>
+
 #Collection Expressions
 
 (C# 12)
