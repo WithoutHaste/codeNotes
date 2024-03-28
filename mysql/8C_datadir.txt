@@ -1,0 +1,61 @@
+##Data Dir
+
+Where is the data stored?
+<code>
+SELECT @@datadir;
+</code>
+probably /var/lib/mysql
+
+To change where data is stored (on ubuntu server)
+!![from DigitalOcean blog](https://www.digitalocean.com/community/tutorials/how-to-move-a-mysql-data-directory-to-a-new-location-on-ubuntu-20-04)
+<code>
+//bash
+sudo systemctl stop mysql
+sudo rsync -av /var/lib/mysql /media/{mounted drive}/mysql
+
+//update this in /etc/mysql/mysql.conf.d/mysqld.cnf
+datadir=/media/{mounted drive}/mysql
+
+//bash
+sudo systemctl start mysql
+sudo systemctl status mysql
+</code>
+
+if restarting mysql gives this error:
+- Job for mysql.service failed because the control process 
+- exited with error code. See "systemctl status mysql.service" 
+- and "journalctl -xe" for details.
+then update apparmor to create a link to the new storage location
+<code>
+//bash
+sudo vin /etc/apparmor.d/tunables/alias
+//add this line
+alias /var/lib/mysql/ -> /media/{mounted drive}/mysql/,
+
+//bash
+sudo systemctl restart apparmor
+</code>
+then restart mysql again
+
+
+
+
+
+
+
+
+
+To change where data is stored
+(assuming this is a fresh setup with no data to migrate)
+(on linux)
+<code>
+//bash
+sudo systemctl stop mysqld
+
+//update in or add to /etc/mysql/my.cnf (exact location may vary)
+datadir=/home/mysql
+socket=/home/mysql/server.sock
+
+//bash
+systemctl start mysqld
+</code>
