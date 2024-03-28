@@ -1,0 +1,30 @@
+##Trees
+
+#B Tree
+
+Maintains sorted data.
+Is self-balancing.
+Allows nodes with more than two children.
+Keys can be kept in the root and internal nodes, all actual data is in the leaves.
+
+![B Tree visual](images/datastructures_btree.png)
+
+#Cartesian Tree
+
+The root is set to the smallest value in the sequence. The left-hand subtree contains everything to the left of the root value in the sequence, and the right-hand subtree contains everything to the right of the root value in the sequence.
+A depth-first traversal of the tree will recreate the original sequence.
+
+![Cartesian Tree visual](images/datastructures_cartesiantree.png)
+
+#Red Black Tree
+
+A binary tree used for comparable data (data that can be ordered).
+Nodes contain a "red" or "black" value, which helps to keep the tree balanced for reliably quick searches.
+
+![Red Black Tree visual](images/datastructures_redblacktree.png)
+
+#Splay Tree
+
+A binary tree that brings recently searched elements to the root, so they are quick to look up again.
+
+![Splay Tree visual](images/datastructures_splaytree.gif)

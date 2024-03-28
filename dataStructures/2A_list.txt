@@ -57,3 +57,10 @@ class ListNode
 }
 </code>
 
+#Skip List
+
+A single ordered list is kept, and then various secondary lists are kept that jump through the data with larger and larger jumps.
+
+![Skip List visual](images/datastructures_skiplist.png)
+
+

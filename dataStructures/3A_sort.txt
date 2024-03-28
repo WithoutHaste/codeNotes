@@ -24,6 +24,8 @@ Selection Sort always takes the same amount of time: Best, Average, and Worst Ti
 Selection Sort is an in-place sort.
 Selection Sort is a comparison sort.
 
+![Selectionsort visual](images/datastructures_selectionsort.gif)
+
 Algorithm:
 	Keep track of two sections of the array - the sorted part, and the unsorted part.
 	Until the entire array is sorted:
@@ -41,6 +43,8 @@ Average and Worst Time: θ(n^2) O(n^2)
 Bubble Sort is an in-place algorithm.
 Bubble Sort is a comparison algorithm.
 
+![Bubblesort visual](images/datastructures_bubblesort.gif)
+
 Algorithm:
 	Loop through the array until it is sorted.
 		For each adjacent pair of elements, swap them if they are in the wrong order.
@@ -56,6 +60,8 @@ Average and Worst Time: θ(n^2) O(n^2)
 
 Insertion Sort is an in-place algorithm.
 Insertion Sort is a comparison algorithm.
+
+![Insertionsort visual](images/datastructures_insertionsort.gif)
 
 Algorithm:
 	Keep track of two sections of the array - the sorted part, and the unsorted part.
@@ -74,6 +80,8 @@ Best, Average, and Worst Times: (n log(n))
 
 Heap Sort is an in-place sort.
 Heap Sort is a comparison algorithm.
+
+![Heapsort visual](images/datastructures_heapsort.gif)
 
 Complete Binary Tree:
 	A binary tree in which all levels are completely full, except possibly the last level where all elements are as far left as possible.
@@ -117,6 +125,8 @@ Quick Sort is a divide and conquer algorithm.
 Quick Sort is a comparison algorithm.
 Quick Sort is an in-place sort.
 
+![Quicksort visual](images/datastructures_quicksort.gif)
+
 Algorithm:
 	Select a pivot element (it can be any element in the array).
 	Partition: move all smaller elements before the pivot and all larger elements after the pivot.
@@ -147,6 +157,8 @@ Merge Sort is a divide and conquer algorithm.
 Merge Sort is a comparison algorithm.
 Merge Sort is NOT an in-place sort. It uses a lot of extra memory.
 Merge Sort can be an external sort - meaning the entire array is NOT kept in memory at one time.
+
+![Mergesort visual](images/datastructures_mergesort.gif)
 
 Algorithm:
 	Divide the array in half.
