@@ -89,8 +89,16 @@ context.font = "12px Georgia";
 context.fillText(elementId, 10, 10);
 var textWidth = context.measureText(text).width;
 </code>
+only width is available, not height
 
-There is no built-in measurement for text height.
+newer measurement options with height
+<code>
+var metrics = context.measureText(text); //advanced measures
+var fontHeight = metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent; //unchanging height of the font
+var actualHeight = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent; //height of this specific text
+</code>
+
+![demo js text measures](images/js_text_measures.png)
 
 #Images
 
