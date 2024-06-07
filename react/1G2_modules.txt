@@ -1,0 +1,43 @@
+##Modules
+
+Modules are not specific to React, they are a part of Javascript.
+Modules enables reuse of code and enclosure of privates.
+
+It is good practice to have only one component per module file.
+(According to the video I'm watching, at work we've got lots of things being exported from each module)
+
+ex module file: DoSomething.js
+<code>
+const doSomething = () => {
+	//...
+};
+export { doSomething };
+</code>
+Other module files can now import "doSomething".
+Anything that a variable can hold can be exported.
+
+<code>
+export {
+	one,
+	two,
+	three
+};
+</code>
+
+The module name is its filename without an extension.
+<code>
+import { doSomething } from "./DoSomething";
+
+doSomething();
+</code>
+
+Each module can export one default item.
+<code>
+//file A
+export default doSomething;
+
+//file B
+Import do from "./A"; //aliases the default export
+
+do();
+</code>

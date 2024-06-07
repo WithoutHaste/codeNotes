@@ -1,18 +1,95 @@
 ##Components
 
 React components are independent, reusable, auto-updating pieces of a web application.
+A component is an instruction for how the GUI should be rendered.
 
-React components are structured as Javascript functions that accept properties and return React elements.
+React components are structured as Javascript functions that accept properties and return React elements (JSX).
+JSX syntax resembled HTML but it is javascript, and extension of javascript.
+JSX must be transformed to Javascript with a tool like Babel.
+
+example: one component
+<code>
+const Banner = () => <h1>This is a banner</h1>;
+//the above JSX is translated to the below Javascript
+const Banner = () => React.createElement('h1', null, 'This is a banner');
+</code>
+
+Each component must return JSX with a single parent element.
+If you don't want, like, an extra div messing up your layout:
+<code>
+const B = () => {
+	<React.Fragment> //Fragment
+		<div></div>
+		<div></div>
+	<React.Fragment/>
+};
+
+const A = () => {
+	<> //Empty Node is shorthand for a Fragment
+		<div></div>
+		<div></div>
+	</>
+};
+</code>
+
+example: component composition
+<code>
+const Greeting = () => (
+	<div>	//invoking a built-in component
+		<Banner />	//invoking that previous component
+		<h2 className='highlight'>Greetings</h2>
+	</div>
+);
+</code>
+
+example: the component is a function, it doesn't have to return immediately
+<code>
+const Component = () => {
+	var x = 5;
+	var jsx = <span>Hello World</span>;
+	
+	return (
+		<div>
+			{x}
+			{jsx}
+		</div>
+	);
+};
+</code>
+
+Javascript Expressions
+<code>
+var imgSrc = "string";
+var divStyles = {
+	fontStyle: "italic",
+	fontSize: "x-large",
+};
+
+const MyComponent = () => {
+	<div className='container'> //"className" means "class" but class is a keyword in JS
+		<img src={imgSrc} /> //the {} here is a Javascript Expression within JSX
+		<div style={divStyles}>
+		</div>
+		<div style={{fontStyle:"italic"}}> //{{}} means an Inline Object inside the Javascript Expression
+		</div>
+	</div>
+};
+</code>
 
 #Naming
 
 Always start component names with a capital letter.
+PascalCase
 
 JSX will interpret capitalized tag names as references to components.
+
+The built-in components are camelCase, the first letter being lowercase.
 
 #Function Components
 
 Function components are the simplest examples.
+
+Component functions should be pure functions - the same input always produces the same output.
 
 <code>
 function Welcome(props) 
@@ -40,77 +117,116 @@ ReactDOM.render(
 
 If your component returns "null" instead of a React element, nothing will be rendered for it. This can be used to hide components.
 
-#ES6 Class Components
-
-<code>
-class Welcome extends React.Component 
-{
-	render() 
-	{
-		return <h1>Hello, {this.props.name}</h1>;
-	}
-}
-</code>
-
-Class components have local state.
-
-<code>
-class Clock extends React.Component 
-{
-	constructor(props)
-	{
-		super(props);
-		this.state = {date: new Date()};
-	}
-	
-	//a Life-Cycle Method
-	//claim memory once, when the React element is first rendered to the DOM
-	componentDidMount()
-	{
-		this.timerID = setInterval(() => this.tick(), 1000);
-	}
-	
-	//a Life-Cycle Method
-	//like Dispose - free up memory when the React element is fully removed from the DOM
-	componentDidUnmount()
-	{
-		clearInterval(this.timerID);
-	}
-	
-	tick() 
-	{
-		this.setState({ date: new Date() });
-	}
-
-	render() 
-	{
-		return (
-			<div>
-			<h1>Hello, world!</h1>
-			<h2>It is {this.state.date.toLocaleTimeString()}.</h2>
-			</div>
-		);
-	}
-}
-</code>
-
 #Props
 
+Pass arguments into a component:
 <code>
-this.props
+const Component = (props) => {
+	<div>
+		{props.myprop}
+	</div>
+};
+
+<Component myprop="value" /> //passing a prop into a component
 </code>
 
-"props" are read-only, no matter how to define your component.
-
+"props" are to be treated as read-only, always.
 Consider "pure" functions, which do not change their inputs and always return the same output when given the same input.
-
 All React components must be pure in respect to their "props".
+
+<code>
+const Component = (props) => {
+	<div className="header">
+		{props.children}
+	</div>
+};
+
+<Component>Hello World</Component> //the innerHTML is auto-passed as props.children
+</code>
+
+detail: this is destructuring "props" as it comes into the component function
+<code>
+const Component = ({children}) => {
+	<div className="header">
+		{children}
+	</div>
+};
+
+<Component>Hello World</Component> //the innerHTML is auto-passed as props.children
+</code>
+
+deeper destructuring:
+<code>
+var widget = {
+	name: 'steve',
+	age: 5,
+};
+const Component = ({widget: { name, age}}) => {
+	<div className="header">
+		{name}
+	</div>
+};
+<Component widget={widget} />
+
+//or
+const Component = ({{ name, age}}) => {
+
+//or use spread to pass in the properties of widget as individual props
+<Component {...widget} /> //but this can impact performance as unneeded props are passed in
+</code>
+or use spread to pass in the properties of widget as individual props
+
+#Hooks
+
+A hook is a function with a name starting "use".
+It encapsulates complexity.
+There are many built-in hooks.
+
+First Rule Of Hooks: Hooks should only be called at the top level.
+- do not call them conditionally, like inside an IF statement
+- do not call them after an optional RETURN statement in a function
+This is so they will always be called in the same order each time the component executes.
+
+Second Rule Of Hooks: Hooks should only be called from inside function components.
+- exception: a custom hook may call other hooks
 
 #State
 
+State is data held internally and privately by a component.
 <code>
 this.state
 </code>
+Every time the state of a component changes, the component function is run again. The "useState" lines will be skipped on re-runs.
+The reconciliation step means only the parts of the JSX that changes will be updated in the browser.
+
+Register variables within a component, and when they are edited the component will refresh.
+<code>
+var integers = [1,2,3];
+const Component = () => {
+	const [_integers, setIntegers] = useState(integers); //hook useState returns the internal object and a function for updating it
+	
+	const addInteger = () => {
+		setIntegers([..._integers, (_integers.Length+1)]); //do NOT edit "_integers" directly
+	};	
+		
+	return (
+		<>
+			{_integers.map((i) => "Number "+i+"<br/>")}
+			<button onClick={addInteger}>Add</button>
+		</>
+	);
+};
+</code>
+Call "setIntegers" to tell React to re-render the component.
+You can use "setState" multiple times within a component.
+For reference-type variables (like arrays), React will refresh when the reference is changed.  For primitive-types (like int), React will refresh when the value is changed. In both cases, the refresh will only occur if you use the variable somewhere in your JSX.
+
+For rapid updates to primitive state values:
+<code>
+const [counter, setCounter] = useState(0);
+setCounter(current => counter + 1);
+</code>
+React will batch the calls to setCounter. Using "current" will ensure that each call uses the updated value from the previous call.
 
 Reserve this object for state information about your component.
 
@@ -131,6 +247,123 @@ If the "next" state values are calculated based on the "current" values, you mus
 this.setState((state, props) => ({
 	counter: state.counter + props.increment
 }));
+</code>
+
+#Memoize
+
+memo-ize
+to make a memo, which here means to cache a value
+a type of hook
+
+With pure functions, you can cache input-to-output pairs to improve performance.
+
+Wrap the component in React.Memo
+<code>
+import React from "react";
+
+const Component = (props) => {
+	return (
+		<div>{props.value}</div>
+	);
+};
+
+export const ComponentMemo = React.memo(Component);
+</code>
+The caching will now be handled automatically.
+
+Do not wrap all components in memo - memory IS limited, and React is already pretty time-efficient.
+Use profiling tools to determine where using memo is actually faster.
+Look for component functions that
+- are pure functions
+- return non-trivial JSX
+- are often called for the same inputs
+
+memoize a long-running calculation
+<code>
+const result = useMemo(() => {
+	return longRunningCalculation(data);
+}, [data]);
+</code>
+
+#Effects
+
+In React, side effects are just called "effects".
+Side effects are when functions are not pure - they rely on or change the state outside of themselves. They do not give consistent outputs based on their inputs.
+Ex: calling an API (could throw an error), using time outs, using the browser's document or window
+
+Effect hook: this part of a component function will be run AFTER the pure part of the function has run and the browser has been reconciled.
+<code>
+useEffect(() => {
+	//do a not-pure function
+});
+</code>
+
+<code>
+import React, {useEffect, useState } from "react";
+
+const Component = () => {
+	const [integers, setIntegers] = useState([]);
+	
+	useEffect(() => {
+		//useEffect cannot be marked async itself, so wrap await calls in local async functions
+		const fetchData = async () => {
+			const response = await fetch("api/data");
+			const data = await response.json();
+			setIntegers(data);
+		};
+		fetchData();
+	});
+	
+	return (
+		<>
+			{integers.map(i => "Number "+i+"<br/>")}
+		</>
+	);
+};
+</code>
+So on the first invocation, this component will render an empty node, then the effect will run, the effect will update the state of the component, that will trigger the component to run again and render the data.
+Does the effect run again the second time? Yes. Yes, it does, every time the component is invoked.
+To avoid that, you need extra logic to tell the effect to not run every time.
+<code>
+const [counter, setCounter] = useState(0);
+
+useEffect(() => {
+	document.title = counter; //just an example for illustration
+}, [counter]); //this is a Dependency Array, the function will only run when a value in this array is edited
+</code>
+Specify an empty dependency array to mark a useEffect function as "run once only"
+<code>
+useEffect(() => {
+	//load data from api
+}, []);
+</code>
+
+You can have multiple useEffect calls in one component, and they can have different dependency arrays.
+
+Return a "cleanup" function from useEffect
+The cleanup will be run (1) when the component is unmounted (removed from the UI), but also (B) before each time the useEffect is invoked.
+<code>
+useEffect(() => {
+	//subscribe to an event stream
+	
+	return () => {
+		//cleanup
+		//unsubscribe from event stream
+	};
+}, []);
+</code>
+
+#Ref Hook
+
+Ref hook persists values between re-render calls without triggering a re-render.
+So it is like state, but does not cause re-rendering.
+
+<code>
+const Component = () => {
+	const counter = useRef(0); //count number of renderings without causing more to happen
+	
+	counter.current++;
+};
 </code>
 
 #Decomposition

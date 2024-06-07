@@ -1,4 +1,4 @@
-##Lists
+##Lists/Arrays
 
 Generate a list of React elements.
 <code>
@@ -51,3 +51,4 @@ function NumberList(props)
 	);
 }
 </code>
+The key needs to be set where the array is created by map, not at a lower level.

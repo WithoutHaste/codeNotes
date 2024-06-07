@@ -12,3 +12,14 @@ To run a React Native app, you'll need XCode (Mac) or Android Studio (Android).
 React Native does not use HTML to render the app; instead it uses native UI components.
 
 Prerequisites: Javascript, HTML
+
+Continuation of notes apply to React 16/17/18
+
+React is a JS library for building UIs
+A React UI is a composition of components
+Create hierarchies of reusable components
+Rendered output changes when the state changes
+Reconciliation will only update the parts of the UI that need to be updated
+
+When a component function is invoked, that is "rendering" - it generates the JSX which will be converted into HTML DOM elements.
+When React updates what the browser is displaying, that is "reconciliation".
