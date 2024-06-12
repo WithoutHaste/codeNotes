@@ -85,6 +85,13 @@ JSX will interpret capitalized tag names as references to components.
 
 The built-in components are camelCase, the first letter being lowercase.
 
+#Mount/Unmount
+
+Mounting is when a component's state is initialized in memory, the component is rendered, and the html is added to the browser DOM.
+
+Unmounting is when the component's html is removed from the DOM and the component's memory is released.
+Component state is lost.
+
 #Function Components
 
 Function components are the simplest examples.
@@ -189,6 +196,38 @@ This is so they will always be called in the same order each time the component 
 
 Second Rule Of Hooks: Hooks should only be called from inside function components.
 - exception: a custom hook may call other hooks
+
+You can create custom hooks to separate concerns (such as fetching a list of data and displaying it)
+<code>
+//put custom hooks under a ./project/hooks/ directory
+//hook functions start with "use" prefix
+import { useState, useEffect } from "react";
+
+export const useHouses = () => {
+	const [houses, setHouses] = useState([]);
+	
+	useEffect(() => {
+		//fetch house data
+		//call setHouses(data)
+	}, []);
+	
+	return { houses, setHouses };
+};
+//in the houses component
+import useHouses from "../hooks/useHouses";
+
+const HouseList = () => {
+	const { houses, setHouses } = useHouses();
+	
+	//display houses
+};
+</code>
+Hooks do not return JSX.
+Hooks may call other hooks.
+
+When a hook's state changes, any component that calls on that hook will re-render.
+
+When a hook is called from multiple components, each component keeps a separate instance of the hook's state - they do not share data or affect each other.
 
 #State
 

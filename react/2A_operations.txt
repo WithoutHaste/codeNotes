@@ -1,0 +1,63 @@
+##Misc Operations
+
+#Conditional Patterns
+
+Using template literal for if/else
+<code>
+	<td className={`${house.price >= 500000 ? "highlight" : ""}`}>
+		{house.price}
+	</td>
+</code>
+
+Using lazy evaluation for if/else
+The TD will only be rendered if "price" is "truthy" (not 0 or undefined)
+<code>
+	{house.price && (
+		<td>{house.price}</td>
+	)}
+</code>
+
+Conditionally Rendering Components
+<code>
+const [selectedHouse, setSelectedHouse] = useState();
+return (
+	{selectedHouse ? <House house={selectedHouse} /> : <HouseList />}
+);
+</code>
+If a house is selected, display its details. Otherwise show the whole list of houses.
+This also needs: a way for HouseList to update the higher-level setSelectedHouse() hook:
+Shared State
+<code>
+const [selectedHouse, setSelectedHouse] = useState();
+return (
+	{selectedHouse ? 
+		<House house={selectedHouse} /> : 
+		<HouseList selectHouse={setSelectedHouse}/>} //pass the setter into the lower-level module, it can be called from there
+);
+
+//in HouseList, click a row to select it
+const HouseRow = ({house, selectHouse}) => {
+	return (
+		<tr onClick={() => selectedHouse(oldHouse => house)}>
+			//...display house row
+		</tr>
+	);
+};
+</code>
+If it is too risky to let the child component run the setter, use a wrapper function:
+<code>
+//top level
+const [selectedHouse, setSelectedHouse] = useState();
+const setSelectedHouseWrapper = (house) => { //pass this to child components
+	//can put checks here, verifying "house" is the correct data type
+	setSelectedHouse(house);
+};
+</code>
+This does create a new instance of the wrapper function when the component is re-rendered, and if that wrapper instance is passed into a memoized component, then it can cause more accidental re-rendering. Similar issue if the wrapper ends up in a dependency array.
+Can avoid these issues by using hook useCallback instead. This will preserve the same function reference across re-renders.
+This does add overhead, so don't use it everywhere.
+<code>
+const setHouseWrapper =	useCallback((house) => {
+	setSelectedHouse(house);
+}, []); //this here is why is only creates one new function on the first render, and not again on each re-render
+</code>
