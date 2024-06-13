@@ -61,3 +61,52 @@ const setHouseWrapper =	useCallback((house) => {
 	setSelectedHouse(house);
 }, []); //this here is why is only creates one new function on the first render, and not again on each re-render
 </code>
+
+You don't have to pass setters through props to share state
+you can also use Context
+<code>
+const context = React.createContext("default");
+
+return (
+	<context.Provider value="x"> //"x" is passed, if no value is defined then that "default" is passed
+		//children components
+	</context.Provider>
+);
+</code>
+With this, both direct child components and all lower descendent components can read the Context.
+<code>
+const value = useContext(context);
+//or
+	<context.Consumer>
+		{ value => /*render with the provided value*/ }
+	</context.Consumer>
+</code>
+When the context value changes, all components that use it will re-render.
+Example usage
+<code>
+//this is exported so any other component can import it
+export const navigationContext = React.createContext(defaultNavValues.start);
+
+const Component = () => {
+	const navigate = useCallback(
+		(navTo) => setNav({ current: navTo, navigate }),
+		[]
+	);
+	
+	const [nav, setNav] = useState({ current: defaultNavValues.start, navigate });
+	
+	return (
+		<navigationContext.Provider value={nav}> //when nav state is changed, it will trigger re-renders
+			//children
+		</navigationContext.Provider>
+	);
+};
+//in child component
+const ChildComponent = () => {
+	const { navigate } = useContext(navigatorContext); //can be used to change the state
+};
+</code>
+So we're still using State to share data and trigger re-renders.
+The Context is just making it so we don't have to explicitly pass the State variables into every child component.
+
+

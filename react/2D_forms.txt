@@ -5,209 +5,57 @@ But React expects all state to maintained internally.
 
 Controlled components are these HTML elements where React controls the state.
 
-For data validation and other advanced techniques:
-!![Formik](https://jaredpalmer.com/formik/)
+#Form
+
+<code>
+const submit = (e) => {
+	e.preventDefault();
+	//submit form data to api
+};
+
+return (
+	<form onSubmit={submit}>
+	</form>
+);
+</code>
 
 #Input
 
-Input example:
 <code>
-class NameForm extends React.Component 
-{
-	constructor(props) 
-	{
-		super(props);
-		this.state = {value: ''};
+const [firstName, setFirstName] = useState("Susan");
 
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
-
-	handleChange(event) 
-	{
-		//occurs on every change to the input value
-		this.setState({value: event.target.value});
-		
-		//if you wanted the text to always be upper case
-		this.setState({value: event.target.value.toUpperCase()});		
-	}
-
-	handleSubmit(event) 
-	{
-		//pop up an alert instead of submitting the form
-		alert('A name was submitted: ' + this.state.value);
-		event.preventDefault();
-	}
-
-	render() 
-	{
-		return (
-			<form onSubmit={this.handleSubmit}>
-				<label>
-					Name:
-					<input type="text" value={this.state.value} onChange={this.handleChange} />
-				</label>
-				<input type="submit" value="Submit" />
-			</form>
-		);
-	}
-}
+return (
+	<input type='text' value={firstName} 
+	onChange={(e) => setFirstName(e.target.value)}/>
+);
 </code>
 
-#Textarea
-
-Textarea example:
+more complicated example
 <code>
-class EssayForm extends React.Component 
-{
-	constructor(props) 
-	{
-		super(props);
-		this.state = {
-			//initial text in textarea
-			value: 'Please write an essay about your favorite DOM element.'
-		};
+const [person, setPerson] = useState({ firstName: 'Susan', lastName: 'Smith' });
+const change = ((e) => setPerson({...person, [e.target.name]: e.target.value });
 
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
+return (
+	<form>
+		<input type='text' name='firstName' value={person.firstName} onChange={change} />
+		<input type='text' name='lastName' value={person.lastName} onChange={change} />
+	</form>
+);
+</code>
+Computed Property Name: this part "[e.target.name]: e.target.value"
 
-	handleChange(event) 
-	{
-		this.setState({value: event.target.value});
-	}
+#TextArea
 
-	handleSubmit(event) 
-	{
-		alert('An essay was submitted: ' + this.state.value);
-		event.preventDefault();
-	}
-
-	render() 
-	{
-		return (
-			<form onSubmit={this.handleSubmit}>
-				<label>
-					Essay:
-					<textarea value={this.state.value} onChange={this.handleChange} />
-				</label>
-				<input type="submit" value="Submit" />
-			</form>
-		);
-	}
-}
+React's textarea component makes textarea similar to input.
+<code>
+	<textarea value={val} onChange={change} />
 </code>
 
 #Select
 
-For "select" tags, React marks the selected value in the "value" attribute of the "select" tag instead of on the "option".
-
-Select (drop down) example:
+React's select component makes select similar to input.
 <code>
-class FlavorForm extends React.Component 
-{
-	constructor(props) 
-	{
-		super(props);
-		this.state = {value: 'coconut'};
-
-		this.handleChange = this.handleChange.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
-
-	handleChange(event) 
-	{
-		this.setState({value: event.target.value});
-	}
-
-	handleSubmit(event) 
-	{
-		alert('Your favorite flavor is: ' + this.state.value);
-		event.preventDefault();
-	}
-
-	render() 
-	{
-		return (
-			<form onSubmit={this.handleSubmit}>
-				<label>
-					Pick your favorite flavor:
-					<select value={this.state.value} onChange={this.handleChange}>
-						<option value="grapefruit">Grapefruit</option>
-						<option value="lime">Lime</option>
-						<option value="coconut">Coconut</option>
-						<option value="mango">Mango</option>
-					</select>
-				</label>
-				<input type="submit" value="Submit" />
-			</form>
-		);
-	}
-}
-</code>
-
-Multi-select: pass an array to "value"
-<code>
-	<select multiple={true} value={['B', 'C']}>
-</code>
-
-#Controlling Multiple Inputs
-
-<code>
-class Reservation extends React.Component 
-{
-	constructor(props) 
-	{
-		super(props);
-		this.state = {
-			isGoing: true,
-			numberOfGuests: 2
-		};
-
-		this.handleInputChange = this.handleInputChange.bind(this);
-	}
-
-	handleInputChange(event) 
-	{
-		const target = event.target;
-		const value = target.type === 'checkbox' ? target.checked : target.value;
-		const name = target.name;
-
-		//set state based on the name of the element
-		//this uses ES6 computed property name
-		this.setState({
-			[name]: value
-		});
-		
-		//ES5 equivalent
-		var partialState = {};
-		partialState[name] = value;
-		this.setState(partialState);
-	}
-
-	render() 
-	{
-		return (
-			<form>
-				<label>
-					Is going:
-					<input
-						name="isGoing"
-						type="checkbox"
-						checked={this.state.isGoing}
-						onChange={this.handleInputChange} />
-				</label>
-				<br />
-				<label>
-					Number of guests:
-					<input
-						name="numberOfGuests"
-						type="number"
-						value={this.state.numberOfGuests}
-						onChange={this.handleInputChange} />
-				</label>
-			</form>
-		);
-	}
-}
+	<select value={val} onChange={change} >
+		<option value='option 1'>1</option>
+	</select>
 </code>
