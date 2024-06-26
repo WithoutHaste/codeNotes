@@ -1,0 +1,17 @@
+##Next.js
+
+Next.js is a toolchain
+it is a React server-side framework
+it connects the React library (a javascript library) to what is needed for debugging and publishing an app
+these toolchains are not required but are a huge time saver
+
+Next.js is not based on Node.js, Next.js runs on top of Node.js
+
+the root component of a Next.js app will be in App.js
+
+How to use:
+- install Node.js
+- run "npx create-next-app@latest" to get a basic app initialized
+  - if you answer "No" to using the App Router, then you will be using Page Router in your App instead
+
+if you use App Router, then all your components will be server components (rendered on the server) and will therefore not be able to manage state in the client's browser

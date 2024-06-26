@@ -1,0 +1,111 @@
+##Debugging
+
+#Basic
+
+You can always throw "console.log('message');" lines into your code.
+
+#Browser
+
+Install and open browser React Developer Tools
+this will add tabs Components and Profiler to the normal browser developer tools
+
+in Components:
+- click on a Component to see what props were passed into
+  - the props are also editable
+- click on a Component's "rendered by" to step up to its ancestor Component
+- click on the "{ }" button to view the source code of the Component
+- click the eye-icon to see the DOM elements rendered by the Component
+- click the bug-icon to open a console pane focused on the Component
+- click the gear-icon to filter the Components tree
+
+in Profiler:
+- on Flamegraph, click "reload and start proofing", then click "stop" once the page has re-rendered
+  - this will display how long it took each nested component to render, and how many times they rendered
+- to really dig into Flamegraph, click the gear-icon > "record why each component rendered while profiling" (this will slow down your app)
+
+#useDebugValue Hook
+
+useDebugValue can be used in custom hooks
+
+<code>
+import { useDebugValue } from "react";
+
+function useMyHook() {
+	const [var1, setVar1] = useState(0);
+	
+	useDebugValue(`var1:${var1}`);
+	
+	return { var1, setVar1 };
+}
+</code>
+The output of useDebugValue will be displayed in the browser React Dev Tools when the component using this hook is selected.
+
+advanced option
+<code>
+import { useDebugValue } from "react";
+
+function useMyHook() {
+	const [var1, setVar1] = useState(0);
+	
+	useDebugValue(`${var1}`, (value) => {
+		if(var1 > 10) return "XYZ";
+		if(var1 > 50) return "ABC";
+		return "DEF";
+	});
+	
+	return { var1, setVar1 };
+}
+</code>
+If you need more complex display logic than the single-parameter useDebugValue allows
+then you can give a function as the second parameter.
+The input argument of the function will be the result of the first parameter.
+
+#Error Boundaries
+
+? might need to copy the ErrorBoundary code into your app yourself ?
+
+<code>
+import React from "react";
+
+class ErrorBoundary extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = { hasError: false };
+	}
+	
+	static getDerivedStateFromError(error) {
+		return { hasError: true };
+	}
+	
+	componentDidCatch(error, errorInfo) {
+		//for logging error to a reporting service
+		logErrorToMyService(error, errorInfo);
+	}
+	
+	render() {
+		if(this.state.hasError) {
+			if(this.props.errorUI) {
+				//custom error message
+				return this.props.errorUI;
+			}
+			
+			// default error message
+			return <h1>Error Occurred</h1>;	
+		}
+		
+		//render the normal nested component
+		return this.props.children;
+	}
+}
+
+const Component = (props) => {
+	return (
+		<ErrorBoundary
+			errorUI={<div>{props.id} Errored</div>}>
+			<InnerComponent {...props} />
+		</ErrorBoundary>
+	);
+};
+</code>
+The error boundary will catch errors/exceptions and will render an error message instead of crashing the whole app.
+

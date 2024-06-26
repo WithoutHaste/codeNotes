@@ -183,6 +183,23 @@ const Component = ({{ name, age}}) => {
 </code>
 or use spread to pass in the properties of widget as individual props
 
+Best practice: use destructuring syntax for receiving props in a component, to ensure that the component cannot accidentally display data that was passed to it but it should not have:
+<code>
+//calling the component
+const data = {
+	favColor: "red",
+	age: 55,
+	ssn: "000-000-0000",
+};
+return (<MyComponent {...data} />);
+
+//declaring component
+function MyComponent({favColor, age}) {
+	console.log(JSON.stringify(props));
+	return(<div></div>);
+}
+</code>
+
 #Hooks
 
 A hook is a function with a name starting "use".
@@ -435,6 +452,42 @@ ReactDOM.render(
 </code>
 
 Design components the way you would an object oriented model. Each component should be reusable and do just its own job.
+
+#Higher Level Component
+
+A higher level component accepts a component argument instead of a props argument.
+It will return an enhanced version of the component that was passed in.
+
+It is used to pass extra values into the argument-component as props.
+
+<code>
+import { useState } from 'react';
+
+const App = ({darkTheme, toggleTheme}) => {
+	return (
+		<div data-theme={darkTheme ? "dark" : "light"} onClick={() => toggleTheme()}>
+			Toggle Dark Theme
+		</div>
+	);
+};
+
+const withTheme = (Component) => {
+	function Func(props) {
+		const [darkTheme, setDarkTheme] = useState(true);
+		return (
+			<Component {...props}
+				darkTheme={darkTheme}
+				toggleTheme={() => setDarkTheme(!darkTheme)}
+			/>
+		);
+	}
+	return Func; //returns a named function rather than an anonymous one to keep linter from complaining
+};
+
+export default withTheme(App);
+</code>
+Every component in the app that needs to know the theme can be called as "withTheme(Component)".
+(Code sample above is not a complete solution)
 
 #Design
 

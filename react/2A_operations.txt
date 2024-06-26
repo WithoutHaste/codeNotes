@@ -35,6 +35,21 @@ return (
 		<HouseList selectHouse={setSelectedHouse}/>} //pass the setter into the lower-level module, it can be called from there
 );
 
+Conditionally including one element in an array:
+<code>
+	<MyComponent listItems=[
+		{
+			value: 1,
+		},
+		...((condition) ? [] : [{
+			value: 2,
+		}]),
+		{
+			value: 3,
+		},
+	] />
+</code>
+
 //in HouseList, click a row to select it
 const HouseRow = ({house, selectHouse}) => {
 	return (
@@ -62,8 +77,13 @@ const setHouseWrapper =	useCallback((house) => {
 }, []); //this here is why is only creates one new function on the first render, and not again on each re-render
 </code>
 
-You don't have to pass setters through props to share state
+#Context
+
+You don't have to pass setters through props to share state (prop drilling: passing props down and down and down through components, not even used by the intermediate components)
 you can also use Context
+
+Each context is available in any descendant component of the component that created it
+
 <code>
 const context = React.createContext("default");
 
