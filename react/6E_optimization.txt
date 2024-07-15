@@ -1,0 +1,60 @@
+##Optimization
+
+Only optimize when you witness an efficiency problem. React is efficient and computers are fast, so most code will work just fine even if it isn't optimized.
+
+#Over-Rendering
+
+Over-rendering is when a component re-renders a lot when it does not need to.
+
+Most common solution is useMemo (see above).
+This can solve the issue: child component re-rendered only because the parent re-rendered. No props passed to the child changed.
+
+#useDeferredValue
+
+example use case:
+- you have a search input field and as the user types, you update the filtering of a list of items based on the search text
+- if the list to filter is large, re-rendering it many times rapidly could slow down the app
+useDeferredValue can tell the list of items to filter/refresh less often, so the UI remains responsive.
+
+<code>
+import { useDeferredValue, useState } from "react";
+
+const App = () => {
+	const [searchText, setSearchText] = useState("");
+	const searchTextDeferred = userDeferredValue(searchText);
+	
+	return (
+		<div>
+			//skip over display of search input field
+			<ItemList searchText={deferredSearchText} />
+		</div>
+	);
+};
+</code>
+
+#useTransition
+
+similar to useDeferredValue
+it tells React that some components are a higher or lower priority when re-rendering
+
+<code>
+function App() {
+	const [searchText, setSearchText] = useState("");
+	const [searchTextSlow, setSearchTextSlow] = useState("");
+	const [isPending, startTransition] = useTransition();
+	
+	return (
+		<div>
+			<input value={searchText} onChange={(e) =>{
+				setSearchText(e.target.value);
+				startTransition(() => setSearchTextSlow(e.target.value));
+				}
+			} />
+			<DisplayList searchText={searchTextSlow} />
+		</div>
+	);
+}
+</code>
+"isPending" boolean is updated when all the state updates run in this component have finished
+"startTransition" marks state function setters as low priority
+In this example, the search input field gets immediate updates while the filtered list gets eventual updates.

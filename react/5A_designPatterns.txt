@@ -1,0 +1,28 @@
+##Design Patterns
+
+#Builder Functions
+
+In C#, I'd often write builder functions for unit tests, which would instantiate a new object and fill it with default data. Each test case would set just the properties that mattered for that test case.
+
+React coding has a strong preference for pure functions, which includes not editing objects that are passed into the function. While this is not an exact match for that rule, it is similar. Anyway, this is the preferred pattern to use instead of a builder function.
+
+<code>
+interface MyProps {
+	someText: string | null;
+	someNumber: number;
+};
+
+//instantiate one constant object with default values
+const defaultProps: MyProps = {
+	someText: '',
+	someNumber: 0,
+};
+
+//in each test case
+//create a new copy of it, overwriting selected properties
+const testCaseProps: MyProps = {
+	...defaultProps,
+	someNumber: 999,
+};
+</code>
+

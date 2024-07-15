@@ -305,7 +305,7 @@ this.setState((state, props) => ({
 }));
 </code>
 
-#Memoize
+#Memoize, Memo, useMemo
 
 memo-ize
 to make a memo, which here means to cache a value
@@ -315,7 +315,7 @@ With pure functions, you can cache input-to-output pairs to improve performance.
 
 Wrap the component in React.Memo
 <code>
-import React from "react";
+import { memo } from "react";
 
 const Component = (props) => {
 	return (
@@ -323,7 +323,7 @@ const Component = (props) => {
 	);
 };
 
-export const ComponentMemo = React.memo(Component);
+export const ComponentMemo = memo(Component);
 </code>
 The caching will now be handled automatically.
 
@@ -340,6 +340,20 @@ const result = useMemo(() => {
 	return longRunningCalculation(data);
 }, [data]);
 </code>
+
+advanced memo: pass in the second argument that determines if a re-render is needed
+<code>
+import { memo } from "react";
+
+const memoizedComponent = memo(
+	originalComponent,
+	(previousProps, newProps) => {
+		if(previousProps.criticalValue != newProps.criticalValue) return true;
+		return false;
+	}
+);
+</code>
+This is one way to handle functions being passed to a child component. A new version of the functions will be passed in each time the parent re-renders, but maybe that doesn't matter to the child.
 
 #Effects
 
