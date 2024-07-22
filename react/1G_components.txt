@@ -214,6 +214,21 @@ This is so they will always be called in the same order each time the component 
 Second Rule Of Hooks: Hooks should only be called from inside function components.
 - exception: a custom hook may call other hooks
 
+hook structure
+<code>
+useCustomHook(() => {
+	//this code runs when the component renders
+	
+	//having a return is optional
+	return () => { 
+		//this code executes only when the component is leaving the screen
+	};
+}, []); //dependency array
+<code>
+A null dependency array means the "when component renders" code runs every time the component renders.
+An empty ([]) dependency array means the "when component renders" code is only run on the first render.
+A filled dependency array means the "when component renders" code is run on the first render, and any time an element of that array is edited.
+
 You can create custom hooks to separate concerns (such as fetching a list of data and displaying it)
 <code>
 //put custom hooks under a ./project/hooks/ directory
@@ -245,6 +260,23 @@ Hooks may call other hooks.
 When a hook's state changes, any component that calls on that hook will re-render.
 
 When a hook is called from multiple components, each component keeps a separate instance of the hook's state - they do not share data or affect each other.
+
+#Built-in Hooks
+
+Basic hooks: useState, useEffect, useContext
+
+Additional hooks: useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, useDebugValue, useDeferredValue, useTransition, useId
+
+Library hooks (for building libraries): useSyncExternalStore, useInserationEffect
+
+useEffect cannot be called async, but it can call an async function
+<code>
+useEffect(() => {
+	async function myAsync() {
+	}
+	myAsync();
+}, []);
+</code>
 
 #State
 
@@ -303,6 +335,71 @@ If the "next" state values are calculated based on the "current" values, you mus
 this.setState((state, props) => ({
 	counter: state.counter + props.increment
 }));
+</code>
+
+#useReducer
+
+useReducer is similar to useState
+<code>
+const [state, dispatch] = useReducer(reducer, initialArg, init);
+</code>
+state: local component state managed by the reducer
+dispatch: a function - the first param passed to dispatch will be the second param passed to reducer
+reducer: function(state, action) returns a new state - should be pure but is not required
+initialArg: starting value of the state
+init: function() returns the starting state
+
+example with useState
+<code>
+import { useState } from "react";
+
+export default function demo() {
+	const [cnt, setCnt] = useState(10);
+	return (
+		<button onClick={() => setCnt(cnt + 1)}>
+			{cnt}
+		</button>
+	);
+}
+</code>
+same functionality with useReducer
+<code>
+import { useReducer } from "react"'
+
+function reducer(state, action) {
+	switch(action.type) {
+		case "increment": return state + action.incrementValue;
+		default: return action;
+	}
+}
+
+export default function demo() {
+	const [state, dispatch] = useReducer(reducer, 10);
+	return (
+		<button onClick={() => dispatch({
+			type: "increment",
+			incrementValue: 1,
+		})}>
+			{state}
+		</button>
+	);
+}
+</code>
+
+example of updating a complicated state
+<code>
+function reducer(state, action) {
+	switch(action.type) {
+		case "loaded": return { ...state, loading: false, speakers: action.speakers };
+		case "setLoadingStatus": return { ...state, loading: true };
+		case "update":
+			const speakersUpdated = state.speakers.map((rec) =>
+				action.speaker.id === rec.id ? action.speaker : rec
+			);
+			return { ...state, speakers: speakersUpdated };
+		default: throw new Error(`case failure: action type {action.type}`);
+	}
+}
 </code>
 
 #Memoize, Memo, useMemo
@@ -434,6 +531,25 @@ const Component = () => {
 	
 	counter.current++;
 };
+</code>
+
+Can be used to get a direct reference to a DOM element
+so you can operate on it with plain javascript
+but this only lasts until a re-render that replaces the DOM element
+
+<code>
+import { useRef } from "react";
+
+export default function demo() {
+	const imgRef = useRef();
+	
+	return (
+		<img src='image.png' ref={imgRef} 
+		style={{filter: "grayscale(100%)"}} 
+		onMouseOver={() => { imgRef.current.style.filter = "grayscale(0%)"; }}
+		/>
+	);
+}
 </code>
 
 #Decomposition
