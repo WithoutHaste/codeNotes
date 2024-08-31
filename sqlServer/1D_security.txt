@@ -34,3 +34,23 @@ EXEC sp_addrolemember 'db_datareader', 'my_user';
 If you run into this error
 "The server principal "my_login" is not able to access the database "master" under the current security context. Cannot open user default database. Login failed."
 This means that you need to specify the default database in your connection string.
+
+#New Server and DB User
+
+- Setup users at the SQL Server level, under Security folder
+- then for each of those, map them to a Database user under {database}/Security/Users
+  - under Properties > Membership, add them to "db_datareader" and "db_datawriter" (or whatever the minimum access needed is)
+  
+#Grant EXECUTE Permission
+
+This creates a membership role that can execute all stored procs and functions.
+<code>
+-- add a new role to the database
+CREATE ROLE db_executor;
+-- grant that role all EXECUTE permissions
+GRANT EXECUTE TO db_executor;
+-- give membership to this role to the database users that need to execute stored procs or functions
+EXEC sp_addrolemember @rolename = N'db_executor', @membername = N'my_db_user_name'
+</code>
+
+You can also grant access to individual stored procs and functions to a role or an individual user.

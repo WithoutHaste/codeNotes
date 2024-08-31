@@ -1,5 +1,40 @@
 ## Server
 
+# Troubleshooting
+
+Turning services on and off
+<code>
+//get status
+sudo systemctl status {service name}
+
+//start, stop, restart
+sudo systemctl start {service name}
+sudo systemctl stop {service name}
+sudo systemctl restart {service name}
+</code>
+
+What version of the server is running?
+<code>
+lsb_release -a
+</code>
+
+Get useful log info about a service
+<code>
+journalctl -xe | grep {service name}
+</code>
+ex: "journalctl -xe | grep mssql"
+
+what version of a library is installed?
+<code>
+ldconfig -p | grep {package name}
+</code>
+
+search everywhere for where a particular library version is installed
+<code>
+find / -name {library}-{version} 2>/dev/null
+</code>
+Ex: find / -name liblber-2.4.so.2 2>/dev/null
+
 # Virtual Hosting
 
 Virtual hosting is hosting multiple domain names from one IP address. Apache's virtual host directs requests to different folders, based on the domain name.
