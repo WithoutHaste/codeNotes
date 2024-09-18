@@ -1,0 +1,13 @@
+##DateTime
+
+String literal format '2024-09-18 13:28:00'
+
+Getting parts of the datetime
+<code>
+SELECT
+	YEAR(CreatedDateTime) as Year,
+	MONTH(CreatedDateTime) as Month,
+	DAY(CreatedDateTime) as Day,
+	DatePart(HOUR, CreatedDateTime) as Hour
+FROM table
+</code>
