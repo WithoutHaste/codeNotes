@@ -217,4 +217,16 @@ Event Properties:
 	location = location of key on the keyboard
 	which => keyCode
 	
-	
+#ContextMenu Event
+
+How to disable the context menu for an element:
+<code>
+element.addEventListener('mouseup', clickElement);
+element.addEventListener('contextmenu', (e) => {e.preventDefault()});
+
+function clickElement(event) {
+	event.stopPropagation();
+	event.preventDefault();
+}	
+
+</code>	
