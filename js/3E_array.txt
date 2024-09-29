@@ -44,6 +44,17 @@ You can do the same thing explicitly with array.toString()
 
 length = returns length of array
 
+to loop over each element of an array
+<code>
+for(let element of array) {
+}
+</code>
+
+includes - does the array include or contain the value?
+<code>
+var boolResult = array.includes("a");
+</code>
+
 adding/removing
 <code>
 var x = [];
@@ -138,6 +149,16 @@ sorting an array randomly
 function randomCompare() {
 	return 0.5 - Math.random();
 }
+</code>
+
+array.map(mapFunction) will apply a function to each element of the array and return the array of results
+<code>
+var mappedResult = array1.map((x) => x * 2);
+</code>
+
+array.filter(filterFunction) will return a new array containing just the elements that returned TRUE in the filterFunction
+<code>
+var filteredResult = array.filter((element) => element.color == "red");
 </code>
 
 #Is Array
