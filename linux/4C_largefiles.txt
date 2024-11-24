@@ -1,0 +1,21 @@
+## Large Files
+
+Compress large files with tar/zip
+<code>
+tar -czvf name-of-archive.tar.gz /path/to/directory-or-file
+</code>
+-c: Create an archive.
+-z: Compress the archive with gzip.
+-v: Display progress in the terminal while creating the archive, also known as "verbose" mode. Optional.
+-f: Allows you to specify the filename of the archive.
+
+Split large files
+<code>
+split -b 1024m the-big-file
+</code>
+"1024m" means split them into pieces of size 1024 megabytes (= 1 gigabyte)
+this does not specify an output filename, and will result in names "xaa", "xab", "xac", etc
+<code>
+split -b 1024m output-prefix the-big-file
+</code>
+this specifies the prefix for the output filenames
