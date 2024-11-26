@@ -1,0 +1,39 @@
+## Files
+
+# Read Local File
+
+use FileAPI
+<code>
+	<input type="file" />
+</code>
+<code>
+const fileInput = document.querySelector("input[type=file]");
+
+fileInput.addEventListener("change", async () => {
+  const [file] = fileInput.files;
+
+  if (file) {
+    var fileContents = await file.text();
+  }
+});
+</code>
+
+# Write Local File
+
+not available in all browsers
+
+FileSystemWritableFileStream
+
+<code>
+async function saveFile() {
+  try {
+    const newHandle = await window.showSaveFilePicker();
+    const writableStream = await newHandle.createWritable();
+
+    await writableStream.write("This is my file content");
+    await writableStream.close();
+  } catch (err) {
+    console.error(err.name, err.message);
+  }
+}
+</code>

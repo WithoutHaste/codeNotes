@@ -16,6 +16,6 @@ split -b 1024m the-big-file
 "1024m" means split them into pieces of size 1024 megabytes (= 1 gigabyte)
 this does not specify an output filename, and will result in names "xaa", "xab", "xac", etc
 <code>
-split -b 1024m output-prefix the-big-file
+split -b 512m the-big-file output-prefix
 </code>
 this specifies the prefix for the output filenames
