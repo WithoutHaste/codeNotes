@@ -50,7 +50,7 @@ document.getElementById('id'); //element
 document.getElementsByName('name'); //array
 document.getElementsByClassName('class'); //array
 document.getElementsByTagName('tag'); //array
-document.querySelectorAll('.my-class[data-my-custom-attribute="value"]'); //array
+document.querySelectorAll('.my-class[data-my-custom-attribute="value"][data-two="value2"]'); //array
 </code>
 
 Create element
