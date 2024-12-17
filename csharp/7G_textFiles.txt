@@ -28,6 +28,17 @@ using(StreamWriter writer = new StreamWriter(filename))
 }
 </code>
 
+Redirect Console.WriteLine to a text file
+<code>
+using(var fileStream = new FileStream("name.txt", FileMode.Create)) {
+	var streamWriter = new StreamWriter(fileStream);
+	streamWriter.AutoFlush = true;
+	Console.SetOut(streamWriter);
+	
+	Widget.DisplayReport(); //operation that displays to Console.WriteLine will now be saved to a file
+}
+</code>
+
 #Operating System Separator
 
 Windows vs Linux use different path or directory separators.
