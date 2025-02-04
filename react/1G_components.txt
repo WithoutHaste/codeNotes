@@ -224,7 +224,7 @@ useCustomHook(() => {
 		//this code executes only when the component is leaving the screen
 	};
 }, []); //dependency array
-<code>
+</code>
 A null dependency array means the "when component renders" code runs every time the component renders.
 An empty ([]) dependency array means the "when component renders" code is only run on the first render.
 A filled dependency array means the "when component renders" code is run on the first render, and any time an element of that array is edited.
