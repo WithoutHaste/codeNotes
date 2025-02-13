@@ -275,6 +275,11 @@ public class NamedItem(string name)
 }
 </code>
 
+For a record, this declaration is sufficient to define the entire record and primary constructor:
+<code>
+public record UserDto(int Id, string Name, DateTime CreatedDateTime);
+</code>
+
 Any explicitly written constructor must use the "this(...)" initializer syntax to invoke the primary constructor. Even an explicit parameterless constructor must invoke the primary constructor.
 
 Calling a parent class's primary constructor
