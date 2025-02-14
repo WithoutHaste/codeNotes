@@ -1,0 +1,63 @@
+##Expressions
+
+#switch Expression
+
+(C# 8.0)
+
+use the "switch" keyword to select one expression to run from a list of them, based on pattern matching syntax
+(this is distinct from a "switch Statement")
+
+Example:
+<code>
+public enum Direction { Left, Right };
+public enum Compass { West, East };
+
+public static ToCompass(Direction d)
+{
+	return d switch {
+		Direction.Left => Compass.West,
+		Direction.Right => Compass.East,
+		_ => throw new ArgumentException("Unknown direction");
+	};
+}
+</code>
+
+underscore (_) is the default expression, if none of the other patterns match
+this is called a "discard pattern"
+
+"Direction.Left => Compass.West" is a "switch expression arm", they are comma-delimited
+a "switch expression arm" contains a "pattern", an optional "case guard", the "=>" token, and an "expression"
+
+Example with case guards:
+<code>
+public record CollatzNumber(int Number);
+
+public static Next(CollatzNumber cn)
+{
+	return cn switch {
+		{ Number: 1 } => cn, //when Number is 1, make no changes
+		{ Number: var n } when n%2==0 => new CollatzNumber(n/2),
+		{ Number: var n } when n%2!=0 => new CollatzNumber((n*3) + 1),
+		_ => throw new ArgumentException("out of range for Collatz Sequence"),
+	};
+}
+</code>
+"case guards" must be boolean expressions
+
+#with Expression
+
+(C# 9.0)
+
+non-destructive mutation
+creates a new object with modified properties
+
+creates a shallow copy of the operand with the specified fields and properties modified
+use "object initializer" syntax to specify the changes
+
+<code>
+public record Widget(int Id, string Name);
+
+var a = new Widget(1, "apple");
+var b = a with { Id = 2 };
+var c = b with { Name = "cherry" };
+</code>
