@@ -114,3 +114,17 @@ Use a canvas as an image source
 image.style.src = canvas.toDataURL();
 div.style.backgroundImage = "url('" + canvas.toDataURL() + "')";
 </code>
+
+# Mouse Events
+
+Where is the mouse over the canvas?
+<code>
+canvas.addEventListener('mousemove', mouseMoveCanvas);
+
+function mouseMoveBoard(event) {
+	var rect = event.target.getBoundingClientRect();
+    var x = event.clientX - rect.left; //x position within the element.
+    var y = event.clientY - rect.top;  //y position within the element.
+	console.log(x+","+y);
+}
+</code>

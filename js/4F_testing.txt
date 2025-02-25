@@ -32,6 +32,12 @@ MyTests.js contents:
 QUnit.test("sum: positive integers", function( assert ) {
 	assert.ok(sum(1, 2) == 3, "Passed!" );
 });
+//OR
+QUnit.module("sum", function() {
+	QUnit.test("positive integers", function( assert ) {
+		assert.ok(sum(1, 2) == 3, "Passed!" );
+	});
+});
 </code>
 
 MyJavascript.js contents:
