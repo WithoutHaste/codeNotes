@@ -85,3 +85,8 @@ if(ctype_digit($string)) {
 	return intval($string);
 }
 </code>
+
+convert integer to string
+<code>
+$x = strval($number);
+</code>
