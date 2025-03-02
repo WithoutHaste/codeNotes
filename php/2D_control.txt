@@ -58,3 +58,16 @@ foreach($array as $element)
 {
 }
 </code>
+
+#Switch
+
+<code>
+switch(myValue) {
+	case 0: //code here
+		break;
+	case 1: //code here
+		break;
+	default: //code here
+		break;
+}
+</code>

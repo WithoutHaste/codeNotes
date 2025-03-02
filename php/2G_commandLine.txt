@@ -12,3 +12,20 @@ php myScript.php a b c
 $x = $argv[0]; //"myScript.php"
 Xy = $argv[1]; //"a"
 </code>
+
+#Exec
+
+exec will run a command on the command line
+and will return the last line of output as a string
+<code>
+$result = exec("python3 my_script.py");
+</code>
+
+#Shell_Exec
+
+shell_exec will run a command on the command line
+and will return all lines of output as a string
+endline characters are preserved, including one at the end of the output
+<code>
+$result = shell_exec("python3 my_script.py");
+</code>
