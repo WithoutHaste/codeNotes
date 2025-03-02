@@ -7,6 +7,11 @@ Accessing GET parameters:
 $email = $_GET["email"];
 </code>
 
+Accessing POST parameters:
+<code>
+$email = $_POST["email"];
+</code>
+
 #Set Headers
 
 Set a custom HTTP response code and message.
