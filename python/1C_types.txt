@@ -290,6 +290,14 @@ text = f"name: {name} "
 	f"title: {title}"
 </code>
 
+Formatted multiline string
+<code>
+str = """
+letters here: %s
+numbers here: %s
+""" % ("abc", "123")
+</code>
+
 #Numbers
 
 Number types are split into integers, floating point (fractions), and complex (imaginary).

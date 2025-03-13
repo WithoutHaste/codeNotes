@@ -97,6 +97,12 @@ print(x.__class__) #outputs <class '__main__.MyClass'>
 print(a.__dict__) #outputs {'varA': 5}
 </code>
 
+Testing if an object has an attribute:
+<code>
+if hasattr(widget, 'attribute'):
+	print(widget.attribute)
+</code>
+
 Instance attributes
 - no privacy option
 - naming convention is __var__ to indicate the variable should be treated as private
