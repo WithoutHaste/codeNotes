@@ -32,3 +32,28 @@ public class UpdateField<T, U>
 	}
 }
 </code>
+
+This is called a Member Expression.
+
+Another example:
+<code>
+//truncate this string based on the length attribute of this property
+var myString = "loooooong string".Truncate<MyClass>(x => x.MyProperty);
+
+using System.ComponentModel.DataAnnotations;
+
+public class MyClass
+{
+	[StringLength(10)]
+	public string? MyProperty { get; set; }
+}
+
+public static string? Truncate<T>(this string? val, Expression<Func<T, string?>> property)
+{
+	var propertyInfo = ((MemberExpression)property.Body).Member as PropertyInfo;
+	var stringLengthAttribute = propertyInfo!.GetCustomAttributes(typeof(StringLengthAttribute), false).Cast<StringLengthAttribute>().SingleOrDefault();
+	var maxLength = stringLengthAttribute.MaximumLength;
+	if(val == null || val.Length <= maxLength) return val;
+	return val[..maxLength];
+}
+</code>

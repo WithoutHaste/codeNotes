@@ -77,6 +77,10 @@ mock
 		return -1;
 	});
 </code>
+can also filter for "any generic type"
+<code>
+.Setup(m => m.MyMethod(It.IsAnySubtype<T>()))
+</code>
 
 Method with an out parameter and a return value:
 <code>

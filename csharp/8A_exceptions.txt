@@ -13,6 +13,19 @@ Example of now valid usage:
 string argument = args.Length > 2 ? args[2] : throw new ArgumentException("Name not found");
 </code>
 
+Preserving vs discarding stack trace:
+<code>
+try
+{
+}
+catch(Exception e)
+{
+	throw e; //destroys the stack trace before this point
+	//vs
+	throw; //preserves the full stack trace
+}
+</code>
+
 #Recommended Usage
 
 You can throw:
