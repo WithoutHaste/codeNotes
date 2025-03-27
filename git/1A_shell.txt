@@ -24,6 +24,11 @@ URL example: https://github.com/jquery/jquery.git
 The repository will be cloned into a new directory named after the repository.
 The upstreams will be set automatically.
 
+Verify current directory is a repository
+<code>
+git rev-parse --is-inside-work-tree
+</code>
+
 View log of commits on repository
 <code>
 git log

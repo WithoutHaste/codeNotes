@@ -420,6 +420,8 @@ MIN(col) return the lowest value
 
 SUM(col) sum all the values
 
+STRING_AGG(col, ',') string-joins all values with ',' delimiter
+
 #Other Functions
 
 UPPER(string) convert all characters to uppercase

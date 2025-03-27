@@ -47,3 +47,23 @@ GO
 SET STATISTICS PROFILE ON
 GO
 </code>
+
+#Runtime Duration
+
+How long does it take to run a query?
+
+<code>
+declare @start datetime = getdate()
+-- your query here
+declare @executionTimeInMilliseconds int = datediff(ms, @start, getdate())
+select @executionTimeInMilliseconds;
+</code>
+
+#Count sproc results
+
+Count the number of rows returned from a stored procedure
+
+<code>
+exec myProcedure;
+select @@rowcount;
+</code>
