@@ -1,0 +1,18 @@
+##Quicktime Player
+
+#Trim start or end
+
+Edit > Trim > use mouse to pull in from start and/or end
+
+#Trim in the middle
+
+Pause video at the point you want to trim >
+Edit > Split Up > use mouse to trim from that point
+
+> Done > View > Show Clips > select one > click Delete on keyboard to remove it
+
+can also Trim a selected Clip in the middle of a Split Clip operation
+
+# Concatenate Clips
+
+Edit > Add Clip To End

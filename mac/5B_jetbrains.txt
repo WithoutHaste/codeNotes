@@ -1,0 +1,11 @@
+##Jetbrains
+
+#Rider
+
+build - COMMAND + F9
+
+find usages - OPTION + F7
+
+search everywhere - SHIFT + SHIFT
+
+open settings - COMMAND + ,(comma)

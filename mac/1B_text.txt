@@ -1,0 +1,11 @@
+##Text
+
+cut/copy/paste - COMMAND + X/C/V
+
+undo - COMMAND + Z
+redo - COMMAND + SHIFT + Z
+
+move cursor to start or end of line - COMMAND + arrow
+move cursor to next word in line - OPTION + arrow
+
+page up or down - FN + arrow

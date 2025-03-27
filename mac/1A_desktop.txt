@@ -1,0 +1,24 @@
+##Desktop
+
+#Lock Screen
+
+closing the laptop lid does not cause the screen to lock
+go to Apple Menu > Lock Screen
+
+#Apps
+
+switch app - hold COMMAND + press TAB + use arrow keys to scroll through apps, or keep clicking Tab to scroll
+
+force-quit app - OPTION + COMMAND + Escape
+
+"right click" in Windows generally equals "CONTROL + click" in Mac
+
+start a Snip operation - COMMAND + SHIFT + 4
+
+#Dock
+
+the "Dock" is the bottom row of icons
+
+remove icon from Dock - click and hold on icon > drag outward from Dock until "remove" appears > release icon
+
+with multiple monitors, moving your mouse to the bottom of the screen that does not have the Dock will cause the Dock to migrate to that screen
