@@ -14,6 +14,11 @@ Displays actual before/after edits for each commit that affected the file.
 git log -p FileName
 </code>
 
+Searches commits for specific strings
+<code>
+git log -p -S 'mystring'
+</code>
+
 Suggested for when someone makes changes, but forgets where they made them.
 <code>
 git log --all --first-parent --remotes --reflog --author-date-order -- FileName
