@@ -21,3 +21,16 @@ function myFunction()
 	$x = 6;
 }
 </code>
+
+#Pass By Reference
+
+Use ampersand (&) symbol to pass a parameter by reference
+<code>
+function increment(&$num)
+{
+    $num++;
+}
+
+$i=5;
+increment($i); // now $i equals 6
+</code>
