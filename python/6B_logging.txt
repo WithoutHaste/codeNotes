@@ -1,0 +1,65 @@
+##Logging
+
+#Example A
+
+<code>
+import logging
+LOGGER = logging.getLogger('clothing_library')
+logging.basicConfig(
+	filename='fullpath/logs/python.clothing_library.log', 
+	level=logging.INFO)
+
+LOGGER.info('the quick brown fox')
+</code>
+
+this result in a file (create or append) at "fullpath/logs/python.clothing_library.log"
+which contains the line "INFO:clothing_library:the quick brown fox"
+a new line will be added for each LOGGER statement 
+
+#Example B
+
+Override the default format of the logged line
+
+<code>
+import logging
+LOGGER = logging.getLogger('clothing_library')
+logging.basicConfig(
+	filename='fullpath/logs/python.clothing_library.log', 
+	level=logging.INFO,
+	format='%(asctime)s %(levelname)-8s %(message)s',
+	datefmt='%Y-%m-%d %H:%M:%S')
+
+LOGGER.info('the quick brown fox')
+</code>
+
+the line now reads "2025-04-13 17:35:55 INFO     the quick brown fox"
+
+#Example C
+
+Logging exceptions with stack trace
+
+<code>
+import logging
+LOGGER = logging.getLogger('clothing_library')
+logging.basicConfig(
+	filename=PYTHON_HOME_DIRECTORY+'../logs/python.clothing_library.log', 
+	level=logging.INFO,
+	format='%(asctime)s %(levelname)-8s %(message)s',
+	datefmt='%Y-%m-%d %H:%M:%S')
+
+try:
+	x = 1/0 #cause an exception
+except:
+	logging.exception('')
+</code>
+
+the log reads:
+<code>
+2025-04-13 17:40:02 ERROR    
+Traceback (most recent call last):
+  File "op_load_request.py", line 35, in main
+    argv_layer(sys.argv)
+  File "op_load_request.py", line 20, in argv_layer
+    x = 1/0
+ZeroDivisionError: division by zero
+</code>
