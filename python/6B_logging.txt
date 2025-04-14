@@ -50,12 +50,12 @@ logging.basicConfig(
 try:
 	x = 1/0 #cause an exception
 except:
-	logging.exception('')
+	logging.exception('the quick brown fox')
 </code>
 
 the log reads:
 <code>
-2025-04-13 17:40:02 ERROR    
+2025-04-13 17:40:02 ERROR    the quick brown fox
 Traceback (most recent call last):
   File "op_load_request.py", line 35, in main
     argv_layer(sys.argv)
