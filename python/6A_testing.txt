@@ -42,12 +42,16 @@ if __name__ == "__main__":
 #Asserts
 
 <code>
-assertEqual(a, b)
-assertTrue(a == b)
-assertFalse(a == b)
+self.assertEqual(a, b)
+self.assertTrue(a == b)
+self.assertFalse(a == b)
+</code>
 
- #verify a specific error was raised
-assertRaises(exception)
+#Assert Error
+
+<code>
+with self.assertRaises(ValueError):
+	operation_causing_raise_error()
 </code>
 
 #Command Line
