@@ -14,3 +14,18 @@ Required fields will be validated by the browser
 	<input type="submit" value="Submit" />
 </form>
 </code>
+
+#Select (Dropdown)
+
+You can set the pre-selected option within a select tag with:
+<code>
+<select>
+	<option selected></option>
+</select>
+</code>
+If Firefox is ignoring this, then turn off auto-complete on the select tag:
+<code>
+<select autocomplete='off'>
+	<option selected></option>
+</select>
+</code>
