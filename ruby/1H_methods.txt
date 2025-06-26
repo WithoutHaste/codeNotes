@@ -1,0 +1,48 @@
+##Methods
+
+#Definition
+
+<code>
+//define
+def hello_world()
+	puts "Hello, world"
+end
+def greet(name)
+	puts "Hello, #{name}"
+end
+
+//call
+hello_world #no parentheses needed when there are no parameters
+greet('Susan')
+</code>
+
+#Return
+
+methods return the output of the last command run in the method
+the default is "nil"
+
+#Instance Method
+
+<code>
+class MyClass
+	def hello_world
+		puts "Hello World"
+	end
+end
+
+my_class = MyClass.new
+my_class.hello_world()
+
+#Class Method
+
+use the self keyword
+
+<code>
+class MyClass
+	def self.hello_world
+		puts "Hello World"
+	end
+end
+
+MyClass.hello_world
+</code>

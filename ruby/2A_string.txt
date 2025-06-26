@@ -1,10 +1,19 @@
 ##String
 
+#Quotes
+
 single quoted strings are literals
 - '1\n2' does not include an end line
 
 double quoted strings interpret escaped characters (backslash notation)
 - "1\n2" prints 1, then end line, then 2
+
+#Interpolation
+
+<code>
+word = "apple"
+sentence = "The #{word} fell out of the tree."
+</code>
 
 #Formatted
 
@@ -26,6 +35,18 @@ left or right justify strings to a number of characters
 a = "apple"
 b = a.ljust(10)
 c = a.rjust(10)
+</code>
+
+#Common Operations
+
+<code>
+text.chomp #remove trailing newline and carriage return characters
+text.chomp('suffix') #removes trailing "suffix"
+text.strip #remove leading and trailing whitespace
+text.length
+text.upcase #returns uppercase version of string
+text.downcase #returns lowercase version of string
+text.reverse
 </code>
 
 #Here Document

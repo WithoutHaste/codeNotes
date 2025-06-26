@@ -1,0 +1,11 @@
+##Symbols
+
+a unique and immutable identifier
+used for naming hash keys or methods
+
+similar to strings, but takes up less memory
+
+created with a colon prefix
+<code>
+hash = {a: 1, b: 2, c: 3}
+</code>

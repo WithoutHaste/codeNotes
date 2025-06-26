@@ -19,6 +19,17 @@ irb #open the shell
 </code>
 "quit" or "exit" will close the shell
 
+load a Ruby file into the irb
+<code>
+require './my_file.rb'
+</code>
+
+tell a program to pause so you can inspect state
+<code>
+binding.irb #like putting a breakpoint in the code
+</code>
+- type "exit" to continue execution
+
 #One-Liner
 
 you can run single lines of Ruby from command prompt
@@ -40,3 +51,26 @@ Installing Ruby on Windows
 </code>
 Then restart your command prompt so the updated environment variables are picked up.
 You can now run *.rb files directly without saying "ruby" first.
+
+#Installation: Mac
+
+install Ruby packages with HomeBrew
+<code>
+//in terminal
+brew install rbenv
+//maybe this?
+rbenv init
+//see list of available versions
+rbenv install -l
+//install
+rbenv install 3.2.2
+rbenv local 3.2.2
+//verify
+ruby -v
+</code>
+
+verify what is installed
+<code>
+//in terminal
+which ruby
+</code>

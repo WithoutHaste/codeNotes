@@ -1,5 +1,7 @@
 ##Class
 
+#Class
+
 "data members" include characteristics and methods
 
 <code>
@@ -17,9 +19,6 @@ end
 create an instance of a class (create an object)
 <code>
 class Person
-	#initialize is run on object creation
-	def initialize()
-	end
 end
 
 jane = Person.new
@@ -42,8 +41,54 @@ jane = Person.new('jane', 3)
 jane.display
 </code>
 
+#Initialize Method
+
+initialize is run each time a new instance is created
+
+<code>
+class Person
+	attr_reader :name #not sure yet if this is required for internal reads of the data
+
+	def initialize(name)
+		@name = name
+	end
+	
+	def print_name()
+		puts @name
+	end
+end
+</code>
+
+#Instance Variables
+
+instance variables are scoped to one instance of a class
+
+<code>
+attr_accessor :my_instance_variable
+
+@my_instance_variable = value
+
+puts @my_instance_variable
+</code>
+
+#Accessors
+
+accessors are for reading and writing to an object's instance variables
+
+attr_reader creates public "getter" methods
+
+attr_writer creates public "setter" methods
+
+attr_accessor creates public "getter" and "setter" methods
+
 #Root Class
 
 all classes inherit from the class "Class"
 
+#Reflection
+
+<code>
+my_object.class #returns the Class type
+my_object.methods #returns a list of Methods
+</code>
 

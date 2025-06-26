@@ -1,0 +1,41 @@
+##Flow Controls
+
+#If
+
+<code>
+val = true
+puts "text" if val #will skip this statement if "val" is false
+</code>
+
+<code>
+if age > 35
+	puts "over 35"
+elsif age > 25
+	puts "over 25"
+else
+	puts "up to 25"
+end
+</code>
+
+#Unless
+
+<code>
+val = true
+puts "text" unless val #will skip this statement if "val" is true
+</code>
+
+#While
+
+<code>
+while counter < 10
+	count += 1
+end
+</code>
+
+#For
+
+<code>
+for num in 1..5
+	puts num #outputs 12345
+end
+</code>

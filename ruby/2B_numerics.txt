@@ -1,0 +1,39 @@
+#Numerics
+
+supports + - * / < > ==
+
+#Integers
+
+inherits from the Integer class, so I'm not sure yet if "primitives" is a concept in Ruby
+
+<code>
+num = 1
+</code>
+
+doing division with two integers returns the rounded-down result
+
+<code>
+num.to_f #converts the integer to a float
+</code>
+
+range operator, includes both the low and the high number
+<code>
+for num in 1..5
+	put num #outputs 12345
+end
+</code>
+
+#Floats
+
+<code>
+dec = 1.5
+</code>
+
+supports .round .ceil .floor
+
+#Bools
+
+<code>
+val = true
+val = false
+</code>

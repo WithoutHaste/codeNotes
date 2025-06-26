@@ -14,8 +14,8 @@ print
 - outputs text
 - does not include an implicit end line
 <code>
-print 'text'
-print "text"
+print 'Enter your name: '
+print "Enter your name: "
 </code>
 
 output a variable
@@ -23,3 +23,13 @@ output a variable
 puts @my_instance_variable
 puts "label: %d" % [@my_instance_variable]
 </code>
+
+#Input
+
+gets
+- retrieve user input
+<code>
+print "Enter a word: "
+word = gets.chomp
+</code>
+

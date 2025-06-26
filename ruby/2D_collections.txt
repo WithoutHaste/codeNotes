@@ -1,0 +1,75 @@
+##Collections
+
+#Arrays
+
+an ordered list
+are stored in contiguous memory (although it may just be an array of memory references to the actual data)
+
+can store mixed data types
+
+<code>
+nums = [1,2,3]
+names = ['Susan','Bob']
+mixed = [1,'Susan',[45,6.7]]
+</code>
+
+get element
+<code>
+val = my_array[0]
+</code>
+
+add elements to array
+<code>
+my_array.push(element)
+my_array << element #the shovel operator
+<code>
+
+remove elements from array
+<code>
+my_array.delete(element)
+my_array.delete_at(index)
+</code>
+
+iterate
+<code>
+my_array.each { |val| puts val } #output each value to the command line
+
+my_array.each do |val|
+	puts val
+end
+</code>
+
+#Hashes
+
+key/value pairs
+keys must be unique
+
+like a dictionary in other languages
+
+<code>
+//with symbol keys
+my_hash = {name:'Susan', fingers:10}
+
+//with string keys
+my_hash = {"name":"Susan", "fingers":10}
+</code>
+
+get a value
+<code>
+val = my_hash[:symbol_key]
+val = my_hash["string_key"]
+</code>
+
+add a value
+<code>
+my_hash[key] = value
+</code>
+
+iterate
+<code>
+my_hash.each { |key,val| puts "#{key} -> #{val}" }
+
+my_hash.each do |key,val|
+	puts "#{key} -> #{val}"
+end
+</code>

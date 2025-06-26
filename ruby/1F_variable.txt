@@ -7,3 +7,9 @@ instance variables: scope is limited to an instance/object, use prefix @ to use 
 class variables: shared across all instances of a class, use prefix @@ to use the variable
 
 global variables: scope is the entire program, use prefix $ to use the variable
+
+Ruby variables use dynamic typing
+<code>
+my_num = 10
+my_name = 'Susan'
+</code>

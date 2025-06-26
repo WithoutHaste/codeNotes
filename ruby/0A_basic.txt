@@ -5,11 +5,17 @@ Ruby: a programming language
 Rails: a Ruby framework used for web development
 "Ruby on Rails"
 
-Gems: Ruby add-ons (called libraries in other languages)
+Gems: Ruby add-ons (called libraries or packages in other languages) you can include in your project
+specify what you need in file "gemfile"
+
+Bundlers: helps you manage Gems and their version dependencies
+writes file "gemfile.lock" which specifies exact versions
 
 Ruby files use *.rb extension
 
 Ruby is object-oriented and can also be used for functional programming
+
+can do Desktop and Web apps
 
 #Comments
 
@@ -45,12 +51,45 @@ file: hello_world.rb
 puts 'Hello world'
 </code>
 
+run in terminal
+<code>
+ruby hello_world.rb
+</code>
+
 #Naming Conventions
 
 Identifiers are names of variables, constants, methods
 Identifiers are case sensitive
 
-snake case: my_variable_name, my_variable_name_2
+Class names use camel case: MyClass
+
+Variable names use snake case: my_variable_name, my_variable_name_2
+Method names use snake case: my_method_name, my_method_name_2
 
 local variable names start with a lowercase letter or _
+
+#Init New Project
+
+in project dir
+<code>
+//in terminal
+gem install bundler
+touch gemfile
+</code>
+
+edit "gemfile" to say
+<code>
+source 'https://rubygems.org'
+
+gem 'pry'
+</code>
+(pry is useful for debugging)
+
+run the bundler
+<code>
+//in terminal
+bundle install
+</code>
+- installs the gems and their dependencies
+- creates gemfile.lock
 
