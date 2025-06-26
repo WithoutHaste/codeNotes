@@ -1,0 +1,9 @@
+##Operators
+
+#Nil Safe
+
+"&." in Ruby is like "?." in C#
+if will save you from nil exceptions when using fluent syntax for multiple piped operations
+<code>
+result = text&.upcase&.reverse
+</code>

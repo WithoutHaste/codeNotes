@@ -1,5 +1,10 @@
 ##Whitespace
 
+indentation matters
+
+you can end a line with just an endline character
+and you can put multiple statements on one line with ; separating them
+
 <code>
 x + y #the same as x+y (addition)
 x +y #the same as x(+y) where x is a method being invoked

@@ -1,0 +1,30 @@
+##Errors/Exceptions
+
+#Error Types
+
+syntax errors
+no method errors
+runtime errors
+
+#Error Handling
+
+"begin", "rescue", "end" are working together
+<code>
+begin
+	puts 10/0
+rescue StandardError => e
+	puts "an error occurred: #{e.message}"
+end
+</code>
+
+#Pry
+
+from the standard Gem "pry", for complex scenarios
+a more powerful tool than binding.irb
+
+add this line into your code where you want to debug
+<code>
+require'pry';binding.pry
+</code>
+the terminal will open a pry prompt you can work in
+type "exit" to exit this pry, and execution will continue to the next one

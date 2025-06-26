@@ -23,6 +23,10 @@ load a Ruby file into the irb
 <code>
 require './my_file.rb'
 </code>
+you can reload a class after making edits to the file
+<code>
+load './my_file.rb'
+</code>
 
 tell a program to pause so you can inspect state
 <code>

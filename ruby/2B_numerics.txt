@@ -14,6 +14,7 @@ doing division with two integers returns the rounded-down result
 
 <code>
 num.to_f #converts the integer to a float
+num.to_s #converts the integer to a string
 </code>
 
 range operator, includes both the low and the high number
@@ -29,7 +30,7 @@ end
 dec = 1.5
 </code>
 
-supports .round .ceil .floor
+supports .round(places) .ceil .floor
 
 #Bools
 
@@ -37,3 +38,5 @@ supports .round .ceil .floor
 val = true
 val = false
 </code>
+
+supports && ||

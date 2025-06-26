@@ -47,6 +47,7 @@ text.length
 text.upcase #returns uppercase version of string
 text.downcase #returns lowercase version of string
 text.reverse
+text.to_i #parse string to integer
 </code>
 
 #Here Document
