@@ -1,5 +1,7 @@
 ## Large Files
 
+# Compression
+
 Compress large files with tar/zip
 <code>
 tar -czvf name-of-archive.tar.gz /path/to/directory-or-file
@@ -8,6 +10,8 @@ tar -czvf name-of-archive.tar.gz /path/to/directory-or-file
 -z: Compress the archive with gzip.
 -v: Display progress in the terminal while creating the archive, also known as "verbose" mode. Optional.
 -f: Allows you to specify the filename of the archive.
+
+# Splitting
 
 Split large files
 <code>

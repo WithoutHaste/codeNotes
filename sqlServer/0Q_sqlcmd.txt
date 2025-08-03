@@ -15,6 +15,11 @@ select name from sys.databases;
 go
 </code>
 
+is mssql-server running?
+<code>
+sudo systemctl status mssql-server
+</code>
+
 #Configuration
 
 Allow remote connections

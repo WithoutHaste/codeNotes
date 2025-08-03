@@ -14,12 +14,12 @@ import tkinter
 class Window(tkinter.Frame):
 	def __init__(self, master=None):
 		tkinter.Frame.__init__(self, master)
-		self.master = master
+		self.master = master # this was "root" in the outer code
 		self.master.title("Example") #title displayed on window
 		self.pack(fill=tkinter.BOTH, expand=1) #layout of window
 		
 root = tkinter.Tk()
-root.geometry("400x300") #size of window
+root.geometry("400x300") #size of window - width x height
 app = Window(root)
 root.mainloop()
 </code>
@@ -44,7 +44,7 @@ class Window(tkinter.Frame):
 		exit()
 
 root = tkinter.Tk()
-root.geometry("400x300")
+root.geometry("400x300") #size of window - width x height
 app = Window(root)
 root.mainloop()
 </code>
@@ -75,6 +75,35 @@ root = tkinter.Tk()
 root.geometry("400x300")
 app = Window(root)
 root.mainloop()
+</code>
+
+labels
+<code>
+labelDirections = tkinter.Label(self, text="Copy/paste target html into text box")
+labelDirections.place(x=10, y=20)
+</code>
+
+input field
+<code>
+input = tkinter.Entry(self, width=200) # width is measure in characters
+button = tkinter.Button(self, text='click here', command=clicked)
+
+def clicked():
+	print(input.get()) #output what was entered
+</code>
+
+multiline textbox field
+<code>
+textbox = tkinter.Text(self, width=200, height=100) # width/height is measure in characters
+button = tkinter.Button(self, text='click here', command=clicked)
+
+def clicked():
+	print(textbox.get("1.0")) #output first character that was entered
+	print(textbox.get("1.0", "end")) #output all characters including last newline
+	print(textbox.get("1.0", "end-1c")) #output all characters including last newline
+	# the "1.0" refers to line "1" and character index "0"
+	# so "2.1" means line "2" and character index "1"
+	# "0.0" is treated the same as "1.0"
 </code>
 
 #Geometry Manager: Place

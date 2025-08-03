@@ -45,6 +45,16 @@ print(myMatch.end()) #6 #index of first char NOT in match
 print(myMatch.span()) #(2, 6) #tuple of start and end indexes
 </code>
 
+#Capture Groups
+
+<code>
+import re
+myRegEx = re.compile('a(.)b')
+myMatch = myRegEx.search("aAb")
+print(myMatch.group()) # "aAb"
+print(myMatch.group(1)) # "A"
+</code>
+
 #FindAll
 
 FindAll - check if regular expression matches text

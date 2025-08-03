@@ -168,6 +168,12 @@ Declarations:
 	#range objects are not directly supported, they are returned by the "range()" function
 </code>
 
+add to list
+<code>
+list = []
+list.append(element)
+</code>
+
 String escape characters:
 \n newline
 \t tab horizontal
@@ -275,6 +281,13 @@ s = s.upper() #to uppercase
 s = s.strip() #strip leading and trailing whitespace
 s = s.lstrip()
 s = s.rstrip()
+</code>
+
+multiline string literal
+<code>
+my_str = ```Line 1
+Line 2
+Line 3```
 </code>
 
 "F String" or Formatted String
