@@ -283,6 +283,13 @@ s = s.lstrip()
 s = s.rstrip()
 </code>
 
+using escape characters - add "r" to start
+<code>
+import re
+
+regex = re.compile(r"^\[[\w\,\s]+\]$")
+</code>
+
 multiline string literal
 <code>
 my_str = ```Line 1
@@ -309,6 +316,16 @@ str = """
 letters here: %s
 numbers here: %s
 """ % ("abc", "123")
+</code>
+
+index will raise an Exception if the substring is not found
+<code>
+i = "abc".index('b')
+</code>
+
+find will return -1 if the substring is not found
+<code>
+i = "abc".find('z')
 </code>
 
 #Numbers

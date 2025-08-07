@@ -81,6 +81,9 @@ labels
 <code>
 labelDirections = tkinter.Label(self, text="Copy/paste target html into text box")
 labelDirections.place(x=10, y=20)
+
+ # label text can be edited
+self.myLabel['text'] = 'Updated text'
 </code>
 
 input field
@@ -104,6 +107,23 @@ def clicked():
 	# the "1.0" refers to line "1" and character index "0"
 	# so "2.1" means line "2" and character index "1"
 	# "0.0" is treated the same as "1.0"
+</code>
+
+focusing on a UI widget
+<code>
+textbox.focus_set()
+</code>
+
+use a frame to subdivide the window
+<code>
+button_frame_bottom  =  tkinter.Frame(self,  width=200,  height=400)
+button_frame_bottom.pack(side=tkinter.TOP,  fill=tkinter.X, expand=True,  padx=10)        
+
+saveButton = tkinter.Button(button_frame_bottom, text="Save", command=self.save)
+saveButton.pack(side=tkinter.LEFT, padx=10)
+
+quitButton = tkinter.Button(button_frame_bottom, text="Quit", command=self.client_quit)
+quitButton.pack(side=tkinter.RIGHT, padx=10)
 </code>
 
 #Geometry Manager: Place
@@ -158,6 +178,7 @@ root.mainloop()
 #Geometry Manager: Grid
 
 Grid: arrange widgets in a 2d table
+(don't use Grid and Pack at the same time)
 
 <code>
 import tkinter
@@ -257,7 +278,39 @@ Pack
 Methods:
 	widget.pack_forget() #removes widget from pack layout
 
-todo
+<code>
+widget.pack(fill=tkinter.BOTH, expand=1, side=tkinter.TOP)
+</code>
+expand: set to True/1 to make widget expand to fill any space not taken up by other widgets in direct parent
+fill: [NONE, X, Y, BOTH]: default is NONE: widget can fill available space in these directions
+side: [TOP, BOTTOM, LEFT, RIGHT]: default is TOP: widget is packed against this side of the parent
+
+<code>
+textbox = tkinter.Text(self, width=90, height=10)
+textbox.pack(side=tkinter.TOP, fill=tkinter.BOTH, expand=True, anchor='w', padx=10)
+</code>
+setting texbox width/height sets its initial size
+it seems to have no trouble filling 100% of space, and expanding with the window, in one dimension
+but when there are other widgets sharing a dimension/axis with it, the window expansion doesn't work well
+- setting a height on the textbox, and placing other elements below it - when I resize the window it does not make the textbox shorter so the other elements end up outside the viewport
+- initializing the textbox height to smaller-than-space-allows, and it is not auto-filling the available space...
+
+anchor the widget to one side of the a parent
+(similar to "sticky" in the grid system)
+<code>
+textbox.pack(anchor='w')
+</code>
+anchor: 'w', 'e', 'n', 's', 'center'
+
+add padding around widget
+<code>
+textbox.pack(padx=10, pady=20)
+</code>
+
+add padding inside widget
+<code>
+textbox.pack(ipadx=10, ipady=20)
+</code>
 
 #Events
 

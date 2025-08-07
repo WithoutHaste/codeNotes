@@ -40,6 +40,9 @@ class MyClass:
 	def __str__(self):
 		return "string"
 		
+	# when you print a list or dict, __repr__ ends up getting called instead of __str__
+	# so you might want to have __repr__ call __str__
+	#
 	# this is like __str__ but intended for developers only instead of something end users see
 	# this is called when you run just the variable name in the Interactive Shell
 	def __repr__(self):
