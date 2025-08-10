@@ -117,8 +117,9 @@ any(iterable) #returns True if any elements are True
 
 enumerate(iterable) #returns a list of tuples as (index, value)
 
-filter(myFilter, iterable) #returns a list of the elements that passed the filter
+list(filter(myFilter, iterable)) #returns a list of the elements that passed the filter
  #the filter is a function that accepts one element and returns True or False
+numbers_list = list(filter(lambda e: e>=0, numbers_list)
 
 myIter = iter(collection) #returns an iterable object for the collection
 a = next(myIter) #first value

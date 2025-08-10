@@ -212,6 +212,15 @@ myCalc = lambda x, y, z: x + y + z
 print(myCalc(3, 4, 5)) #prints 12
 </code>
 
+defining lambdas inside a loop (closures)
+<code>
+for pn in page_numbers:
+	pageButton = tkinter.Button(button_frame_top, text=str(pn+1), command=lambda pn=pn: self.go_to_page(pn))
+	pageButton.pack(side=tkinter.LEFT, padx=10)
+</code>
+note the "lambda pn=pn:" part, this is what preserves the current value of "pn" in the lambda
+if you just write "lambda:", then all instances of the button will use the final value of "pn"
+
 #Type Hinting
 
 Python 3.5 and higher.

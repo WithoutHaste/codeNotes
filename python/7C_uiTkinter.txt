@@ -86,13 +86,21 @@ labelDirections.place(x=10, y=20)
 self.myLabel['text'] = 'Updated text'
 </code>
 
-input field
+input field and button
 <code>
 input = tkinter.Entry(self, width=200) # width is measure in characters
 button = tkinter.Button(self, text='click here', command=clicked)
 
 def clicked():
 	print(input.get()) #output what was entered
+</code>
+
+passing custom data to button click command
+<code>
+pageFirstButton = tkinter.Button(button_frame_top, text="1...", command=lambda: self.go_to_page(1))
+
+def go_to_page(self, page_index):
+	print(page_index)
 </code>
 
 multiline textbox field
@@ -107,6 +115,10 @@ def clicked():
 	# the "1.0" refers to line "1" and character index "0"
 	# so "2.1" means line "2" and character index "1"
 	# "0.0" is treated the same as "1.0"
+
+	
+ # input/textbox text can be cleared
+textbox.delete("0.0", "end")
 </code>
 
 focusing on a UI widget
@@ -124,6 +136,33 @@ saveButton.pack(side=tkinter.LEFT, padx=10)
 
 quitButton = tkinter.Button(button_frame_bottom, text="Quit", command=self.client_quit)
 quitButton.pack(side=tkinter.RIGHT, padx=10)
+</code>
+frame styling
+<code>
+ # frame "border" is called a "highlight"
+frame = tkinter.Frame(self,  width=200,  height=400, highlightbackground='black', highlightthickness=1)
+</code>
+remove and delete all widgets from fram
+<code>
+def clear_frame(self, frame):
+	for widget in frame.winfo_children():
+		widget.destroy()
+</code>
+
+open a secondary window, pop-up window
+<code>
+def open_secondary_window(self):
+	secondary_window = tkinter.Toplevel()
+	secondary_window.title("Secondary Window")
+	secondary_window.config(width=300, height=200)
+	# Create a button to close (destroy) this window.
+	button_close = tkinter.Button(
+		secondary_window,
+		text="Close window",
+		command=secondary_window.destroy
+	)
+	button_close.place(x=75, y=75)
+	return secondary_window
 </code>
 
 #Geometry Manager: Place
