@@ -115,7 +115,6 @@ def clicked():
 	# the "1.0" refers to line "1" and character index "0"
 	# so "2.1" means line "2" and character index "1"
 	# "0.0" is treated the same as "1.0"
-
 	
  # input/textbox text can be cleared
 textbox.delete("0.0", "end")
@@ -154,7 +153,7 @@ open a secondary window, pop-up window
 def open_secondary_window(self):
 	secondary_window = tkinter.Toplevel()
 	secondary_window.title("Secondary Window")
-	secondary_window.config(width=300, height=200)
+	secondary_window.geometry("300x200")
 	# Create a button to close (destroy) this window.
 	button_close = tkinter.Button(
 		secondary_window,
@@ -164,6 +163,57 @@ def open_secondary_window(self):
 	button_close.place(x=75, y=75)
 	return secondary_window
 </code>
+
+key bindings / onclick events
+<code>
+inputBox = tkinter.Text(self, width=40, height=15)
+inputBox.pack(side=tkinter.TOP, fill=tkinter.X, expand=True, anchor='w', ipadx=10)
+inputBox.bind('<KeyRelease>', self.input_key)
+inputBox.bind('<Tab>', self.input_tab)
+
+ # on KeyRelease event, the text has already been updated
+def input_key(self, event):
+	print(event)
+	print(self.input_box.get("1.0", "end").find('\t')) #checking tab character already added
+	
+ # on a specific key event, the text has NOT been updated yet
+def input_tab(self, event):
+	print(event)
+	print(self.input_box.get("1.0", "end").find('\t')) # tab not found
+</code>
+
+checkbox
+<code>
+checkbox_var = tkinter.StringVar()
+checkbox = tkinter.Checkbutton(parent, text='display text', variable=checkbox_var, onvalue='internal value', offvalue=None)
+checkbox.pack(side=tkinter.TOP, anchor="w")
+if is_selected:
+	checkbox_var.set('internal value')
+else:
+	checkbox_var.set(None)
+</code>
+
+radio buttons
+<code>
+radiobutton_var = tkinter.StringVar() #string or int type
+radio_button = tkinter.Radiobutton(parent, variable=radiobutton_var, text='display text', value='value text')
+radio_button.pack(side=tkinter.LEFT)
+if is_selected:
+	radio_button.select()
+</code>
+to group multiple radio buttons together, give them the same "StringVar/IntVar" variable
+- this var will hold the current selected value of the radio button grouping
+- make sure the var is defined in a scope that keeps existing
+
+option menu / select menu
+<code>
+char_choices = ['A', 'B', 'C']
+option_var = tkinter.StringVar()
+option_var.set('C') #set the current selected value
+option_menu = tkinter.OptionMenu(parent, option_var, *char_choices)
+option_menu.pack(side=tkinter.TOP)
+</code>
+this ui does a terrible job of letting you scroll through long lists - only use short lists
 
 #Geometry Manager: Place
 
