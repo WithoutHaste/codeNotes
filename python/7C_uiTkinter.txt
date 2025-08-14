@@ -115,9 +115,16 @@ def clicked():
 	# the "1.0" refers to line "1" and character index "0"
 	# so "2.1" means line "2" and character index "1"
 	# "0.0" is treated the same as "1.0"
-	
+
  # input/textbox text can be cleared
 textbox.delete("0.0", "end")
+	
+ # input/textbox text can be added to
+textbox.insert(tkinter.END, text)
+
+ # setting where the cursor is inside a textbox
+ # the insert-type mark tells the ui where the cursor is
+textbox.mark_set("insert", "%d.%d" % (line + 1, column + 1))
 </code>
 
 focusing on a UI widget
@@ -180,6 +187,12 @@ def input_key(self, event):
 def input_tab(self, event):
 	print(event)
 	print(self.input_box.get("1.0", "end").find('\t')) # tab not found
+</code>
+event.keysym will have values like "a", "b", "Tab"
+event.keycode is...I'm not sure, it is 59 off from the ASCII codes for "a"
+<code>
+if event.keycode + 59 == ord('a'):
+	print('a')
 </code>
 
 checkbox
