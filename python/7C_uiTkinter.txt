@@ -127,6 +127,17 @@ textbox.insert(tkinter.END, text)
 textbox.mark_set("insert", "%d.%d" % (line + 1, column + 1))
 </code>
 
+background and foreground colors of textbox
+<code>
+outputBox = tkinter.Text(target_frame, width=20, height=5, bg='black', fg='white')
+
+ # or set the styling after instantiation
+outputBox.config(bg='black', fg='white')
+</code>
+can be set with words like "black" or with hexidecimal codes like "#cccccc"
+other styles:
+- set "insertbackground='#ff7db5'" to change the cursor color
+
 focusing on a UI widget
 <code>
 textbox.focus_set()
