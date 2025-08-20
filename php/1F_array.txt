@@ -5,7 +5,7 @@ Init an array
 $a = array();
 </code>
 
-Print full array:
+Print full array in a human-readable format:
 <code>
 print_r($myArray);
 </code>
@@ -40,6 +40,8 @@ add to array
 array_push($array, $element); //add to the end
 aray_unshift($array, $element); //add to the beginning
 </code>
+WARNING that "push" will push in a copy of the $element
+- I've confirmed this when pushing associative arrays into arrays - edits made to the associative array after the push are not reflected in the parent array
 
 remove from array
 <code>
