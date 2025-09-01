@@ -116,8 +116,10 @@ def clicked():
 	# so "2.1" means line "2" and character index "1"
 	# "0.0" is treated the same as "1.0"
 
- # input/textbox text can be cleared
+ # text widget (multi-line) can be cleared
 textbox.delete("0.0", "end")
+# entry widget (single line) can be cleared 
+entry.delete("0", "end")
 	
  # input/textbox text can be added to
 textbox.insert(tkinter.END, text)
