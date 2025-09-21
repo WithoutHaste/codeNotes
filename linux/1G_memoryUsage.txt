@@ -9,3 +9,8 @@ get a summary of which directories are taking up memory
 <code>
 sudo du -h -x -d1 /dir/
 </code>
+
+get a list of which files are taking up the most memory
+<code>
+sudo du -a / | sort -n -r | head -n 10
+</code>
