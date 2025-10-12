@@ -107,6 +107,11 @@ Draw image on canvas
 const imageElement = document.getElementById('myImage');
 context.drawImage(imageElement, x, y); //top-left corner
 context.drawImage(imageElement, x, y, width, height); //can resize image
+
+//can draw an in-memory canvas directly onto another canvas
+const dynamicCanvas = document.createElement("canvas");
+  //draw stuff on dynamicCanvas
+mainCanvas.drawImage(dynamicCanvas, 50, 100);
 </code>
 
 Use a canvas as an image source
