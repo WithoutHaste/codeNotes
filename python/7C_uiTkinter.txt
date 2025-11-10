@@ -253,6 +253,13 @@ def client_open_file(self):
 	print(filename)
 </code>
 
+filter which filetypes are allowed
+<code>
+filename = tkinter.filedialog.askopenfilename(filetypes=[('Markdown', '*.md')])
+
+filename = tkinter.filedialog.askopenfilename(filetypes=[('Allowed Types', '*.xml *.jpeg *.jpg *.json')])
+</code>
+
 #Geometry Manager: Place
 
 Place: arrange widgets by relative or absolute values
