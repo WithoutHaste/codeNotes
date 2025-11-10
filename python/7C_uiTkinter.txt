@@ -118,7 +118,7 @@ def clicked():
 
  # text widget (multi-line) can be cleared
 textbox.delete("0.0", "end")
-# entry widget (single line) can be cleared 
+ # entry widget (single line) can be cleared 
 entry.delete("0", "end")
 	
  # input/textbox text can be added to
@@ -240,6 +240,18 @@ option_menu = tkinter.OptionMenu(parent, option_var, *char_choices)
 option_menu.pack(side=tkinter.TOP)
 </code>
 this ui does a terrible job of letting you scroll through long lists - only use short lists
+
+#File Selector
+
+This will display a system "file selector" window, and will return the full-path-filename the user selects, or will return None
+<code>
+import tkinter
+import tkinter.filedialog
+
+def client_open_file(self):
+	filename = tkinter.filedialog.askopenfilename()
+	print(filename)
+</code>
 
 #Geometry Manager: Place
 
