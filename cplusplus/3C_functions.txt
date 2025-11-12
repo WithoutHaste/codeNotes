@@ -1,0 +1,15 @@
+## Functions and Methods
+
+# Signature
+
+aka Prototype
+contains the function name, parameter list, and return type
+
+example:
+<code>
+Type MyObject::myFunction(
+	Type1 param1,
+	Type2 *param2,
+	const Type3 &param3
+);
+</code>

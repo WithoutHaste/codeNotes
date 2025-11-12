@@ -1,0 +1,31 @@
+## Ubuntu: Getting Started
+
+from [stackexchange](https://askubuntu.com/questions/36520/how-could-i-begin-c-programming-on-ubuntu)
+
+Ubuntu comes with gcc
+
+example hello world:
+save as "helloworld.c" for "c"
+save as "helloworld.cpp" for "c++"
+<code>
+ #include <stdio.h>
+
+int main ()
+{
+	printf("Hello World");
+}
+</code>
+
+to compile:
+<code>
+gcc helloworld.c -o helloworld
+
+g++ helloworld.cpp -o helloworld
+</code>
+"-o" is followed by the output file name (the executable file)
+(my ubuntu said it did not have "g++" auto-installed, but could install it with "sudo apt install g++")
+
+to execute:
+<code>
+./helloworld
+</code>

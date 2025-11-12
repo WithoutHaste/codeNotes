@@ -1,0 +1,7 @@
+## GUI: Qt
+
+Qt library for C++ GUI
+
+pronouned "cute", not "cu-tee"
+
+see [Qt for Beginners](https://wiki.qt.io/Qt_for_Beginners)
