@@ -201,7 +201,9 @@ def input_tab(self, event):
 	print(event)
 	print(self.input_box.get("1.0", "end").find('\t')) # tab not found
 </code>
-event.keysym will have values like "a", "b", "Tab"
+event.keysym will have values like "a", "b", "Tab", "Return"
+to check for "shift is held down when key is pressed", bind to '<Shift-KeyRelease>'
+
 event.keycode is...I'm not sure, it is 59 off from the ASCII codes for "a"
 <code>
 if event.keycode + 59 == ord('a'):
@@ -258,6 +260,70 @@ filter which filetypes are allowed
 filename = tkinter.filedialog.askopenfilename(filetypes=[('Markdown', '*.md')])
 
 filename = tkinter.filedialog.askopenfilename(filetypes=[('Allowed Types', '*.xml *.jpeg *.jpg *.json')])
+</code>
+
+#Bindable Events
+
+they have the format '<modifier-type-detail>', where only 'type' is required
+
+you can add modifiers "Shift", "Control", and "Alt" to other bindings to indicate that the key is being held down at the same time
+ex: '<Shift-Return>'
+
+example bind and handler
+<code>
+textbox.bind('<Shift-Return>', self.section_shift_plus_return)
+
+def section_shift_plus_return(self, event):
+	print("shift-enter")
+	print(event.widget.get("1.0", "end")) # event.widget is the widget/element that had the event
+</code>
+
+<code>
+<Button> # mouse button pressed
+<Button-1> # left mouse button pressed
+<Button-3> # right mouse button pressed
+<Button-4> # mouse scroll up
+<Button-5> # mouse scroll down
+<Motion> # mouse button held down and mouse is being moved
+<B1-Motion> # pattern to specify which mouse button is held down
+<ButtonRelease> # mouse button released
+<ButtonRelease-1> # left mouse button released
+<Double-Button> # mouse button double clicked
+<Double-Button-1> # left mouse button double clicked
+<Enter> # mouse pointer entered the widget/element
+<Leave> # mouse pointer left the widget/element
+<FocusIn> # keyboard focus entered the widget (or a child of it)
+<FocusOut> # keyboard focus left the widget
+<Key> # any key pressed
+a # the key "a", etc
+<Configure> # the size of the widget changed
+</code>
+
+specific keyboard bindings
+<code>
+<space> # space bar
+<Return> # enter
+<less> # less than key
+<Cancel> # break key
+<BackSpace>
+<Tab>
+<Shift_L> # any Shift key
+<Control_L> # any Control key
+<Alt_L> # any Alt key
+<Pause>
+<Caps_Lock>
+<Escape>
+<Prior> # page up
+<Next> # page down
+<End>
+<Home>
+<Left> <Up> <Right> <Down>
+<Print>
+<Insert>
+<Delete>
+<F1> # etc
+<Num_Lock>
+<Scroll_Lock>
 </code>
 
 #Geometry Manager: Place
