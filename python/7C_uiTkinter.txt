@@ -276,7 +276,9 @@ textbox.bind('<Shift-Return>', self.section_shift_plus_return)
 def section_shift_plus_return(self, event):
 	print("shift-enter")
 	print(event.widget.get("1.0", "end")) # event.widget is the widget/element that had the event
+	return "break"
 </code>
+use 'return "break"' to tell it to NOT propagate the event further - this will stop default behavior and event bubbling
 
 <code>
 <Button> # mouse button pressed
