@@ -14,3 +14,12 @@ fclose($file);
 $pages = glob('../pages/*.txt');
 //result is array of "../pages/a.txt", "../pages/b.txt" etc
 </code>
+
+#Paths
+
+<code>
+$full_path = "./aaa/bbb/ccc.txt";
+$dir_part = dirname($full_path); // is ./aaa/bbb
+$file_part = basename($full_path); // is ccc.txt
+$separator = DIRECTORY_SEPARATOR; // is /
+</code>
