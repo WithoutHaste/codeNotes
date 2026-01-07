@@ -580,12 +580,19 @@ print('My format:', datetime_parsed.strftime("%Y-%m-%d"))
 </code>
 
 %Y year in 4 digits
-%m month
-%d day of month
-%H hour in 24 hour cycle
-%M minutes
-%S seconds
+%b month name, short (Jan, Feb...)
+%B month name (January, February...)
+%m month (01,02,03...)
+%d day of month (01,02,03...)
+%a day of week, short (Sun, Mon, Tue...)
+%A day of week (Sunday, Monday...)
+%H hour in 24 hour cycle (00,01,02...23)
+%I hour in 12 hour cycle (01,02...12)
+%p AM or PM
+%M minutes (00,01,02...)
+%S seconds (00,01,02...)
 %f microseconds
+%% literal character %
 ![full datetime documentation](https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior)
 
 #Duck Typing
