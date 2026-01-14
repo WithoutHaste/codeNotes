@@ -1,1 +1,5 @@
+TODO renamed openOfficeCalc (.php and folder) to openOffice, delete the old files and add the new, and update WithoutHaste Index page link
+
+TODO delete csharp/9W_style document - no longer displaying old thoughts about the language
+
 xxx

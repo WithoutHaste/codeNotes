@@ -39,6 +39,14 @@ using(var fileStream = new FileStream("name.txt", FileMode.Create)) {
 }
 </code>
 
+#Write Text: Formatting
+
+<code>
+Console.Writeline($"{varA, 10} {varb, 20}");
+</code>
+This gives a 10-char-wide column for displaying varA, and a 20-char-wide column for varB
+Positive column widths will right-align, and negative ones will left-align
+
 #Operating System Separator
 
 Windows vs Linux use different path or directory separators.

@@ -50,3 +50,14 @@ Verbose names are easier to read and to understand.
 Verbose names are part of self-documenting code.
 
 You only have to write it a few times, but you'll have to read it many many times.
+
+#Keyword Override
+
+to use a keyword as a variable name, add a "@" at the beginning
+<code>
+var @using = "i really wanted this keyword as a variable name";
+return @using;
+</code>
+<code>
+for(var @case in cases) { }
+</code>

@@ -22,3 +22,8 @@ public void MyMethod()
 </code>
 
 It is generally recommended to decompose a large method into several smaller methods instead.
+
+#Nested Scopes
+
+You can now have local functions nested inside of functions/methods
+They have access to the scope of their parent

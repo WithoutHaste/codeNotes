@@ -629,3 +629,18 @@ A component can pass its state "down" as props to a child component.
 Data is never passed "up" from child to parent component.
 aka Top down data flow
 aka Unidirectional data flow
+
+#Conditional Display
+
+pattern to conditionally display a component "B"
+<code>
+const myFlag = true;
+return (
+	<myComponentA>
+		{ myFlag && (
+			<myComponentB>
+			</myComponentB>
+		)}
+	</myComponentA>
+);
+</code>

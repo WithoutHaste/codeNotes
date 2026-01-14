@@ -15,6 +15,8 @@ force-quit app - OPTION + COMMAND + Escape
 
 start a Snip operation - COMMAND + SHIFT + 4
 
+make a full-screen app windowed again - COMMAND + CONTROL + F
+
 #Dock
 
 the "Dock" is the bottom row of icons
@@ -22,3 +24,8 @@ the "Dock" is the bottom row of icons
 remove icon from Dock - click and hold on icon > drag outward from Dock until "remove" appears > release icon
 
 with multiple monitors, moving your mouse to the bottom of the screen that does not have the Dock will cause the Dock to migrate to that screen
+
+#Finder
+
+to view hidden files (such as any file with a filename starting with ".")
+- COMMAND + SHIFT + . (period)

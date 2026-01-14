@@ -1,0 +1,20 @@
+##Usings
+
+#Global
+
+to add a global using (affects all files in project), add this line to any file at project root
+<code>
+global using System.Linq;
+</code>
+Replace "System.Linq" with any library
+
+OR
+
+add this line to the *.csproj file
+<code>
+	<itemGroup>
+		<using Include="System.Linq" />
+	</itemGroup>
+</code>
+this can be mixed with other tag types within one itemGroup
+I recommend this option so all the global usings are in one consistent place

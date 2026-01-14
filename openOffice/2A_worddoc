@@ -1,0 +1,8 @@
+##Word: ODT Docs
+
+#Images
+
+To make an image free-floating (i.e. not in-line with text):
+- insert image
+- right click > wrap > background
+- right click > arrange > bring to front

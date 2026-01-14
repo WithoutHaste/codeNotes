@@ -6,3 +6,11 @@ Sort the lines in a file
 <code>
 sort FileName
 </code>
+
+#Add to Path
+
+<code>
+vim ~/.zshrc
+//add this line to append a new section to the paths variable
+export PATH=/my/full/path:$PATH
+</code>

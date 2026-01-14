@@ -305,3 +305,20 @@ Here's the business logic operating on the base abstract classes, but returning 
 		return nodeWrapper;
 	}
 </code>
+
+#Runtime Magic
+
+How to invoke a generic method at runtime with a Type coming in at runtime.
+(This is tricky because generic methods need compile-time type checking to pass.)
+(This is also dangerous because it bypasses compile-time checking. I've only used this in a test suite.)
+<code>
+// given the method signature
+public void MockService<T>()
+
+// runtime call with some Type
+var myType = typeof(theType);
+//from library System.Object.GetType
+GetType().GetMethod(nameof(MockService))!.MakeGenericMethod(theType).Invoke(this, new[]);
+// "this" means "invoke from here"
+// "new[]" is the parameter list
+</code>

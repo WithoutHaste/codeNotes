@@ -1,5 +1,7 @@
 ##Unit Testing
 
+General unit testing topics, not specific to one library
+
 #Test Privates
 
 You can unit test private methods using the PrivateObject.
@@ -52,6 +54,23 @@ using System.Runtime.CompilerServices;
 //or
 [assembly:InternalsVisibleTo("NameOfFriendAssemblyA"), InternalsVisibleTo("NameOfFriendAssemblyB")]
 </code>
+
+#Isolation Patterns
+
+You want to keep unit tests isolated from each other, so the order in which they are run does not matter
+I've used at least one unit test library that promised to manage isolation when using a shared init/setup method, but it was a lie, so for my own sanity I just manage this myself now
+
+Do Not use a shared Init/Setup method that runs automatically before each test.
+
+Do Not use non-constant global shared variables.
+
+Do write an Init/Setup method that you call explicitly from each test. This gives you control over when to call it, and it is easy to make several setup methods that handle different details.
+
+Do write setup methods that return the data they initialized for use within the test.
+
+Do write a setup method that does the full setup for the Happy Path test.  The Happy Path test just calls this setup and verifies the results.  Then have the Unhappy Path tests call the setup, edit just the part that needs editing to make the test fail, and verify the results.  This focuses attention on what varies between each test, and the Happy Path test confirms that the shared setup method does create a valid data state.
+
+Do write Assistant classes. The test instantiates an Assistant.  The Assistant class holds data initialized for the test, and has methods that handle different steps of the tests.  This makes each test case more legible - it reads as a few method calls instead of all the internal details.  Because each test instantiates its own Assistant, their data is isolated.
 
 #Scripts
 

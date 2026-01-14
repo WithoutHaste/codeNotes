@@ -1,4 +1,4 @@
-##Macros
+##Calc: Macros
 
 Macros record a series of user actions and replay them as needed.
 
