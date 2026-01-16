@@ -38,6 +38,14 @@ Outdated escape characters, not really applicable to the web:
 \t tab horizontal
 \v tab vertical
 
+#Multiline
+
+Use a template literal
+<code>
+var x = `skjfhksdfuhskfushkdfusdf
+skdfjshkfusdfhkusdf`;
+</code>
+
 Some browser support using a single slash to type text across multiple lines
 <code>
 var x = "skjfhksdfuhskfushkdfusdf\
