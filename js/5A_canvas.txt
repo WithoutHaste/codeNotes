@@ -116,7 +116,7 @@ mainCanvas.drawImage(dynamicCanvas, 50, 100);
 
 Use a canvas as an image source
 <code>
-image.style.src = canvas.toDataURL();
+imgElement.src = canvas.toDataURL();
 div.style.backgroundImage = "url('" + canvas.toDataURL() + "')";
 </code>
 
