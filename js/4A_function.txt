@@ -682,6 +682,25 @@ var result = (function() {
 console.log(result); //outputs 5
 </code>
 
+You can use it to simulate a namespace and private scopes
+<code>
+const my_library = (function() {
+	var c = 4;
+	
+	function funcC() {
+		return c;
+	}
+	
+	return {
+		'summation': function(a,b) { return a + b + funcC(); }
+	};
+})();
+
+console.log(my_library.summation(1, 2)); // outputs 7
+</code>
+In this example, variable c and funcC remain private,
+and you can return as many public functions as you want
+
 Incorrectly written closure:
 <code>
 function init(array)
