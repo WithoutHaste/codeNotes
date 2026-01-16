@@ -1,0 +1,43 @@
+##Tables
+
+#Border Collapse
+
+<code>
+table {
+	border-collapse: collapse;
+}
+</code>
+
+#Row Hide
+
+hide an entire row, including its height
+<code>
+tr {
+	display: none;
+}
+</code>
+
+and display it again
+<code>
+tr {
+	display: '';
+}
+</code>
+
+#Cell Min Size
+
+set the minimum width and height on a table cell
+<code>
+td {
+	height: 2em;
+	min-width: 2em;
+}
+</code>
+
+#Cell Align
+
+<code>
+td {
+	text-align: center;
+}
+</coide>
