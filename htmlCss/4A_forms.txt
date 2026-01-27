@@ -17,6 +17,14 @@ Required fields will be validated by the browser
 
 #Select (Dropdown)
 
+Basics:
+<code>
+<select>
+	<option value="1">One</option>
+	<option value="2">Two</option>
+</select>
+</code>
+
 You can set the pre-selected option within a select tag with:
 <code>
 <select>

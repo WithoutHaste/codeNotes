@@ -184,6 +184,14 @@ function validateForm() {
 </script>
 </code>
 
+Select Element
+<code>
+var e = document.getElementById("my-select-element");
+var value = e.value; // "value" tag from selected option element
+var text = e.options[e.selectedIndex].text; // innerHTML of selected option element
+</code>
+And use event "onchange" for when the selection changes.
+
 #Data Attributes
 
 You can add any custom attribute to an HTML element. 
