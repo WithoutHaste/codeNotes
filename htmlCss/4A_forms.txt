@@ -25,6 +25,12 @@ Basics:
 </select>
 </code>
 
+Make the select element taller so several options are visible:
+<code>
+<select size='4'>
+</select>
+</code>
+
 You can set the pre-selected option within a select tag with:
 <code>
 <select>

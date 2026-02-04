@@ -73,6 +73,28 @@ var myCustomer = Object.create(myPrototype);
 console.log(myCustomer.fullName()); //outputs "John Smith"
 </code>
 
+Don't add properties to an object in this way:
+<code>
+function buildPerson() {
+	return {
+		fieldA: 1,
+		methodB: function() {
+			this.fieldC = 2; // this is ok - the field is accessible
+		},
+	};
+}
+
+var myPerson = buildPerson();
+
+myPerson.methodD = function() {
+	this.fieldE = 3; // don't do this - the field is not accessible
+	// but if fieldE were already defined on the object, then assigning it a value here would be fine
+};
+</code>
+I can't find a technical explanation of why this doesn't work.
+Calling "myPerson.fieldC" returns "2", so that part works as expected.
+But calling "myPerson.fieldE" returns "undefined". And "fieldE" is not in 'Object.keys(myPerson)". BUT "fieldE" is visible in "console.log(myPerson)".
+
 #Properties
 
 <code>
