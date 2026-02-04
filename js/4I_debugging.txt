@@ -7,3 +7,19 @@ console.log('a'); //outputs 'a'
 
 console.log('a', 'b', 'c'); //outputs 'a b c'
 </code>
+
+Be careful displaying objects - the object is passed by reference
+The LAST state of the object will be displayed
+<code>
+var myObj = { a:1 };
+console.log(myObj.a); // displays "1"
+console.log(myObj); // displays "{ a:2 }"
+
+myObj.a = 2;
+console.log(myObj.a); // displays "2"
+console.log(myObj); // displays "{ a:2 }"
+</code>
+there's definitely more detail going on than what I have here
+because this exact example does not produce the problem
+but I've been bit by this "gotcha" many times, so it does happen
+to be safe, stringify the object before displaying it
