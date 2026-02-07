@@ -1,8 +1,72 @@
 ##Dependency Injection
 
-This is about using the .Net ServiceProvider class as a Dependency Injection container.
+#About
+
+Dependency Injection is a design pattern to separate the concrete implementations of interfaces (contracts) from their usage.
+For example, a class that makes database queries can have a dependency in an interface that handles the database details. It does not need a code-dependency on the concrete class that specifies how the interface is implemented for SQl Server or for Postgres.
+DI is a necessary prerequisite for Inversion Of Control and/or Dependency Inversion.
+(I've heard some variety in definitions of those terms, the sources I trust most use this one)
+- Inversion Of Control: have high-level modules not rely on low-level modules, have them rely on intefaces instead. The interface can reside on either side of a module-divide, depending on which one you want to be dependent on the other.
+
+
+In DI, instead of constructing (instantiating) the objects you need, you require that they are passed into the class's constructor or methods.  The depenency (the object you need) must be injected.
+Manually (or explicitly) instantiating and passing in the required dependencies is Dependency Injection.  Having C# handle the details automatically is a nice "extra" but is not required for the pattern.
+
+#Dependency Injection Container
+
+(These notes were last updated for C#12)
+
+You can end up with deep dependency trees. This is common and expected in large Solutions.
+C# helps to manage instantiating all those dependencies automatically.
+
+Install NuGet package Microsoft.Extensions.Hosting
+
+Getting started example:
+<code>
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+// BUILDING PHASE or REGISTRATION PHASE - building the container
+using var host = Host.CreateDefaultBuilder(args)
+	.ConfigureServices((context, services) => {
+		// add registrations here
+		// registration order does NOT matter
+		services.AddTransient<MyClassA>();
+		services.AddTransient<IOperationB, MyClassB>();
+	});
+	.Build();
+	
+// RESOLVING PHASE - can get instances of dependencies from container
+var myclassa = host.Services.GetRequiredService<MyClassA>();
+var operationb = host.Services.GetRequiredService<IOperationB>(); //will return a concrete instance of MyClassB
+</code>
+
+With the dependency injection container, you can instantion a class with one simple command even if it has several dependencies, and each of those has several dependencies, etc
+as long as /all/ those types are registered with the container, it will automatically instantiate everything needed.
+
+Terminology: Service Type, Implementing Type
+<code>
+// here, the Service Type is "IOperationB"
+// and the Implementing Type is "MyClassb"
+services.AddTransient<IOperationB, MyClassB>();
+
+// when both are the same Type, you only need to list it once
+services.AddTransient<MyClassA>();
+</code>
+The Implementing Type must implement the Service Type (for example, be an implementation of an interface)
+
+Service Lifetime:
+Defines when the container should instantiate a new instance of the Implementing Type, or simply return the instance it already has in memory.
+<code>
+services.AddTransient<MyClassA>();
+services.AddSingleton<MyClassA>();
+</code>
+
+
 
 #Registering Implementations
+
+This is about using the .Net ServiceProvider class as a Dependency Injection container.
 
 <code>
 public interface IMyInterface {}
