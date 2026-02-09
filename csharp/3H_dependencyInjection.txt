@@ -1,20 +1,19 @@
 ##Dependency Injection
 
+(These notes were last updated for C#12)
+
 #About
 
 Dependency Injection is a design pattern to separate the concrete implementations of interfaces (contracts) from their usage.
-For example, a class that makes database queries can have a dependency in an interface that handles the database details. It does not need a code-dependency on the concrete class that specifies how the interface is implemented for SQl Server or for Postgres.
+For example, a class that makes database queries can have a dependency on an interface that handles the database details. It does not need a code-dependency on the concrete class that specifies how the interface is implemented for SQl Server or for Postgres.
 DI is a necessary prerequisite for Inversion Of Control and/or Dependency Inversion.
 (I've heard some variety in definitions of those terms, the sources I trust most use this one)
 - Inversion Of Control: have high-level modules not rely on low-level modules, have them rely on intefaces instead. The interface can reside on either side of a module-divide, depending on which one you want to be dependent on the other.
-
 
 In DI, instead of constructing (instantiating) the objects you need, you require that they are passed into the class's constructor or methods.  The depenency (the object you need) must be injected.
 Manually (or explicitly) instantiating and passing in the required dependencies is Dependency Injection.  Having C# handle the details automatically is a nice "extra" but is not required for the pattern.
 
 #Dependency Injection Container
-
-(These notes were last updated for C#12)
 
 You can end up with deep dependency trees. This is common and expected in large Solutions.
 C# helps to manage instantiating all those dependencies automatically.
@@ -44,6 +43,9 @@ var operationb = host.Services.GetRequiredService<IOperationB>(); //will return 
 With the dependency injection container, you can instantion a class with one simple command even if it has several dependencies, and each of those has several dependencies, etc
 as long as /all/ those types are registered with the container, it will automatically instantiate everything needed.
 
+All services registered with the container must have a constructor that is either parameterless, or all its parameter types are also registered with the container.
+And there can't be any dependency loops.
+
 Terminology: Service Type, Implementing Type
 <code>
 // here, the Service Type is "IOperationB"
@@ -60,9 +62,52 @@ Defines when the container should instantiate a new instance of the Implementing
 <code>
 services.AddTransient<MyClassA>();
 services.AddSingleton<MyClassA>();
+services.AddScoped<MyClassA>();
+</code>
+Use transient for classes that should be instantiating new each time the container resolves them.
+Use singleton for classes that should be instantiating only ONCE for as long as the container exists.
+Use scoped for classes that should be instantiated once per scope.
+
+Scopes: You can create multiple scopes under one dependency container to manage when a new service instance is instantiated.
+<code>
+services.AddScoped<IOperationB, MyClassB>();
+
+using var scopeA = hose.Services.CreateScope();
+var instanceA1 = scopeA.ServiceProvider.GetRequiredService<IOperationB>();
+</code>
+You can also let your services create scopes as they need to:
+<code>
+public class MyClassC
+{
+	private readonly IServiceScopeFactory _serviceScopeFactory;
+	
+	public MyClassC(IServiceScopeFactory serviceScopeFactory) // this dependency is injection by the dependency container
+	{
+		_serviceScopeFactory = serviceScopeFactory;
+	}
+	
+	public void DoOperation() 
+	{
+		using var scope = _serviceScopeFactory.CreateScope();
+		var myClassB = scope.ServiceProvider.GetRequiredService<IOperationB>();
+	}
+}
 </code>
 
+Service Locator Pattern: directly resolving services on the dependency container. I.E. calling ServiceProvider.GetRequiredService explicitly.
+- This is not recommended.
 
+Dependency Captivity:
+- Given a Singleton service that has a dependency on a Scoped service => de facto, all dependencies of Singleton services are also treated as Singleton.
+<code>
+using var host = Host.CreateDefaultBuilder(args)
+	.UseDefaultServiceProvider((context, options)) =>
+	{
+		options.ValidateScope = true; //check for some Dependency Captivity errors - will generate a build error
+	})
+	.ConfigureServices...
+</code>
+In general, set up your dependency tree so that shorter lifetimes only depend on same or longer lifetimes.
 
 #Registering Implementations
 
