@@ -57,6 +57,38 @@ services.AddTransient<MyClassA>();
 </code>
 The Implementing Type must implement the Service Type (for example, be an implementation of an interface)
 
+"AddTransient" vs "TryAddTransient"
+- "Try" will not overwrite types that have already been registered, if they are registered a second time
+
+a common way to organize a long list of service registrations
+<code>
+public static class DiRegistrations
+{
+	public static IServiceCollection RegisterAccounting(this IServiceCollection services) {
+		services.TryAddTransient<ClientService>();
+		services.TryAddTransient<BankingService>();
+		services.TryAddTransient<SettlementService>();
+		return services;
+	}
+	
+	public static IServiceCollection RegisterAuditing(this IServiceCollection services) {
+		services.TryAddTransient<ClientService>();
+		services.TryAddTransient<DisplayService>();
+		services.TryAddTransient<CalculationsService>();
+		return services;
+	}
+}
+
+using var host = Host.CreateDefaultBuilder(args)
+	.ConfigureServices((context, services) => {
+		services.RegisterAccounting();
+		services.RegisterAuditing();
+	});
+	.Build();
+</code>
+
+#Lifetimes
+
 Service Lifetime:
 Defines when the container should instantiate a new instance of the Implementing Type, or simply return the instance it already has in memory.
 <code>
@@ -94,8 +126,7 @@ public class MyClassC
 }
 </code>
 
-Service Locator Pattern: directly resolving services on the dependency container. I.E. calling ServiceProvider.GetRequiredService explicitly.
-- This is not recommended.
+#Dependency Captivity
 
 Dependency Captivity:
 - Given a Singleton service that has a dependency on a Scoped service => de facto, all dependencies of Singleton services are also treated as Singleton.
@@ -108,6 +139,17 @@ using var host = Host.CreateDefaultBuilder(args)
 	.ConfigureServices...
 </code>
 In general, set up your dependency tree so that shorter lifetimes only depend on same or longer lifetimes.
+
+#Service Locator Pattern
+
+Service Locator Pattern: directly resolving services on the dependency container. I.E. calling ServiceProvider.GetRequiredService explicitly.
+- This is not recommended.
+
+in other words, instead of passing in dependencies (services), you pass in the DI container itself and let the lower level code get any services it wants to
+
+in this pattern, the DI Container is the "Service Locator"
+
+one big reason this pattern is discouraged is that it makes automated testing harder - you can't just pass a Mocked dependency into a class to test it
 
 #Registering Implementations
 
@@ -134,6 +176,10 @@ public class MyController : Controller
 	}
 }
 </code>
+
+#IOptions
+
+further reading can be done about patterns for using IOptions to inject settings/options/configurations into services, just the ones needed by that service
 
 #Registering Multiple Implementations
 
@@ -168,6 +214,40 @@ public class MyController : Controller
 		BImplementation b = myInterfaces.OfType<BImplementation>().First();
 		//or even better, using a method on your IMyInterface
 		IMyImplementation x = myInterfaces.First(CanHandle("this operation"));
+	}
+}
+</code>
+
+Asking for one vs multiple:
+<code>
+// gets the full list of types
+public MyController(IEnumerable<IMyInterface> myInterfaces)
+
+// gets just the last-registered type - I recommend not relying on this
+public MyController(IMyInterface myInterfaces)
+</code>
+
+#Optional Services
+
+Instead of specifying one concrete service to instantiate when an interface is requested,
+you can provide a method that decides what service (if any) to return
+<code>
+services.AddTransient<ICalculator>((serviceProvider) => {
+	return new MyCalculator();
+});
+</code>
+If returning a null is possible here, use a Null Implementation instead
+- write an implementation of ICalculator that is all 'no-op' - makes no changes to anything, no operation
+- and return that as the default
+
+Or you can request a list of services and check if it is empty, or select one from it
+<code>
+public MyController(IEnumerable<IMyInterface> myInterfaces) {
+	if(myInterfaces.IsEmpty()) {
+		// do a default operation
+	}
+	else {
+		myInterfaces.First().DoOperation();
 	}
 }
 </code>
