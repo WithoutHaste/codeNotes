@@ -2,4 +2,4 @@
 TODO migrate jetbrains notes from Mac section into dedicated JetBrains section
 TODO is "openOffice" not opening correctly?
 
-xxxx
+xxx
