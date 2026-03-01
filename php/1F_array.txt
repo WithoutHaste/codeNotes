@@ -33,6 +33,16 @@ $array += array($key=>$value);
 note that neither update is made in-place
 if this array was already an element in a parent array, the parent array will still see the old version of the array
 
+#Iterate
+
+<code>
+foreach($indexed_array as $value) {
+}
+
+foreach($associative_array as $key=>$value) {
+}
+</code>
+
 #Operations
 
 add to array
