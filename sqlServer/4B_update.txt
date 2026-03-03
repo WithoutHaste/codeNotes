@@ -5,6 +5,16 @@ Update records in a table:
 UPDATE tableName SET columnA='Value', columnC=123 WHERE columnB >= 10;
 </code>
 
+#With Joins
+
+<code>
+UPDATE tableNameA SET columnA='Value', columnC=123
+FROM tableNameA
+INNER JOIN tableNameB on tableNameA.FkId = tableNameB.Id
+WHERE tableNameA.columnB >= 10
+AND tableNameB.columnC is not null;
+</code>
+
 #CASE
 
 <code>
