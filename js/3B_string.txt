@@ -200,6 +200,11 @@ var y = "a,b,c".split(","); //["a", "b", "c"]
 var z = "Name|Address|Phone".split("|"); //["Name", "Address", "Phone"]
 var a = "Hello".split(); //["Hello"]
 </code>
+Split on multiple possible delimitors using regex
+but this does return the delimitors in the result array
+<code>
+var fields = "cabccabbc".split(/ab+/); //["c", "ab", "cc", "abb", "c"]
+</code>
 
 Includes
 string contains the substring
