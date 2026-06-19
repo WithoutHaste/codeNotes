@@ -264,7 +264,7 @@ Object.defineProperty(myObject, "propertyName", { value: "value", enumerable: fa
 Object.defineProperty(myObject, { propertyA: { value: "value", enumerable: false }, propertyB: { value: "otherValue", enumerable: true } });
 </code>
 
-#Destructuring
+#Object Destructuring
 
 (see also Array Destructuring)
 

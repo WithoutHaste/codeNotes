@@ -49,6 +49,7 @@ to loop over each element of an array
 for(let element of array) {
 }
 </code>
+If you say "for(let element in array)" you will be looping through the indexes, not the values.
 
 includes - does the array include or contain the value?
 <code>
@@ -151,6 +152,11 @@ function randomCompare() {
 }
 </code>
 
+array.forEach(forEachFunction) will apply a function to each element of the array
+<code>
+array1.forEach((x) => console.log(x));
+</code>
+
 array.map(mapFunction) will apply a function to each element of the array and return the array of results
 <code>
 var mappedResult = array1.map((x) => x * 2);
@@ -159,6 +165,16 @@ var mappedResult = array1.map((x) => x * 2);
 array.filter(filterFunction) will return a new array containing just the elements that returned TRUE in the filterFunction
 <code>
 var filteredResult = array.filter((element) => element.color == "red");
+</code>
+
+array.find(findFunction) will return the first element returned TRUE in the findFunction
+<code>
+var singleResult = array.find((element) => element.color == "red");
+</code>
+
+array.findIndex(findFunction) will return the index of the first element returned TRUE in the findFunction
+<code>
+var index = array.findIndex((element) => element.color == "red");
 </code>
 
 #Is Array
@@ -170,7 +186,7 @@ This looks the most reliable
 if(x instanceof Array) {}
 </code>
 
-#Destructuring
+#Array Destructuring
 
 (see also Object Destructuring)
 
