@@ -164,3 +164,17 @@ div {
 }
 </code>
 background images will fill the space, they will not alter the size of the space
+
+#Arrange
+
+'float' causes elements to move as far in that direction as possible, before bumping up against other elements
+'float' can cause non-floating elements to overlap with floating elements
+'clear' (left, right, both) makes an element bump down enough to not overlap with floating elements
+<code>
+div {
+	float: left;
+}
+div.break {
+	clear: both;
+}
+</code>
