@@ -1,0 +1,19 @@
+## URL
+
+Assuming "if ('URLSearchParams' in window)" returns true...
+
+# Reading Query Params
+
+<code>
+const urlParams = new URLSearchParams(window.location.search);
+const pageSize = urlParams.get('pageSize');
+</code>
+
+# Setting Query Params
+
+<code>
+var urlParams = new URLSearchParams(window.location.search);
+urlParams.set("pageSize", "5");
+window.location.search = urlParams.toString();
+</code>
+This will cause the current page to reload, even if no value changes were made.
