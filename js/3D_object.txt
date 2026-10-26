@@ -211,6 +211,11 @@ console.log(objectC.a); //Almond
 List all enumerable own properties:
 <code>
 var keys = Object.keys(myObject);
+
+// check if key is in object
+if(key in myObject) {
+	var value = myObject[key];
+}
 </code>
 
 List all own properties:
